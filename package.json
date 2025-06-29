@@ -1,0 +1,87 @@
+{
+  "name": "neonkit",
+  "version": "0.1.0",
+  "description": "A sleek, futuristic UI component library with subtle neon accents",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "bin"
+  ],
+  "bin": {
+    "neonkit": "./bin/neonkit.js"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "npm run build:lib && npm run build:docs",
+    "build:lib": "rollup -c",
+    "build:docs": "next build",
+    "start": "next start",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [
+    "ui",
+    "components",
+    "react",
+    "typescript",
+    "neon",
+    "design-system",
+    "tailwind"
+  ],
+  "author": "NeonKit Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.9.4",
+    "@types/react": "^18.2.38",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.54.0",
+    "eslint-config-next": "^14.0.4",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "postcss": "^8.4.32",
+    "rollup": "^4.5.2",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "framer-motion": "^10.16.16",
+    "lucide-react": "^0.294.0",
+    "next": "^14.0.4",
+    "next-themes": "^0.2.1",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "tailwind-merge": "^2.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neonkit/neonkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/neonkit/neonkit/issues"
+  },
+  "homepage": "https://neonkit.dev"
+}
