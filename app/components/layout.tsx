@@ -15,6 +15,7 @@ const componentCategories = [
       { name: "Button", href: "/components", description: "Interactive buttons with multiple variants" },
       { name: "Input", href: "/components/input", description: "Text inputs with enhanced features" },
       { name: "Textarea", href: "/components/textarea", description: "Multi-line text input" },
+      { name: "Dropdown", href: "/components/dropdown", description: "Select dropdowns with neon effects" },
     ]
   },
   {
