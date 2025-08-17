@@ -1,9 +1,9 @@
 "use client";
 
+// --- Dropdown component start ---
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Check, Search, X, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export interface DropdownOption {
   value: string;
@@ -384,23 +384,13 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <label
-            className={cn(
-              "text-sm font-medium leading-none",
-              isNeonVariant &&
-                getIconColor()
-                  .replace("text-", "text-")
-                  .replace("-400", "-100"),
-            )}
-          >
-            {label}
-          </label>
+          <label className={"text-sm font-medium leading-none"}>{label}</label>
         )}
 
         <div ref={dropdownRef} className="relative">
           <motion.div
             ref={ref}
-            className={cn(
+            className={[
               baseClasses,
               variants[variant],
               sizes[size],
@@ -409,7 +399,9 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                 isNeonVariant &&
                 "shadow-[0_0_15px_rgba(34,211,238,0.3)]",
               className,
-            )}
+            ]
+              .filter(Boolean)
+              .join(" ")}
             onClick={toggleDropdown}
             initial={prefersReducedMotion ? undefined : { scale: 1 }}
             whileHover={
@@ -424,15 +416,17 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           >
             <div className="flex items-center flex-1 min-w-0">
               <span
-                className={cn(
+                className={[
                   "truncate",
                   (!selectedOption && !multiple) ||
-                    (multiple && selectedOptions.length === 0)
+                  (multiple && selectedOptions.length === 0)
                     ? isNeonVariant
                       ? "text-opacity-70"
                       : "text-muted-foreground"
                     : "",
-                )}
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
               >
                 {displayText()}
               </span>
@@ -441,7 +435,7 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             <div className="flex items-center gap-1">
               {loading && (
                 <Loader2
-                  className={cn("h-4 w-4 animate-spin", getIconColor())}
+                  className={["h-4 w-4 animate-spin", getIconColor()].join(" ")}
                 />
               )}
 
@@ -449,21 +443,23 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                 <button
                   type="button"
                   onClick={handleClear}
-                  className={cn(
+                  className={[
                     "p-0.5 rounded hover:bg-accent transition-colors",
                     getIconColor(),
-                  )}
+                  ].join(" ")}
                 >
                   <X className="h-3 w-3" />
                 </button>
               )}
 
               <ChevronDown
-                className={cn(
+                className={[
                   "h-4 w-4 transition-transform duration-200",
                   isOpen && "rotate-180",
                   getIconColor(),
-                )}
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
               />
             </div>
           </motion.div>
@@ -487,29 +483,31 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                     : { opacity: 0, y: -10, scale: 0.95 }
                 }
                 transition={{ duration: 0.15 }}
-                className={cn(
+                className={[
                   "absolute top-full left-0 right-0 z-50 mt-1 rounded-md shadow-lg",
                   getDropdownBgColor(),
                   getDropdownBorderColor(),
                   isNeonVariant && getDropdownShadow(),
-                )}
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 style={{ maxHeight }}
               >
                 {searchable && (
                   <div
-                    className={cn(
+                    className={[
                       "p-2 border-b",
                       isNeonVariant
                         ? "border-b-current/20"
                         : "border-border/50",
-                    )}
+                    ].join(" ")}
                   >
                     <div className="relative">
                       <Search
-                        className={cn(
+                        className={[
                           "absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4",
                           getIconColor(),
-                        )}
+                        ].join(" ")}
                       />
                       <input
                         ref={searchRef}
@@ -517,12 +515,12 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                         placeholder="Search options..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className={cn(
+                        className={[
                           "w-full pl-8 pr-3 py-2 text-sm bg-transparent border-0 focus:outline-none rounded-md",
                           isNeonVariant
                             ? `text-white placeholder:text-white/50 focus:bg-${neonColor}-400/10 focus:shadow-[inset_0_0_8px_rgba(255,255,255,0.1)]`
                             : "text-foreground placeholder:text-muted-foreground focus:bg-accent/20",
-                        )}
+                        ].join(" ")}
                       />
                     </div>
                   </div>
@@ -531,12 +529,12 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                 <div className="max-h-60 overflow-y-auto p-1">
                   {filteredOptions.length === 0 ? (
                     <div
-                      className={cn(
+                      className={[
                         "px-3 py-6 text-sm text-center rounded-md",
                         isNeonVariant
                           ? "text-white/60 bg-white/5"
                           : "text-muted-foreground",
-                      )}
+                      ].join(" ")}
                     >
                       {searchQuery
                         ? "No options found"
@@ -552,7 +550,7 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                       return (
                         <motion.div
                           key={option.value}
-                          className={cn(
+                          className={[
                             "flex items-center gap-2 px-3 py-2.5 text-sm cursor-pointer rounded-md transition-all duration-200",
                             option.disabled && "opacity-50 cursor-not-allowed",
                             isSelected && getOptionSelectedStyles(),
@@ -565,7 +563,9 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                               (isNeonVariant
                                 ? `text-white/90 ${getOptionHoverStyles()}`
                                 : `text-foreground ${getOptionHoverStyles()}`),
-                          )}
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
                           onClick={() =>
                             !option.disabled && handleSelect(option.value)
                           }
@@ -593,12 +593,12 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
                             </div>
                             {option.description && (
                               <div
-                                className={cn(
+                                className={[
                                   "text-xs truncate mt-0.5",
                                   isNeonVariant
                                     ? "text-white/50"
                                     : "text-muted-foreground",
-                                )}
+                                ].join(" ")}
                               >
                                 {option.description}
                               </div>
@@ -607,10 +607,10 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
 
                           {isSelected && (
                             <Check
-                              className={cn(
+                              className={[
                                 "h-4 w-4 flex-shrink-0",
                                 isNeonVariant ? getIconColor() : "text-primary",
-                              )}
+                              ].join(" ")}
                             />
                           )}
                         </motion.div>
@@ -625,14 +625,14 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
 
         {helperText && (
           <p
-            className={cn(
+            className={[
               "text-xs",
               error
                 ? "text-destructive"
                 : success
                 ? "text-green-600"
                 : "text-muted-foreground",
-            )}
+            ].join(" ")}
           >
             {helperText}
           </p>
@@ -643,5 +643,94 @@ const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
 );
 
 Dropdown.displayName = "Dropdown";
+// --- Dropdown component end ---
 
-export { Dropdown };
+import { useState } from "react";
+import {
+  User,
+  Settings,
+  Palette,
+  Globe,
+  Shield,
+  Zap,
+  Star,
+  Heart,
+} from "lucide-react";
+
+const basicOptions: DropdownOption[] = [
+  { value: "option1", label: "Option 1" },
+  { value: "option2", label: "Option 2" },
+  { value: "option3", label: "Option 3" },
+  { value: "option4", label: "Option 4" },
+];
+
+const iconOptions: DropdownOption[] = [
+  { value: "profile", label: "Profile", icon: <User className="w-4 h-4" /> },
+  {
+    value: "settings",
+    label: "Settings",
+    icon: <Settings className="w-4 h-4" />,
+  },
+  { value: "theme", label: "Theme", icon: <Palette className="w-4 h-4" /> },
+  { value: "language", label: "Language", icon: <Globe className="w-4 h-4" /> },
+  {
+    value: "security",
+    label: "Security",
+    icon: <Shield className="w-4 h-4" />,
+  },
+];
+
+const detailedOptions: DropdownOption[] = [
+  {
+    value: "premium",
+    label: "Premium Plan",
+    description: "Access to all features",
+    icon: <Zap className="w-4 h-4" />,
+  },
+  {
+    value: "pro",
+    label: "Pro Plan",
+    description: "Advanced features included",
+    icon: <Star className="w-4 h-4" />,
+  },
+  {
+    value: "basic",
+    label: "Basic Plan",
+    description: "Essential features only",
+    icon: <Heart className="w-4 h-4" />,
+  },
+];
+
+export default function NeonDropdowns() {
+  const [selectedNeonValue, setSelectedNeonValue] = useState("");
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl">
+      <Dropdown
+        variant="neon-cyan"
+        options={basicOptions}
+        placeholder="Select cyan option..."
+        label="Cyan Dropdown"
+        value={selectedNeonValue}
+        onChange={setSelectedNeonValue}
+      />
+      <Dropdown
+        variant="neon-purple"
+        options={iconOptions}
+        placeholder="Select purple option..."
+        label="Purple Dropdown"
+      />
+      <Dropdown
+        variant="neon-chartreuse"
+        options={detailedOptions}
+        placeholder="Select chartreuse option..."
+        label="Chartreuse Dropdown"
+      />
+      <Dropdown
+        variant="neon-pink"
+        options={basicOptions}
+        placeholder="Select pink option..."
+        label="Pink Dropdown"
+      />
+    </div>
+  );
+}

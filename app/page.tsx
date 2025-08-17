@@ -1,10 +1,17 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Button } from "@/components/button"
-import { BackgroundGradient } from "@/components/background-gradient"
-import { ArrowRight, Github, Zap, Palette, Code2, Sparkles } from "lucide-react"
-import Link from "next/link"
+import { motion } from "framer-motion";
+import { Button } from "@/components/button";
+import { BackgroundGradient } from "@/components/background-gradient";
+import {
+  ArrowRight,
+  Github,
+  Zap,
+  Palette,
+  Code2,
+  Sparkles,
+} from "lucide-react";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -26,19 +33,32 @@ export default function HomePage() {
                 <span className="text-xl font-bold">NeonKit</span>
               </motion.div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
-              <Link href="/setup" className="text-sm font-medium hover:text-neon-cyan transition-colors">
+              <Link
+                href="/setup"
+                className="text-sm font-medium hover:text-neon-cyan transition-colors"
+              >
                 Installation
               </Link>
-              <Link href="/docs" className="text-sm font-medium hover:text-neon-blue transition-colors">
+              <Link
+                href="/docs"
+                className="text-sm font-medium hover:text-neon-blue transition-colors"
+              >
                 Documentation
               </Link>
-              <Link href="/components" className="text-sm font-medium hover:text-neon-purple transition-colors">
+              <Link
+                href="/components"
+                className="text-sm font-medium hover:text-neon-purple transition-colors"
+              >
                 Components
               </Link>
               <Button variant="ghost" size="icon" asChild>
-                <a href="https://github.com/neonkit/neonkit" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://github.com/neonkit/neonkit"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Github className="h-5 w-5" />
                 </a>
               </Button>
@@ -61,10 +81,10 @@ export default function HomePage() {
                 NeonKit
               </span>
             </h1>
-            
+
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Copy and paste beautiful JSX components with electric neon accents. 
-              Dark mode optimized, Tailwind-powered, ready to use.
+              Copy and paste beautiful JSX components with electric neon
+              accents. Dark mode optimized, Tailwind-powered, ready to use.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -73,11 +93,9 @@ export default function HomePage() {
                   Copy Components <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              
+
               <Button size="xl" variant="outline" asChild>
-                <Link href="/components">
-                  Browse Library
-                </Link>
+                <Link href="/components">Browse Library</Link>
               </Button>
             </div>
 
@@ -118,7 +136,8 @@ export default function HomePage() {
               Why Choose NeonKit?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Designed for developers who want clean, accessible, and beautifully animated components.
+              Designed for developers who want clean, accessible, and
+              beautifully animated components.
             </p>
           </motion.div>
 
@@ -127,18 +146,21 @@ export default function HomePage() {
               {
                 icon: <Palette className="h-8 w-8 text-neon-blue" />,
                 title: "Copy & Paste Ready",
-                description: "Complete JSX with Tailwind classes. No setup, no installation, just copy and use."
+                description:
+                  "Complete JSX with Tailwind classes. No setup, no installation, just copy and use.",
               },
               {
                 icon: <Code2 className="h-8 w-8 text-neon-purple" />,
                 title: "Dark Mode Optimized",
-                description: "7 neon variants designed exclusively for dark themes where electric effects shine."
+                description:
+                  "7 neon variants designed exclusively for dark themes where electric effects shine.",
               },
               {
                 icon: <Sparkles className="h-8 w-8 text-neon-chartreuse" />,
                 title: "Smooth Animations",
-                description: "Framer Motion powered with accessibility-first design and reduced motion support."
-              }
+                description:
+                  "Framer Motion powered with accessibility-first design and reduced motion support.",
+              },
             ].map((feature, index) => (
               <motion.div
                 key={index}
@@ -167,7 +189,7 @@ export default function HomePage() {
               </div>
               <span className="font-semibold">NeonKit</span>
             </div>
-            
+
             <div className="text-sm text-muted-foreground">
               Built with ❤️ for the future of web development
             </div>
@@ -175,5 +197,5 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
-  )
-} 
+  );
+}
