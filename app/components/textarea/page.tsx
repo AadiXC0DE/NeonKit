@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Textarea } from "@/components/textarea"
-import { Copy, Check, Code, Eye } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Textarea } from "@/components/textarea";
+import { Copy, Check, Code, Eye } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-function ComponentSection({ 
-  title, 
-  description, 
-  preview, 
-  code
+function ComponentSection({
+  title,
+  description,
+  preview,
+  code,
 }: {
-  title: string
-  description: string
-  preview: React.ReactNode
-  code: string
+  title: string;
+  description: string;
+  preview: React.ReactNode;
+  code: string;
 }) {
-  const [activeTab, setActiveTab] = useState<"preview" | "code">("preview")
-  const [copied, setCopied] = useState(false)
+  const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
+  const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(code)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="space-y-4">
@@ -39,9 +39,9 @@ function ComponentSection({
           onClick={() => setActiveTab("preview")}
           className={cn(
             "px-4 py-2 rounded-md text-sm font-medium transition-colors",
-            activeTab === "preview" 
-              ? "bg-background text-foreground shadow-sm" 
-              : "text-muted-foreground hover:text-foreground"
+            activeTab === "preview"
+              ? "bg-background text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground",
           )}
         >
           <Eye className="w-4 h-4 mr-2 inline" />
@@ -51,9 +51,9 @@ function ComponentSection({
           onClick={() => setActiveTab("code")}
           className={cn(
             "px-4 py-2 rounded-md text-sm font-medium transition-colors",
-            activeTab === "code" 
-              ? "bg-background text-foreground shadow-sm" 
-              : "text-muted-foreground hover:text-foreground"
+            activeTab === "code"
+              ? "bg-background text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground",
           )}
         >
           <Code className="w-4 h-4 mr-2 inline" />
@@ -72,12 +72,18 @@ function ComponentSection({
         ) : (
           <div className="relative">
             <div className="flex items-center justify-between p-4 border-b bg-muted/50">
-              <span className="text-sm font-medium">components/ui/textarea.tsx</span>
+              <span className="text-sm font-medium">
+                components/ui/textarea.tsx
+              </span>
               <button
                 onClick={copyToClipboard}
                 className="flex items-center gap-2 px-3 py-1 rounded-md bg-background border hover:bg-accent transition-colors"
               >
-                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
                 {copied ? "Copied!" : "Copy"}
               </button>
             </div>
@@ -88,7 +94,7 @@ function ComponentSection({
         )}
       </div>
     </div>
-  )
+  );
 }
 
 export default function TextareaPage() {
@@ -104,7 +110,8 @@ export default function TextareaPage() {
           Textarea Components
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Beautiful textarea components with neon effects, multiple variants, and rich features. Copy and paste into your project.
+          Beautiful textarea components with neon effects, multiple variants,
+          and rich features. Copy and paste into your project.
         </p>
       </motion.div>
 
@@ -115,10 +122,30 @@ export default function TextareaPage() {
           description="Electric neon textareas with glowing effects in multiple vibrant colors"
           preview={
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-              <Textarea variant="neon-cyan" placeholder="Neon cyan textarea..." label="Cyan Textarea" rows={3} />
-              <Textarea variant="neon-purple" placeholder="Neon purple textarea..." label="Purple Textarea" rows={3} />
-              <Textarea variant="neon-chartreuse" placeholder="Neon chartreuse textarea..." label="Chartreuse Textarea" rows={3} />
-              <Textarea variant="neon-pink" placeholder="Neon pink textarea..." label="Pink Textarea" rows={3} />
+              <Textarea
+                variant="neon-cyan"
+                placeholder="Neon cyan textarea..."
+                label="Cyan Textarea"
+                rows={3}
+              />
+              <Textarea
+                variant="neon-purple"
+                placeholder="Neon purple textarea..."
+                label="Purple Textarea"
+                rows={3}
+              />
+              <Textarea
+                variant="neon-chartreuse"
+                placeholder="Neon chartreuse textarea..."
+                label="Chartreuse Textarea"
+                rows={3}
+              />
+              <Textarea
+                variant="neon-pink"
+                placeholder="Neon pink textarea..."
+                label="Pink Textarea"
+                rows={3}
+              />
             </div>
           }
           code={`{/* Neon Cyan Textarea */}
@@ -168,9 +195,23 @@ export default function TextareaPage() {
           description="Standard textarea variants for everyday use"
           preview={
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-              <Textarea placeholder="Default textarea..." label="Default" rows={3} />
-              <Textarea variant="filled" placeholder="Filled textarea..." label="Filled" rows={3} />
-              <Textarea variant="ghost" placeholder="Ghost textarea..." label="Ghost" rows={3} />
+              <Textarea
+                placeholder="Default textarea..."
+                label="Default"
+                rows={3}
+              />
+              <Textarea
+                variant="filled"
+                placeholder="Filled textarea..."
+                label="Filled"
+                rows={3}
+              />
+              <Textarea
+                variant="ghost"
+                placeholder="Ghost textarea..."
+                label="Ghost"
+                rows={3}
+              />
             </div>
           }
           code={`{/* Default Textarea */}
@@ -210,10 +251,30 @@ export default function TextareaPage() {
           description="Different sizes for various use cases"
           preview={
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-              <Textarea variant="neon-cyan" size="sm" placeholder="Small..." label="Small" />
-              <Textarea variant="neon-purple" size="default" placeholder="Default..." label="Default" />
-              <Textarea variant="neon-chartreuse" size="lg" placeholder="Large..." label="Large" />
-              <Textarea variant="neon-pink" size="xl" placeholder="Extra large..." label="Extra Large" />
+              <Textarea
+                variant="neon-cyan"
+                size="sm"
+                placeholder="Small..."
+                label="Small"
+              />
+              <Textarea
+                variant="neon-purple"
+                size="default"
+                placeholder="Default..."
+                label="Default"
+              />
+              <Textarea
+                variant="neon-chartreuse"
+                size="lg"
+                placeholder="Large..."
+                label="Large"
+              />
+              <Textarea
+                variant="neon-pink"
+                size="xl"
+                placeholder="Extra large..."
+                label="Extra Large"
+              />
             </div>
           }
           code={`{/* Small Neon Textarea */}
@@ -259,10 +320,32 @@ export default function TextareaPage() {
           description="Specialized neon textareas for different states and purposes"
           preview={
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-              <Textarea variant="neon-destructive" placeholder="Error textarea..." label="Destructive" rows={3} />
-              <Textarea variant="neon-success" placeholder="Success textarea..." label="Success" rows={3} />
-              <Textarea variant="neon-warning" placeholder="Warning textarea..." label="Warning" rows={3} />
-              <Textarea variant="neon-cyan" maxLength={100} showCount placeholder="Type to see character count..." label="With Character Count" rows={3} />
+              <Textarea
+                variant="neon-destructive"
+                placeholder="Error textarea..."
+                label="Destructive"
+                rows={3}
+              />
+              <Textarea
+                variant="neon-success"
+                placeholder="Success textarea..."
+                label="Success"
+                rows={3}
+              />
+              <Textarea
+                variant="neon-warning"
+                placeholder="Warning textarea..."
+                label="Warning"
+                rows={3}
+              />
+              <Textarea
+                variant="neon-cyan"
+                maxLength={100}
+                showCount
+                placeholder="Type to see character count..."
+                label="With Character Count"
+                rows={3}
+              />
             </div>
           }
           code={`{/* Destructive Neon Textarea */}
@@ -316,10 +399,34 @@ export default function TextareaPage() {
           description="Advanced features like validation states and helper text"
           preview={
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-              <Textarea variant="neon-cyan" placeholder="Normal state..." label="Normal State" rows={3} />
-              <Textarea variant="neon-destructive" error helperText="This field is required" placeholder="Error state..." label="Error State" rows={3} />
-              <Textarea variant="neon-success" success helperText="Valid input!" placeholder="Success state..." label="Success State" rows={3} />
-              <Textarea placeholder="Disabled state..." label="Disabled State" rows={3} disabled />
+              <Textarea
+                variant="neon-cyan"
+                placeholder="Normal state..."
+                label="Normal State"
+                rows={3}
+              />
+              <Textarea
+                variant="neon-destructive"
+                error
+                helperText="This field is required"
+                placeholder="Error state..."
+                label="Error State"
+                rows={3}
+              />
+              <Textarea
+                variant="neon-success"
+                success
+                helperText="Valid input!"
+                placeholder="Success state..."
+                label="Success State"
+                rows={3}
+              />
+              <Textarea
+                placeholder="Disabled state..."
+                label="Disabled State"
+                rows={3}
+                disabled
+              />
             </div>
           }
           code={`{/* Normal State */}
@@ -373,23 +480,34 @@ export default function TextareaPage() {
           className="border rounded-lg p-6 bg-gradient-to-r from-[#00FFC3]/5 to-[#D300FF]/5"
         >
           <h2 className="text-2xl font-bold mb-4">Installation</h2>
-          
+
           <div className="space-y-4">
             <div>
               <p className="text-muted-foreground mb-3">
-                Copy and paste the textarea code directly. Install required dependencies:
+                Copy and paste the textarea code directly. Install required
+                dependencies:
               </p>
               <div className="bg-muted rounded-lg p-3">
-                <code className="text-sm">npm install framer-motion clsx tailwind-merge lucide-react</code>
+                <code className="text-sm">
+                  npm install framer-motion clsx tailwind-merge lucide-react
+                </code>
               </div>
             </div>
-            
+
             <div className="text-sm text-muted-foreground">
-              <p>Make sure you have the <code className="bg-muted px-1 py-0.5 rounded">cn</code> utility function. <a href="/setup" className="text-[#00FFC3] hover:underline">See complete installation guide</a>.</p>
+              <p>
+                Make sure you have the{" "}
+                <code className="bg-muted px-1 py-0.5 rounded">cn</code> utility
+                function.{" "}
+                <a href="/setup" className="text-[#00FFC3] hover:underline">
+                  See complete installation guide
+                </a>
+                .
+              </p>
             </div>
           </div>
         </motion.section>
       </div>
     </div>
-  )
-} 
+  );
+}
