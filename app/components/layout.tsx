@@ -60,6 +60,12 @@ const componentCategories = [
         disabled: false,
       },
       {
+        name: "Modal",
+        href: "/components/modal",
+        description: "Modal dialogs with neon effects",
+        disabled: false,
+      },
+      {
         name: "Toast",
         href: "/components/toast",
         description: "Notification toasts",

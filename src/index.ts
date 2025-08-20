@@ -4,7 +4,7 @@ export { Input } from "./components/input";
 export { Textarea } from "./components/textarea";
 export { Dropdown } from "./components/dropdown";
 export type { DropdownOption } from "./components/dropdown";
-export { Alert } from "./components/alert";
+
 export {
   Card,
   CardHeader,
@@ -14,6 +14,16 @@ export {
   CardContent,
 } from "./components/card";
 export { FeatureCard, StatCard } from "./components/feature-card";
+export {
+  Modal,
+  ModalTrigger,
+  ModalContent,
+  ModalFooter,
+  Root,
+  Trigger,
+  Content,
+  Footer,
+} from "./components/modal";
 export { ThemeProvider } from "./components/theme-provider";
 export { ThemeToggle } from "./components/theme-toggle";
 export { ModeToggle } from "./components/mode-toggle";
