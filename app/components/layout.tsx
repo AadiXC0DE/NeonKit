@@ -73,6 +73,17 @@ const componentCategories = [
       },
     ],
   },
+  {
+    title: "Progress Components",
+    items: [
+      {
+        name: "Progress",
+        href: "/components/progress",
+        description: "Progress bars with neon effects and animations",
+        disabled: false,
+      },
+    ],
+  },
 ];
 
 function Sidebar() {
