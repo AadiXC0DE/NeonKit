@@ -2,7 +2,7 @@
 
 A modern, dark mode UI component library with electric neon accents. Copy and paste beautiful JSX components with Tailwind classes directly into your project.
 
-## 🚀 Quick Start
+## Quick Start
 
 Copy and paste components directly into your project. No complex setup required!
 
