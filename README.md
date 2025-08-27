@@ -174,10 +174,6 @@ NeonKit follows these core principles:
 - **Next.js** - Documentation site
 - **Dark Mode** - Exclusive focus for neon aesthetics
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) for details.
