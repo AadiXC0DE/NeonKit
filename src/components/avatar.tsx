@@ -139,7 +139,16 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
 
     if (!animate || prefersReducedMotion) {
       return (
-        <div ref={ref} {...props}>
+        <div
+          ref={ref}
+          {...Object.fromEntries(
+            Object.entries(props).filter(
+              ([key]) =>
+                !key.startsWith("onAnimation") &&
+                !key.startsWith("onTransition"),
+            ),
+          )}
+        >
           {content}
         </div>
       );
@@ -152,7 +161,12 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
         animate={{ scale: 1, opacity: 1 }}
         whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.2, ease: "easeOut" }}
-        {...props}
+        {...Object.fromEntries(
+          Object.entries(props).filter(
+            ([key]) =>
+              !key.startsWith("onAnimation") && !key.startsWith("onTransition"),
+          ),
+        )}
       >
         {content}
       </motion.div>

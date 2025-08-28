@@ -4,7 +4,8 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-export interface TooltipProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TooltipProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "content"> {
   children: React.ReactNode;
   content: React.ReactNode;
   open?: boolean;
@@ -187,7 +188,12 @@ const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
           left: position.x,
           top: position.y,
         }}
-        {...props}
+        {...Object.fromEntries(
+          Object.entries(props).filter(
+            ([key]) =>
+              !key.startsWith("onAnimation") && !key.startsWith("onTransition"),
+          ),
+        )}
       >
         {content}
       </motion.div>

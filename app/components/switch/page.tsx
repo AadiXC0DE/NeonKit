@@ -36,6 +36,7 @@ export default async function SwitchPage() {
           description="Electric neon switches with glowing effects in 8 vibrant colors (cyan, purple, chartreuse, pink, red, emerald, amber)"
           preview={<NeonSwitches />}
           code={neonSwitchesSource}
+          filePathLabel="app/components/switch/snippets/NeonSwitches.tsx"
         />
 
         {/* Basic Switches */}
@@ -44,6 +45,7 @@ export default async function SwitchPage() {
           description="Clean, simple toggle switches for general use"
           preview={<BasicSwitches />}
           code={basicSwitchesSource}
+          filePathLabel="app/components/switch/snippets/BasicSwitches.tsx"
         />
 
         {/* Installation Section */}

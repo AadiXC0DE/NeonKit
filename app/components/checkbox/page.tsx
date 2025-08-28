@@ -43,6 +43,7 @@ export default async function CheckboxPage() {
           description="Electric neon checkboxes with glowing effects in vibrant colors"
           preview={<NeonCheckboxes />}
           code={neonCheckboxesSource}
+          filePathLabel="app/components/checkbox/snippets/NeonCheckboxes.tsx"
         />
 
         {/* Basic Checkboxes */}
@@ -51,6 +52,7 @@ export default async function CheckboxPage() {
           description="Clean, simple checkboxes for general use"
           preview={<BasicCheckboxes />}
           code={basicCheckboxesSource}
+          filePathLabel="app/components/checkbox/snippets/BasicCheckboxes.tsx"
         />
 
         {/* Checkbox Sizes */}
@@ -59,6 +61,7 @@ export default async function CheckboxPage() {
           description="Checkboxes in different sizes for various use cases"
           preview={<CheckboxSizes />}
           code={checkboxSizesSource}
+          filePathLabel="app/components/checkbox/snippets/CheckboxSizes.tsx"
         />
 
         {/* Checkbox States */}
@@ -67,6 +70,7 @@ export default async function CheckboxPage() {
           description="Different states including indeterminate for partial selections"
           preview={<CheckboxStates />}
           code={checkboxStatesSource}
+          filePathLabel="app/components/checkbox/snippets/CheckboxStates.tsx"
         />
 
         {/* Installation Section */}

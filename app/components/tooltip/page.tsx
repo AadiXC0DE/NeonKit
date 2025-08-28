@@ -43,6 +43,7 @@ export default async function TooltipPage() {
           description="Electric neon tooltips with glowing effects in vibrant colors"
           preview={<NeonTooltips />}
           code={neonTooltipsSource}
+          filePathLabel="app/components/tooltip/snippets/NeonTooltips.tsx"
         />
 
         {/* Basic Tooltips */}
@@ -51,6 +52,7 @@ export default async function TooltipPage() {
           description="Clean, simple tooltips for general use"
           preview={<BasicTooltips />}
           code={basicTooltipsSource}
+          filePathLabel="app/components/tooltip/snippets/BasicTooltips.tsx"
         />
 
         {/* Tooltip Positions */}
@@ -59,6 +61,7 @@ export default async function TooltipPage() {
           description="Tooltips positioned in different directions"
           preview={<TooltipPositions />}
           code={tooltipPositionsSource}
+          filePathLabel="app/components/tooltip/snippets/TooltipPositions.tsx"
         />
 
         {/* Tooltip Sizes */}
@@ -67,6 +70,7 @@ export default async function TooltipPage() {
           description="Tooltips in different sizes for various use cases"
           preview={<TooltipSizes />}
           code={tooltipSizesSource}
+          filePathLabel="app/components/tooltip/snippets/TooltipSizes.tsx"
         />
 
         {/* Installation Section */}

@@ -101,7 +101,13 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
         <div
           ref={ref}
           className={cn(baseClasses, variants[variant], sizes[size], className)}
-          {...props}
+          {...Object.fromEntries(
+            Object.entries(props).filter(
+              ([key]) =>
+                !key.startsWith("onAnimation") &&
+                !key.startsWith("onTransition"),
+            ),
+          )}
         >
           {content}
         </div>
@@ -118,7 +124,12 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
         whileTap={{ scale: 0.95 }}
         transition={{ duration: 0.2, ease: "easeOut" }}
         className={cn(baseClasses, variants[variant], sizes[size], className)}
-        {...props}
+        {...Object.fromEntries(
+          Object.entries(props).filter(
+            ([key]) =>
+              !key.startsWith("onAnimation") && !key.startsWith("onTransition"),
+          ),
+        )}
       >
         {content}
       </motion.div>

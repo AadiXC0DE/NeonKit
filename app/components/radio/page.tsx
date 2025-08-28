@@ -44,6 +44,7 @@ export default async function RadioPage() {
           description="Electric neon radio buttons with glowing effects in vibrant colors"
           preview={<NeonRadios />}
           code={neonRadiosSource}
+          filePathLabel="app/components/radio/snippets/NeonRadios.tsx"
         />
 
         {/* Basic Radios */}
@@ -52,6 +53,7 @@ export default async function RadioPage() {
           description="Clean, simple radio buttons for single selection"
           preview={<BasicRadios />}
           code={basicRadiosSource}
+          filePathLabel="app/components/radio/snippets/BasicRadios.tsx"
         />
 
         {/* Radio Sizes */}
@@ -60,6 +62,7 @@ export default async function RadioPage() {
           description="Radio buttons in different sizes for various use cases"
           preview={<RadioSizes />}
           code={radioSizesSource}
+          filePathLabel="app/components/radio/snippets/RadioSizes.tsx"
         />
 
         {/* Radio Groups */}
@@ -68,6 +71,7 @@ export default async function RadioPage() {
           description="Grouped radio buttons for better organization"
           preview={<RadioGroups />}
           code={radioGroupsSource}
+          filePathLabel="app/components/radio/snippets/RadioGroups.tsx"
         />
 
         {/* Installation Section */}

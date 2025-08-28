@@ -44,6 +44,7 @@ export default async function AvatarPage() {
           description="Electric neon avatars with glowing borders and effects"
           preview={<NeonAvatars />}
           code={neonAvatarsSource}
+          filePathLabel="app/components/avatar/snippets/NeonAvatars.tsx"
         />
 
         {/* Basic Avatars */}
@@ -52,6 +53,7 @@ export default async function AvatarPage() {
           description="Standard avatar display with image and fallback support"
           preview={<BasicAvatars />}
           code={basicAvatarsSource}
+          filePathLabel="app/components/avatar/snippets/BasicAvatars.tsx"
         />
 
         {/* Avatar Sizes */}
@@ -60,6 +62,7 @@ export default async function AvatarPage() {
           description="Avatars in different sizes for various use cases"
           preview={<AvatarSizes />}
           code={avatarSizesSource}
+          filePathLabel="app/components/avatar/snippets/AvatarSizes.tsx"
         />
 
         {/* Avatar Statuses */}
@@ -68,6 +71,7 @@ export default async function AvatarPage() {
           description="Avatars with online/offline status indicators"
           preview={<AvatarStatuses />}
           code={avatarStatusesSource}
+          filePathLabel="app/components/avatar/snippets/AvatarStatuses.tsx"
         />
 
         {/* Installation Section */}

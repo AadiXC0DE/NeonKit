@@ -44,6 +44,7 @@ export default async function BadgePage() {
           description="Electric neon badges with glowing effects in vibrant colors"
           preview={<NeonBadges />}
           code={neonBadgesSource}
+          filePathLabel="app/components/badge/snippets/NeonBadges.tsx"
         />
 
         {/* Basic Badges */}
@@ -52,6 +53,7 @@ export default async function BadgePage() {
           description="Clean, simple badges for general use"
           preview={<BasicBadges />}
           code={basicBadgesSource}
+          filePathLabel="app/components/badge/snippets/BasicBadges.tsx"
         />
 
         {/* Badge Sizes */}
@@ -60,6 +62,7 @@ export default async function BadgePage() {
           description="Badges in different sizes for various use cases"
           preview={<BadgeSizes />}
           code={badgeSizesSource}
+          filePathLabel="app/components/badge/snippets/BadgeSizes.tsx"
         />
 
         {/* Removable Badges */}
@@ -68,6 +71,7 @@ export default async function BadgePage() {
           description="Interactive badges that can be dismissed"
           preview={<RemovableBadges />}
           code={removableBadgesSource}
+          filePathLabel="app/components/badge/snippets/RemovableBadges.tsx"
         />
 
         {/* Installation Section */}

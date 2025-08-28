@@ -32,6 +32,41 @@ const componentCategories = [
         href: "/components/dropdown",
         description: "Select dropdowns with neon effects",
       },
+      {
+        name: "Checkbox",
+        href: "/components/checkbox",
+        description: "Multiple-selection checkboxes with neon effects",
+      },
+      {
+        name: "Radio",
+        href: "/components/radio",
+        description: "Single-selection radio buttons",
+      },
+      {
+        name: "Switch",
+        href: "/components/switch",
+        description: "Toggle switches with neon effects",
+      },
+    ],
+  },
+  {
+    title: "Data Display",
+    items: [
+      {
+        name: "Avatar",
+        href: "/components/avatar",
+        description: "User profile pictures with neon effects",
+      },
+      {
+        name: "Badge",
+        href: "/components/badge",
+        description: "Status indicators and labels",
+      },
+      {
+        name: "Tooltip",
+        href: "/components/tooltip",
+        description: "Contextual help and information tooltips",
+      },
     ],
   },
   {
