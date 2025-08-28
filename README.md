@@ -1,8 +1,8 @@
-# �� NeonKit
+# NeonKit
 
 A modern, dark mode UI component library with electric neon accents. Copy and paste beautiful JSX components with Tailwind classes directly into your project.
 
-## 🚀 Quick Start
+## Quick Start
 
 Copy and paste components directly into your project. No complex setup required!
 
@@ -73,17 +73,21 @@ NeonKit provides 7 stunning neon variants that you copy as complete JSX:
 ## 📋 Available Components
 
 ### Buttons
+
 Copy complete button JSX with these variants:
+
 - **Standard**: `default`, `destructive`, `outline`, `secondary`, `ghost`
 - **Neon**: `neon-cyan`, `neon-purple`, `neon-chartreuse`, `neon-pink`, `neon-destructive`, `neon-success`, `neon-warning`
 
 ### Inputs
+
 Copy complete input JSX with neon styling:
+
 ```jsx
 {/* Neon Cyan Input */}
 <div className="space-y-2">
   <label className="text-sm font-medium leading-none text-cyan-100">Username</label>
-  <input 
+  <input
     className="flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300 bg-slate-950/50 border-2 border-cyan-400/60 text-cyan-100 font-medium placeholder:text-cyan-200/70 focus-visible:border-cyan-400 focus-visible:ring-cyan-400/50 focus-visible:shadow-[0_0_15px_rgb(34,211,238,0.3)] hover:border-cyan-400/80 hover:shadow-[0_0_10px_rgb(34,211,238,0.2)] backdrop-blur-sm"
     placeholder="Enter username..."
   />
@@ -91,7 +95,9 @@ Copy complete input JSX with neon styling:
 ```
 
 ### Cards
+
 Copy complete card JSX with neon effects:
+
 ```jsx
 {/* Neon Feature Card */}
 <div className="relative rounded-lg border-2 bg-slate-950/90 backdrop-blur-sm p-6 transition-all duration-300 hover:translate-y-[-4px] before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-br before:via-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-500 border-cyan-400/50 hover:border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] before:from-cyan-400/10 before:to-cyan-400/5">
@@ -109,7 +115,7 @@ Following the shadcn/ui approach, you get **complete JSX with Tailwind classes**
 ✅ **Ready to Use** - Copy JSX directly, no setup needed  
 ✅ **Full Customization** - Modify Tailwind classes as needed  
 ✅ **No Dependencies** - Pure JSX + Tailwind classes  
-✅ **Dark Mode Optimized** - Built for dark themes  
+✅ **Dark Mode Optimized** - Built for dark themes
 
 ## 🛠️ How It Works
 
@@ -121,6 +127,7 @@ Following the shadcn/ui approach, you get **complete JSX with Tailwind classes**
 ## 📖 Documentation Site
 
 Visit our documentation site to:
+
 - See live component examples
 - Copy complete JSX code
 - View all neon variants
@@ -146,11 +153,13 @@ NeonKit follows these core principles:
 ## 🌈 Neon Color System
 
 **Primary Neons:**
+
 - 🔵 **Cyan** - `#22d3ee` (primary actions)
 - 🟣 **Purple** - `#a855f7` (secondary actions)
 - 🟢 **Chartreuse** - `#a3e635` (success states)
 
 **Specialized Neons:**
+
 - 🩷 **Pink** - `#f472b6` (special actions)
 - 🔴 **Red** - `#f87171` (destructive actions)
 - 🟢 **Emerald** - `#34d399` (success confirmations)
@@ -165,10 +174,6 @@ NeonKit follows these core principles:
 - **Next.js** - Documentation site
 - **Dark Mode** - Exclusive focus for neon aesthetics
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) for details.
@@ -176,6 +181,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 ## 🌟 Inspiration
 
 NeonKit is inspired by:
+
 - [shadcn/ui](https://ui.shadcn.com) - Copy & paste philosophy
 - [Aceternity UI](https://ui.aceternity.com) - Modern design patterns
 - Modern neon aesthetics and cyberpunk design
@@ -184,4 +190,4 @@ NeonKit is inspired by:
 
 **Made with 💙 by the NeonKit team**
 
-*"Beautiful neon components, copy-paste ready, dark mode only."*
+_"Beautiful neon components, copy-paste ready, dark mode only."_
