@@ -153,7 +153,7 @@ const Radio = React.forwardRef<HTMLButtonElement, RadioProps>(
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         className={cn(
-          "inline-flex items-center focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+          "inline-flex items-center focus:outline-none",
           disabled && "cursor-not-allowed",
         )}
         value={value}
