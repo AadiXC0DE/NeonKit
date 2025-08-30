@@ -1087,7 +1087,7 @@ export default function HomePage() {
                       Alert Component
                     </h4>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-3 text-left">
                     <Alert
                       variant="neon-success"
                       title="Success!"
