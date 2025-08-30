@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
@@ -10,10 +8,12 @@ import { Switch } from "@/components/switch";
 import { Alert } from "@/components/alert";
 import { Dropdown } from "@/components/dropdown";
 import { Checkbox } from "@/components/checkbox";
-import { Tooltip } from "@/components/tooltip";
+
 import { Textarea } from "@/components/textarea";
 import { Slider } from "@/components/slider";
 import { Radio } from "@/components/radio";
+import { Avatar } from "@/components/avatar";
+import { StatsCard } from "@/components/feature-card";
 import { BackgroundGradient } from "@/components/background-gradient";
 
 // ProgressBar component definition
@@ -206,7 +206,6 @@ import {
   AlertTriangle,
   Check,
   Download,
-  Bell,
   Settings,
   Eye,
   MessageSquare,
@@ -226,9 +225,557 @@ import {
   Search,
   Upload,
   Volume2,
+  Info,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+// Import Modal from the same source as the examples
+import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { AlertCircle } from "lucide-react";
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title?: string;
+  description?: string;
+  children?: React.ReactNode;
+  variant?:
+    | "default"
+    | "neon-cyan"
+    | "neon-purple"
+    | "neon-chartreuse"
+    | "neon-pink"
+    | "neon-destructive"
+    | "neon-success"
+    | "neon-warning";
+  size?: "sm" | "default" | "lg" | "xl" | "full";
+  showCloseButton?: boolean;
+  closeOnOverlayClick?: boolean;
+  closeOnEscape?: boolean;
+  className?: string;
+  overlayClassName?: string;
+  contentClassName?: string;
+  icon?: React.ReactNode;
+  actions?: React.ReactNode;
+  footer?: React.ReactNode;
+}
+
+const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
+  (
+    {
+      isOpen,
+      onClose,
+      title,
+      description,
+      children,
+      variant = "default",
+      size = "default",
+      showCloseButton = true,
+      closeOnOverlayClick = true,
+      closeOnEscape = true,
+      className,
+      overlayClassName,
+      contentClassName,
+      icon,
+      actions,
+      footer,
+      ...props
+    },
+    ref,
+  ) => {
+    const modalRef = React.useRef<HTMLDivElement>(null);
+    const prefersReducedMotion =
+      typeof window !== "undefined"
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false;
+
+    // Handle escape key
+    React.useEffect(() => {
+      if (!closeOnEscape || !isOpen) return;
+
+      const handleEscape = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          onClose();
+        }
+      };
+
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }, [isOpen, onClose, closeOnEscape]);
+
+    // Handle overlay click
+    const handleOverlayClick = (event: React.MouseEvent) => {
+      if (!closeOnOverlayClick) return;
+      if (event.target === event.currentTarget) {
+        onClose();
+      }
+    };
+
+    const isNeonVariant = variant?.startsWith("neon-");
+    const neonColor = isNeonVariant ? variant.split("-")[1] : null;
+
+    const getModalStyles = () => {
+      if (!isNeonVariant) return "bg-background border border-border";
+
+      const colorMap = {
+        cyan: "bg-slate-950/95 border-2 border-cyan-400/50 backdrop-blur-xl shadow-[0_0_50px_rgba(34,211,238,0.3)]",
+        purple:
+          "bg-slate-950/95 border-2 border-purple-400/50 backdrop-blur-xl shadow-[0_0_50px_rgba(168,85,247,0.3)]",
+        chartreuse:
+          "bg-slate-950/95 border-2 border-lime-400/50 backdrop-blur-xl shadow-[0_0_50px_rgba(163,230,53,0.3)]",
+        pink: "bg-slate-950/95 border-2 border-pink-400/50 backdrop-blur-xl shadow-[0_0_50px_rgba(244,114,182,0.3)]",
+        destructive:
+          "bg-slate-950/95 border-2 border-red-400/50 backdrop-blur-xl shadow-[0_0_50px_rgba(248,113,113,0.3)]",
+        success:
+          "bg-slate-950/95 border-2 border-emerald-400/50 backdrop-blur-xl shadow-[0_0_50px_rgba(52,211,153,0.3)]",
+        warning:
+          "bg-slate-950/95 border-2 border-amber-400/50 backdrop-blur-xl shadow-[0_0_50px_rgba(251,191,36,0.3)]",
+      };
+
+      return (
+        colorMap[neonColor as keyof typeof colorMap] ||
+        "bg-background border border-border"
+      );
+    };
+
+    const getTextColor = () => {
+      if (!isNeonVariant) return "text-foreground";
+      return "text-white";
+    };
+
+    const getTitleColor = () => {
+      if (!isNeonVariant) return "text-foreground";
+      return "text-white font-semibold";
+    };
+
+    const getDescriptionColor = () => {
+      if (!isNeonVariant) return "text-muted-foreground";
+      return "text-white/80";
+    };
+
+    const getCloseButtonColor = () => {
+      if (!isNeonVariant) return "text-muted-foreground hover:text-foreground";
+      return "text-white/60 hover:text-white";
+    };
+
+    const getOverlayStyles = () => {
+      if (!isNeonVariant) return "bg-black/50 backdrop-blur-sm";
+      return "bg-black/60 backdrop-blur-md";
+    };
+
+    const sizes = {
+      sm: "max-w-md",
+      default: "max-w-lg",
+      lg: "max-w-2xl",
+      xl: "max-w-4xl",
+      full: "max-w-[95vw] max-h-[95vh]",
+    };
+
+    const getIconColor = () => {
+      if (!isNeonVariant) return "text-muted-foreground";
+
+      const colorMap = {
+        cyan: "text-cyan-400",
+        purple: "text-purple-400",
+        chartreuse: "text-lime-400",
+        pink: "text-pink-400",
+        destructive: "text-red-400",
+        success: "text-emerald-400",
+        warning: "text-amber-400",
+      };
+
+      return colorMap[neonColor as keyof typeof colorMap] || "text-cyan-400";
+    };
+
+    const getDefaultIcon = () => {
+      if (!isNeonVariant) return null;
+
+      const iconMap = {
+        destructive: <AlertCircle className="h-6 w-6" />,
+        success: <CheckCircle className="h-6 w-6" />,
+        warning: <AlertTriangle className="h-6 w-6" />,
+        cyan: <Info className="h-6 w-6" />,
+        purple: <Info className="h-6 w-6" />,
+        chartreuse: <Info className="h-6 w-6" />,
+        pink: <Info className="h-6 w-6" />,
+      };
+
+      return iconMap[neonColor as keyof typeof iconMap] || null;
+    };
+
+    const displayIcon = icon || getDefaultIcon();
+
+    return (
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0 }}
+              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1 }}
+              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className={cn(
+                "fixed inset-0 z-50 flex items-center justify-center p-4",
+                getOverlayStyles(),
+                overlayClassName,
+              )}
+              onClick={handleOverlayClick}
+            >
+              {/* Modal */}
+              <motion.div
+                ref={modalRef}
+                initial={
+                  prefersReducedMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, scale: 0.95, y: 20 }
+                }
+                animate={
+                  prefersReducedMotion
+                    ? { opacity: 1 }
+                    : { opacity: 1, scale: 1, y: 0 }
+                }
+                exit={
+                  prefersReducedMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, scale: 0.95, y: 20 }
+                }
+                transition={{
+                  duration: 0.2,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 30,
+                }}
+                className={cn(
+                  "relative w-full rounded-lg shadow-lg",
+                  getModalStyles(),
+                  sizes[size],
+                  className,
+                )}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Header */}
+                {(title || showCloseButton) && (
+                  <div className="flex items-start justify-between p-6 pb-4">
+                    <div className="flex items-center gap-3">
+                      {displayIcon && (
+                        <div className={cn("flex-shrink-0", getIconColor())}>
+                          {displayIcon}
+                        </div>
+                      )}
+                      <div className="text-left">
+                        {title && (
+                          <h2
+                            className={cn(
+                              "text-lg font-semibold leading-none tracking-tight",
+                              getTitleColor(),
+                            )}
+                          >
+                            {title}
+                          </h2>
+                        )}
+                        {description && (
+                          <p
+                            className={cn(
+                              "text-sm mt-1",
+                              getDescriptionColor(),
+                            )}
+                          >
+                            {description}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    {showCloseButton && (
+                      <button
+                        onClick={onClose}
+                        className={cn(
+                          "rounded-md p-1 transition-colors hover:bg-accent/50",
+                          getCloseButtonColor(),
+                        )}
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Content */}
+                {children && (
+                  <div
+                    className={cn(
+                      "px-6 pb-6 text-left",
+                      title || showCloseButton ? "pt-0" : "pt-6",
+                      getTextColor(),
+                      contentClassName,
+                    )}
+                  >
+                    {children}
+                  </div>
+                )}
+
+                {/* Actions */}
+                {actions && (
+                  <div className="flex items-center justify-end gap-3 px-6 pb-6">
+                    {actions}
+                  </div>
+                )}
+
+                {/* Footer */}
+                {footer && (
+                  <div
+                    className={cn(
+                      "px-6 py-4 border-t",
+                      isNeonVariant ? "border-white/10" : "border-border",
+                      footer,
+                    )}
+                  >
+                    {footer}
+                  </div>
+                )}
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    );
+  },
+);
+
+Modal.displayName = "Modal";
+
+// CircularProgress component definition
+interface CircularProgressProps {
+  variant?:
+    | "neon-cyan"
+    | "neon-purple"
+    | "neon-chartreuse"
+    | "neon-pink"
+    | "neon-destructive"
+    | "neon-success"
+    | "neon-warning";
+  value?: number;
+  max?: number;
+  size?: "sm" | "md" | "lg" | "xl";
+  strokeWidth?: number;
+  showLabel?: boolean;
+  label?: string;
+  animated?: boolean;
+  pulseEffect?: boolean;
+  className?: string;
+}
+
+const CircularProgress = React.forwardRef<
+  HTMLDivElement,
+  CircularProgressProps
+>(
+  (
+    {
+      variant = "neon-cyan",
+      value = 0,
+      max = 100,
+      size = "md",
+      strokeWidth = 4,
+      showLabel = false,
+      label,
+      animated = true,
+      pulseEffect = false,
+      className,
+      ...props
+    },
+    ref,
+  ) => {
+    const [currentValue, setCurrentValue] = React.useState(0);
+
+    React.useEffect(() => {
+      if (animated) {
+        const interval = setInterval(() => {
+          setCurrentValue((prev) => {
+            if (prev >= value) return value;
+            return prev + Math.max(1, (value - prev) * 0.1);
+          });
+        }, 50);
+        return () => clearInterval(interval);
+      } else {
+        setCurrentValue(value);
+      }
+    }, [value, animated]);
+
+    const prefersReducedMotion =
+      typeof window !== "undefined"
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false;
+
+    const percentage = Math.min(100, Math.max(0, (currentValue / max) * 100));
+    const radius = 40;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDasharray = circumference;
+    const strokeDashoffset = circumference - (percentage / 100) * circumference;
+
+    const sizes = {
+      sm: "w-16 h-16",
+      md: "w-20 h-20",
+      lg: "w-24 h-24",
+      xl: "w-32 h-32",
+    };
+
+    const textSizes = {
+      sm: "text-xs",
+      md: "text-sm",
+      lg: "text-base",
+      xl: "text-lg",
+    };
+
+    const strokeColors = {
+      "neon-cyan": "stroke-[#22d3ee]",
+      "neon-purple": "stroke-[#a855f7]",
+      "neon-chartreuse": "stroke-[#a3e635]",
+      "neon-pink": "stroke-[#f472b6]",
+      "neon-destructive": "stroke-[#f87171]",
+      "neon-success": "stroke-[#34d399]",
+      "neon-warning": "stroke-[#fbbf24]",
+    };
+
+    const bgStrokeColors = {
+      "neon-cyan": "stroke-[#22d3ee]/20",
+      "neon-purple": "stroke-[#a855f7]/20",
+      "neon-chartreuse": "stroke-[#a3e635]/20",
+      "neon-pink": "stroke-[#f472b6]/20",
+      "neon-destructive": "stroke-[#f87171]/20",
+      "neon-success": "stroke-[#34d399]/20",
+      "neon-warning": "stroke-[#fbbf24]/20",
+    };
+
+    const glowEffects = {
+      "neon-cyan": "drop-shadow-[0_0_12px_rgba(34,211,238,0.8)]",
+      "neon-purple": "drop-shadow-[0_0_12px_rgba(168,85,247,0.8)]",
+      "neon-chartreuse": "drop-shadow-[0_0_12px_rgba(163,230,53,0.8)]",
+      "neon-pink": "drop-shadow-[0_0_12px_rgba(244,114,182,0.8)]",
+      "neon-destructive": "drop-shadow-[0_0_12px_rgba(248,113,113,0.8)]",
+      "neon-success": "drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]",
+      "neon-warning": "drop-shadow-[0_0_12px_rgba(251,191,36,0.8)]",
+    };
+
+    const getGlowColor = () => {
+      const colorMap = {
+        "neon-cyan": "rgba(34,211,238,0.6)",
+        "neon-purple": "rgba(168,85,247,0.6)",
+        "neon-chartreuse": "rgba(163,230,53,0.6)",
+        "neon-pink": "rgba(244,114,182,0.6)",
+        "neon-destructive": "rgba(248,113,113,0.6)",
+        "neon-success": "rgba(52,211,153,0.6)",
+        "neon-warning": "rgba(251,191,36,0.6)",
+      };
+      return colorMap[variant];
+    };
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "relative inline-flex items-center justify-center",
+          sizes[size],
+          className,
+        )}
+        role="progressbar"
+        aria-valuenow={currentValue}
+        aria-valuemin={0}
+        aria-valuemax={max}
+        {...props}
+      >
+        {/* Main circular progress */}
+        <svg
+          className={cn("transform -rotate-90", glowEffects[variant])}
+          width="100%"
+          height="100%"
+          viewBox="0 0 100 100"
+        >
+          {/* Background circle */}
+          <circle
+            cx="50"
+            cy="50"
+            r={radius}
+            fill="none"
+            strokeWidth={strokeWidth}
+            className={bgStrokeColors[variant]}
+          />
+
+          {/* Progress circle */}
+          <motion.circle
+            cx="50"
+            cy="50"
+            r={radius}
+            fill="none"
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            className={strokeColors[variant]}
+            strokeDasharray={strokeDasharray}
+            animate={{ strokeDashoffset }}
+            transition={{
+              duration: animated && !prefersReducedMotion ? 1.5 : 0,
+              ease: "easeOut",
+            }}
+            style={{
+              filter: `drop-shadow(0 0 8px ${getGlowColor()})`,
+            }}
+          />
+        </svg>
+
+        {/* Pulsing glow effect */}
+        {pulseEffect && !prefersReducedMotion && (
+          <motion.div
+            className="absolute inset-0 rounded-full opacity-30"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            style={{
+              background: `radial-gradient(circle, ${getGlowColor()} 0%, transparent 70%)`,
+            }}
+          />
+        )}
+
+        {/* Center content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          {showLabel ? (
+            <div className="text-center">
+              <div className={cn("font-bold text-foreground", textSizes[size])}>
+                {Math.round(percentage)}%
+              </div>
+              {label && (
+                <div
+                  className={cn(
+                    "text-xs text-muted-foreground mt-1",
+                    size === "sm" && "text-[10px]",
+                  )}
+                >
+                  {label}
+                </div>
+              )}
+            </div>
+          ) : label ? (
+            <div
+              className={cn(
+                "font-medium text-foreground text-center",
+                textSizes[size],
+              )}
+            >
+              {label}
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+  },
+);
+
+CircularProgress.displayName = "CircularProgress";
 
 export default function HomePage() {
   const [switchChecked, setSwitchChecked] = useState(false);
@@ -238,6 +785,15 @@ export default function HomePage() {
   const [progressValue, setProgressValue] = useState(75);
   const [dropdownValue, setDropdownValue] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<
+    | "success"
+    | "info"
+    | "chartreuse"
+    | "pink"
+    | "success-neon"
+    | "warning"
+    | null
+  >(null);
 
   const dropdownOptions = [
     { value: "option1", label: "Option 1" },
@@ -379,6 +935,12 @@ export default function HomePage() {
                     <Button variant="neon-warning" size="sm">
                       Warning
                     </Button>
+                    <Button variant="neon-destructive" size="sm">
+                      Destructive
+                    </Button>
+                    <Button variant="neon-cyan" size="sm">
+                      Cyan Glow
+                    </Button>
                   </div>
                 </motion.div>
 
@@ -426,7 +988,19 @@ export default function HomePage() {
                       Input
                     </h4>
                   </div>
-                  <Input variant="neon-cyan" placeholder="Email..." size="sm" />
+                  <div className="space-y-2">
+                    <Input
+                      variant="neon-cyan"
+                      placeholder="Email..."
+                      size="sm"
+                    />
+                    <Input
+                      variant="neon-purple"
+                      placeholder="Username..."
+                      size="sm"
+                      startIcon={<Mail className="h-4 w-4" />}
+                    />
+                  </div>
                 </motion.div>
 
                 {/* Badges - Medium Box */}
@@ -447,6 +1021,8 @@ export default function HomePage() {
                     <Badge variant="neon-cyan">New</Badge>
                     <Badge variant="neon-purple">Hot</Badge>
                     <Badge variant="neon-chartreuse">Pro</Badge>
+                    <Badge variant="neon-pink">Beta</Badge>
+                    <Badge variant="neon-warning">Sale</Badge>
                   </div>
                 </motion.div>
 
@@ -482,6 +1058,18 @@ export default function HomePage() {
                         size="sm"
                       />
                     </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-lime-400">Chartreuse</span>
+                      <Switch
+                        variant="neon-chartreuse"
+                        defaultChecked
+                        size="sm"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-pink-400">Pink</span>
+                      <Switch variant="neon-pink" size="sm" />
+                    </div>
                   </div>
                 </motion.div>
 
@@ -499,17 +1087,25 @@ export default function HomePage() {
                       Alert Component
                     </h4>
                   </div>
-                  <Alert
-                    variant="neon-success"
-                    title="Success!"
-                    description="Your action was completed successfully with beautiful neon styling that shines in dark mode."
-                    closable
-                  />
+                  <div className="space-y-3">
+                    <Alert
+                      variant="neon-success"
+                      title="Success!"
+                      description="Your action was completed successfully with beautiful neon styling that shines in dark mode."
+                      closable
+                    />
+                    <Alert
+                      variant="neon-warning"
+                      title="Warning"
+                      description="Please proceed with caution. This action may have consequences."
+                      closable
+                    />
+                  </div>
                 </motion.div>
 
                 {/* Dropdown - Medium Box */}
                 <motion.div
-                  className="md:col-span-1 lg:col-span-1 row-span-1 bg-card/50 border border-neon-destructive/20 rounded-xl p-4 backdrop-blur-sm hover:border-neon-destructive/40 transition-all duration-300"
+                  className="md:col-span-1 lg:col-span-1 row-span-1 bg-card/50 border border-neon-destructive/20 rounded-xl p-4 backdrop-blur-sm hover:border-neon-destructive/40 transition-all duration-300 relative"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.9 }}
@@ -521,14 +1117,22 @@ export default function HomePage() {
                       Dropdown
                     </h4>
                   </div>
-                  <Dropdown
-                    options={dropdownOptions}
-                    placeholder="Select..."
-                    value={dropdownValue}
-                    onChange={setDropdownValue}
-                    variant="neon-cyan"
-                    size="sm"
-                  />
+                  <div className="space-y-2">
+                    <Dropdown
+                      options={dropdownOptions}
+                      placeholder="Select..."
+                      value={dropdownValue}
+                      onChange={setDropdownValue}
+                      variant="neon-cyan"
+                      size="sm"
+                    />
+                    <Dropdown
+                      options={dropdownOptions}
+                      placeholder="Choose..."
+                      variant="neon-purple"
+                      size="sm"
+                    />
+                  </div>
                 </motion.div>
 
                 {/* Checkboxes - Medium Box */}
@@ -562,6 +1166,18 @@ export default function HomePage() {
                         size="sm"
                       />
                       <span className="text-xs">Terms</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        variant="neon-chartreuse"
+                        defaultChecked
+                        size="sm"
+                      />
+                      <span className="text-xs">Updates</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Checkbox variant="neon-pink" size="sm" />
+                      <span className="text-xs">Subscribe</span>
                     </div>
                   </div>
                 </motion.div>
@@ -605,12 +1221,36 @@ export default function HomePage() {
                       />
                       <span className="text-xs">Option 2</span>
                     </div>
+                    <div className="flex items-center gap-2">
+                      <Radio
+                        variant="neon-chartreuse"
+                        value="option3"
+                        checked={radioValue === "option3"}
+                        onCheckedChange={(checked) =>
+                          checked && setRadioValue("option3")
+                        }
+                        size="sm"
+                      />
+                      <span className="text-xs">Option 3</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Radio
+                        variant="neon-pink"
+                        value="option4"
+                        checked={radioValue === "option4"}
+                        onCheckedChange={(checked) =>
+                          checked && setRadioValue("option4")
+                        }
+                        size="sm"
+                      />
+                      <span className="text-xs">Option 4</span>
+                    </div>
                   </div>
                 </motion.div>
 
                 {/* Slider - Medium Box */}
                 <motion.div
-                  className="md:col-span-1 lg:col-span-1 row-span-1 bg-card/50 border border-neon-purple/20 rounded-xl p-4 backdrop-blur-sm hover:border-neon-purple/40 transition-all duration-300"
+                  className="md:col-span-1 lg:col-span-1 row-span-1 bg-card/50 border border-neon-purple/20 rounded-xl p-4 backdrop-blur-sm hover:border-neon-purple/40 transition-all duration-300 relative"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 1.2 }}
@@ -619,24 +1259,46 @@ export default function HomePage() {
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-3 h-3 bg-neon-purple rounded-full shadow-[0_0_10px_rgb(168,85,247,0.5)]"></div>
                     <h4 className="text-sm font-semibold text-neon-purple">
-                      Slider
+                      Neon Sliders
                     </h4>
                   </div>
-                  <Slider
-                    value={sliderValue}
-                    onValueChange={setSliderValue}
-                    max={100}
-                    step={1}
-                    className="w-full"
-                  />
-                  <div className="text-center mt-2">
-                    <span className="text-xs text-neon-purple">
-                      {sliderValue[0]}%
-                    </span>
+                  <div className="space-y-3">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-cyan-400">Cyan</span>
+                        <span className="text-xs text-cyan-300">
+                          {sliderValue[0]}%
+                        </span>
+                      </div>
+                      <Slider
+                        value={sliderValue}
+                        onValueChange={setSliderValue}
+                        variant="neon-cyan"
+                        max={100}
+                        step={1}
+                        className="w-full"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-purple-400">Purple</span>
+                        <span className="text-xs text-purple-300">
+                          {sliderValue[0]}%
+                        </span>
+                      </div>
+                      <Slider
+                        value={sliderValue}
+                        onValueChange={setSliderValue}
+                        variant="neon-purple"
+                        max={100}
+                        step={1}
+                        className="w-full"
+                      />
+                    </div>
                   </div>
                 </motion.div>
 
-                {/* Tooltip - Medium Box */}
+                {/* Circular Progress - Medium Box */}
                 <motion.div
                   className="md:col-span-1 lg:col-span-1 row-span-1 bg-card/50 border border-neon-warning/20 rounded-xl p-4 backdrop-blur-sm hover:border-neon-warning/40 transition-all duration-300"
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -647,17 +1309,24 @@ export default function HomePage() {
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-3 h-3 bg-neon-warning rounded-full shadow-[0_0_10px_rgb(251,191,36,0.5)]"></div>
                     <h4 className="text-sm font-semibold text-neon-warning">
-                      Tooltip
+                      Progress
                     </h4>
                   </div>
-                  <div className="flex justify-center">
-                    <Tooltip
-                      content="Click me! This is a tooltip"
+                  <div className="flex justify-center items-center space-x-4">
+                    <CircularProgress
                       variant="neon-cyan"
-                      triggerClassName="inline-flex items-center justify-center p-2 rounded-md border border-neon-cyan/30"
-                    >
-                      <Bell className="w-4 h-4" />
-                    </Tooltip>
+                      value={75}
+                      size="md"
+                      showLabel
+                      pulseEffect
+                    />
+                    <CircularProgress
+                      variant="neon-purple"
+                      value={60}
+                      size="md"
+                      showLabel
+                      pulseEffect
+                    />
                   </div>
                 </motion.div>
 
@@ -675,11 +1344,111 @@ export default function HomePage() {
                       Textarea
                     </h4>
                   </div>
-                  <Textarea
-                    variant="neon-cyan"
-                    placeholder="Type your message here..."
-                    className="h-20 text-sm"
-                  />
+                  <div className="space-y-3">
+                    <Textarea
+                      variant="neon-cyan"
+                      placeholder="Type your message here..."
+                      size="sm"
+                    />
+                    <Textarea
+                      variant="neon-purple"
+                      label="Message"
+                      placeholder="Write something..."
+                      size="sm"
+                    />
+                    <Textarea
+                      variant="neon-warning"
+                      placeholder="Feedback (max 120 chars)"
+                      helperText="We value your feedback"
+                      showCount
+                      maxLength={120}
+                      size="sm"
+                    />
+                  </div>
+                </motion.div>
+
+                {/* Modal Trigger - Large Box (now same height as textarea) */}
+                <motion.div
+                  className="md:col-span-1 lg:col-span-1 row-span-2 bg-card/50 border border-neon-cyan/20 rounded-xl p-6 backdrop-blur-sm hover:border-neon-cyan/40 transition-all duration-300"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 1.55 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-3 h-3 bg-neon-cyan rounded-full shadow-[0_0_10px_rgb(34,211,238,0.5)]"></div>
+                    <h4 className="text-lg font-semibold text-neon-cyan">
+                      Modals
+                    </h4>
+                  </div>
+                  <div className="space-y-3">
+                    <Button
+                      variant="neon-cyan"
+                      size="sm"
+                      onClick={() => {
+                        setModalType("success");
+                        setIsModalOpen(true);
+                      }}
+                      className="w-full"
+                    >
+                      Success Modal
+                    </Button>
+                    <Button
+                      variant="neon-purple"
+                      size="sm"
+                      onClick={() => {
+                        setModalType("info");
+                        setIsModalOpen(true);
+                      }}
+                      className="w-full"
+                    >
+                      Info Modal
+                    </Button>
+                    <Button
+                      variant="neon-chartreuse"
+                      size="sm"
+                      onClick={() => {
+                        setModalType("chartreuse");
+                        setIsModalOpen(true);
+                      }}
+                      className="w-full"
+                    >
+                      Chartreuse Modal
+                    </Button>
+                    <Button
+                      variant="neon-pink"
+                      size="sm"
+                      onClick={() => {
+                        setModalType("pink");
+                        setIsModalOpen(true);
+                      }}
+                      className="w-full"
+                    >
+                      Pink Modal
+                    </Button>
+                    <Button
+                      variant="neon-success"
+                      size="sm"
+                      onClick={() => {
+                        setModalType("success-neon");
+                        setIsModalOpen(true);
+                      }}
+                      className="w-full"
+                    >
+                      Success Neon
+                    </Button>
+                    <Button
+                      variant="neon-warning"
+                      size="sm"
+                      onClick={() => {
+                        setModalType("warning");
+                        setIsModalOpen(true);
+                      }}
+                      className="w-full"
+                    >
+                      Warning Modal
+                    </Button>
+                  </div>
                 </motion.div>
 
                 {/* Card Example - Large Box */}
@@ -724,7 +1493,7 @@ export default function HomePage() {
                   </div>
                 </motion.div>
 
-                {/* Modal Trigger - Medium Box */}
+                {/* Avatars - Medium Box (below Modals) */}
                 <motion.div
                   className="md:col-span-1 lg:col-span-1 row-span-1 bg-card/50 border border-neon-cyan/20 rounded-xl p-4 backdrop-blur-sm hover:border-neon-cyan/40 transition-all duration-300"
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -735,19 +1504,21 @@ export default function HomePage() {
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-3 h-3 bg-neon-cyan rounded-full shadow-[0_0_10px_rgb(34,211,238,0.5)]"></div>
                     <h4 className="text-sm font-semibold text-neon-cyan">
-                      Modal
+                      Avatars
                     </h4>
                   </div>
-                  <div className="text-center">
-                    <Button
-                      variant="neon-cyan"
-                      size="sm"
-                      onClick={() => setIsModalOpen(true)}
-                    >
-                      Open Modal
-                    </Button>
+                  <div className="flex items-center gap-3">
+                    <Avatar variant="neon-cyan" fallback="A" size="default" />
+                    <Avatar variant="neon-purple" fallback="B" size="default" />
+                    <Avatar
+                      variant="neon-chartreuse"
+                      fallback="C"
+                      size="default"
+                    />
                   </div>
                 </motion.div>
+
+                {/* Stats Card - Medium Box (below Modals) */}
 
                 {/* Stats Box - Medium Box */}
                 <motion.div
@@ -810,64 +1581,90 @@ export default function HomePage() {
                 </motion.div>
               </div>
 
-              {/* Modal Component - Hidden by default, triggered by button */}
-              {isModalOpen && (
-                <div
-                  className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
-                  onClick={() => setIsModalOpen(false)}
-                >
-                  <motion.div
-                    className="relative w-full max-w-lg rounded-lg border-2 border-cyan-400/50 bg-slate-950/95 backdrop-blur-xl shadow-[0_0_50px_rgba(34,211,238,0.3)] p-6"
-                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                    transition={{ duration: 0.2 }}
-                    onClick={(e) => e.stopPropagation()}
+              {/* Modal Component - Using actual Modal component */}
+              <Modal
+                isOpen={isModalOpen}
+                onClose={() => {
+                  setIsModalOpen(false);
+                  setModalType(null);
+                }}
+                title={
+                  modalType === "info"
+                    ? "Information"
+                    : modalType === "chartreuse"
+                    ? "Success!"
+                    : modalType === "pink"
+                    ? "Special Notice"
+                    : modalType === "success-neon"
+                    ? "Operation Successful"
+                    : modalType === "warning"
+                    ? "Warning"
+                    : "Success!"
+                }
+                description={
+                  modalType === "info"
+                    ? "Here is some helpful information."
+                    : modalType === "chartreuse"
+                    ? "Operation completed successfully"
+                    : modalType === "pink"
+                    ? "Special information with pink neon styling"
+                    : modalType === "success-neon"
+                    ? "Your action has been completed successfully"
+                    : modalType === "warning"
+                    ? "Please proceed with caution"
+                    : "Modal opened successfully"
+                }
+                variant={
+                  modalType === "info"
+                    ? "neon-purple"
+                    : modalType === "chartreuse"
+                    ? "neon-chartreuse"
+                    : modalType === "pink"
+                    ? "neon-pink"
+                    : modalType === "success-neon"
+                    ? "neon-success"
+                    : modalType === "warning"
+                    ? "neon-warning"
+                    : "neon-cyan"
+                }
+                actions={
+                  <Button
+                    variant={
+                      modalType === "info"
+                        ? "neon-purple"
+                        : modalType === "chartreuse"
+                        ? "neon-chartreuse"
+                        : modalType === "pink"
+                        ? "neon-pink"
+                        : modalType === "success-neon"
+                        ? "neon-success"
+                        : modalType === "warning"
+                        ? "neon-warning"
+                        : "neon-cyan"
+                    }
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setModalType(null);
+                    }}
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="text-cyan-400">
-                          <CheckCircle className="h-6 w-6" />
-                        </div>
-                        <div>
-                          <h2 className="text-lg font-semibold text-white">
-                            Success!
-                          </h2>
-                          <p className="text-sm text-white/80">
-                            Modal opened successfully
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => setIsModalOpen(false)}
-                        className="text-white/60 hover:text-white"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    </div>
-                    <div className="mb-6">
-                      <p className="text-sm text-white/90">
-                        This is a beautiful neon modal component with backdrop
-                        blur and glowing borders.
-                      </p>
-                    </div>
-                    <div className="flex gap-3">
-                      <Button
-                        variant="ghost"
-                        onClick={() => setIsModalOpen(false)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="neon-cyan"
-                        onClick={() => setIsModalOpen(false)}
-                      >
-                        Confirm
-                      </Button>
-                    </div>
-                  </motion.div>
-                </div>
-              )}
+                    Got it
+                  </Button>
+                }
+              >
+                <p className="text-sm">
+                  {modalType === "info"
+                    ? "This neon modal is perfect for showing additional context without leaving the page."
+                    : modalType === "chartreuse"
+                    ? "This modal uses the neon-chartreuse variant with bright lime green accents and glowing effects. Perfect for success confirmations and achievements."
+                    : modalType === "pink"
+                    ? "This modal uses the neon-pink variant with vibrant pink accents and glowing effects. Great for special announcements and highlights."
+                    : modalType === "success-neon"
+                    ? "This modal uses the neon-success variant with emerald green accents and glowing effects. Perfect for success messages and confirmations."
+                    : modalType === "warning"
+                    ? "This modal uses the neon-warning variant with amber accents and glowing effects. Ideal for warning messages and important notices."
+                    : "This is a beautiful neon modal for success messages and confirmations."}
+                </p>
+              </Modal>
             </motion.div>
           </motion.div>
         </div>
