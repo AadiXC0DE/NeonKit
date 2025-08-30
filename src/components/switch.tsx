@@ -159,7 +159,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           isChecked ? variants[variant].thumbChecked : variants[variant].thumb,
         )}
         animate={{
-          x: isChecked ? (size === "sm" ? 16 : size === "lg" ? 28 : 22) : 2,
+          x: isChecked ? (size === "sm" ? 16 : size === "lg" ? 28 : 22) : 0,
         }}
         transition={{ duration: animate && !prefersReducedMotion ? 0.2 : 0 }}
       />
