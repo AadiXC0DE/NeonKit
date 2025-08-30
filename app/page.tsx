@@ -871,7 +871,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Copy and paste beautiful JSX components with electric neon
+              Copy and paste 20+ beautiful JSX components with electric neon
               accents. Dark mode optimized, Tailwind-powered, ready to use.
             </p>
 
@@ -1544,7 +1544,7 @@ export default function HomePage() {
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-neon-pink mb-1">
-                      12+
+                      20+
                     </div>
                     <div className="text-xs text-muted-foreground mb-1">
                       Components
@@ -1693,7 +1693,7 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
                 icon: <Palette className="h-8 w-8 text-neon-blue" />,
@@ -1705,13 +1705,19 @@ export default function HomePage() {
                 icon: <Code2 className="h-8 w-8 text-neon-purple" />,
                 title: "Dark Mode Optimized",
                 description:
-                  "7 neon variants designed exclusively for dark themes where electric effects shine.",
+                  "8 neon variants designed exclusively for dark themes where electric effects shine.",
               },
               {
                 icon: <Sparkles className="h-8 w-8 text-neon-chartreuse" />,
                 title: "Smooth Animations",
                 description:
                   "Framer Motion powered with accessibility-first design and reduced motion support.",
+              },
+              {
+                icon: <Zap className="h-8 w-8 text-neon-pink" />,
+                title: "20+ Components",
+                description:
+                  "From buttons to modals, inputs to tooltips - comprehensive component library for modern apps.",
               },
             ].map((feature, index) => (
               <motion.div
@@ -1736,14 +1742,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-6 h-6 bg-gradient-to-br from-neon-blue to-neon-purple rounded flex items-center justify-center">
-                <Zap className="w-4 h-4 text-white" />
-              </div>
               <span className="font-semibold">NeonKit</span>
             </div>
 
             <div className="text-sm text-muted-foreground">
-              Built with ❤️ for the future of web development
+              Built with ❤️ by Aadi
             </div>
           </div>
         </div>
