@@ -4,6 +4,7 @@ export { Input } from "./components/input";
 export { Textarea } from "./components/textarea";
 export { Dropdown } from "./components/dropdown";
 export type { DropdownOption } from "./components/dropdown";
+export { Slider } from "./components/slider";
 
 export {
   Card,

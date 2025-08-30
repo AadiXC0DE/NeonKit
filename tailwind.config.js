@@ -51,6 +51,12 @@ module.exports = {
           blue: "#00FFC3",
           purple: "#D300FF",
           chartreuse: "#BFFF00",
+          cyan: "#22d3ee",
+          pink: "#f472b6",
+          success: "#34d399",
+          warning: "#fbbf24",
+          destructive: "#f87171",
+          emerald: "#10b981",
         },
       },
       borderRadius: {
@@ -90,7 +96,8 @@ module.exports = {
             filter: "drop-shadow(0 0 5px currentColor)",
           },
           "100%": {
-            filter: "drop-shadow(0 0 15px currentColor) drop-shadow(0 0 25px currentColor)",
+            filter:
+              "drop-shadow(0 0 15px currentColor) drop-shadow(0 0 25px currentColor)",
           },
         },
         "fade-in": {
@@ -125,9 +132,10 @@ module.exports = {
       boxShadow: {
         "neon-sm": "0 0 5px currentColor",
         "neon-md": "0 0 10px currentColor, 0 0 20px currentColor",
-        "neon-lg": "0 0 15px currentColor, 0 0 30px currentColor, 0 0 45px currentColor",
+        "neon-lg":
+          "0 0 15px currentColor, 0 0 30px currentColor, 0 0 45px currentColor",
       },
     },
   },
   plugins: [],
-} 
+};
