@@ -1507,9 +1507,19 @@ export default function HomePage() {
                       Avatars
                     </h4>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Avatar variant="neon-cyan" fallback="A" size="default" />
-                    <Avatar variant="neon-purple" fallback="B" size="default" />
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Avatar
+                      variant="neon-cyan"
+                      fallback="A"
+                      size="default"
+                      status="online"
+                    />
+                    <Avatar
+                      variant="neon-purple"
+                      fallback="B"
+                      size="default"
+                      status="offline"
+                    />
                     <Avatar
                       variant="neon-chartreuse"
                       fallback="C"
@@ -1517,8 +1527,6 @@ export default function HomePage() {
                     />
                   </div>
                 </motion.div>
-
-                {/* Stats Card - Medium Box (below Modals) */}
 
                 {/* Stats Box - Medium Box */}
                 <motion.div
@@ -1560,9 +1568,6 @@ export default function HomePage() {
                     </h4>
                   </div>
                   <div className="text-center">
-                    <div className="w-8 h-8 bg-gradient-to-br from-neon-cyan to-neon-purple rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <Zap className="w-4 h-4 text-white" />
-                    </div>
                     <h4 className="text-sm font-semibold text-white mb-2">
                       Ready to Build?
                     </h4>
