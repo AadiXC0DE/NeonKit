@@ -174,10 +174,6 @@ NeonKit follows these core principles:
 - **Next.js** - Documentation site
 - **Dark Mode** - Exclusive focus for neon aesthetics
 
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
 ## 🌟 Inspiration
 
 NeonKit is inspired by:
