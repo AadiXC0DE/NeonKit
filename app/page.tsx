@@ -815,9 +815,11 @@ export default function HomePage() {
                 animate={{ opacity: 1, x: 0 }}
                 className="flex items-center space-x-2"
               >
-                <div className="w-8 h-8 bg-gradient-to-br from-neon-blue to-neon-purple rounded-lg flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-white" />
-                </div>
+                <img
+                  src="/Neonkitlogo.png"
+                  alt="NeonKit Logo"
+                  className="w-8 h-8 object-contain"
+                />
                 <span className="text-xl font-bold">NeonKit</span>
               </motion.div>
             </div>
@@ -843,7 +845,7 @@ export default function HomePage() {
               </Link>
               <Button variant="ghost" size="icon" asChild>
                 <a
-                  href="https://github.com/neonkit/neonkit"
+                  href="https://github.com/AadiXC0DE"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -1717,7 +1719,7 @@ export default function HomePage() {
                 icon: <Zap className="h-8 w-8 text-neon-pink" />,
                 title: "20+ Components",
                 description:
-                  "From buttons to modals, inputs to tooltips - comprehensive component library for modern apps.",
+                  "From buttons to modals, inputs to progress bars - comprehensive component library for modern apps.",
               },
             ].map((feature, index) => (
               <motion.div
