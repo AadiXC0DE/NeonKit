@@ -62,11 +62,6 @@ const componentCategories = [
         href: "/components/badge",
         description: "Status indicators and labels",
       },
-      {
-        name: "Tooltip",
-        href: "/components/tooltip",
-        description: "Contextual help and information tooltips",
-      },
     ],
   },
   {
@@ -125,7 +120,7 @@ function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="w-64 h-full bg-background border-r border-border">
+    <div className="w-64 h-screen bg-background border-r border-border sticky top-0 overflow-hidden z-40">
       {/* Header */}
       <div className="p-6 border-b border-border">
         <div className="flex items-center gap-3">
@@ -139,7 +134,7 @@ function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <div className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-120px)]">
+      <div className="p-4 space-y-6 overflow-y-scroll h-[calc(100vh-104px)]">
         {/* Installation - Top Priority */}
         <div>
           <h3 className="text-sm font-medium text-muted-foreground mb-3 px-2">
@@ -258,28 +253,14 @@ function Sidebar() {
             Quick Links
           </h3>
           <div className="space-y-1">
-            <Link
-              href="/components/colors"
-              className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium">Color System</div>
-                <div className="text-xs text-muted-foreground">
-                  Custom colors guide
-                </div>
-              </div>
-            </Link>
-            <Link
-              href="/components/examples"
-              className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
+            <div className="flex items-center gap-3 px-3 py-2 rounded-md text-muted-foreground/50 cursor-not-allowed">
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium">Examples</div>
-                <div className="text-xs text-muted-foreground">
-                  Component combinations
+                <div className="text-xs text-muted-foreground/50">
+                  Coming soon
                 </div>
               </div>
-            </Link>
+            </div>
           </div>
         </div>
       </div>

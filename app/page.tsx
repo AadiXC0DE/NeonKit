@@ -1717,7 +1717,7 @@ export default function HomePage() {
                 icon: <Zap className="h-8 w-8 text-neon-pink" />,
                 title: "20+ Components",
                 description:
-                  "From buttons to modals, inputs to tooltips - comprehensive component library for modern apps.",
+                  "From buttons to modals, inputs to progress bars - comprehensive component library for modern apps.",
               },
             ].map((feature, index) => (
               <motion.div
