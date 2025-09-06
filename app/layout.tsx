@@ -8,25 +8,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "NeonKit - Futuristic UI Components",
   description:
-    "A sleek, futuristic UI component library with subtle neon accents. Copy and paste beautiful JSX components with Tailwind classes directly into your project.",
-  keywords: [
-    "UI components",
-    "React",
-    "TypeScript",
-    "Neon",
-    "Design System",
-    "Tailwind CSS",
-    "Dark Mode",
-    "Component Library",
-  ],
+    "A sleek, futuristic UI component library with subtle neon accents",
+  keywords: ["UI components", "React", "TypeScript", "Neon", "Design System"],
   authors: [{ name: "NeonKit Team" }],
   creator: "NeonKit Team",
-  publisher: "NeonKit",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -36,47 +21,6 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
-  openGraph: {
-    title: "NeonKit - Futuristic UI Components",
-    description:
-      "A sleek, futuristic UI component library with subtle neon accents. Copy and paste beautiful JSX components with Tailwind classes.",
-    url: "https://neonkit.dev",
-    siteName: "NeonKit",
-    images: [
-      {
-        url: "/Neonkitlogo.png",
-        width: 1200,
-        height: 630,
-        alt: "NeonKit Logo",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "NeonKit - Futuristic UI Components",
-    description:
-      "A sleek, futuristic UI component library with subtle neon accents. Copy and paste beautiful JSX components.",
-    images: ["/Neonkitlogo.png"],
-    creator: "@neonkit",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      noimageindex: false,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  verification: {
-    google: "your-google-site-verification-code", // Replace with actual code
-  },
 };
 
 export default function RootLayout({
