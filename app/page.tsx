@@ -795,6 +795,9 @@ export default function HomePage() {
     | null
   >(null);
 
+  // Mobile menu state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const dropdownOptions = [
     { value: "option1", label: "Option 1" },
     { value: "option2", label: "Option 2" },
@@ -824,7 +827,8 @@ export default function HomePage() {
               </motion.div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <Link
                 href="/setup"
                 className="text-sm font-medium hover:text-neon-cyan transition-colors"
@@ -853,9 +857,95 @@ export default function HomePage() {
                 </a>
               </Button>
             </div>
+
+            {/* Mobile Navigation Button */}
+            <div className="md:hidden flex items-center space-x-2">
+              <Button variant="ghost" size="icon" asChild>
+                <a
+                  href="https://github.com/AadiXC0DE"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Github className="h-5 w-5" />
+                </a>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="relative"
+              >
+                <motion.div
+                  className="w-6 h-6 flex flex-col justify-center items-center"
+                  animate={{ rotate: isMobileMenuOpen ? 45 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <motion.span
+                    className="w-5 h-0.5 bg-foreground absolute"
+                    animate={{
+                      rotate: isMobileMenuOpen ? 90 : 0,
+                      y: isMobileMenuOpen ? 0 : -6
+                    }}
+                    transition={{ duration: 0.2 }}
+                  />
+                  <motion.span
+                    className="w-5 h-0.5 bg-foreground absolute"
+                    animate={{ opacity: isMobileMenuOpen ? 0 : 1 }}
+                    transition={{ duration: 0.2 }}
+                  />
+                  <motion.span
+                    className="w-5 h-0.5 bg-foreground absolute"
+                    animate={{
+                      rotate: isMobileMenuOpen ? -90 : 0,
+                      y: isMobileMenuOpen ? 0 : 6
+                    }}
+                    transition={{ duration: 0.2 }}
+                  />
+                </motion.div>
+              </Button>
+            </div>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden border-b bg-background/95 backdrop-blur-md"
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex flex-col space-y-3">
+                <Link
+                  href="/setup"
+                  className="text-sm font-medium hover:text-neon-cyan transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Installation
+                </Link>
+                <Link
+                  href="/docs"
+                  className="text-sm font-medium hover:text-neon-blue transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Documentation
+                </Link>
+                <Link
+                  href="/components"
+                  className="text-sm font-medium hover:text-neon-purple transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Components
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hero Section */}
       <section className="flex-1 flex items-center justify-center px-4 py-20">
