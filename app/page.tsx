@@ -878,21 +878,18 @@ export default function HomePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <a href="/components">
               <Button size="xl" variant="neon-cyan" asChild>
-                <Link
-                  href="/setup"
-                  className="inline-flex items-center whitespace-nowrap"
-                >
                   Copy Components{" "}
                   <ArrowRight className="ml-2 h-5 w-5 flex-shrink-0" />
-                </Link>
               </Button>
-
+              </a>
+              
+              <a href="/components">
               <Button size="xl" variant="neon-purple" asChild>
-                <Link href="/components" className="inline-flex items-center">
                   Browse Library
-                </Link>
-              </Button>
+                </Button>
+              </a>
             </div>
 
             {/* Bento Grid Component Showcase */}
