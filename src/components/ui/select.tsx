@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
+import { autoUpdate, flip, offset, shift, size as fitToViewport, useFloating } from "@floating-ui/react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Check, ChevronDown } from "lucide-react";
 
@@ -9,6 +11,8 @@ import { neonVars, type NeonColor } from "@/lib/neon";
 
 const INVALID = "#ff4d5e";
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
+
+const subscribeNoop = () => () => {};
 
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
@@ -125,7 +129,32 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
     const selected = selectedIndex >= 0 ? options[selectedIndex] : undefined;
 
     const [open, setOpen] = React.useState(false);
-    const [listWidth, setListWidth] = React.useState<number>();
+    // The list is portaled out of this subtree, so it gets the resolved color copied over.
+    const [carriedNeon, setCarriedNeon] = React.useState<string>();
+    const isClient = React.useSyncExternalStore(subscribeNoop, () => true, () => false);
+
+    const { refs, floatingStyles, placement } = useFloating({
+      placement: "bottom-start",
+      strategy: "fixed",
+      // Position with top/left; motion owns `transform` for the enter animation.
+      transform: false,
+      whileElementsMounted: autoUpdate,
+      middleware: [
+        offset(6),
+        flip({ padding: 8 }),
+        shift({ padding: 8 }),
+        fitToViewport({
+          padding: 8,
+          apply({ rects, availableHeight, elements }) {
+            Object.assign(elements.floating.style, {
+              width: `${rects.reference.width}px`,
+              maxHeight: `${Math.max(120, Math.min(256, availableHeight))}px`,
+            });
+          },
+        }),
+      ],
+    });
+    const above = placement.startsWith("top");
     const [activeIndex, setActiveIndex] = React.useState(-1);
     const isOpen = open && !disabled;
 
@@ -175,8 +204,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             : step(options.length - 1, -1);
       scrollToActive.current = true;
       setActiveIndex(index);
-      // Match the trigger, which may be narrower than the field's container.
-      setListWidth(triggerRef.current?.offsetWidth);
+      if (triggerRef.current) {
+        setCarriedNeon(getComputedStyle(triggerRef.current).getPropertyValue("--neon").trim() || undefined);
+      }
       setOpen(true);
     }
 
@@ -306,7 +336,10 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
         )}
         <div className="relative">
           <button
-            ref={triggerRef}
+            ref={(node) => {
+              triggerRef.current = node;
+              refs.setReference(node);
+            }}
             id={id}
             type="button"
             role="combobox"
@@ -375,90 +408,103 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             />
           </button>
 
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                ref={listRef}
-                id={listboxId}
-                role="listbox"
-                aria-labelledby={label ? labelId : ariaLabelledBy}
-                aria-label={label ? undefined : ariaLabel}
-                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4, scale: 0.98 }}
-                transition={{ duration: 0.16, ease: EASE_OUT }}
-                // Keep focus on the trigger so aria-activedescendant stays in charge.
-                onMouseDown={(event) => event.preventDefault()}
-                style={{ width: listWidth }}
-                className={cn(
-                  "absolute left-0 top-full z-50 w-full mt-1.5 max-h-64 origin-top overflow-y-auto overscroll-contain border border-white/10 bg-[#0a0b11] p-1",
-                  "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
-                  "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]",
-                  s.list,
-                )}
-              >
-                {options.map((option, index) => {
-                  const active = index === activeIndex;
-                  const isSelected = index === selectedIndex;
-                  return (
-                    <div
-                      key={option.value}
-                      id={optionId(index)}
-                      role="option"
-                      aria-selected={isSelected}
-                      aria-disabled={option.disabled || undefined}
-                      data-active={active || undefined}
-                      onPointerMove={() => {
-                        if (!option.disabled && !active) setActiveIndex(index);
-                      }}
-                      onClick={() => {
-                        if (!option.disabled) commit(index);
-                      }}
-                      className={cn(
-                        "flex cursor-pointer select-none items-center text-white/75 transition-colors duration-100",
-                        s.option,
-                        active && "bg-[rgb(var(--neon)/0.1)] text-white",
-                        isSelected && "text-[rgb(var(--neon))]",
-                        option.disabled && "cursor-not-allowed opacity-40",
-                      )}
-                    >
-                      {option.icon && (
-                        <span
+          {isClient &&
+            createPortal(
+              <AnimatePresence>
+                {isOpen && (
+                  <motion.div
+                    ref={(node) => {
+                      listRef.current = node;
+                      refs.setFloating(node);
+                    }}
+                    id={listboxId}
+                    role="listbox"
+                    aria-labelledby={label ? labelId : ariaLabelledBy}
+                    aria-label={label ? undefined : ariaLabel}
+                    initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: above ? 4 : -4, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: above ? 4 : -4, scale: 0.98 }}
+                    transition={{ duration: 0.16, ease: EASE_OUT }}
+                    // Keep focus on the trigger so aria-activedescendant stays in charge.
+                    onMouseDown={(event) => event.preventDefault()}
+                    style={
+                      {
+                        ...floatingStyles,
+                        ...(carriedNeon ? { "--neon": carriedNeon, "--neon-accent": carriedNeon } : null),
+                      } as React.CSSProperties
+                    }
+                    className={cn(
+                      "[--neon:var(--neon-accent,34_211_238)] z-50 overflow-y-auto overscroll-contain border border-white/10 bg-[#0a0b11] p-1",
+                      "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+                      "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]",
+                      above ? "origin-bottom" : "origin-top",
+                      s.list,
+                    )}
+                  >
+                    {options.map((option, index) => {
+                      const active = index === activeIndex;
+                      const isSelected = index === selectedIndex;
+                      return (
+                        <div
+                          key={option.value}
+                          id={optionId(index)}
+                          role="option"
+                          aria-selected={isSelected}
+                          aria-disabled={option.disabled || undefined}
+                          data-active={active || undefined}
+                          onPointerMove={() => {
+                            if (!option.disabled && !active) setActiveIndex(index);
+                          }}
+                          onClick={() => {
+                            if (!option.disabled) commit(index);
+                          }}
                           className={cn(
-                            "flex shrink-0 items-center",
-                            isSelected ? "text-[rgb(var(--neon))]" : "text-white/45",
+                            "flex cursor-pointer select-none items-center text-white/75 transition-colors duration-100",
+                            s.option,
+                            active && "bg-[rgb(var(--neon)/0.1)] text-white",
+                            isSelected && "text-[rgb(var(--neon))]",
+                            option.disabled && "cursor-not-allowed opacity-40",
                           )}
                         >
-                          {option.icon}
-                        </span>
-                      )}
-                      <span className="flex min-w-0 flex-1 flex-col">
-                        <span className="truncate">{option.label}</span>
-                        {option.description && (
-                          <span
-                            className={cn(
-                              "truncate",
-                              s.hint,
-                              active ? "text-white/55" : "text-white/40",
+                          {option.icon && (
+                            <span
+                              className={cn(
+                                "flex shrink-0 items-center",
+                                isSelected ? "text-[rgb(var(--neon))]" : "text-white/45",
+                              )}
+                            >
+                              {option.icon}
+                            </span>
+                          )}
+                          <span className="flex min-w-0 flex-1 flex-col">
+                            <span className="truncate">{option.label}</span>
+                            {option.description && (
+                              <span
+                                className={cn(
+                                  "truncate",
+                                  s.hint,
+                                  active ? "text-white/55" : "text-white/40",
+                                )}
+                              >
+                                {option.description}
+                              </span>
                             )}
-                          >
-                            {option.description}
                           </span>
-                        )}
-                      </span>
-                      <Check
-                        aria-hidden
-                        className={cn(
-                          "shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.7))]",
-                          !isSelected && "invisible",
-                        )}
-                      />
-                    </div>
-                  );
-                })}
-              </motion.div>
+                          <Check
+                            aria-hidden
+                            className={cn(
+                              "shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.7))]",
+                              !isSelected && "invisible",
+                            )}
+                          />
+                        </div>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>,
+              document.body,
             )}
-          </AnimatePresence>
         </div>
         {name && <input type="hidden" name={name} value={selectedValue ?? ""} disabled={disabled} />}
         {message && (

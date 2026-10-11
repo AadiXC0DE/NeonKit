@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Hanken_Grotesk, JetBrains_Mono, Tilt_Neon } from "next/font/google";
 import { AccentRestorer } from "@/components/site/accent-store";
 import { siteConfig } from "@/config/site";
@@ -64,15 +65,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${neon.variable}`} suppressHydrationWarning>
-      <head>
-        {/* Apply a visitor's saved accent before first paint. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{var a=JSON.parse(localStorage.getItem("neonkit:accent"));if(a&&a.rgb)document.documentElement.style.setProperty("--neon-accent",a.rgb)}catch(e){}`,
-          }}
-        />
-      </head>
       <body className="min-h-dvh">
+        {/* Apply a visitor's saved accent before first paint. */}
+        <Script id="neonkit-accent" strategy="beforeInteractive">
+          {`try{var a=JSON.parse(localStorage.getItem("neonkit:accent"));if(a&&a.rgb)document.documentElement.style.setProperty("--neon-accent",a.rgb)}catch(e){}`}
+        </Script>
         <AccentRestorer />
         {children}
       </body>

@@ -8,7 +8,7 @@ export function AccentPicker({
   onChange,
   className,
 }: {
-  value: NeonColorName;
+  value: NeonColorName | null;
   onChange: (color: NeonColorName) => void;
   className?: string;
 }) {

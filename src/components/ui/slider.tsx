@@ -69,6 +69,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       name,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       onPointerDown,
       onPointerMove,
       onPointerUp,
@@ -263,6 +264,8 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
                   tabIndex={disabled ? -1 : 0}
                   aria-label={label}
                   aria-labelledby={!isRange && !thumbLabels?.[i] ? ariaLabelledBy : undefined}
+                  // Descriptions belong to the focusable thumbs, not the wrapper.
+                  aria-describedby={ariaDescribedBy}
                   aria-valuemin={i > 0 ? values[i - 1] : min}
                   aria-valuemax={i < values.length - 1 ? values[i + 1] : max}
                   aria-valuenow={value}

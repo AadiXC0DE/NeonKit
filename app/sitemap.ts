@@ -1,16 +1,18 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
-import { registry } from "@/registry";
+import { blocks, registry } from "@/registry";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   const pages: [string, number][] = [
     ["", 1],
     ["/components", 0.9],
+    ...(blocks.length ? ([["/blocks", 0.9]] as [string, number][]) : []),
     ["/docs", 0.8],
     ["/docs/installation", 0.8],
     ["/docs/theming", 0.7],
     ["/docs/ai", 0.7],
+    ["/changelog", 0.6],
     ["/request", 0.5],
     ["/sponsor", 0.4],
   ];

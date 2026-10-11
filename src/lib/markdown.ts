@@ -3,7 +3,7 @@ import "server-only";
 import { registryUrl, siteConfig } from "@/config/site";
 import { readSource } from "@/lib/highlight";
 import { neonColorNames } from "@/lib/neon";
-import { categories, componentPath, examplePath, getItem, registry } from "@/registry";
+import { blocks, categories, componentPath, examplePath, getItem, registry } from "@/registry";
 import { docs } from "@/registry/docs";
 
 const fence = (code: string, lang = "tsx") => `\`\`\`${lang}\n${code.trimEnd()}\n\`\`\``;
@@ -79,6 +79,9 @@ export async function componentMarkdown(slug: string) {
     fence(`npx shadcn@latest add ${registryUrl(slug)}`, "bash"),
     `With the \`@neonkit\` namespace configured: \`npx shadcn@latest add @neonkit/${slug}\`.`,
     `npm dependencies: ${deps}. Also needs \`lib/utils.ts\` (\`cn\`) and \`lib/neon.ts\` (\`neonVars\`), which the CLI adds.`,
+    ...(item.registryDependencies?.length
+      ? [`Builds on: ${item.registryDependencies.map((dep) => `[${getItem(dep)?.name ?? dep}](${pageUrl(dep)}.md)`).join(", ")}. The CLI installs them too.`]
+      : []),
     `## Usage`,
     fence(doc.usage),
     `## Examples`,
@@ -134,6 +137,17 @@ export function llmsTxt() {
         .map((item) => `- [${item.name}](${pageUrl(item.slug)}.md): ${item.description}`)
         .join("\n"),
     ]),
+    ...(blocks.length
+      ? [
+          `## Blocks`,
+          [
+            `Whole sections built from NeonKit components. Gallery: ${siteConfig.url}/blocks`,
+            ...blocks.map(
+              (block) => `- [${block.name}](${registryUrl(block.slug)}): ${block.description} Install: \`npx shadcn@latest add ${registryUrl(block.slug)}\``,
+            ),
+          ].join("\n"),
+        ]
+      : []),
     `## Optional`,
     [
       `- [Full documentation](${siteConfig.url}/llms-full.txt): every guide and component, including source, in one file`,

@@ -73,6 +73,7 @@ export default async function ComponentPage({ params }: Props) {
   ]);
 
   const [hero, ...rest] = examples;
+  const requires = (item.registryDependencies ?? []).map((dep) => getItem(dep)).filter((dep) => dep !== undefined);
   const { prev, next } = getNeighbours(slug);
 
   const toc: TocItem[] = [
@@ -128,9 +129,18 @@ export default async function ComponentPage({ params }: Props) {
             <CopyPage href={`/components/${slug}.md`} />
           </div>
           <p className="mt-3 max-w-2xl text-[17px] leading-relaxed text-muted">{item.description}</p>
-          {item.dependencies.length > 0 && (
+          {(item.dependencies.length > 0 || requires.length > 0) && (
             <div className="mt-5 flex flex-wrap items-center gap-2 font-mono text-[11px] text-dim">
               <span className="uppercase tracking-[0.14em]">Uses</span>
+              {requires.map((dep) => (
+                <Link
+                  key={dep.slug}
+                  href={`/components/${dep.slug}`}
+                  className="rounded-md border border-[rgb(var(--neon-accent)/0.3)] px-2 py-0.5 text-[rgb(var(--neon-accent))] transition-colors hover:border-[rgb(var(--neon-accent)/0.6)]"
+                >
+                  {dep.name}
+                </Link>
+              ))}
               {item.dependencies.map((dep) => (
                 <a
                   key={dep}
@@ -158,6 +168,21 @@ export default async function ComponentPage({ params }: Props) {
               {deps && (
                 <Step title="Install the dependencies">
                   <CommandBlock commands={deps} />
+                </Step>
+              )}
+              {requires.length > 0 && (
+                <Step title="Add the components it builds on">
+                  <p>
+                    {requires.map((dep, i) => (
+                      <span key={dep.slug}>
+                        {i > 0 && (i === requires.length - 1 ? " and " : ", ")}
+                        <Link href={`/components/${dep.slug}`} className="text-fg underline decoration-white/20 underline-offset-4">
+                          {dep.name}
+                        </Link>
+                      </span>
+                    ))}
+                    . The CLI adds them for you.
+                  </p>
                 </Step>
               )}
               <Step title="Add the helpers">

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { autoUpdate, flip, shift, useFloating, type Placement } from "@floating-ui/react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
@@ -31,16 +32,13 @@ function isFocusVisible(element: Element) {
   }
 }
 
-const sides: Record<Side, string> = {
-  top: "bottom-full pb-2",
-  bottom: "top-full pt-2",
-  left: "right-full pr-2",
-  right: "left-full pl-2",
-};
-
-const aligns: Record<"x" | "y", Record<Align, string>> = {
-  x: { start: "left-0", center: "left-1/2 -translate-x-1/2", end: "right-0" },
-  y: { start: "top-0", center: "top-1/2 -translate-y-1/2", end: "bottom-0" },
+// The gap is padding on the positioned box, so moving the pointer from the
+// trigger onto the bubble never leaves the wrapper.
+const gaps: Record<Side, string> = {
+  top: "pb-2",
+  bottom: "pt-2",
+  left: "pr-2",
+  right: "pl-2",
 };
 
 const arrowSides: Record<Side, string> = {
@@ -178,17 +176,27 @@ const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
       },
     });
 
-    const axis = side === "top" || side === "bottom" ? "x" : "y";
-    const along = origins[align];
+    // Flips to the opposite side and shifts along the edge to stay on screen.
+    const { refs, floatingStyles, placement } = useFloating({
+      placement: (align === "center" ? side : `${side}-${align}`) as Placement,
+      strategy: "fixed",
+      whileElementsMounted: autoUpdate,
+      middleware: [flip({ padding: 8 }), shift({ padding: 8 })],
+    });
+    const [placedSide, placedAlign = "center"] = placement.split("-") as [Side, Align | undefined];
+
+    const axis = placedSide === "top" || placedSide === "bottom" ? "x" : "y";
+    const along = origins[placedAlign];
     const transformOrigin = {
       top: `${along} 100%`,
       bottom: `${along} 0%`,
       left: `100% ${along}`,
       right: `0% ${along}`,
-    }[side];
+    }[placedSide];
 
     return (
       <span
+        ref={refs.setReference}
         className="relative inline-flex"
         onPointerEnter={(event) => {
           if (event.pointerType === "mouse") show(false);
@@ -199,7 +207,7 @@ const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
         {trigger}
         <AnimatePresence>
           {open && (
-            <span key="tooltip" className={cn("absolute z-50", sides[side], aligns[axis][align])}>
+            <span key="tooltip" ref={refs.setFloating} style={floatingStyles} className={cn("z-50", gaps[placedSide])}>
               <motion.span
                 ref={ref}
                 id={id}
@@ -209,7 +217,7 @@ const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
                     ? false
                     : reduceMotion
                       ? { opacity: 0 }
-                      : { opacity: 0, scale: 0.96, ...nudges[side] }
+                      : { opacity: 0, scale: 0.96, ...nudges[placedSide] }
                 }
                 animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
                 exit={
@@ -231,8 +239,8 @@ const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
                   aria-hidden
                   className={cn(
                     "absolute size-2 rotate-45 border-[rgb(var(--neon)/0.4)] bg-[#0a0b11]",
-                    arrowSides[side],
-                    arrowAligns[axis][align],
+                    arrowSides[placedSide],
+                    arrowAligns[axis][placedAlign],
                   )}
                 />
                 {content}

@@ -15,21 +15,24 @@
       "dependencies": [
         "@radix-ui/react-slot",
         "lucide-react"
-      ]
+      ],
+      "addedIn": "1.0"
     },
     {
       "slug": "input",
       "name": "Input",
       "category": "Forms",
       "description": "Text field with an animated neon focus ring, icons, labels and error states.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0"
     },
     {
       "slug": "textarea",
       "name": "Textarea",
       "category": "Forms",
       "description": "Multi-line field that grows with its content and counts characters.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0"
     },
     {
       "slug": "select",
@@ -37,37 +40,43 @@
       "category": "Forms",
       "description": "Keyboard-friendly listbox with a glowing popover and typeahead.",
       "dependencies": [
+        "@floating-ui/react-dom",
         "motion",
         "lucide-react"
-      ]
+      ],
+      "addedIn": "1.0"
     },
     {
       "slug": "checkbox",
       "name": "Checkbox",
       "category": "Forms",
       "description": "Checkbox with a drawn-on checkmark and indeterminate state.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0"
     },
     {
       "slug": "radio-group",
       "name": "Radio Group",
       "category": "Forms",
       "description": "Single choice from a set, with arrow-key navigation and card layouts.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0"
     },
     {
       "slug": "switch",
       "name": "Switch",
       "category": "Forms",
       "description": "A toggle that powers on like a neon tube.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0"
     },
     {
       "slug": "slider",
       "name": "Slider",
       "category": "Forms",
       "description": "Pointer and keyboard slider with a glowing track and optional range.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0"
     },
     {
       "slug": "otp-input",
@@ -75,7 +84,7 @@
       "category": "Forms",
       "description": "One-time code input with auto-advance, paste and backspace handling.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "badge",
@@ -84,21 +93,24 @@
       "description": "Status labels with optional live dot and remove button.",
       "dependencies": [
         "lucide-react"
-      ]
+      ],
+      "addedIn": "1.0"
     },
     {
       "slug": "avatar",
       "name": "Avatar",
       "category": "Data Display",
       "description": "Profile image with initials fallback, status light and stacked groups.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0"
     },
     {
       "slug": "card",
       "name": "Card",
       "category": "Data Display",
       "description": "Surface with header, content and footer slots and a lit edge.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0"
     },
     {
       "slug": "kbd",
@@ -106,7 +118,7 @@
       "category": "Data Display",
       "description": "Keyboard keys and shortcuts that glow when pressed.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "tabs",
@@ -116,7 +128,7 @@
       "dependencies": [
         "motion"
       ],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "accordion",
@@ -127,14 +139,15 @@
         "motion",
         "lucide-react"
       ],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "progress",
       "name": "Progress",
       "category": "Feedback",
       "description": "Linear and circular progress with a moving highlight.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0"
     },
     {
       "slug": "spinner",
@@ -142,7 +155,7 @@
       "category": "Feedback",
       "description": "Ring, dots and bars loaders in any neon color.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "skeleton",
@@ -150,7 +163,7 @@
       "category": "Feedback",
       "description": "Loading placeholders with a scanning shimmer.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "alert",
@@ -159,7 +172,8 @@
       "description": "Inline messages for info, success, warning and errors.",
       "dependencies": [
         "lucide-react"
-      ]
+      ],
+      "addedIn": "1.0"
     },
     {
       "slug": "toast",
@@ -170,7 +184,7 @@
         "motion",
         "lucide-react"
       ],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "dialog",
@@ -180,7 +194,8 @@
       "dependencies": [
         "motion",
         "lucide-react"
-      ]
+      ],
+      "addedIn": "1.0"
     },
     {
       "slug": "tooltip",
@@ -188,9 +203,10 @@
       "category": "Overlay",
       "description": "Hover and focus hints on four sides.",
       "dependencies": [
+        "@floating-ui/react-dom",
         "motion"
       ],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "neon-text",
@@ -200,7 +216,7 @@
       "dependencies": [
         "motion"
       ],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "border-beam",
@@ -208,7 +224,7 @@
       "category": "Effects",
       "description": "A beam of light that travels around any element's border.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "spotlight-card",
@@ -216,7 +232,7 @@
       "category": "Effects",
       "description": "Card whose border and surface light up under the cursor.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0"
     },
     {
       "slug": "retro-grid",
@@ -224,7 +240,37 @@
       "category": "Effects",
       "description": "Synthwave perspective grid that scrolls toward the horizon.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0"
+    }
+  ],
+  "blockCategories": [
+    "Heroes",
+    "Features",
+    "Pricing",
+    "Testimonials",
+    "Calls to action",
+    "Navigation",
+    "Footers",
+    "Auth",
+    "App",
+    "Marketing"
+  ],
+  "blocks": [
+    {
+      "slug": "hero-sign",
+      "name": "Sign Hero",
+      "category": "Heroes",
+      "description": "A neon sign headline on a lit wall, with a working power switch.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "neon-text",
+        "switch"
+      ],
+      "addedIn": "1.1",
+      "height": 720
     }
   ]
 }

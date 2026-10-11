@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { registry } from "@/registry";
+import { isNew, registry } from "@/registry";
 import { SectionHeading } from "./section-heading";
 
 export function Directory() {
@@ -39,7 +39,7 @@ export function Directory() {
                       <span className="hidden text-[11px] text-dim transition-colors group-hover:text-muted sm:inline">
                         {item.category}
                       </span>
-                      {item.isNew && (
+                      {isNew(item) && (
                         <span className="text-[10px] text-[rgb(var(--neon-accent))]">new</span>
                       )}
                     </Link>

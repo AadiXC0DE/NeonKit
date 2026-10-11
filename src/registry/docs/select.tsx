@@ -72,6 +72,6 @@ export const doc: ComponentDoc = {
     "Enter, Space and the arrow keys open the list. Arrows move, Home and End jump, Enter or Space picks, Escape and Tab close.",
     "Typing letters jumps to the first matching option. Pressing the same letter again cycles through matches.",
     "Without a visible label, pass aria-label. It names both the trigger and the list.",
-    "The list is positioned below the trigger, so an overflow-hidden ancestor will clip it.",
+    "The list renders in a portal, flips above the trigger near the bottom of the screen and is never clipped by overflow-hidden ancestors.",
   ],
 };

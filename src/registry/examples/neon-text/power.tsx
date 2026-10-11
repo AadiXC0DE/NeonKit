@@ -9,7 +9,7 @@ export default function NeonTextPower() {
 
   return (
     <div className="flex flex-col items-center gap-8">
-      <NeonText on={on} color="lime" className="text-5xl font-semibold tracking-tight">
+      <NeonText on={on} className="text-5xl font-semibold tracking-tight">
         VACANCY
       </NeonText>
       <button

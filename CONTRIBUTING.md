@@ -6,7 +6,7 @@ Every component is a single file people copy into their own project. That shapes
 
 ```
 src/components/ui/<slug>.tsx        the component (this is what users copy)
-src/registry/registry.json          name, category, description, npm deps
+src/registry/registry.json          name, category, description, npm deps, addedIn
 src/registry/docs/<slug>.tsx        docs: usage, examples, API table, a11y notes
 src/registry/examples/<slug>/*.tsx  live examples, shown with their source
 src/lib/neon.ts                     palette + neonVars() helper
@@ -17,7 +17,15 @@ src/lib/utils.ts                    cn()
 
 ## Component rules
 
-**Imports.** Only `react`, `@/lib/utils`, `@/lib/neon`, and the npm packages listed for the component in `registry.json` (`motion`, `lucide-react`, `@radix-ui/react-slot`). Import motion from `motion/react`. Never import another NeonKit component unless the registry entry says so.
+**Imports.** Only `react`, `react-dom`, `@/lib/utils`, `@/lib/neon`, and the npm packages listed for the component in `registry.json` (`motion`, `lucide-react`, `@radix-ui/react-slot`, `@floating-ui/react-dom`). Import motion from `motion/react`.
+
+**Building on other components.** A component may import another NeonKit component from `@/components/ui/<slug>` only when its registry entry lists that slug in `registryDependencies`. The CLI then installs both. The build fails on any mismatch either way. Prefer composition (Date Picker = Calendar + Popover) over copying internals.
+
+**Anchored overlays** (menus, popovers, hover cards, comboboxes):
+
+- Position with `@floating-ui/react-dom`: `useFloating({ placement, whileElementsMounted: autoUpdate, middleware: [offset(8), flip(), shift({ padding: 8 })] })`, plus `size()` when the panel should match or cap to the trigger and viewport.
+- Render the panel in a portal (`createPortal(…, document.body)`) so `overflow: hidden` ancestors can't clip it. A portal leaves the DOM subtree, so copy the trigger's resolved color onto the panel when it opens: read `getComputedStyle(trigger).getPropertyValue("--neon")` and set both `--neon` and `--neon-accent` inline.
+- Close on Escape and outside pointer down, return focus to the trigger, and keep `aria-expanded`/`aria-controls` in sync.
 
 **Color.** Every component takes `color?: NeonColor` and reads it through one CSS variable:
 

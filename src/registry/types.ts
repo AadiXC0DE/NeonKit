@@ -7,7 +7,23 @@ export type RegistryItem = {
   description: string;
   /** npm packages the component imports, besides react. */
   dependencies: string[];
-  isNew?: boolean;
+  /** Other NeonKit components this one imports from `@/components/ui/<slug>`. */
+  registryDependencies?: string[];
+  /** Library version that introduced it, e.g. "1.1". */
+  addedIn: string;
+};
+
+export type RegistryBlock = {
+  slug: string;
+  name: string;
+  category: string;
+  description: string;
+  dependencies: string[];
+  /** NeonKit components the block is built from. */
+  registryDependencies: string[];
+  addedIn: string;
+  /** Initial preview height in pixels before the frame reports its own. */
+  height?: number;
 };
 
 export type ComponentExample = {

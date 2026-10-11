@@ -23,7 +23,8 @@ export function ComponentPreview({
   canvasClassName?: string;
 }) {
   const [tab, setTab] = React.useState<"preview" | "code">("preview");
-  const [accent, setAccent] = React.useState<NeonColorName>("cyan");
+  // Null inherits the site-wide accent (set by the hue knob); picking a swatch overrides it here only.
+  const [accent, setAccent] = React.useState<NeonColorName | null>(null);
   const [replay, setReplay] = React.useState(0);
 
   return (
@@ -65,7 +66,7 @@ export function ComponentPreview({
       </div>
       {tab === "preview" ? (
         <div
-          style={neonVars(accent)}
+          style={neonVars(accent ?? undefined)}
           className={cn(
             "relative flex min-h-[320px] items-center justify-center rounded-b-xl bg-background bg-dots px-6 py-14 [overflow-x:clip] sm:px-10",
             canvasClassName,

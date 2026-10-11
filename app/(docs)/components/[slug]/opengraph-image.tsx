@@ -15,6 +15,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const { slug } = await params;
   const item = getItem(slug);
   const name = item?.name ?? "NeonKit";
+  // The OG renderer only ships Latin glyphs; spell out symbols it can't draw.
+  const description = (item?.description ?? "").replace(/⌘/g, "Cmd ");
 
   return new ImageResponse(
     (
@@ -49,7 +51,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           >
             {name}
           </span>
-          <span style={{ fontSize: 34, color: "#8a93a6", maxWidth: 980 }}>{item?.description ?? ""}</span>
+          <span style={{ fontSize: 34, color: "#8a93a6", maxWidth: 980 }}>{description}</span>
         </div>
         <div style={{ display: "flex", fontSize: 26, color: "#5a6276", fontFamily: "monospace" }}>
           {`npx shadcn@latest add @neonkit/${slug}`}

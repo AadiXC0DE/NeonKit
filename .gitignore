@@ -110,3 +110,6 @@ coverage
 Doc.md
 # Generated registry
 public/r/
+
+# Internal working notes (tracker, screenshots). Never committed.
+/internal/
