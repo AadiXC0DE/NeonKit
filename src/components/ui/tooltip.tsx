@@ -1,0 +1,249 @@
+"use client";
+
+import * as React from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+
+import { cn } from "@/lib/utils";
+import { neonVars, type NeonColor } from "@/lib/neon";
+
+type Side = "top" | "right" | "bottom" | "left";
+type Align = "start" | "center" | "end";
+
+const EASE = [0.23, 1, 0.32, 1] as const;
+const SKIP_DELAY_WINDOW = 300;
+
+// Shared by every tooltip: once one has been open, the next opens without a delay.
+let lastClosedAt = 0;
+
+function markClosed() {
+  lastClosedAt = Date.now();
+}
+
+function closedRecently() {
+  return Date.now() - lastClosedAt < SKIP_DELAY_WINDOW;
+}
+
+function isFocusVisible(element: Element) {
+  try {
+    return element.matches(":focus-visible");
+  } catch {
+    return true;
+  }
+}
+
+const sides: Record<Side, string> = {
+  top: "bottom-full pb-2",
+  bottom: "top-full pt-2",
+  left: "right-full pr-2",
+  right: "left-full pl-2",
+};
+
+const aligns: Record<"x" | "y", Record<Align, string>> = {
+  x: { start: "left-0", center: "left-1/2 -translate-x-1/2", end: "right-0" },
+  y: { start: "top-0", center: "top-1/2 -translate-y-1/2", end: "bottom-0" },
+};
+
+const arrowSides: Record<Side, string> = {
+  top: "-bottom-1 border-b border-r",
+  bottom: "-top-1 border-l border-t",
+  left: "-right-1 border-r border-t",
+  right: "-left-1 border-b border-l",
+};
+
+const arrowAligns: Record<"x" | "y", Record<Align, string>> = {
+  x: { start: "left-2.5", center: "left-1/2 -ml-1", end: "right-2.5" },
+  y: { start: "top-2.5", center: "top-1/2 -mt-1", end: "bottom-2.5" },
+};
+
+// Where the arrow sits, so the bubble grows out of it.
+const origins: Record<Align, string> = {
+  start: "14px",
+  center: "50%",
+  end: "calc(100% - 14px)",
+};
+
+// The bubble starts nudged toward the trigger and settles outward.
+const nudges: Record<Side, { x?: number; y?: number }> = {
+  top: { y: 4 },
+  bottom: { y: -4 },
+  left: { x: 4 },
+  right: { x: -4 },
+};
+
+export interface TooltipProps
+  extends Omit<
+    React.HTMLAttributes<HTMLSpanElement>,
+    "content" | "color" | "children" | "onAnimationStart" | "onDrag" | "onDragStart" | "onDragEnd"
+  > {
+  content: React.ReactNode;
+  /** The trigger. A single element that accepts focus and ARIA props. */
+  children: React.ReactElement;
+  side?: Side;
+  align?: Align;
+  /** Milliseconds before opening on hover. Closing is immediate. */
+  delay?: number;
+  /** Palette name or hex. Inherits `--neon-accent` when omitted. */
+  color?: NeonColor;
+  disabled?: boolean;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
+  (
+    {
+      content,
+      children,
+      side = "top",
+      align = "center",
+      delay = 300,
+      color,
+      disabled = false,
+      open: openProp,
+      defaultOpen = false,
+      onOpenChange,
+      className,
+      style,
+      ...props
+    },
+    ref,
+  ) => {
+    const id = React.useId();
+    const reduceMotion = useReducedMotion();
+    const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
+    const [instant, setInstant] = React.useState(false);
+    const timer = React.useRef<number | undefined>(undefined);
+    const isControlled = openProp !== undefined;
+    const open = !disabled && (isControlled ? openProp : uncontrolledOpen);
+
+    const setOpen = React.useCallback(
+      (next: boolean) => {
+        if (next === open) return;
+        if (!next) markClosed();
+        if (!isControlled) setUncontrolledOpen(next);
+        onOpenChange?.(next);
+      },
+      [open, isControlled, onOpenChange],
+    );
+
+    React.useEffect(() => () => window.clearTimeout(timer.current), []);
+
+    React.useEffect(() => {
+      if (!open) return;
+      const onKeyDown = (event: KeyboardEvent) => {
+        if (event.key !== "Escape") return;
+        // Close the tooltip first, not the dialog or menu it sits in.
+        event.preventDefault();
+        setOpen(false);
+      };
+      document.addEventListener("keydown", onKeyDown);
+      return () => document.removeEventListener("keydown", onKeyDown);
+    }, [open, setOpen]);
+
+    const show = (immediate: boolean) => {
+      if (disabled) return;
+      window.clearTimeout(timer.current);
+      const sequential = closedRecently();
+      if (immediate || sequential || delay <= 0) {
+        setInstant(sequential);
+        setOpen(true);
+        return;
+      }
+      timer.current = window.setTimeout(() => {
+        setInstant(false);
+        setOpen(true);
+      }, delay);
+    };
+
+    const hide = () => {
+      window.clearTimeout(timer.current);
+      setOpen(false);
+    };
+
+    const child = children as React.ReactElement<React.HTMLAttributes<HTMLElement>>;
+    const describedBy =
+      [child.props["aria-describedby"], open ? id : undefined].filter(Boolean).join(" ") ||
+      undefined;
+
+    const trigger = React.cloneElement(child, {
+      "aria-describedby": describedBy,
+      onFocus: (event: React.FocusEvent<HTMLElement>) => {
+        child.props.onFocus?.(event);
+        if (!event.defaultPrevented && isFocusVisible(event.currentTarget)) show(true);
+      },
+      onBlur: (event: React.FocusEvent<HTMLElement>) => {
+        child.props.onBlur?.(event);
+        hide();
+      },
+    });
+
+    const axis = side === "top" || side === "bottom" ? "x" : "y";
+    const along = origins[align];
+    const transformOrigin = {
+      top: `${along} 100%`,
+      bottom: `${along} 0%`,
+      left: `100% ${along}`,
+      right: `0% ${along}`,
+    }[side];
+
+    return (
+      <span
+        className="relative inline-flex"
+        onPointerEnter={(event) => {
+          if (event.pointerType === "mouse") show(false);
+        }}
+        onPointerLeave={hide}
+        onPointerDown={hide}
+      >
+        {trigger}
+        <AnimatePresence>
+          {open && (
+            <span key="tooltip" className={cn("absolute z-50", sides[side], aligns[axis][align])}>
+              <motion.span
+                ref={ref}
+                id={id}
+                role="tooltip"
+                initial={
+                  instant
+                    ? false
+                    : reduceMotion
+                      ? { opacity: 0 }
+                      : { opacity: 0, scale: 0.96, ...nudges[side] }
+                }
+                animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+                exit={
+                  reduceMotion
+                    ? { opacity: 0, transition: { duration: 0.1 } }
+                    : { opacity: 0, scale: 0.96, transition: { duration: 0.1, ease: EASE } }
+                }
+                transition={{ duration: 0.15, ease: EASE }}
+                style={{ ...neonVars(color, style), transformOrigin }}
+                className={cn(
+                  "[--neon:var(--neon-accent,34_211_238)]",
+                  "relative block w-max whitespace-nowrap rounded-lg border border-[rgb(var(--neon)/0.4)] bg-[#0a0b11] px-2.5 py-1.5 text-xs leading-4 text-white/90",
+                  "shadow-[0_0_14px_-2px_rgb(var(--neon)/0.35),0_8px_20px_-8px_rgb(0_0_0/0.8)]",
+                  className,
+                )}
+                {...props}
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute size-2 rotate-45 border-[rgb(var(--neon)/0.4)] bg-[#0a0b11]",
+                    arrowSides[side],
+                    arrowAligns[axis][align],
+                  )}
+                />
+                {content}
+              </motion.span>
+            </span>
+          )}
+        </AnimatePresence>
+      </span>
+    );
+  },
+);
+Tooltip.displayName = "Tooltip";
+
+export { Tooltip };
