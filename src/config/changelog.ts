@@ -8,6 +8,17 @@ export type Release = {
 
 export const releases: Release[] = [
   {
+    version: "1.2",
+    date: "2026-10-12",
+    title: "Signature neon",
+    notes: [
+      "The pieces nobody else has: a full neon sign with backplate, cable and flicker profiles, a split-flap departures board, seven-segment and LED matrix displays.",
+      "Instruments you can actually use as form controls: knobs, faders, hardware switches and gauges, plus live signal displays (meters, oscilloscope, radar, heartbeat) and glow charts.",
+      "Backgrounds and surfaces: cityscape, aurora, starfield, light rays, rain on glass, particles, hologram cards and a CRT overlay.",
+      "Effect buttons: shimmer, pulse, magnetic, power, cyber and hold-to-confirm.",
+    ],
+  },
+  {
     version: "1.1",
     date: "2026-10-11",
     title: "The standard set",

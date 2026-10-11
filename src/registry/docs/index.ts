@@ -20,6 +20,13 @@ import { doc as calendarDoc } from "./calendar";
 import { doc as datePickerDoc } from "./date-picker";
 import { doc as timeInputDoc } from "./time-input";
 import { doc as fieldDoc } from "./field";
+import { doc as shimmerButtonDoc } from "./shimmer-button";
+import { doc as pulseButtonDoc } from "./pulse-button";
+import { doc as magneticButtonDoc } from "./magnetic-button";
+import { doc as powerButtonDoc } from "./power-button";
+import { doc as cyberButtonDoc } from "./cyber-button";
+import { doc as holdButtonDoc } from "./hold-button";
+import { doc as copyButtonDoc } from "./copy-button";
 import { doc as badgeDoc } from "./badge";
 import { doc as avatarDoc } from "./avatar";
 import { doc as cardDoc } from "./card";
@@ -28,6 +35,7 @@ import { doc as tabsDoc } from "./tabs";
 import { doc as accordionDoc } from "./accordion";
 import { doc as tableDoc } from "./table";
 import { doc as timelineDoc } from "./timeline";
+import { doc as glowChartDoc } from "./glow-chart";
 import { doc as breadcrumbDoc } from "./breadcrumb";
 import { doc as paginationDoc } from "./pagination";
 import { doc as stepperDoc } from "./stepper";
@@ -50,9 +58,40 @@ import { doc as separatorDoc } from "./separator";
 import { doc as scrollAreaDoc } from "./scroll-area";
 import { doc as collapsibleDoc } from "./collapsible";
 import { doc as neonTextDoc } from "./neon-text";
+import { doc as neonSignDoc } from "./neon-sign";
+import { doc as glitchTextDoc } from "./glitch-text";
+import { doc as scrambleTextDoc } from "./scramble-text";
+import { doc as terminalDoc } from "./terminal";
+import { doc as splitFlapDoc } from "./split-flap";
+import { doc as sevenSegmentDoc } from "./seven-segment";
+import { doc as ledMatrixDoc } from "./led-matrix";
+import { doc as knobDoc } from "./knob";
+import { doc as faderDoc } from "./fader";
+import { doc as hardwareSwitchDoc } from "./hardware-switch";
+import { doc as gaugeDoc } from "./gauge";
+import { doc as meterDoc } from "./meter";
+import { doc as equalizerDoc } from "./equalizer";
+import { doc as oscilloscopeDoc } from "./oscilloscope";
+import { doc as radarDoc } from "./radar";
+import { doc as heartbeatDoc } from "./heartbeat";
+import { doc as countdownDoc } from "./countdown";
+import { doc as neonClockDoc } from "./neon-clock";
 import { doc as borderBeamDoc } from "./border-beam";
 import { doc as spotlightCardDoc } from "./spotlight-card";
+import { doc as hologramCardDoc } from "./hologram-card";
+import { doc as neonFrameDoc } from "./neon-frame";
+import { doc as tubeDividerDoc } from "./tube-divider";
+import { doc as crtOverlayDoc } from "./crt-overlay";
+import { doc as cursorGlowDoc } from "./cursor-glow";
+import { doc as marqueeDoc } from "./marquee";
+import { doc as neonIconDoc } from "./neon-icon";
 import { doc as retroGridDoc } from "./retro-grid";
+import { doc as auroraDoc } from "./aurora";
+import { doc as starfieldDoc } from "./starfield";
+import { doc as lightRaysDoc } from "./light-rays";
+import { doc as cityscapeDoc } from "./cityscape";
+import { doc as rainGlassDoc } from "./rain-glass";
+import { doc as particlesDoc } from "./particles";
 
 export const docs: Record<string, ComponentDoc> = {
   "button": buttonDoc,
@@ -75,6 +114,13 @@ export const docs: Record<string, ComponentDoc> = {
   "date-picker": datePickerDoc,
   "time-input": timeInputDoc,
   "field": fieldDoc,
+  "shimmer-button": shimmerButtonDoc,
+  "pulse-button": pulseButtonDoc,
+  "magnetic-button": magneticButtonDoc,
+  "power-button": powerButtonDoc,
+  "cyber-button": cyberButtonDoc,
+  "hold-button": holdButtonDoc,
+  "copy-button": copyButtonDoc,
   "badge": badgeDoc,
   "avatar": avatarDoc,
   "card": cardDoc,
@@ -83,6 +129,7 @@ export const docs: Record<string, ComponentDoc> = {
   "accordion": accordionDoc,
   "table": tableDoc,
   "timeline": timelineDoc,
+  "glow-chart": glowChartDoc,
   "breadcrumb": breadcrumbDoc,
   "pagination": paginationDoc,
   "stepper": stepperDoc,
@@ -105,7 +152,38 @@ export const docs: Record<string, ComponentDoc> = {
   "scroll-area": scrollAreaDoc,
   "collapsible": collapsibleDoc,
   "neon-text": neonTextDoc,
+  "neon-sign": neonSignDoc,
+  "glitch-text": glitchTextDoc,
+  "scramble-text": scrambleTextDoc,
+  "terminal": terminalDoc,
+  "split-flap": splitFlapDoc,
+  "seven-segment": sevenSegmentDoc,
+  "led-matrix": ledMatrixDoc,
+  "knob": knobDoc,
+  "fader": faderDoc,
+  "hardware-switch": hardwareSwitchDoc,
+  "gauge": gaugeDoc,
+  "meter": meterDoc,
+  "equalizer": equalizerDoc,
+  "oscilloscope": oscilloscopeDoc,
+  "radar": radarDoc,
+  "heartbeat": heartbeatDoc,
+  "countdown": countdownDoc,
+  "neon-clock": neonClockDoc,
   "border-beam": borderBeamDoc,
   "spotlight-card": spotlightCardDoc,
+  "hologram-card": hologramCardDoc,
+  "neon-frame": neonFrameDoc,
+  "tube-divider": tubeDividerDoc,
+  "crt-overlay": crtOverlayDoc,
+  "cursor-glow": cursorGlowDoc,
+  "marquee": marqueeDoc,
+  "neon-icon": neonIconDoc,
   "retro-grid": retroGridDoc,
+  "aurora": auroraDoc,
+  "starfield": starfieldDoc,
+  "light-rays": lightRaysDoc,
+  "cityscape": cityscapeDoc,
+  "rain-glass": rainGlassDoc,
+  "particles": particlesDoc,
 };

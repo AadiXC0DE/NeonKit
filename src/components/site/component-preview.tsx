@@ -68,6 +68,8 @@ export function ComponentPreview({
         <div
           style={neonVars(accent ?? undefined)}
           className={cn(
+            // Examples may style with var(--neon) directly; resolve it from the accent here.
+            "[--neon:var(--neon-accent,34_211_238)]",
             "relative flex min-h-[320px] items-center justify-center rounded-b-xl bg-background bg-dots px-6 py-14 [overflow-x:clip] sm:px-10",
             canvasClassName,
           )}

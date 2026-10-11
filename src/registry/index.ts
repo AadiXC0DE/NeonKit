@@ -1,13 +1,15 @@
 import data from "./registry.json";
 import type { RegistryBlock, RegistryItem } from "./types";
 
-/** The release being built. Items added in it get a "new" badge. */
-export const currentVersion = "1.1";
+/** The release being built. */
+export const currentVersion = "1.2";
+/** Items added in these releases get a "new" badge. */
+export const newVersions = ["1.1", "1.2"];
 
 export const categories = data.categories;
 export const registry: RegistryItem[] = data.items;
 
-export const isNew = (item: Pick<RegistryItem, "addedIn">) => item.addedIn === currentVersion;
+export const isNew = (item: Pick<RegistryItem, "addedIn">) => newVersions.includes(item.addedIn);
 
 export const blockCategories = data.blockCategories;
 export const blocks: RegistryBlock[] = data.blocks;

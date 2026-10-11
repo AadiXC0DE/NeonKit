@@ -1,12 +1,16 @@
 {
   "categories": [
     "Forms",
+    "Buttons",
     "Data Display",
     "Navigation",
     "Overlay",
     "Feedback",
     "Layout",
-    "Effects"
+    "Text",
+    "Instruments",
+    "Effects",
+    "Backgrounds"
   ],
   "items": [
     {
@@ -199,6 +203,62 @@
       "addedIn": "1.1"
     },
     {
+      "slug": "shimmer-button",
+      "name": "Shimmer Button",
+      "category": "Buttons",
+      "description": "A light sweeps across the face while a beam runs the border.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "pulse-button",
+      "name": "Pulse Button",
+      "category": "Buttons",
+      "description": "A ring pulses outward to call attention.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "magnetic-button",
+      "name": "Magnetic Button",
+      "category": "Buttons",
+      "description": "Pulled toward the cursor, with a label that leads.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "power-button",
+      "name": "Power Button",
+      "category": "Buttons",
+      "description": "A round power key that ignites with a flickering ring.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "cyber-button",
+      "name": "Cyber Button",
+      "category": "Buttons",
+      "description": "Cut corners, a corner tick and a glitch on hover.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "hold-button",
+      "name": "Hold Button",
+      "category": "Buttons",
+      "description": "Hold to confirm: a tube fills, release drains it.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "copy-button",
+      "name": "Copy Button",
+      "category": "Buttons",
+      "description": "Copy to clipboard with a drawn-on check.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
       "slug": "badge",
       "name": "Badge",
       "category": "Data Display",
@@ -270,6 +330,14 @@
       "description": "Events on a tube that is lit up to now.",
       "dependencies": [],
       "addedIn": "1.1"
+    },
+    {
+      "slug": "glow-chart",
+      "name": "Glow Chart",
+      "category": "Data Display",
+      "description": "Line, area and bar charts with glow, crosshair tooltips and a Sparkline.",
+      "dependencies": [],
+      "addedIn": "1.2"
     },
     {
       "slug": "breadcrumb",
@@ -488,12 +556,158 @@
     {
       "slug": "neon-text",
       "name": "Neon Text",
-      "category": "Effects",
+      "category": "Text",
       "description": "Text rendered as a glowing tube sign, with optional power-on flicker.",
       "dependencies": [
         "motion"
       ],
       "addedIn": "1.0"
+    },
+    {
+      "slug": "neon-sign",
+      "name": "Neon Sign",
+      "category": "Text",
+      "description": "A full sign: acrylic backplate, standoffs, frame tube, cable and a power switch with flicker profiles.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "glitch-text",
+      "name": "Glitch Text",
+      "category": "Text",
+      "description": "RGB-split text with slice jitter, in bursts or on hover.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "scramble-text",
+      "name": "Scramble Text",
+      "category": "Text",
+      "description": "Text that decodes into place from random glyphs.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "terminal",
+      "name": "Terminal",
+      "category": "Text",
+      "description": "A typing terminal and an inline typewriter for rotating headlines.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "split-flap",
+      "name": "Split-Flap Board",
+      "category": "Text",
+      "description": "Departure-board characters that flip mechanically into place.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "seven-segment",
+      "name": "Seven-Segment Display",
+      "category": "Text",
+      "description": "Numbers and clocks on segments you can see even when they're off.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "led-matrix",
+      "name": "LED Matrix",
+      "category": "Text",
+      "description": "Dot-matrix marquee with a built-in 5\u00d77 font.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "knob",
+      "name": "Knob",
+      "category": "Instruments",
+      "description": "A machined rotary control with a lit value arc and detents.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "fader",
+      "name": "Fader",
+      "category": "Instruments",
+      "description": "A mixing-desk channel fader with a scale and an LED meter.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "hardware-switch",
+      "name": "Hardware Switch",
+      "category": "Instruments",
+      "description": "Rocker, safety-cover flip and key switches you can almost feel.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "gauge",
+      "name": "Gauge",
+      "category": "Instruments",
+      "description": "Radial gauge with a sprung needle, redline and digital readout.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "meter",
+      "name": "Meter",
+      "category": "Instruments",
+      "description": "LED VU meter with zones and peak hold.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "equalizer",
+      "name": "Equalizer",
+      "category": "Instruments",
+      "description": "Animated spectrum bars, optionally driven by real audio.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "oscilloscope",
+      "name": "Oscilloscope",
+      "category": "Instruments",
+      "description": "A phosphor trace on a CRT grid, from waveforms or live audio.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "radar",
+      "name": "Radar",
+      "category": "Instruments",
+      "description": "A sweeping radar where blips flare as the beam passes.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "heartbeat",
+      "name": "Heartbeat",
+      "category": "Instruments",
+      "description": "A looping ECG trace with a bright leading edge.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "countdown",
+      "name": "Countdown",
+      "category": "Instruments",
+      "description": "Launch timers in split-flap, digital or neon-tube digits.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "neon-clock",
+      "name": "Neon Clock",
+      "category": "Instruments",
+      "description": "Analog and digital clocks with tube hands and a blinking colon.",
+      "dependencies": [],
+      "addedIn": "1.2"
     },
     {
       "slug": "border-beam",
@@ -512,12 +726,118 @@
       "addedIn": "1.0"
     },
     {
+      "slug": "hologram-card",
+      "name": "Hologram Card",
+      "category": "Effects",
+      "description": "A 3D-tilting card with iridescent foil and a moving glare.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "neon-frame",
+      "name": "Neon Frame",
+      "category": "Effects",
+      "description": "A HUD frame with corner brackets that draw in and label tabs.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "tube-divider",
+      "name": "Tube Divider",
+      "category": "Effects",
+      "description": "Bent neon tube separators with mounting clips.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "crt-overlay",
+      "name": "CRT Overlay",
+      "category": "Effects",
+      "description": "Scanlines, vignette, flicker and a power-on animation over anything.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "cursor-glow",
+      "name": "Cursor Glow",
+      "category": "Effects",
+      "description": "A pointer light with an optional comet trail.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "marquee",
+      "name": "Marquee",
+      "category": "Effects",
+      "description": "Infinite scrolling rows with edge fades and pause on hover.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "neon-icon",
+      "name": "Neon Icon",
+      "category": "Effects",
+      "description": "Status icons whose bars and segments light up in sequence.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
       "slug": "retro-grid",
       "name": "Retro Grid",
-      "category": "Effects",
+      "category": "Backgrounds",
       "description": "Synthwave perspective grid that scrolls toward the horizon.",
       "dependencies": [],
       "addedIn": "1.0"
+    },
+    {
+      "slug": "aurora",
+      "name": "Aurora",
+      "category": "Backgrounds",
+      "description": "Slow curtains of light drifting behind your content.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "starfield",
+      "name": "Starfield",
+      "category": "Backgrounds",
+      "description": "Parallax stars with a hyperspace warp.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "light-rays",
+      "name": "Light Rays",
+      "category": "Backgrounds",
+      "description": "Volumetric beams with drifting dust.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "cityscape",
+      "name": "Cityscape",
+      "category": "Backgrounds",
+      "description": "A night skyline with flickering windows and rooftop signs.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "rain-glass",
+      "name": "Rain on Glass",
+      "category": "Backgrounds",
+      "description": "Droplets sliding down glass over neon bokeh.",
+      "dependencies": [],
+      "addedIn": "1.2"
+    },
+    {
+      "slug": "particles",
+      "name": "Particles",
+      "category": "Backgrounds",
+      "description": "Drifting dust that reacts to the cursor.",
+      "dependencies": [],
+      "addedIn": "1.2"
     }
   ],
   "blockCategories": [
