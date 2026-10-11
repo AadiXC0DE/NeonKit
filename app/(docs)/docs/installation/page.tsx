@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 export default async function InstallationPage() {
   const [init, addOne, addMany, base, utils, neon] = await Promise.all([
     runCommand("shadcn@latest init"),
-    runCommand(`shadcn@latest add ${registryUrl("button")}`),
-    runCommand(`shadcn@latest add ${registryUrl("switch")} ${registryUrl("tabs")} ${registryUrl("toast")}`),
+    runCommand(`shadcn@latest add ${registryUrl("switch")}`),
+    runCommand(`shadcn@latest add ${registryUrl("tabs")} ${registryUrl("toast")} ${registryUrl("slider")}`),
     installCommand(["clsx", "tailwind-merge"]),
     readSource("src/lib/utils.ts"),
     readSource("src/lib/neon.ts"),
@@ -47,17 +47,18 @@ export default async function InstallationPage() {
         </Step>
         <Step title="Use it">
           <CodeBlock
-            code={`import { Button } from "@/components/ui/button"
+            code={`import { Switch } from "@/components/ui/switch"
 
 export default function Page() {
-  return <Button color="cyan">Light it up</Button>
+  return <Switch color="lime" label="Neon on" defaultChecked />
 }`}
           />
         </Step>
       </Steps>
       <P className="mt-8">
-        NeonKit writes to the same <InlineCode>components/ui</InlineCode> folder as shadcn/ui. If you already have a
-        shadcn component with the same name, the CLI asks before overwriting it.
+        NeonKit writes to the same <InlineCode>components/ui</InlineCode> folder as shadcn/ui. If a file with the same
+        name exists (a fresh <InlineCode>shadcn init</InlineCode> ships a button), the CLI asks first. Add{" "}
+        <InlineCode>--overwrite</InlineCode> to replace it without asking.
       </P>
 
       <H2 id="manual">Manual</H2>

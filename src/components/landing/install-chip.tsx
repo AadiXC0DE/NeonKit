@@ -4,7 +4,7 @@ import { CopyButton } from "@/components/site/copy-button";
 import { registryUrl } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-export function InstallChip({ className, name = "button" }: { className?: string; name?: string }) {
+export function InstallChip({ className, name = "switch" }: { className?: string; name?: string }) {
   const command = `npx shadcn@latest add ${registryUrl(name)}`;
   return (
     <div

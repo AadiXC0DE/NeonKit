@@ -52,10 +52,10 @@ export function ThemingPlayground() {
           </div>
           <Progress value={68} label="Upload" showValue size="sm" />
         </div>
-        <div className="space-y-5">
+        <div className="flex flex-col items-start gap-5">
           <Switch defaultChecked label="Neon on" />
           <Checkbox defaultChecked label="Inherit the accent" />
-          <Slider defaultValue={[40]} aria-label="Demo slider" />
+          <Slider defaultValue={[40]} aria-label="Demo slider" className="w-full" />
         </div>
       </div>
       <p className="border-t border-line px-4 py-2.5 font-mono text-[11px] text-dim">

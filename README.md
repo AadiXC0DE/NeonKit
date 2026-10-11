@@ -9,10 +9,10 @@ Live at [get-neonkit.vercel.app](https://get-neonkit.vercel.app).
 NeonKit is a [shadcn registry](https://ui.shadcn.com/docs/registry), so one command writes the file, installs its dependencies and adds the color helper:
 
 ```bash
-npx shadcn@latest add https://get-neonkit.vercel.app/r/button.json
+npx shadcn@latest add https://get-neonkit.vercel.app/r/switch.json
 ```
 
-New to shadcn? Run `npx shadcn@latest init` first. Prefer to paste? Every component page has a Manual tab with the full source.
+New to shadcn? Run `npx shadcn@latest init` first, and add `--overwrite` if a component with the same name already exists. Prefer to paste? Every component page has a Manual tab with the full source.
 
 ## Color
 

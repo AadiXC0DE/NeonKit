@@ -125,6 +125,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
     const selected = selectedIndex >= 0 ? options[selectedIndex] : undefined;
 
     const [open, setOpen] = React.useState(false);
+    const [listWidth, setListWidth] = React.useState<number>();
     const [activeIndex, setActiveIndex] = React.useState(-1);
     const isOpen = open && !disabled;
 
@@ -174,6 +175,8 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             : step(options.length - 1, -1);
       scrollToActive.current = true;
       setActiveIndex(index);
+      // Match the trigger, which may be narrower than the field's container.
+      setListWidth(triggerRef.current?.offsetWidth);
       setOpen(true);
     }
 
@@ -386,8 +389,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                 transition={{ duration: 0.16, ease: EASE_OUT }}
                 // Keep focus on the trigger so aria-activedescendant stays in charge.
                 onMouseDown={(event) => event.preventDefault()}
+                style={{ width: listWidth }}
                 className={cn(
-                  "absolute inset-x-0 top-full z-50 mt-1.5 max-h-64 origin-top overflow-y-auto overscroll-contain border border-white/10 bg-[#0a0b11] p-1",
+                  "absolute left-0 top-full z-50 w-full mt-1.5 max-h-64 origin-top overflow-y-auto overscroll-contain border border-white/10 bg-[#0a0b11] p-1",
                   "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
                   "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]",
                   s.list,
