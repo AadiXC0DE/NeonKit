@@ -108,3 +108,5 @@ coverage
 .jest
 
 Doc.md
+# Generated registry
+public/r/

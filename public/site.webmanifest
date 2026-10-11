@@ -1,5 +1,5 @@
 {
-  "name": "NeonKit - Futuristic UI Components",
+  "name": "NeonKit — Neon UI for React",
   "short_name": "NeonKit",
   "icons": [
     {
@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#05060a",
+  "background_color": "#05060a",
   "display": "standalone"
 }
