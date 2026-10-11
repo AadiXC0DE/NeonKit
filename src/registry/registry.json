@@ -1,0 +1,230 @@
+{
+  "categories": [
+    "Forms",
+    "Data Display",
+    "Feedback",
+    "Overlay",
+    "Effects"
+  ],
+  "items": [
+    {
+      "slug": "button",
+      "name": "Button",
+      "category": "Forms",
+      "description": "Solid, outline, soft, ghost and link buttons that light up on hover.",
+      "dependencies": [
+        "@radix-ui/react-slot",
+        "lucide-react"
+      ]
+    },
+    {
+      "slug": "input",
+      "name": "Input",
+      "category": "Forms",
+      "description": "Text field with an animated neon focus ring, icons, labels and error states.",
+      "dependencies": []
+    },
+    {
+      "slug": "textarea",
+      "name": "Textarea",
+      "category": "Forms",
+      "description": "Multi-line field that grows with its content and counts characters.",
+      "dependencies": []
+    },
+    {
+      "slug": "select",
+      "name": "Select",
+      "category": "Forms",
+      "description": "Keyboard-friendly listbox with a glowing popover and typeahead.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ]
+    },
+    {
+      "slug": "checkbox",
+      "name": "Checkbox",
+      "category": "Forms",
+      "description": "Checkbox with a drawn-on checkmark and indeterminate state.",
+      "dependencies": []
+    },
+    {
+      "slug": "radio-group",
+      "name": "Radio Group",
+      "category": "Forms",
+      "description": "Single choice from a set, with arrow-key navigation and card layouts.",
+      "dependencies": []
+    },
+    {
+      "slug": "switch",
+      "name": "Switch",
+      "category": "Forms",
+      "description": "A toggle that powers on like a neon tube.",
+      "dependencies": []
+    },
+    {
+      "slug": "slider",
+      "name": "Slider",
+      "category": "Forms",
+      "description": "Pointer and keyboard slider with a glowing track and optional range.",
+      "dependencies": []
+    },
+    {
+      "slug": "otp-input",
+      "name": "OTP Input",
+      "category": "Forms",
+      "description": "One-time code input with auto-advance, paste and backspace handling.",
+      "dependencies": [],
+      "isNew": true
+    },
+    {
+      "slug": "badge",
+      "name": "Badge",
+      "category": "Data Display",
+      "description": "Status labels with optional live dot and remove button.",
+      "dependencies": [
+        "lucide-react"
+      ]
+    },
+    {
+      "slug": "avatar",
+      "name": "Avatar",
+      "category": "Data Display",
+      "description": "Profile image with initials fallback, status light and stacked groups.",
+      "dependencies": []
+    },
+    {
+      "slug": "card",
+      "name": "Card",
+      "category": "Data Display",
+      "description": "Surface with header, content and footer slots and a lit edge.",
+      "dependencies": []
+    },
+    {
+      "slug": "kbd",
+      "name": "Kbd",
+      "category": "Data Display",
+      "description": "Keyboard keys and shortcuts that glow when pressed.",
+      "dependencies": [],
+      "isNew": true
+    },
+    {
+      "slug": "tabs",
+      "name": "Tabs",
+      "category": "Data Display",
+      "description": "Tabbed panels with a sliding light indicator and roving focus.",
+      "dependencies": [
+        "motion"
+      ],
+      "isNew": true
+    },
+    {
+      "slug": "accordion",
+      "name": "Accordion",
+      "category": "Data Display",
+      "description": "Collapsible sections with smooth height animation.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "isNew": true
+    },
+    {
+      "slug": "progress",
+      "name": "Progress",
+      "category": "Feedback",
+      "description": "Linear and circular progress with a moving highlight.",
+      "dependencies": []
+    },
+    {
+      "slug": "spinner",
+      "name": "Spinner",
+      "category": "Feedback",
+      "description": "Ring, dots and bars loaders in any neon color.",
+      "dependencies": [],
+      "isNew": true
+    },
+    {
+      "slug": "skeleton",
+      "name": "Skeleton",
+      "category": "Feedback",
+      "description": "Loading placeholders with a scanning shimmer.",
+      "dependencies": [],
+      "isNew": true
+    },
+    {
+      "slug": "alert",
+      "name": "Alert",
+      "category": "Feedback",
+      "description": "Inline messages for info, success, warning and errors.",
+      "dependencies": [
+        "lucide-react"
+      ]
+    },
+    {
+      "slug": "toast",
+      "name": "Toast",
+      "category": "Feedback",
+      "description": "Stacked notifications with a tiny toast() API. No provider needed.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "isNew": true
+    },
+    {
+      "slug": "dialog",
+      "name": "Dialog",
+      "category": "Overlay",
+      "description": "Accessible modal built on the native dialog element.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ]
+    },
+    {
+      "slug": "tooltip",
+      "name": "Tooltip",
+      "category": "Overlay",
+      "description": "Hover and focus hints on four sides.",
+      "dependencies": [
+        "motion"
+      ],
+      "isNew": true
+    },
+    {
+      "slug": "neon-text",
+      "name": "Neon Text",
+      "category": "Effects",
+      "description": "Text rendered as a glowing tube sign, with optional power-on flicker.",
+      "dependencies": [
+        "motion"
+      ],
+      "isNew": true
+    },
+    {
+      "slug": "border-beam",
+      "name": "Border Beam",
+      "category": "Effects",
+      "description": "A beam of light that travels around any element's border.",
+      "dependencies": [],
+      "isNew": true
+    },
+    {
+      "slug": "spotlight-card",
+      "name": "Spotlight Card",
+      "category": "Effects",
+      "description": "Card whose border and surface light up under the cursor.",
+      "dependencies": [],
+      "isNew": true
+    },
+    {
+      "slug": "retro-grid",
+      "name": "Retro Grid",
+      "category": "Effects",
+      "description": "Synthwave perspective grid that scrolls toward the horizon.",
+      "dependencies": [],
+      "isNew": true
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Request a component (form)
+    url: https://get-neonkit.vercel.app/request
+    about: The friendliest way to ask for something new.
+  - name: Chat on X
+    url: https://x.com/AadiChowdhury7
+    about: Questions, ideas, or show us what you built.

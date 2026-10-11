@@ -1,0 +1,56 @@
+import type { ComponentDoc } from "../types";
+import { doc as buttonDoc } from "./button";
+import { doc as inputDoc } from "./input";
+import { doc as textareaDoc } from "./textarea";
+import { doc as selectDoc } from "./select";
+import { doc as checkboxDoc } from "./checkbox";
+import { doc as radioGroupDoc } from "./radio-group";
+import { doc as switchDoc } from "./switch";
+import { doc as sliderDoc } from "./slider";
+import { doc as otpInputDoc } from "./otp-input";
+import { doc as badgeDoc } from "./badge";
+import { doc as avatarDoc } from "./avatar";
+import { doc as cardDoc } from "./card";
+import { doc as kbdDoc } from "./kbd";
+import { doc as tabsDoc } from "./tabs";
+import { doc as accordionDoc } from "./accordion";
+import { doc as progressDoc } from "./progress";
+import { doc as spinnerDoc } from "./spinner";
+import { doc as skeletonDoc } from "./skeleton";
+import { doc as alertDoc } from "./alert";
+import { doc as toastDoc } from "./toast";
+import { doc as dialogDoc } from "./dialog";
+import { doc as tooltipDoc } from "./tooltip";
+import { doc as neonTextDoc } from "./neon-text";
+import { doc as borderBeamDoc } from "./border-beam";
+import { doc as spotlightCardDoc } from "./spotlight-card";
+import { doc as retroGridDoc } from "./retro-grid";
+
+export const docs: Record<string, ComponentDoc> = {
+  "button": buttonDoc,
+  "input": inputDoc,
+  "textarea": textareaDoc,
+  "select": selectDoc,
+  "checkbox": checkboxDoc,
+  "radio-group": radioGroupDoc,
+  "switch": switchDoc,
+  "slider": sliderDoc,
+  "otp-input": otpInputDoc,
+  "badge": badgeDoc,
+  "avatar": avatarDoc,
+  "card": cardDoc,
+  "kbd": kbdDoc,
+  "tabs": tabsDoc,
+  "accordion": accordionDoc,
+  "progress": progressDoc,
+  "spinner": spinnerDoc,
+  "skeleton": skeletonDoc,
+  "alert": alertDoc,
+  "toast": toastDoc,
+  "dialog": dialogDoc,
+  "tooltip": tooltipDoc,
+  "neon-text": neonTextDoc,
+  "border-beam": borderBeamDoc,
+  "spotlight-card": spotlightCardDoc,
+  "retro-grid": retroGridDoc,
+};

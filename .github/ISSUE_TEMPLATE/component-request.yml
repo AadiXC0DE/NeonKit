@@ -1,0 +1,35 @@
+name: Component request
+description: Ask for a component NeonKit doesn't have yet.
+title: "[Component]: "
+labels: ["component-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. Upvote existing requests with a thumbs-up instead of opening a duplicate: the most wanted ones ship first.
+  - type: input
+    id: name
+    attributes:
+      label: Component
+      placeholder: Command palette
+    validations:
+      required: true
+  - type: input
+    id: category
+    attributes:
+      label: Category
+      description: Forms, Data Display, Feedback, Overlay, Effects, or not sure.
+      placeholder: Overlay
+  - type: textarea
+    id: details
+    attributes:
+      label: What should it do?
+      description: The use case matters more than the look. What are you building?
+    validations:
+      required: true
+  - type: input
+    id: reference
+    attributes:
+      label: Reference
+      description: Optional. A link to something similar you like.
+      placeholder: https://
