@@ -9,19 +9,46 @@ import { doc as radioGroupDoc } from "./radio-group";
 import { doc as switchDoc } from "./switch";
 import { doc as sliderDoc } from "./slider";
 import { doc as otpInputDoc } from "./otp-input";
+import { doc as toggleGroupDoc } from "./toggle-group";
+import { doc as comboboxDoc } from "./combobox";
+import { doc as tagInputDoc } from "./tag-input";
+import { doc as numberInputDoc } from "./number-input";
+import { doc as fileDropzoneDoc } from "./file-dropzone";
+import { doc as ratingDoc } from "./rating";
+import { doc as colorPickerDoc } from "./color-picker";
+import { doc as calendarDoc } from "./calendar";
+import { doc as datePickerDoc } from "./date-picker";
+import { doc as timeInputDoc } from "./time-input";
+import { doc as fieldDoc } from "./field";
 import { doc as badgeDoc } from "./badge";
 import { doc as avatarDoc } from "./avatar";
 import { doc as cardDoc } from "./card";
 import { doc as kbdDoc } from "./kbd";
 import { doc as tabsDoc } from "./tabs";
 import { doc as accordionDoc } from "./accordion";
+import { doc as tableDoc } from "./table";
+import { doc as timelineDoc } from "./timeline";
+import { doc as breadcrumbDoc } from "./breadcrumb";
+import { doc as paginationDoc } from "./pagination";
+import { doc as stepperDoc } from "./stepper";
+import { doc as navigationMenuDoc } from "./navigation-menu";
+import { doc as sidebarDoc } from "./sidebar";
+import { doc as dialogDoc } from "./dialog";
+import { doc as tooltipDoc } from "./tooltip";
+import { doc as dropdownMenuDoc } from "./dropdown-menu";
+import { doc as contextMenuDoc } from "./context-menu";
+import { doc as popoverDoc } from "./popover";
+import { doc as hoverCardDoc } from "./hover-card";
+import { doc as commandDoc } from "./command";
+import { doc as sheetDoc } from "./sheet";
 import { doc as progressDoc } from "./progress";
 import { doc as spinnerDoc } from "./spinner";
 import { doc as skeletonDoc } from "./skeleton";
 import { doc as alertDoc } from "./alert";
 import { doc as toastDoc } from "./toast";
-import { doc as dialogDoc } from "./dialog";
-import { doc as tooltipDoc } from "./tooltip";
+import { doc as separatorDoc } from "./separator";
+import { doc as scrollAreaDoc } from "./scroll-area";
+import { doc as collapsibleDoc } from "./collapsible";
 import { doc as neonTextDoc } from "./neon-text";
 import { doc as borderBeamDoc } from "./border-beam";
 import { doc as spotlightCardDoc } from "./spotlight-card";
@@ -37,19 +64,46 @@ export const docs: Record<string, ComponentDoc> = {
   "switch": switchDoc,
   "slider": sliderDoc,
   "otp-input": otpInputDoc,
+  "toggle-group": toggleGroupDoc,
+  "combobox": comboboxDoc,
+  "tag-input": tagInputDoc,
+  "number-input": numberInputDoc,
+  "file-dropzone": fileDropzoneDoc,
+  "rating": ratingDoc,
+  "color-picker": colorPickerDoc,
+  "calendar": calendarDoc,
+  "date-picker": datePickerDoc,
+  "time-input": timeInputDoc,
+  "field": fieldDoc,
   "badge": badgeDoc,
   "avatar": avatarDoc,
   "card": cardDoc,
   "kbd": kbdDoc,
   "tabs": tabsDoc,
   "accordion": accordionDoc,
+  "table": tableDoc,
+  "timeline": timelineDoc,
+  "breadcrumb": breadcrumbDoc,
+  "pagination": paginationDoc,
+  "stepper": stepperDoc,
+  "navigation-menu": navigationMenuDoc,
+  "sidebar": sidebarDoc,
+  "dialog": dialogDoc,
+  "tooltip": tooltipDoc,
+  "dropdown-menu": dropdownMenuDoc,
+  "context-menu": contextMenuDoc,
+  "popover": popoverDoc,
+  "hover-card": hoverCardDoc,
+  "command": commandDoc,
+  "sheet": sheetDoc,
   "progress": progressDoc,
   "spinner": spinnerDoc,
   "skeleton": skeletonDoc,
   "alert": alertDoc,
   "toast": toastDoc,
-  "dialog": dialogDoc,
-  "tooltip": tooltipDoc,
+  "separator": separatorDoc,
+  "scroll-area": scrollAreaDoc,
+  "collapsible": collapsibleDoc,
   "neon-text": neonTextDoc,
   "border-beam": borderBeamDoc,
   "spotlight-card": spotlightCardDoc,

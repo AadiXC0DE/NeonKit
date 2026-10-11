@@ -2,8 +2,10 @@
   "categories": [
     "Forms",
     "Data Display",
-    "Feedback",
+    "Navigation",
     "Overlay",
+    "Feedback",
+    "Layout",
     "Effects"
   ],
   "items": [
@@ -87,6 +89,116 @@
       "addedIn": "1.0"
     },
     {
+      "slug": "toggle-group",
+      "name": "Toggle Group",
+      "category": "Forms",
+      "description": "Toggles and segmented controls with a lit pill that slides to the selection.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "combobox",
+      "name": "Combobox",
+      "category": "Forms",
+      "description": "Searchable select with filtering, keyboard nav and an async-friendly API.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion",
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "tag-input",
+      "name": "Tag Input",
+      "category": "Forms",
+      "description": "Type, paste or backspace your way through a row of glowing chips.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "number-input",
+      "name": "Number Input",
+      "category": "Forms",
+      "description": "Steppers, drag-to-scrub, min, max, step and locale formatting.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "file-dropzone",
+      "name": "File Dropzone",
+      "category": "Forms",
+      "description": "Drag files in and the dashed tube border powers up. Lists files with progress.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "rating",
+      "name": "Rating",
+      "category": "Forms",
+      "description": "Stars or bolts that flicker on as you hover, with half steps.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "color-picker",
+      "name": "Color Picker",
+      "category": "Forms",
+      "description": "Neon gel swatches, a hue knob and a hex field in one control.",
+      "dependencies": [],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "calendar",
+      "name": "Calendar",
+      "category": "Forms",
+      "description": "Single, range and multiple selection with full keyboard grid navigation.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "date-picker",
+      "name": "Date Picker",
+      "category": "Forms",
+      "description": "A field that opens a calendar, with presets and range support.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "calendar",
+        "popover"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "time-input",
+      "name": "Time Input",
+      "category": "Forms",
+      "description": "Segmented hours and minutes you can type, arrow or scrub.",
+      "dependencies": [],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "field",
+      "name": "Field",
+      "category": "Forms",
+      "description": "Label, description and error wiring for any control, plus a standalone Label.",
+      "dependencies": [],
+      "addedIn": "1.1"
+    },
+    {
       "slug": "badge",
       "name": "Badge",
       "category": "Data Display",
@@ -142,6 +254,167 @@
       "addedIn": "1.0"
     },
     {
+      "slug": "table",
+      "name": "Table",
+      "category": "Data Display",
+      "description": "Sortable, selectable table with a sticky header and a row hover beam.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "timeline",
+      "name": "Timeline",
+      "category": "Data Display",
+      "description": "Events on a tube that is lit up to now.",
+      "dependencies": [],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "breadcrumb",
+      "name": "Breadcrumb",
+      "category": "Navigation",
+      "description": "Path navigation with separators and overflow collapse.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "pagination",
+      "name": "Pagination",
+      "category": "Navigation",
+      "description": "Page controls with a sliding active indicator and a compact mode.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "stepper",
+      "name": "Stepper",
+      "category": "Navigation",
+      "description": "Steps joined by a tube that fills as you progress.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "navigation-menu",
+      "name": "Navigation Menu",
+      "category": "Navigation",
+      "description": "Top navigation with mega-menu panels and a moving light indicator.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion",
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "sidebar",
+      "name": "Sidebar",
+      "category": "Navigation",
+      "description": "App sidebar with groups, collapse-to-rail and an active tube marker.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "dialog",
+      "name": "Dialog",
+      "category": "Overlay",
+      "description": "Accessible modal built on the native dialog element.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "addedIn": "1.0"
+    },
+    {
+      "slug": "tooltip",
+      "name": "Tooltip",
+      "category": "Overlay",
+      "description": "Hover and focus hints on four sides.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "addedIn": "1.0"
+    },
+    {
+      "slug": "dropdown-menu",
+      "name": "Dropdown Menu",
+      "category": "Overlay",
+      "description": "Menus with groups, checkable items, submenus and a gliding highlight.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion",
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "context-menu",
+      "name": "Context Menu",
+      "category": "Overlay",
+      "description": "Right-click menus built on the Dropdown Menu parts.",
+      "dependencies": [],
+      "registryDependencies": [
+        "dropdown-menu"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "popover",
+      "name": "Popover",
+      "category": "Overlay",
+      "description": "Anchored panel that flips to stay on screen, with arrow and focus handling.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "hover-card",
+      "name": "Hover Card",
+      "category": "Overlay",
+      "description": "Rich previews that open on hover or focus.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "command",
+      "name": "Command",
+      "category": "Overlay",
+      "description": "A \u2318K palette with groups, fuzzy search and keyboard navigation.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "sheet",
+      "name": "Sheet",
+      "category": "Overlay",
+      "description": "Side panel on the native dialog with a lit leading edge.",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "addedIn": "1.1"
+    },
+    {
       "slug": "progress",
       "name": "Progress",
       "category": "Feedback",
@@ -187,26 +460,30 @@
       "addedIn": "1.0"
     },
     {
-      "slug": "dialog",
-      "name": "Dialog",
-      "category": "Overlay",
-      "description": "Accessible modal built on the native dialog element.",
-      "dependencies": [
-        "motion",
-        "lucide-react"
-      ],
-      "addedIn": "1.0"
+      "slug": "separator",
+      "name": "Separator",
+      "category": "Layout",
+      "description": "Hairlines and tube dividers, with optional labels.",
+      "dependencies": [],
+      "addedIn": "1.1"
     },
     {
-      "slug": "tooltip",
-      "name": "Tooltip",
-      "category": "Overlay",
-      "description": "Hover and focus hints on four sides.",
+      "slug": "scroll-area",
+      "name": "Scroll Area",
+      "category": "Layout",
+      "description": "Thin neon scrollbar with edge fades that appear only when needed.",
+      "dependencies": [],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "collapsible",
+      "name": "Collapsible",
+      "category": "Layout",
+      "description": "A single disclosure with smooth height animation.",
       "dependencies": [
-        "@floating-ui/react-dom",
         "motion"
       ],
-      "addedIn": "1.0"
+      "addedIn": "1.1"
     },
     {
       "slug": "neon-text",
