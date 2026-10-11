@@ -28,7 +28,7 @@ npx shadcn@latest add @neonkit/switch @neonkit/tabs @neonkit/toast
 
 ## With AI agents
 
-Point Cursor, Claude Code, Copilot or v0 at [`/llms.txt`](https://get-neonkit.vercel.app/llms.txt). Every component page has a markdown version (add `.md` to the URL), and with the namespace above the [shadcn MCP server](https://get-neonkit.vercel.app/docs/ai#mcp) can search and install NeonKit for you.
+Point Cursor, Copilot, v0 or any coding agent at [`/llms.txt`](https://get-neonkit.vercel.app/llms.txt). Every component page has a markdown version (add `.md` to the URL), and with the namespace above the [shadcn MCP server](https://get-neonkit.vercel.app/docs/ai#mcp) can search and install NeonKit for you.
 
 ## Color
 

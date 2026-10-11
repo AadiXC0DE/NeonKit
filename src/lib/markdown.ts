@@ -125,7 +125,7 @@ export function llmsTxt() {
       `- [Introduction](${siteConfig.url}/docs): what NeonKit is and how it works`,
       `- [Installation](${siteConfig.url}/docs/installation): shadcn CLI, namespaced registry, manual setup`,
       `- [Theming](${siteConfig.url}/docs/theming): the --neon variable, palette and custom colors`,
-      `- [Use with AI](${siteConfig.url}/docs/ai): MCP, Cursor, Claude Code, v0 and prompts`,
+      `- [Use with AI](${siteConfig.url}/docs/ai): MCP, Cursor, Copilot, v0 and prompts`,
     ].join("\n"),
     ...categories.flatMap((category) => [
       `## ${category}`,

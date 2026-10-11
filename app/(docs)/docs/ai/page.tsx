@@ -8,13 +8,13 @@ import { runCommand } from "@/lib/commands";
 export const metadata: Metadata = {
   title: "Use with AI",
   description:
-    "Use NeonKit from Cursor, Claude Code, Copilot or v0: llms.txt, markdown docs, a namespaced shadcn registry and the shadcn MCP server.",
+    "Use NeonKit from Cursor, Copilot, v0 and other coding agents: llms.txt, markdown docs, a namespaced shadcn registry and the shadcn MCP server.",
   alternates: { canonical: "/docs/ai" },
 };
 
 export default async function AiPage() {
   const [mcp, add] = await Promise.all([
-    runCommand("shadcn@latest mcp init --client claude"),
+    runCommand("shadcn@latest mcp init --client cursor"),
     runCommand("shadcn@latest add @neonkit/switch @neonkit/dialog"),
   ]);
 
@@ -80,8 +80,8 @@ export default async function AiPage() {
         <Step title="Connect your client">
           <CommandBlock commands={mcp} />
           <p>
-            Swap <InlineCode>claude</InlineCode> for <InlineCode>cursor</InlineCode>, <InlineCode>vscode</InlineCode> or{" "}
-            <InlineCode>codex</InlineCode>.
+            Swap <InlineCode>cursor</InlineCode> for <InlineCode>vscode</InlineCode>, <InlineCode>codex</InlineCode> or
+            whichever MCP client you use.
           </p>
         </Step>
         <Step title="Ask">
@@ -101,8 +101,8 @@ export default async function AiPage() {
 
       <H2 id="agents-md">Tell your agent to use it</H2>
       <P>
-        Add this to <InlineCode>AGENTS.md</InlineCode>, <InlineCode>CLAUDE.md</InlineCode> or your Cursor rules, and new
-        UI will reach for NeonKit by default.
+        Add this to <InlineCode>AGENTS.md</InlineCode> or your editor&apos;s rules file, and new UI will reach for
+        NeonKit by default.
       </P>
       <CodeBlock
         title="AGENTS.md"
