@@ -4,8 +4,10 @@ import { afterEach } from "vitest";
 
 afterEach(() => cleanup());
 
-// jsdom lacks these; components touch them.
-if (!window.matchMedia) {
+// jsdom lacks these; components touch them. Node-environment suites skip this.
+const browser = typeof window !== "undefined";
+
+if (browser && !window.matchMedia) {
   window.matchMedia = (query: string) =>
     ({
       matches: false,
@@ -19,11 +21,11 @@ if (!window.matchMedia) {
     }) as MediaQueryList;
 }
 
-if (!Element.prototype.scrollIntoView) {
+if (browser && !Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {};
 }
 
-if (!HTMLElement.prototype.setPointerCapture) {
+if (browser && !HTMLElement.prototype.setPointerCapture) {
   HTMLElement.prototype.setPointerCapture = () => {};
   HTMLElement.prototype.releasePointerCapture = () => {};
   HTMLElement.prototype.hasPointerCapture = () => false;

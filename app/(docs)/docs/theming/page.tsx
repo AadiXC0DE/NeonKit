@@ -6,7 +6,8 @@ import { neonColorNames, neonColors } from "@/lib/neon";
 
 export const metadata: Metadata = {
   title: "Theming",
-  description: "One CSS variable colors every NeonKit component. Here is how to set it.",
+  description: "One CSS variable colors every NeonKit component. Set it per component, per section or app-wide, with any hex.",
+  alternates: { canonical: "/docs/theming" },
 };
 
 const toHex = (rgb: string) =>
@@ -94,7 +95,7 @@ export default function ThemingPage() {
 
       <PagerLinks
         prev={{ title: "Installation", href: "/docs/installation" }}
-        next={{ title: "All components", href: "/components" }}
+        next={{ title: "Use with AI", href: "/docs/ai" }}
       />
     </article>
   );

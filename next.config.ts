@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [{ source: "/components/:slug.md", destination: "/md/:slug" }];
+  },
   async redirects() {
     return [
       { source: "/setup", destination: "/docs/installation", permanent: true },

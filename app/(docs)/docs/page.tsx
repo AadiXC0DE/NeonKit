@@ -7,7 +7,8 @@ import { registry } from "@/registry";
 
 export const metadata: Metadata = {
   title: "Introduction",
-  description: "What NeonKit is, how it works, and where to start.",
+  description: "NeonKit is a free, open-source set of neon React components for Tailwind. What it is, how it works and where to start.",
+  alternates: { canonical: "/docs" },
 };
 
 const principles = [

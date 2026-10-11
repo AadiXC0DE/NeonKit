@@ -6,7 +6,8 @@ import { categories, registry } from "@/registry";
 
 export const metadata: Metadata = {
   title: "Components",
-  description: "Every NeonKit component, by category.",
+  description: `All ${registry.length} NeonKit neon components for React and Tailwind: buttons, inputs, selects, dialogs, toasts, tabs and glow effects.`,
+  alternates: { canonical: "/components" },
 };
 
 export default function ComponentsIndexPage() {

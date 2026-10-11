@@ -2,7 +2,9 @@
 
 Neon UI components for React and Tailwind. Calm at rest, lit when it matters. Copy them in or add them with the shadcn CLI. Either way the code is yours.
 
-Live at [get-neonkit.vercel.app](https://get-neonkit.vercel.app).
+**[get-neonkit.vercel.app](https://get-neonkit.vercel.app)** · [Components](https://get-neonkit.vercel.app/components) · [Use with AI](https://get-neonkit.vercel.app/docs/ai) · [Request a component](https://get-neonkit.vercel.app/request)
+
+![NeonKit](https://get-neonkit.vercel.app/opengraph-image)
 
 ## Add a component
 
@@ -13,6 +15,20 @@ npx shadcn@latest add https://get-neonkit.vercel.app/r/switch.json
 ```
 
 New to shadcn? Run `npx shadcn@latest init` first, and add `--overwrite` if a component with the same name already exists. Prefer to paste? Every component page has a Manual tab with the full source.
+
+Or register the namespace once in `components.json` and use short names:
+
+```json
+{ "registries": { "@neonkit": "https://get-neonkit.vercel.app/r/{name}.json" } }
+```
+
+```bash
+npx shadcn@latest add @neonkit/switch @neonkit/tabs @neonkit/toast
+```
+
+## With AI agents
+
+Point Cursor, Claude Code, Copilot or v0 at [`/llms.txt`](https://get-neonkit.vercel.app/llms.txt). Every component page has a markdown version (add `.md` to the URL), and with the namespace above the [shadcn MCP server](https://get-neonkit.vercel.app/docs/ai#mcp) can search and install NeonKit for you.
 
 ## Color
 
@@ -56,7 +72,13 @@ app/                      the docs site
 scripts/build-registry.mjs
 ```
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for the component rules.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the component rules. Missing a component? [Request it](https://get-neonkit.vercel.app/request).
+
+## Support
+
+NeonKit is free and built by one person. If it helps you, [sponsor on GitHub](https://github.com/sponsors/AadiXC0DE), [buy me a coffee](https://www.buymeacoffee.com/AadiChowdhury7), or just star the repo. It helps other people find it.
+
+Built by [@AadiChowdhury7](https://x.com/AadiChowdhury7).
 
 ## License
 

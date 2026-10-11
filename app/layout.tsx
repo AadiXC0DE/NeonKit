@@ -11,27 +11,42 @@ const neon = Tilt_Neon({ subsets: ["latin"], variable: "--font-tilt-neon", displ
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "NeonKit — neon UI components for React",
+    default: siteConfig.title,
     template: "%s · NeonKit",
   },
   description: siteConfig.description,
-  keywords: ["neon", "react components", "tailwind", "shadcn", "ui library", "dark mode", "cyberpunk", "glow"],
-  authors: [{ name: siteConfig.author, url: siteConfig.authorUrl }],
-  creator: siteConfig.author,
+  applicationName: "NeonKit",
+  keywords: siteConfig.keywords,
+  authors: [{ name: siteConfig.author.name, url: siteConfig.author.site }],
+  creator: siteConfig.author.name,
+  publisher: siteConfig.author.name,
+  category: "technology",
+  alternates: {
+    types: { "text/plain": [{ url: "/llms.txt", title: "LLM-friendly docs" }] },
+  },
   openGraph: {
     type: "website",
     url: siteConfig.url,
     siteName: "NeonKit",
-    title: "NeonKit — neon UI components for React",
+    locale: "en_US",
+    title: siteConfig.title,
     description: siteConfig.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "NeonKit — neon UI components for React",
+    site: `@${siteConfig.author.handle}`,
+    creator: `@${siteConfig.author.handle}`,
+    title: siteConfig.title,
     description: siteConfig.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
   icons: {
     icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
     ],

@@ -14,7 +14,8 @@ import { Search } from "./search";
 const links = [
   { title: "Docs", href: "/docs" },
   { title: "Components", href: "/components" },
-  { title: "Theming", href: "/docs/theming" },
+  { title: "Use with AI", href: "/docs/ai" },
+  { title: "Sponsor", href: "/sponsor" },
 ];
 
 export function SiteHeader({ className }: { className?: string }) {
@@ -47,7 +48,9 @@ export function SiteHeader({ className }: { className?: string }) {
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
           {links.map((link) => {
             const active =
-              link.href === "/docs" ? pathname === "/docs" || pathname === "/docs/installation" : pathname.startsWith(link.href);
+              link.href === "/docs"
+                ? pathname.startsWith("/docs") && pathname !== "/docs/ai"
+                : pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}
@@ -71,7 +74,7 @@ export function SiteHeader({ className }: { className?: string }) {
             className="inline-flex h-8 items-center gap-2 rounded-md px-2.5 text-[13px] text-muted transition-colors hover:bg-white/[0.05] hover:text-fg"
           >
             <GitHubIcon className="size-4" />
-            <span className="hidden sm:inline">GitHub</span>
+            <span className="hidden sm:inline">Star</span>
           </a>
           <button
             type="button"
@@ -86,6 +89,18 @@ export function SiteHeader({ className }: { className?: string }) {
       </div>
       {open && (
         <div className="fixed inset-x-0 bottom-0 top-14 z-50 overflow-y-auto border-t border-line bg-background px-4 pb-16 pt-6 md:hidden">
+          <nav aria-label="Site" className="mb-8 grid grid-cols-2 gap-2">
+            {[...links, { title: "Request a component", href: "/request" }].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className="rounded-lg border border-line px-3 py-2.5 text-[14px] text-fg"
+              >
+                {link.title}
+              </Link>
+            ))}
+          </nav>
           <DocsNav onNavigate={() => setOpen(false)} />
         </div>
       )}

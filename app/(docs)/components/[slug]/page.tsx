@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CodeBlock } from "@/components/site/code-block";
+import { CopyPage } from "@/components/site/copy-page";
+import { JsonLd } from "@/components/site/json-ld";
 import { ComponentPreview } from "@/components/site/component-preview";
 import { CommandBlock, InstallTabs } from "@/components/site/install-tabs";
 import { H2, H3, InlineCode, P, PagerLinks, Step, Steps } from "@/components/site/prose";
 import { PropsTable } from "@/components/site/props-table";
 import { Toc, type TocItem } from "@/components/site/toc";
-import { registryUrl } from "@/config/site";
+import { registryUrl, siteConfig } from "@/config/site";
 import { installCommand, runCommand } from "@/lib/commands";
 import { highlight, readSource } from "@/lib/highlight";
 import { componentPath, examplePath, getItem, getNeighbours, registry } from "@/registry";
@@ -25,10 +27,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const item = getItem(slug);
   if (!item) return {};
+  const title = `${item.name}`;
+  const description = `${item.description} A neon ${item.name.toLowerCase()} component for React and Tailwind, installable with the shadcn CLI.`;
   return {
-    title: item.name,
-    description: item.description,
-    alternates: { canonical: `/components/${slug}` },
+    title,
+    description,
+    keywords: [`neon ${item.name.toLowerCase()}`, `react ${item.name.toLowerCase()}`, `tailwind ${item.name.toLowerCase()}`, `shadcn ${item.name.toLowerCase()}`, ...siteConfig.keywords.slice(0, 4)],
+    alternates: {
+      canonical: `/components/${slug}`,
+      types: { "text/markdown": [{ url: `/components/${slug}.md`, title: `${item.name} as Markdown` }] },
+    },
+    openGraph: {
+      title: `${item.name} · NeonKit`,
+      description,
+      url: `/components/${slug}`,
+      type: "article",
+      siteName: "NeonKit",
+      locale: "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${item.name} · NeonKit`,
+      description,
+      creator: `@${siteConfig.author.handle}`,
+    },
   };
 }
 
@@ -66,8 +88,32 @@ export default async function ComponentPage({ params }: Props) {
     ...(doc.notes?.length ? [{ id: "accessibility", title: "Accessibility" }] : []),
   ];
 
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      headline: `${item.name}: neon React component`,
+      description: item.description,
+      url: `${siteConfig.url}/components/${slug}`,
+      author: { "@type": "Person", name: siteConfig.author.name, url: siteConfig.author.site },
+      isPartOf: { "@type": "WebSite", name: "NeonKit", url: siteConfig.url },
+      proficiencyLevel: "Beginner",
+      dependencies: item.dependencies.join(", ") || undefined,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "NeonKit", item: siteConfig.url },
+        { "@type": "ListItem", position: 2, name: "Components", item: `${siteConfig.url}/components` },
+        { "@type": "ListItem", position: 3, name: item.name, item: `${siteConfig.url}/components/${slug}` },
+      ],
+    },
+  ];
+
   return (
     <div className="flex gap-14">
+      <JsonLd data={structuredData} />
       <article className="min-w-0 max-w-3xl flex-1">
         <header className="mb-8">
           <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
@@ -77,7 +123,10 @@ export default async function ComponentPage({ params }: Props) {
             <span className="mx-2 text-white/15">/</span>
             {item.category}
           </p>
-          <h1 className="text-[2.5rem] font-semibold leading-[1.05] tracking-[-0.035em] text-fg">{item.name}</h1>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h1 className="text-[2.5rem] font-semibold leading-[1.05] tracking-[-0.035em] text-fg">{item.name}</h1>
+            <CopyPage href={`/components/${slug}.md`} />
+          </div>
           <p className="mt-3 max-w-2xl text-[17px] leading-relaxed text-muted">{item.description}</p>
           {item.dependencies.length > 0 && (
             <div className="mt-5 flex flex-wrap items-center gap-2 font-mono text-[11px] text-dim">

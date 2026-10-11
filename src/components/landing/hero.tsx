@@ -40,6 +40,7 @@ export function Hero({ componentCount }: { componentCount: number }) {
       />
 
       <div className="mx-auto flex min-h-[calc(100svh-3.5rem)] max-w-[88rem] flex-col px-4 pb-10 pt-8 sm:px-6 lg:pb-14">
+        <h1 className="sr-only">NeonKit: neon UI components for React and Tailwind CSS</h1>
         <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
           <span>Neon UI for React</span>
           <span className="hidden sm:inline">{componentCount} components · MIT</span>
@@ -58,7 +59,8 @@ export function Hero({ componentCount }: { componentCount: number }) {
             <Screw className="bottom-3 left-3" />
             <Screw className="bottom-3 right-3" />
             <NeonText
-              as="h1"
+              as="p"
+              aria-hidden
               on={on}
               buzz
               className="font-neon text-[clamp(4.25rem,17vw,13.5rem)] leading-[1.05] tracking-[-0.01em]"

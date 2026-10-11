@@ -2,20 +2,22 @@ import type { Metadata } from "next";
 import { CodeBlock } from "@/components/site/code-block";
 import { CommandBlock } from "@/components/site/install-tabs";
 import { H2, InlineCode, P, PageHeader, PagerLinks, Step, Steps } from "@/components/site/prose";
-import { registryUrl } from "@/config/site";
+import { registryUrl, siteConfig } from "@/config/site";
 import { installCommand, runCommand } from "@/lib/commands";
 import { readSource } from "@/lib/highlight";
 
 export const metadata: Metadata = {
   title: "Installation",
-  description: "Add NeonKit components with the shadcn CLI, or copy them in by hand.",
+  description: "Add NeonKit neon components to any React + Tailwind project with the shadcn CLI, a namespaced registry, or by hand.",
+  alternates: { canonical: "/docs/installation" },
 };
 
 export default async function InstallationPage() {
-  const [init, addOne, addMany, base, utils, neon] = await Promise.all([
+  const [init, addOne, addMany, short, base, utils, neon] = await Promise.all([
     runCommand("shadcn@latest init"),
     runCommand(`shadcn@latest add ${registryUrl("switch")}`),
     runCommand(`shadcn@latest add ${registryUrl("tabs")} ${registryUrl("toast")} ${registryUrl("slider")}`),
+    runCommand("shadcn@latest add @neonkit/button @neonkit/select"),
     installCommand(["clsx", "tailwind-merge"]),
     readSource("src/lib/utils.ts"),
     readSource("src/lib/neon.ts"),
@@ -60,6 +62,25 @@ export default function Page() {
         name exists (a fresh <InlineCode>shadcn init</InlineCode> ships a button), the CLI asks first. Add{" "}
         <InlineCode>--overwrite</InlineCode> to replace it without asking.
       </P>
+
+      <H2 id="namespace">Short names</H2>
+      <P>
+        Register the <InlineCode>@neonkit</InlineCode> namespace in <InlineCode>components.json</InlineCode> and drop the
+        URLs. This also makes NeonKit visible to the{" "}
+        <a href="/docs/ai#mcp">shadcn MCP server</a>.
+      </P>
+      <CodeBlock
+        title="components.json"
+        lang="json"
+        code={`{
+  "registries": {
+    "@neonkit": "${siteConfig.url}/r/{name}.json"
+  }
+}`}
+      />
+      <div className="mt-4">
+        <CommandBlock commands={short} />
+      </div>
 
       <H2 id="manual">Manual</H2>
       <P>Prefer to see every line? It takes about a minute.</P>
