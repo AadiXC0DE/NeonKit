@@ -97,8 +97,20 @@ export default function AuthVerify() {
   const [wait, setWait] = React.useState(RESEND_AFTER);
   const [resent, setResent] = React.useState(false);
   const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
+  const otpRef = React.useRef<HTMLDivElement>(null);
+  const titleRef = React.useRef<HTMLHeadingElement>(null);
+  // The code boxes are disabled while checking and the form swaps for the success panel,
+  // both of which drop focus on <body>. Put it back where the next step happens.
+  const focusNext = React.useRef<"otp" | "title" | null>(null);
 
   React.useEffect(() => () => clearTimeout(timer.current), []);
+
+  React.useEffect(() => {
+    if (!focusNext.current) return;
+    if (focusNext.current === "title") titleRef.current?.focus();
+    else otpRef.current?.querySelector<HTMLInputElement>("input:not([type=hidden])")?.focus();
+    focusNext.current = null;
+  });
 
   React.useEffect(() => {
     if (wait <= 0) return;
@@ -114,6 +126,7 @@ export default function AuthVerify() {
     setState("checking");
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
+      focusNext.current = value === WRONG_CODE ? "otp" : "title";
       if (value === WRONG_CODE) {
         setState("error");
         setFlashes((n) => n + 1);
@@ -131,6 +144,7 @@ export default function AuthVerify() {
   }
 
   function startOver() {
+    focusNext.current = "otp";
     setCode("");
     setState("idle");
     setAttempts(ATTEMPTS);
@@ -153,9 +167,9 @@ export default function AuthVerify() {
           </svg>
           keystone
         </span>
-        <p className="text-[13px] text-white/45">
+        <p className="text-[13px] text-white/60">
           {ACCOUNT} ·{" "}
-          <a href="#switch-account" className="text-white/70 underline decoration-white/20 underline-offset-4 hover:text-white/90">
+          <a href="#switch-account" className="-my-2 inline-block rounded-md py-2 text-white/70 underline decoration-white/20 underline-offset-4 hover:text-white/90">
             Not you?
           </a>
         </p>
@@ -176,7 +190,7 @@ export default function AuthVerify() {
             </div>
             <div className="grid w-full gap-3 font-mono text-[11px] uppercase tracking-[0.16em]">
               <p className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-                <span className="text-white/40">Session</span>
+                <span className="text-white/55">Session</span>
                 <span
                   aria-live="polite"
                   className={cn(
@@ -189,7 +203,7 @@ export default function AuthVerify() {
                   {status}
                 </span>
               </p>
-              <p className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-white/40">
+              <p className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-white/55">
                 {SESSION.map((s) => (
                   <span key={s}>{s}</span>
                 ))}
@@ -201,7 +215,13 @@ export default function AuthVerify() {
             {state === "done" ? (
               <div className="grid gap-5 py-6">
                 <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">Verified</p>
-                <h1 className="text-[clamp(2.25rem,5vw,3rem)] font-semibold leading-[0.95] tracking-[-0.04em]">You&apos;re in.</h1>
+                <h1
+                  ref={titleRef}
+                  tabIndex={-1}
+                  className="text-[clamp(2.25rem,5vw,3rem)] font-semibold leading-[0.95] tracking-[-0.04em] outline-none"
+                >
+                  You&apos;re in.
+                </h1>
                 <p className="max-w-[36ch] text-[15px] leading-relaxed text-white/55">
                   {remember
                     ? `This browser is trusted until ${TRUSTED_UNTIL}. We'll ask again after that, or from anywhere new.`
@@ -226,7 +246,7 @@ export default function AuthVerify() {
                 className="grid gap-6"
               >
                 <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Step 2 of 2 · Two-factor</p>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Step 2 of 2 · Two-factor</p>
                   <h1 className="mt-4 text-[clamp(1.875rem,4vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em]">
                     {backup ? "Use a backup code" : "Enter the code from your phone"}
                   </h1>
@@ -239,6 +259,7 @@ export default function AuthVerify() {
 
                 <div className="grid gap-2.5">
                   <OTPInput
+                    ref={otpRef}
                     key={backup ? "backup" : "totp"}
                     length={length}
                     groupSize={backup ? 4 : 3}
@@ -258,7 +279,7 @@ export default function AuthVerify() {
                       backup ? "gap-1.5 [&_input]:w-[clamp(1.75rem,7.4vw,2.5rem)]" : "[&_input]:w-[clamp(2.25rem,9.6vw,3.25rem)]",
                     )}
                   />
-                  <p aria-live="polite" className={cn("min-h-5 text-[13px]", state === "error" || locked ? "text-[#ff4d5e]" : "text-white/40")}>
+                  <p aria-live="polite" className={cn("min-h-5 text-[13px]", state === "error" || locked ? "text-[#ff4d5e]" : "text-white/60")}>
                     {locked
                       ? "Too many attempts. Try again in 15 minutes."
                       : state === "error"
@@ -278,8 +299,11 @@ export default function AuthVerify() {
                 </Button>
 
                 <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-white/[0.06] pt-5 text-[13px]">
+                  <span role="status" className="sr-only">
+                    {resent && wait > 0 ? "New code sent." : ""}
+                  </span>
                   {wait > 0 ? (
-                    <span className="text-white/45">
+                    <span className="text-white/60">
                       {resent ? "New code sent. " : "No code? "}Resend in{" "}
                       <span className="font-mono tabular-nums text-white/70">0:{String(wait).padStart(2, "0")}</span>
                     </span>
@@ -287,10 +311,11 @@ export default function AuthVerify() {
                     <button
                       type="button"
                       onClick={() => {
+                        focusNext.current = "otp";
                         setWait(RESEND_AFTER);
                         setResent(true);
                       }}
-                      className="rounded-md text-[rgb(var(--neon))] outline-none hover:[text-shadow:0_0_12px_rgb(var(--neon)/0.6)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                      className="-my-2 rounded-md py-2 text-[rgb(var(--neon))] outline-none hover:[text-shadow:0_0_12px_rgb(var(--neon)/0.6)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                     >
                       Resend code
                     </button>
@@ -298,7 +323,7 @@ export default function AuthVerify() {
                   <button
                     type="button"
                     onClick={switchMode}
-                    className="rounded-md text-white/55 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                    className="-my-2 rounded-md py-2 text-white/60 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                   >
                     {backup ? "Use the app instead" : "Use a backup code"}
                   </button>

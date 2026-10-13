@@ -396,7 +396,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             {selected?.icon && (
               <span className="flex shrink-0 items-center text-white/50">{selected.icon}</span>
             )}
-            <span className={cn("min-w-0 flex-1 truncate", !selected && "text-white/30")}>
+            <span className={cn("min-w-0 flex-1 truncate", !selected && "text-white/55")}>
               {selected ? selected.label : placeholder}
             </span>
             <ChevronDown

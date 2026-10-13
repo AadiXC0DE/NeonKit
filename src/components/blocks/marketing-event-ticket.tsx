@@ -105,7 +105,7 @@ function QrPlaceholder({ seed, className }: { seed: string; className?: string }
 function Field({ label, value, className }: { label: string; value: React.ReactNode; className?: string }) {
   return (
     <div className={className}>
-      <dt className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/40">{label}</dt>
+      <dt className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/55">{label}</dt>
       <dd className="mt-1 text-[14px] font-medium text-white/90">{value}</dd>
     </div>
   );
@@ -131,13 +131,13 @@ function Ticket() {
             >
               nightline
             </NeonText>
-            <p className="pt-1 text-right font-mono text-[10px] uppercase leading-relaxed tracking-[0.18em] text-white/50">
+            <p className="pt-1 text-right font-mono text-[10px] uppercase leading-relaxed tracking-[0.18em] text-white/55">
               {EVENT.edition}
               <br />
               <span className="text-[rgb(var(--neon))]">Admit one</span>
             </p>
           </div>
-          <p className="mt-3 max-w-[30ch] text-[13px] leading-relaxed text-white/50">{EVENT.tagline}</p>
+          <p className="mt-3 max-w-[30ch] text-[13px] leading-relaxed text-white/60">{EVENT.tagline}</p>
 
           <dl className="mt-6 grid grid-cols-2 gap-x-5 gap-y-4 border-t border-white/[0.07] pt-5 sm:grid-cols-[1.25fr_1fr_1fr_1fr]">
             <Field label="Date" value={EVENT.date} />
@@ -154,12 +154,12 @@ function Ticket() {
 
         <div className="relative flex items-center gap-5 p-6 sm:w-[198px] sm:flex-col sm:items-stretch sm:justify-between sm:gap-4 sm:p-6">
           <div className="flex items-baseline justify-between gap-3 sm:order-none">
-            <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/40">Gate</p>
+            <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/55">Gate</p>
             <p className="text-[34px] font-semibold leading-none tracking-[-0.03em] text-white">{EVENT.gate}</p>
           </div>
           <QrPlaceholder seed={EVENT.number} className="order-first size-[104px] shrink-0 sm:order-none sm:aspect-square sm:h-auto sm:w-full" />
           <div className="min-w-0 flex-1 sm:flex-none">
-            <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/40">{EVENT.tier}</p>
+            <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/55">{EVENT.tier}</p>
             <p className="mt-1 truncate font-mono text-[12px] text-white/80">{EVENT.number}</p>
           </div>
         </div>
@@ -171,12 +171,19 @@ function Ticket() {
 export default function MarketingEventTicket() {
   const [wallet, setWallet] = React.useState<"idle" | "adding" | "added">("idle");
   const timer = React.useRef<number | undefined>(undefined);
+  const walletRef = React.useRef<HTMLButtonElement>(null);
   React.useEffect(() => () => window.clearTimeout(timer.current), []);
 
   function addToWallet() {
     if (wallet !== "idle") return;
     setWallet("adding");
-    timer.current = window.setTimeout(() => setWallet("added"), 900);
+    timer.current = window.setTimeout(() => {
+      setWallet("added");
+      // The button is disabled while loading, which drops focus; give it back if nothing else took it.
+      requestAnimationFrame(() => {
+        if (document.activeElement === document.body) walletRef.current?.focus();
+      });
+    }, 900);
   }
 
   return (
@@ -189,7 +196,7 @@ export default function MarketingEventTicket() {
       <style>{css}</style>
       <div className="mx-auto grid max-w-[1200px] items-center gap-14 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-5">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Nightline Conf 2027 · Your ticket</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Nightline Conf 2027 · Your ticket</p>
           <h2
             id="nightline-ticket-title"
             className="mt-5 text-[clamp(2.4rem,5.4vw,4rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -200,12 +207,12 @@ export default function MarketingEventTicket() {
           </h2>
 
           <div className="mt-9">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">Doors open in</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Doors open in</p>
             <Countdown to={EVENT.doors} size="sm" className="mt-3 sm:[--countdown-h:52px]" />
           </div>
 
           <div className="mt-9 flex flex-wrap gap-3">
-            <Button variant={wallet === "added" ? "outline" : "solid"} onClick={addToWallet} loading={wallet === "adding"} aria-live="polite" className="min-w-[172px]">
+            <Button ref={walletRef} variant={wallet === "added" ? "outline" : "solid"} onClick={addToWallet} loading={wallet === "adding"} aria-live="polite" className="min-w-[172px]">
               {wallet === "added" ? <Check aria-hidden /> : wallet === "idle" ? <Wallet aria-hidden /> : null}
               {wallet === "added" ? "In your wallet" : wallet === "adding" ? "Adding" : "Add to wallet"}
             </Button>
@@ -219,7 +226,7 @@ export default function MarketingEventTicket() {
           <ol className="mt-10 border-t border-white/[0.08]">
             {SCHEDULE.map(([time, text]) => (
               <li key={time} className="flex gap-5 border-b border-white/[0.06] py-3 text-[13px]">
-                <span className="w-11 shrink-0 font-mono text-white/45">{time}</span>
+                <span className="w-11 shrink-0 font-mono text-white/55">{time}</span>
                 <span className="text-white/70">{text}</span>
               </li>
             ))}
@@ -230,7 +237,7 @@ export default function MarketingEventTicket() {
           <div className="mx-auto max-w-[640px] lg:rotate-[-2.5deg]">
             <Ticket />
           </div>
-          <p className="mx-auto mt-8 max-w-[640px] text-center font-mono text-[10px] uppercase tracking-[0.16em] text-white/35 lg:mt-12">
+          <p className="mx-auto mt-8 max-w-[640px] text-center font-mono text-[10px] uppercase tracking-[0.16em] text-white/55 lg:mt-12">
             Non-transferable after Mar 12 · Show the code at Gate {EVENT.gate}
           </p>
         </div>

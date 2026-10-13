@@ -94,9 +94,10 @@ describe("Knob", () => {
     expect(knob).toHaveAttribute("aria-valuenow", "5");
   });
 
-  it("turns with the wheel when the scroll starts on it", () => {
+  it("turns with the wheel once focused, when the scroll starts on it", () => {
     render(<Knob aria-label="Level" defaultValue={50} />);
     const knob = screen.getByRole("slider");
+    knob.focus();
     fireEvent.wheel(knob, { deltaY: -100 });
     expect(knob).toHaveAttribute("aria-valuenow", "55");
   });
@@ -106,6 +107,7 @@ describe("Knob", () => {
     const onValueCommit = vi.fn();
     render(<Knob aria-label="Level" defaultValue={50} onValueCommit={onValueCommit} />);
     const knob = screen.getByRole("slider");
+    knob.focus();
     fireEvent.wheel(knob, { deltaY: -100 });
     fireEvent.wheel(knob, { deltaY: -100 });
     expect(onValueCommit).not.toHaveBeenCalled();
@@ -125,6 +127,25 @@ describe("Knob", () => {
     fireEvent.wheel(screen.getByText("Above"), { deltaY: 100 });
     fireEvent.wheel(screen.getByRole("slider"), { deltaY: 100 });
     expect(screen.getByRole("slider")).toHaveAttribute("aria-valuenow", "50");
+  });
+
+  it("leaves the wheel to the page while it isn't focused", () => {
+    render(<Knob aria-label="Level" defaultValue={50} />);
+    const knob = screen.getByRole("slider");
+    const wheel = new WheelEvent("wheel", { deltaY: -100, bubbles: true, cancelable: true });
+    knob.dispatchEvent(wheel);
+    expect(wheel.defaultPrevented).toBe(false);
+    expect(knob).toHaveAttribute("aria-valuenow", "50");
+  });
+
+  it("lets the page scroll once it reaches the end of its travel", () => {
+    render(<Knob aria-label="Level" defaultValue={0} />);
+    const knob = screen.getByRole("slider");
+    knob.focus();
+    const down = new WheelEvent("wheel", { deltaY: 100, bubbles: true, cancelable: true });
+    knob.dispatchEvent(down);
+    expect(down.defaultPrevented).toBe(false);
+    expect(knob).toHaveAttribute("aria-valuenow", "0");
   });
 
   it("returns to defaultValue on double-click", () => {

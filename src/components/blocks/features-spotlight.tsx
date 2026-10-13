@@ -33,7 +33,7 @@ const HOVER_LIT =
 
 function Label({ icon: Icon, children }: { icon: typeof Timer; children: React.ReactNode }) {
   return (
-    <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+    <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
       <Icon aria-hidden className="size-3.5 text-white/55" strokeWidth={1.75} />
       {children}
     </p>
@@ -44,7 +44,7 @@ function Stat({ value, unit, lit, className }: { value: React.ReactNode; unit?: 
   return (
     <p className={cn("flex items-baseline gap-2", className)}>
       <span className={cn(NUMBER, lit ? LIT : HOVER_LIT)}>{value}</span>
-      {unit && <span className="text-lg font-medium tracking-[-0.01em] text-white/45">{unit}</span>}
+      {unit && <span className="text-lg font-medium tracking-[-0.01em] text-white/55">{unit}</span>}
     </p>
   );
 }
@@ -75,7 +75,7 @@ export default function FeaturesSpotlight() {
       <div className="mx-auto max-w-[1200px]">
         <header className="grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Quarry · Search API</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Quarry · Search API</p>
             <h2
               id="features-spotlight-title"
               className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -90,7 +90,7 @@ export default function FeaturesSpotlight() {
             </p>
             <a
               href="#sla"
-              className="mt-4 inline-flex items-center gap-1 rounded-md text-sm text-white/80 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
+              className="mt-2 inline-flex items-center gap-1 rounded-md py-2 text-sm text-white/80 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
             >
               Read the SLA <ArrowUpRight aria-hidden className="size-4" />
             </a>
@@ -127,9 +127,9 @@ export default function FeaturesSpotlight() {
                   style={{ left: `calc(${(P95 + 1) / LATENCY.length} * 100%)` }}
                 />
               </div>
-              <div aria-hidden className="relative mt-2 h-4 font-mono text-[10px] text-white/35">
+              <div aria-hidden className="relative mt-2 h-4 font-mono text-[10px] text-white/50">
                 <span className="absolute left-0">0</span>
-                <span className="absolute -translate-x-1/2 text-white/55" style={{ left: `calc(${(P50 + 0.5) / LATENCY.length} * 100%)` }}>
+                <span className="absolute -translate-x-1/2 text-white/75" style={{ left: `calc(${(P50 + 0.5) / LATENCY.length} * 100%)` }}>
                   p50 18
                 </span>
                 <span className="absolute -translate-x-1/2 text-[rgb(var(--neon))]" style={{ left: `calc(${(P95 + 1) / LATENCY.length} * 100%)` }}>
@@ -155,7 +155,7 @@ export default function FeaturesSpotlight() {
                 />
               ))}
             </div>
-            <p className="mt-3 text-sm text-white/50">One incident: 4 minutes of partial writes in fra, Aug 12.</p>
+            <p className="mt-3 text-sm text-white/60">One incident: 4 minutes of partial writes in fra, Aug 12.</p>
           </SpotlightCard>
 
           <SpotlightCard className="flex flex-col p-6 sm:p-7 lg:col-span-5">
@@ -169,7 +169,7 @@ export default function FeaturesSpotlight() {
                 </li>
               ))}
             </ul>
-            <p className="mt-4 text-sm text-white/50">Reads from the nearest one. Writes replicate in under a second.</p>
+            <p className="mt-4 text-sm text-white/60">Reads from the nearest one. Writes replicate in under a second.</p>
           </SpotlightCard>
 
           <SpotlightCard className="flex flex-col p-6 sm:p-7 lg:col-span-4">
@@ -182,19 +182,19 @@ export default function FeaturesSpotlight() {
               </span>
               <LiveDocs />
             </p>
-            <p className="mt-1 text-sm text-white/50">Product catalogs, docs and logs. About 1,180 new ones a second.</p>
+            <p className="mt-1 text-sm text-white/60">Product catalogs, docs and logs. About 1,180 new ones a second.</p>
           </SpotlightCard>
 
           <SpotlightCard className="flex flex-col p-6 sm:p-7 lg:col-span-4">
             <Label icon={Receipt}>Price</Label>
             <Stat value="$0.40" unit="/ 1k queries" className="mt-6 text-[clamp(3rem,6vw,4.5rem)]" />
-            <p className="mt-auto pt-6 text-sm text-white/50">First 100,000 queries every month are free. No seats, no minimums.</p>
+            <p className="mt-auto pt-6 text-sm text-white/60">First 100,000 queries every month are free. No seats, no minimums.</p>
           </SpotlightCard>
 
           <SpotlightCard className="flex flex-col p-6 sm:p-7 md:col-span-2 lg:col-span-4">
             <Label icon={Layers}>Shards to manage</Label>
             <Stat value="0" className="mt-6 text-[clamp(3rem,6vw,4.5rem)]" />
-            <p className="mt-auto pt-6 text-sm text-white/50">Indexes split and rebalance themselves as they grow. You never pick a shard count.</p>
+            <p className="mt-auto pt-6 text-sm text-white/60">Indexes split and rebalance themselves as they grow. You never pick a shard count.</p>
           </SpotlightCard>
         </div>
       </div>

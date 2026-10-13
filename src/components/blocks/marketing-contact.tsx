@@ -124,17 +124,17 @@ function OfficeHours() {
   return (
     <div className="relative overflow-hidden rounded-[20px] border border-white/10 bg-[#08090e]">
       <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-5 py-3.5">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Studio hours</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Studio hours</p>
         <ToggleGroup aria-label="Studio" size="sm" value={office} onValueChange={(value) => setOffice(value as OfficeKey)}>
-          <ToggleGroupItem value="chicago">Chicago</ToggleGroupItem>
-          <ToggleGroupItem value="porto">Porto</ToggleGroupItem>
+          <ToggleGroupItem value="chicago" className="h-8 sm:h-6">Chicago</ToggleGroupItem>
+          <ToggleGroupItem value="porto" className="h-8 sm:h-6">Porto</ToggleGroupItem>
         </ToggleGroup>
       </div>
 
       <div className="relative px-5 pb-6 pt-6 sm:px-7">
         {/* The display lights the plate it sits on */}
         <div aria-hidden className="absolute left-2 top-6 h-28 w-64 rounded-[50%] bg-[rgb(var(--neon)/0.13)] blur-[50px]" />
-        <p className="relative font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">
+        <p className="relative font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
           {data.city} · {data.zoneLabel}
         </p>
         <div className="relative mt-3 flex items-start justify-between gap-4">
@@ -161,7 +161,7 @@ function OfficeHours() {
                 <dt
                   className={cn(
                     "font-mono text-[10px] uppercase tracking-[0.14em]",
-                    today ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/40",
+                    today ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/55",
                   )}
                 >
                   {group.label}
@@ -182,7 +182,7 @@ function OfficeHours() {
             <span key={line} className="block">{line}</span>
           ))}
         </address>
-        <div className="flex flex-col gap-1.5 sm:items-end">
+        <div className="flex flex-col gap-3 sm:items-end sm:gap-1.5">
           <a href={`tel:${data.phone.replace(/[^+\d]/g, "")}`} className="w-fit rounded-md text-white/70 tabular-nums outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
             {data.phone}
           </a>
@@ -213,8 +213,20 @@ function ContactForm() {
   const [tried, setTried] = React.useState(false);
   const [state, setState] = React.useState<"idle" | "sending" | "sent">("idle");
   const timer = React.useRef<number | undefined>(undefined);
+  const formRef = React.useRef<HTMLFormElement>(null);
+  const doneRef = React.useRef<HTMLHeadingElement>(null);
+  // Where focus goes after the next render: the first invalid field, the receipt, or back to the form.
+  const focusNext = React.useRef<"error" | "done" | "form" | null>(null);
 
   React.useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  React.useEffect(() => {
+    const target = focusNext.current;
+    focusNext.current = null;
+    if (target === "error") formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus();
+    if (target === "done") doneRef.current?.focus();
+    if (target === "form") formRef.current?.querySelector<HTMLElement>("input")?.focus();
+  }, [errors, state]);
 
   const set = (key: keyof typeof values) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const next = { ...values, [key]: event.target.value };
@@ -228,11 +240,14 @@ function ContactForm() {
     setTried(true);
     setErrors(found);
     if (Object.keys(found).length) {
-      event.currentTarget.querySelector<HTMLElement>("[aria-invalid='true']")?.focus();
+      focusNext.current = "error";
       return;
     }
     setState("sending");
-    timer.current = window.setTimeout(() => setState("sent"), 1200);
+    timer.current = window.setTimeout(() => {
+      focusNext.current = "done";
+      setState("sent");
+    }, 1200);
   }
 
   function reset() {
@@ -241,6 +256,7 @@ function ContactForm() {
     setBudget(undefined);
     setTried(false);
     setErrors({});
+    focusNext.current = "form";
     setState("idle");
   }
 
@@ -251,8 +267,8 @@ function ContactForm() {
           <span className="grid size-11 place-items-center rounded-full border border-[rgb(var(--neon)/0.6)] bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))] shadow-[0_0_24px_rgb(var(--neon)/0.35),inset_0_0_10px_rgb(var(--neon)/0.2)]">
             <Check aria-hidden className="size-5" strokeWidth={2.5} />
           </span>
-          <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Ticket CL-2291</p>
-          <h3 className="mt-3 text-[28px] font-semibold leading-[1.05] tracking-[-0.03em] text-white">
+          <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Ticket CL-2291</p>
+          <h3 ref={doneRef} tabIndex={-1} className="mt-3 text-[28px] font-semibold leading-[1.05] tracking-[-0.03em] text-white outline-none">
             Got it, {values.name.trim().split(" ")[0]}.
           </h3>
           <p className="mt-3 max-w-sm text-[15px] leading-relaxed text-white/55">
@@ -261,11 +277,11 @@ function ContactForm() {
           </p>
           <dl className="mt-8 grid gap-3 border-t border-white/[0.06] pt-5 text-[13px] sm:grid-cols-2">
             <div>
-              <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">Scope</dt>
+              <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Scope</dt>
               <dd className="mt-1 text-white/80">{services.length ? services.join(", ") : "Not sure yet"}</dd>
             </div>
             <div>
-              <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">Budget</dt>
+              <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Budget</dt>
               <dd className="mt-1 text-white/80">{BUDGETS.find((b) => b.value === budget)?.label ?? "Not given"}</dd>
             </div>
           </dl>
@@ -278,7 +294,7 @@ function ContactForm() {
   }
 
   return (
-    <form noValidate onSubmit={submit} className="grid gap-5 p-6 sm:p-9">
+    <form ref={formRef} noValidate onSubmit={submit} className="grid gap-5 p-6 sm:p-9">
       <div className="grid items-start gap-5 sm:grid-cols-2">
         <Input label="Name" autoComplete="name" placeholder="Dana Whitfield" value={values.name} onChange={set("name")} error={errors.name} />
         <Input label="Work email" type="email" autoComplete="email" placeholder="dana@ridgeway.co" value={values.email} onChange={set("email")} error={errors.email} />
@@ -315,7 +331,7 @@ function ContactForm() {
         error={errors.message}
       />
       <div className="mt-1 flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-[13px] text-white/45">Median first reply last quarter: 3h 40m.</p>
+        <p className="text-[13px] text-white/60">Median first reply last quarter: 3h 40m.</p>
         <Button type="submit" variant="solid" loading={state === "sending"} className="w-full sm:w-auto">
           {state === "sending" ? "Sending" : "Send brief"}
           {state !== "sending" && <ArrowRight aria-hidden />}
@@ -335,7 +351,7 @@ export default function MarketingContact() {
     >
       <div className="mx-auto grid max-w-[1200px] gap-10 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-10">
         <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Copperline · Contact</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Copperline · Contact</p>
           <h2
             id="copperline-contact-title"
             className="mt-5 text-[clamp(2.4rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -352,7 +368,7 @@ export default function MarketingContact() {
           <div className="rounded-[20px] border border-white/10 bg-white/[0.03]">
             <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4 sm:px-9">
               <p className="text-sm font-medium text-white/90">New project brief</p>
-              <a href="mailto:hello@copperline.studio" className="rounded-md text-[13px] text-white/50 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
+              <a href="mailto:hello@copperline.studio" className="rounded-md text-[13px] text-white/60 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
                 or hello@copperline.studio
               </a>
             </div>

@@ -369,7 +369,7 @@ const Countdown = React.forwardRef<HTMLDivElement, CountdownProps>(
                 })}
               </div>
               {labels !== false && (
-                <span className={cn("font-mono font-medium uppercase tracking-[0.2em] text-white/45", s.label)}>
+                <span className={cn("font-mono font-medium uppercase tracking-[0.2em] text-white/55", s.label)}>
                   {names[unit]}
                 </span>
               )}

@@ -71,6 +71,8 @@ export default function MarketingWaitlist() {
   const [status, setStatus] = React.useState<"idle" | "loading" | "done">("idle");
   const [position, setPosition] = React.useState<number | null>(null);
   const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const doneRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     let tick = 0;
@@ -81,14 +83,21 @@ export default function MarketingWaitlist() {
     };
   }, []);
 
+  // The form unmounts on success, so hand focus to the confirmation rather than letting it fall to <body>.
+  React.useEffect(() => {
+    if (status === "done") doneRef.current?.focus();
+  }, [status]);
+
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!EMAIL.test(email.trim())) {
       setError(email ? "That doesn't look like an email address." : "Enter the email you'd like the invite sent to.");
+      inputRef.current?.focus();
       return;
     }
     setError(undefined);
     setStatus("loading");
+    clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       setPosition(queue + 1);
       setQueue((q) => q + 1);
@@ -105,9 +114,9 @@ export default function MarketingWaitlist() {
       style={neonVars("lime")}
       className="relative isolate overflow-hidden bg-[#05060a] px-5 py-16 text-white/90 sm:px-10 lg:py-28"
     >
-      <div className="mx-auto grid max-w-[1160px] gap-12 lg:grid-cols-[1fr_minmax(0,500px)] lg:items-start lg:gap-20">
+      <div className="mx-auto grid max-w-[1160px] grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:items-start lg:gap-20">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Glasshouse · macOS and iPad · spring 2027</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Glasshouse · macOS and iPad · spring 2027</p>
           <h2
             id="glasshouse-waitlist"
             className="mt-6 max-w-[14ch] text-[clamp(2.5rem,5.6vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.045em]"
@@ -123,7 +132,7 @@ export default function MarketingWaitlist() {
               <div key={f.label} className="flex items-baseline gap-3 bg-[#05060a] px-5 py-4 sm:flex-col sm:gap-1.5">
                 <dt className="sr-only">{f.label}</dt>
                 <dd className="shrink-0 text-2xl font-semibold tracking-[-0.03em] tabular-nums">{f.value}</dd>
-                <dd className="text-[13px] leading-snug text-white/45">{f.label}</dd>
+                <dd className="text-[13px] leading-snug text-white/60">{f.label}</dd>
               </div>
             ))}
           </dl>
@@ -141,13 +150,18 @@ export default function MarketingWaitlist() {
               <Row label="Your number" value={position ? pad(position) : "-----"} lit={!!position} />
             </div>
 
-            <p className="mt-4 flex justify-between font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">
+            <p className="mt-4 flex justify-between font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
               <span>In line now</span>
               <span className="tabular-nums text-white/70">{queue.toLocaleString("en-US")}</span>
             </p>
 
             {status === "done" && position ? (
-              <div aria-live="polite" className="mt-6 grid gap-4 border-t border-white/[0.06] pt-6">
+              <div
+                ref={doneRef}
+                tabIndex={-1}
+                aria-live="polite"
+                className="mt-6 grid gap-4 border-t border-white/[0.06] pt-6 outline-none"
+              >
                 <p className="text-[15px] leading-relaxed text-white/70">
                   You&apos;re in line. At {BATCH} invites a week, yours lands around{" "}
                   <span className="text-white/90">{inviteWeek(position)}</span>. Each photographer who joins with your
@@ -163,6 +177,7 @@ export default function MarketingWaitlist() {
             ) : (
               <form noValidate onSubmit={handleSubmit} className="mt-6 grid gap-3 border-t border-white/[0.06] pt-6 sm:grid-cols-[1fr_auto] sm:items-start">
                 <Input
+                  ref={inputRef}
                   type="email"
                   name="email"
                   aria-label="Email address"

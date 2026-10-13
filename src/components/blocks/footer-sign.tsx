@@ -89,7 +89,7 @@ export default function FooterSign() {
 
         <div className="mx-auto grid max-w-[1180px] gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)] lg:items-end lg:gap-16">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
               Eating after dark · since 2019
             </p>
             <NeonSign
@@ -102,7 +102,7 @@ export default function FooterSign() {
 
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-1">
             <div>
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">The Counter</h2>
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">The Counter</h2>
               <address className="mt-4 text-[15px] not-italic leading-relaxed text-white/75">
                 41 Kiln Street, Leeds LS2 7HQ
                 <br />
@@ -110,7 +110,7 @@ export default function FooterSign() {
               </address>
               <a
                 href="#"
-                className="mt-3 inline-flex items-center gap-1.5 rounded-md text-sm text-[rgb(var(--neon))] outline-none hover:underline hover:underline-offset-4 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className="-mb-2 mt-1 inline-flex items-center gap-1.5 rounded-md py-2 text-sm text-[rgb(var(--neon))] outline-none hover:underline hover:underline-offset-4 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
               >
                 <MapPin aria-hidden className="size-4" /> Directions
               </a>
@@ -118,7 +118,7 @@ export default function FooterSign() {
 
             <div>
               <div className="flex items-center justify-between gap-4">
-                <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">Hours</h2>
+                <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Hours</h2>
                 <p role="status" className="flex h-5 items-center gap-2 text-xs text-white/60">
                   {state && (
                     <>
@@ -160,13 +160,13 @@ export default function FooterSign() {
           </div>
         </div>
 
-        <nav aria-label="Footer" className="mx-auto mt-16 max-w-[1180px] border-t border-white/[0.07] pt-6">
-          <ul className="flex flex-wrap gap-x-7 gap-y-3 text-sm text-white/60">
+        <nav aria-label="Footer" className="mx-auto mt-16 max-w-[1180px] border-t border-white/[0.07] pt-4">
+          <ul className="flex flex-wrap gap-x-7 gap-y-1 text-sm text-white/60">
             {LINKS.map((link) => (
               <li key={link}>
                 <a
                   href="#"
-                  className="rounded-md outline-none transition-colors duration-150 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                  className="inline-block rounded-md py-1.5 outline-none transition-colors duration-150 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                 >
                   {link}
                 </a>
@@ -175,7 +175,7 @@ export default function FooterSign() {
             <li className="sm:ml-auto">
               <a
                 href="#"
-                className="inline-flex items-center gap-1 rounded-md outline-none transition-colors duration-150 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className="inline-flex items-center gap-1 rounded-md py-1.5 outline-none transition-colors duration-150 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
               >
                 Get the app <ArrowUpRight aria-hidden className="size-3.5" />
               </a>
@@ -190,13 +190,13 @@ export default function FooterSign() {
         <div aria-hidden className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(#05060a,transparent)]" />
       </div>
       <div className="border-t border-white/[0.06] bg-[#05060a] px-6 py-5 sm:px-10 lg:px-16">
-        <div className="mx-auto flex max-w-[1180px] flex-col gap-2 font-mono text-[11px] text-white/35 sm:flex-row sm:justify-between">
+        <div className="mx-auto flex max-w-[1180px] flex-col gap-2 font-mono text-[11px] text-white/55 sm:flex-row sm:justify-between">
           <span>© 2026 Neon Alley Ltd. Reviews are paid for by us, never by the kitchens.</span>
           <span className="flex gap-5">
-            <a href="#" className="rounded-md outline-none hover:text-white/70 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
+            <a href="#" className="-my-2 inline-block rounded-md py-2 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
               Privacy
             </a>
-            <a href="#" className="rounded-md outline-none hover:text-white/70 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
+            <a href="#" className="-my-2 inline-block rounded-md py-2 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
               Terms
             </a>
           </span>

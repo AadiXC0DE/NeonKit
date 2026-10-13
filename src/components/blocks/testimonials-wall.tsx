@@ -125,7 +125,7 @@ function Card({ item }: { item: Quote }) {
       )}
       {item.metric && (
         <div className={cn("relative mb-5 border-b pb-4", featured ? "border-[rgb(var(--neon)/0.18)]" : "border-white/[0.06]")}>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">{item.metric.label}</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">{item.metric.label}</p>
           <p
             className={cn(
               "mt-1.5 font-semibold tabular-nums tracking-[-0.03em]",
@@ -148,7 +148,7 @@ function Card({ item }: { item: Quote }) {
         <Avatar alt={item.name} size="sm" ring={featured} />
         <span className="min-w-0 text-sm leading-tight">
           <span className="block truncate font-medium text-white/90">{item.name}</span>
-          <span className="block truncate text-[13px] text-white/45">
+          <span className="block truncate text-[13px] text-white/60">
             {item.role}, {item.company}
           </span>
         </span>
@@ -161,6 +161,14 @@ export default function TestimonialsWall() {
   const titleId = React.useId();
   const wallId = React.useId();
   const [expanded, setExpanded] = React.useState(false);
+  const toggleRef = React.useRef<HTMLButtonElement>(null);
+
+  // Collapsing removes most of the wall from under the reader, so bring the button back into view.
+  function toggle() {
+    const next = !expanded;
+    setExpanded(next);
+    if (!next) requestAnimationFrame(() => toggleRef.current?.scrollIntoView({ block: "nearest" }));
+  }
 
   return (
     <section
@@ -172,7 +180,7 @@ export default function TestimonialsWall() {
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-end lg:gap-16">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Lockstep · field reports</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Lockstep · field reports</p>
             <h2
               id={titleId}
               className="mt-5 max-w-[17ch] text-balance text-[clamp(2.1rem,5vw,3.5rem)] font-semibold leading-[1] tracking-[-0.04em]"
@@ -187,7 +195,7 @@ export default function TestimonialsWall() {
             </p>
             <a
               href="#"
-              className="group inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
+              className="group -my-2 inline-flex items-center gap-1.5 rounded-md py-2 text-sm font-medium text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
             >
               Read all 212 case notes
               <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -222,7 +230,8 @@ export default function TestimonialsWall() {
               variant="outline"
               aria-expanded={expanded}
               aria-controls={wallId}
-              onClick={() => setExpanded((value) => !value)}
+              ref={toggleRef}
+              onClick={toggle}
               className="bg-[#05060a]"
             >
               {expanded ? "Show fewer" : `Show all ${quotes.length}`}

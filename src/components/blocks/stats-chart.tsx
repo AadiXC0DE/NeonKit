@@ -152,7 +152,7 @@ export default function StatsChart() {
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end lg:gap-16">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
               Groundwork · public numbers
             </p>
             <h2
@@ -176,9 +176,9 @@ export default function StatsChart() {
                 setRange(value as Range);
               }}
             >
-              <ToggleGroupItem value="7d">7D</ToggleGroupItem>
-              <ToggleGroupItem value="30d">30D</ToggleGroupItem>
-              <ToggleGroupItem value="90d">90D</ToggleGroupItem>
+              <ToggleGroupItem value="7d" className="h-8 sm:h-6">7D</ToggleGroupItem>
+              <ToggleGroupItem value="30d" className="h-8 sm:h-6">30D</ToggleGroupItem>
+              <ToggleGroupItem value="90d" className="h-8 sm:h-6">90D</ToggleGroupItem>
             </ToggleGroup>
           </div>
         </div>
@@ -195,7 +195,7 @@ export default function StatsChart() {
                   i === 1 && "lg:border-r",
                 )}
               >
-                <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/45">{kpi.label}</dt>
+                <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{kpi.label}</dt>
                 <dd className="flex flex-wrap items-center gap-x-3 gap-y-2">
                   <span className="text-[clamp(1.5rem,3vw,2rem)] font-semibold tabular-nums leading-none tracking-[-0.03em]">
                     {kpi.value}
@@ -209,7 +209,7 @@ export default function StatsChart() {
           <div className="p-4 sm:p-6">
             <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-1">
               <p className="text-sm font-medium text-white/80">p95 response time, all regions</p>
-              <p aria-live="polite" className="font-mono text-xs tabular-nums text-white/45">
+              <p aria-live="polite" className="font-mono text-xs tabular-nums text-white/60">
                 {point ? (
                   <>
                     {formatDate(point.x)} · <span className="text-white/85">{point.y} ms</span>
@@ -236,7 +236,7 @@ export default function StatsChart() {
           </div>
 
           <div className="border-t border-white/[0.07] px-5 py-4 sm:px-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
               {now.incidents.length} {now.incidents.length === 1 ? "incident" : "incidents"} in this range
             </p>
             <ul className="mt-3 grid gap-2">
@@ -245,18 +245,18 @@ export default function StatsChart() {
                   key={incident.daysAgo}
                   className="grid grid-cols-[3.25rem_1fr_auto] items-baseline gap-x-3 text-sm sm:grid-cols-[4rem_1fr_auto] sm:gap-x-4"
                 >
-                  <span className="font-mono text-xs tabular-nums text-white/40">
+                  <span className="font-mono text-xs tabular-nums text-white/60">
                     {formatDate(new Date(TODAY - incident.daysAgo * DAY))}
                   </span>
                   <span className="min-w-0 text-white/75">
                     {incident.cause}
-                    <span className="ml-2.5 whitespace-nowrap font-mono text-xs tabular-nums text-white/40">
+                    <span className="ml-2.5 whitespace-nowrap font-mono text-xs tabular-nums text-white/60">
                       {incident.minutes} min
                     </span>
                   </span>
                   <a
                     href="#"
-                    className="rounded-md text-xs text-white/45 underline decoration-white/20 underline-offset-4 outline-none transition-colors hover:text-white/85 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                    className="-my-2 rounded-md py-2 text-xs text-white/60 underline decoration-white/20 underline-offset-4 outline-none transition-colors hover:text-white/85 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                   >
                     Write-up
                   </a>

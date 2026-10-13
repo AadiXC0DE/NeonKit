@@ -662,7 +662,7 @@ const CommandInput = React.forwardRef<HTMLInputElement, CommandInputProps>(
             setFocused(false);
           }}
           className={cn(
-            "h-full min-w-0 flex-1 bg-transparent text-white/90 outline-none placeholder:text-white/30",
+            "h-full min-w-0 flex-1 bg-transparent text-white/90 outline-none placeholder:text-white/40",
             "[&::-webkit-search-cancel-button]:appearance-none",
             className,
           )}
@@ -675,7 +675,7 @@ const CommandInput = React.forwardRef<HTMLInputElement, CommandInputProps>(
             aria-label="Close"
             onClick={dialog.close}
             className={cn(
-              "flex h-6 shrink-0 cursor-pointer items-center rounded-md border border-white/10 bg-white/[0.04] px-1.5 font-mono text-[11px] text-white/45 outline-none",
+              "flex h-6 shrink-0 cursor-pointer items-center rounded-md border border-white/10 bg-white/[0.04] px-1.5 font-mono text-[11px] text-white/60 outline-none",
               "transition-[color,border-color,transform] duration-150 ease-out hover:border-white/20 hover:text-white/80 active:scale-[0.97]",
               "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0b11]",
             )}
@@ -769,7 +769,7 @@ const CommandEmpty = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
         ref={ref}
         role="presentation"
         style={{ order: -1, ...style }}
-        className={cn("flex flex-col items-center gap-3 px-4 py-10 text-center text-sm text-white/45", className)}
+        className={cn("flex flex-col items-center gap-3 px-4 py-10 text-center text-sm text-white/60", className)}
         {...props}
       >
         {/* An unlit tube. */}
@@ -837,7 +837,7 @@ const CommandGroup = React.forwardRef<HTMLDivElement, CommandGroupProps>(
               id={`${id}-heading`}
               aria-hidden
               data-command-group-heading=""
-              className="select-none px-3 pb-1.5 pt-2.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.14em] text-white/35"
+              className="select-none px-3 pb-1.5 pt-2.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.14em] text-white/55"
             >
               {heading}
             </div>
@@ -1007,7 +1007,7 @@ const CommandItem = React.forwardRef<HTMLDivElement, CommandItemProps>(
                 key={`${key}-${index}`}
                 className={cn(
                   "inline-flex h-5 min-w-5 items-center justify-center rounded-[5px] border px-1 font-sans text-[11px] leading-none transition-colors duration-150",
-                  active ? "border-white/15 bg-white/[0.07] text-white/70" : "border-white/[0.08] bg-white/[0.03] text-white/40",
+                  active ? "border-white/15 bg-white/[0.07] text-white/70" : "border-white/[0.08] bg-white/[0.03] text-white/55",
                 )}
               >
                 {key}

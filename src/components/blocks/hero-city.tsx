@@ -17,11 +17,19 @@ function NotifyForm() {
   const [email, setEmail] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const [state, setState] = React.useState<"idle" | "sending" | "done">("idle");
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const statusRef = React.useRef<HTMLParagraphElement>(null);
+
+  // The form unmounts on success, so hand focus to the confirmation instead of dropping it.
+  React.useEffect(() => {
+    if (state === "done") statusRef.current?.focus();
+  }, [state]);
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
       setError("We need a real address to write to.");
+      inputRef.current?.focus();
       return;
     }
     setError(null);
@@ -31,7 +39,7 @@ function NotifyForm() {
 
   if (state === "done") {
     return (
-      <p role="status" className="flex max-w-md items-start gap-3 text-sm leading-6 text-white/75">
+      <p ref={statusRef} tabIndex={-1} role="status" className="flex max-w-md items-start gap-3 text-sm leading-6 text-white/75 outline-none">
         <Check aria-hidden className="mt-1 size-4 shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)))]" />
         <span>
           You&apos;re on the list. One email on 19 March, the night we open, then we leave you alone.
@@ -43,6 +51,7 @@ function NotifyForm() {
   return (
     <form onSubmit={submit} noValidate className="flex max-w-md flex-col gap-2 sm:flex-row sm:items-start">
       <Input
+        ref={inputRef}
         type="email"
         size="lg"
         autoComplete="email"
@@ -88,11 +97,11 @@ export default function HeroCity() {
         <span className="text-[19px] font-semibold lowercase tracking-[-0.04em] text-white/90">
           after<span className="text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]">hours</span>
         </span>
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Lisbon · 2027</span>
+        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Lisbon · 2027</span>
       </div>
 
       <div className="mx-auto w-full max-w-6xl flex-1 px-5 pb-[360px] pt-12 sm:px-8 sm:pb-[400px] sm:pt-16 lg:pb-[420px]">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Late-night food market</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Late-night food market</p>
         <h1
           id="afterhours-hero-title"
           className="mt-5 text-[clamp(3.25rem,10vw,8.5rem)] font-semibold leading-[0.9] tracking-[-0.05em] text-white/95"
@@ -114,7 +123,7 @@ export default function HeroCity() {
           </div>
 
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Doors open in</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Doors open in</p>
             <Countdown
               to={LAUNCH}
               variant="sign"
@@ -122,13 +131,13 @@ export default function HeroCity() {
               className="mt-5 sm:[--countdown-h:60px] lg:[--countdown-h:72px]"
               labels={{ days: "Days", hours: "Hrs", minutes: "Min", seconds: "Sec" }}
             />
-            <p className="mt-5 text-sm text-white/45">Friday 19 March, 22:00. First 500 orders are on us.</p>
+            <p className="mt-5 text-sm text-white/60">Friday 19 March, 22:00. First 500 orders are on us.</p>
           </div>
         </div>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 border-t border-white/[0.06] bg-[#05060a]/90">
-        <ul className="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-6 gap-y-1 px-5 py-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/50 sm:justify-between sm:px-8">
+        <ul className="mx-auto flex max-w-6xl flex-wrap justify-center gap-x-6 gap-y-1 px-5 py-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 sm:justify-between sm:px-8">
           {FACTS.map((fact, i) => (
             <li key={fact} className={i % 2 === 1 ? "hidden sm:block" : undefined}>
               {fact}

@@ -45,6 +45,8 @@ const CARDS: Record<ColumnId, Card[]> = {
 };
 
 const ORDER = COLUMNS.map((c) => c.id);
+// The pseudo-element stretches the tap area to 36px without changing the card's layout.
+const MOVE = "size-7 rounded-md after:absolute after:-inset-1 after:content-[''] [&_svg]:size-3.5";
 const DEPTS: Dept[] = ["Camera", "Lighting", "Art", "Sound", "Locations", "Cast"];
 
 function Tube({ state }: { state: "idle" | "full" | "over" }) {
@@ -71,12 +73,16 @@ export default function AppKanban() {
   const [announce, setAnnounce] = React.useState("");
   const reduceMotion = useReducedMotion() ?? false;
   const refs = React.useRef(new Map<string, HTMLElement>());
-  const focusNext = React.useRef<string | null>(null);
+  const focusNext = React.useRef<{ id: string; button?: number } | null>(null);
   const nextId = React.useRef(12);
 
   React.useEffect(() => {
     if (!focusNext.current) return;
-    refs.current.get(focusNext.current)?.focus({ preventScroll: false });
+    const { id, button } = focusNext.current;
+    const card = refs.current.get(id);
+    // A move button keeps focus in the moved card, so pressing it again keeps the card travelling.
+    const control = button ? card?.querySelector<HTMLElement>(`[data-move="${button}"]:not(:disabled)`) : null;
+    (control ?? card)?.focus({ preventScroll: false });
     focusNext.current = null;
   });
 
@@ -94,7 +100,7 @@ export default function AppKanban() {
     return null;
   }
 
-  function move(id: string, dx: number, dy = 0, keepFocus = false) {
+  function move(id: string, dx: number, dy = 0, focus?: "card" | "button") {
     const at = locate(id);
     if (!at) return;
     const toCol = ORDER[ORDER.indexOf(at.col) + dx];
@@ -111,7 +117,7 @@ export default function AppKanban() {
       const over = column.limit !== undefined && next[toCol].length > column.limit;
       setAnnounce(`Moved “${card.title}” to ${column.title}.${over ? ` ${column.title} is over its limit of ${column.limit}.` : ""}`);
     }
-    if (keepFocus) focusNext.current = id;
+    if (focus) focusNext.current = { id, button: focus === "button" ? dx : undefined };
   }
 
   function onCardKey(event: React.KeyboardEvent, id: string) {
@@ -121,7 +127,7 @@ export default function AppKanban() {
     const step = arrows[event.key];
     if (!step) return;
     event.preventDefault();
-    if (event.shiftKey) return move(id, step[0], step[1], true);
+    if (event.shiftKey) return move(id, step[0], step[1], "card");
     const col = ORDER[ORDER.indexOf(at.col) + step[0]];
     if (!col) return;
     const list = board[col];
@@ -129,10 +135,18 @@ export default function AppKanban() {
     if (target) refs.current.get(target.id)?.focus();
   }
 
-  function addCard(event: React.FormEvent, col: ColumnId) {
+  // Closing the inline field hands focus back to its "Add card" button.
+  function closeAdd(from: HTMLElement) {
+    const slot = from.closest("li");
+    setDraft("");
+    setAdding(null);
+    requestAnimationFrame(() => slot?.querySelector<HTMLElement>("button")?.focus());
+  }
+
+  function addCard(event: React.FormEvent<HTMLFormElement>, col: ColumnId) {
     event.preventDefault();
     const title = draft.trim();
-    if (!title) return setAdding(null);
+    if (!title) return closeAdd(event.currentTarget);
     const card: Card = { id: `c${nextId.current++}`, title, dept: dept === "all" ? "Art" : (dept as Dept), day: "Day 15", crew: ["Noor Haddad"] };
     setBoard((b) => ({ ...b, [col]: [...b[col], card] }));
     setDraft("");
@@ -155,14 +169,14 @@ export default function AppKanban() {
 
       <header className="mx-auto flex w-full max-w-[1400px] flex-wrap items-end justify-between gap-x-8 gap-y-5 px-4 pb-6 pt-8 sm:px-8 lg:pt-12">
         <div className="min-w-0">
-          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
             <Clapperboard aria-hidden className="size-3.5 text-[rgb(var(--neon))]" />
             Rigging · Saltmarsh · Day 8 of 32
           </p>
           <h1 id="kanban-title" className="mt-3 text-[34px] font-semibold leading-[0.95] tracking-[-0.04em] text-white sm:text-[48px]">
             Production board
           </h1>
-          <p className="mt-3 text-sm text-white/50">Tue, Oct 13 · Unit call 06:30 · Wrap 19:00</p>
+          <p className="mt-3 text-sm text-white/60">Tue, Oct 13 · Unit call 06:30 · Wrap 19:00</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <AvatarGroup size="sm" max={5}>
@@ -170,7 +184,7 @@ export default function AppKanban() {
               <Avatar key={n} alt={n} />
             ))}
           </AvatarGroup>
-          <p className="hidden items-center gap-1.5 text-xs text-white/40 xl:flex">
+          <p className="hidden items-center gap-1.5 text-xs text-white/60 xl:flex">
             <Kbd size="sm">⇧</Kbd>
             <Kbd size="sm">←</Kbd>
             <Kbd size="sm">→</Kbd>
@@ -193,7 +207,7 @@ export default function AppKanban() {
       <p role="status" aria-live="polite" className="sr-only">{announce}</p>
 
       <LayoutGroup>
-        <div className="mx-auto mt-5 w-full max-w-[1400px] snap-x snap-mandatory overflow-x-auto scroll-px-4 px-4 pb-12 [scrollbar-color:rgb(255_255_255/0.12)_transparent] [scrollbar-width:thin] sm:scroll-px-8 sm:px-8 lg:snap-none">
+        <div className="mx-auto mt-5 w-full max-w-[1400px] snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-12 [scrollbar-color:rgb(255_255_255/0.12)_transparent] [scrollbar-width:thin] sm:scroll-px-8 sm:px-8 lg:snap-none">
           <ol className="grid min-w-max grid-cols-[repeat(4,280px)] gap-3 lg:min-w-0 lg:grid-cols-4">
             {COLUMNS.map((column) => {
               const cards = board[column.id];
@@ -205,7 +219,7 @@ export default function AppKanban() {
                   <div className="relative flex items-start justify-between gap-3 px-4 pb-3 pt-4">
                     <div className="min-w-0">
                       <h2 id={`col-${column.id}`} className="text-sm font-semibold tracking-[-0.01em] text-white/90">{column.title}</h2>
-                      <p className={cn("mt-0.5 truncate text-xs", state === "over" ? "text-[rgb(255_77_94)]" : "text-white/40")}>
+                      <p className={cn("mt-0.5 truncate text-xs", state === "over" ? "text-[rgb(255_77_94)]" : "text-white/60")}>
                         {state === "over" ? `Over the WIP limit by ${cards.length - column.limit!}` : column.note}
                       </p>
                     </div>
@@ -214,11 +228,11 @@ export default function AppKanban() {
                         "shrink-0 rounded-md border px-1.5 py-0.5 font-mono text-[11px] tabular-nums transition-[color,border-color,box-shadow,text-shadow] duration-300",
                         state === "over" && "border-[rgb(255_77_94/0.6)] text-[rgb(255_77_94)] shadow-[0_0_12px_rgb(255_77_94/0.35)] [text-shadow:0_0_8px_rgb(255_77_94/0.8)]",
                         state === "full" && "border-[rgb(var(--neon)/0.45)] text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.6)]",
-                        state === "idle" && "border-white/10 text-white/50",
+                        state === "idle" && "border-white/10 text-white/60",
                       )}
                     >
                       {cards.length}
-                      {column.limit !== undefined && <span className="opacity-60"> / {column.limit}</span>}
+                      {column.limit !== undefined && <span className="opacity-75"> / {column.limit}</span>}
                       <span className="sr-only">{column.limit !== undefined ? " cards, limit " : " cards"}</span>
                     </span>
                   </div>
@@ -245,24 +259,24 @@ export default function AppKanban() {
                               dim && "opacity-30",
                             )}
                           >
-                            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/45">
+                            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
                               <span className={cn(card.dept === dept && "text-[rgb(var(--neon))]")}>{card.dept}</span>
-                              {card.scene && <span className="text-white/25">·</span>}
+                              {card.scene && <span aria-hidden className="text-white/25">·</span>}
                               {card.scene && <span>{card.scene}</span>}
-                              <span className="ml-auto text-white/35">{card.day}</span>
+                              <span className="ml-auto text-white/55">{card.day}</span>
                             </div>
                             <h3 className="mt-2 text-[14px] leading-snug text-white/90">{card.title}</h3>
                             <div className="mt-3 flex min-h-7 items-center gap-2">
                               <span className="flex gap-1">
                                 {card.crew.map((n) => <Avatar key={n} alt={n} size="sm" className="size-6 text-[9px]" />)}
                               </span>
-                              {card.flag === "rain" && <span className="flex items-center gap-1 text-[11px] text-white/50"><CloudRain aria-hidden className="size-3.5" />Rain 60%</span>}
-                              {card.flag === "permit" && <span className="flex items-center gap-1 text-[11px] text-white/50"><FileWarning aria-hidden className="size-3.5" />Permit pending</span>}
+                              {card.flag === "rain" && <span className="flex items-center gap-1 text-[11px] text-white/60"><CloudRain aria-hidden className="size-3.5" />Rain 60%</span>}
+                              {card.flag === "permit" && <span className="flex items-center gap-1 text-[11px] text-white/60"><FileWarning aria-hidden className="size-3.5" />Permit pending</span>}
                               <div className="ml-auto flex gap-0.5 transition-opacity duration-150 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-focus-within:opacity-100">
-                                <Button size="icon" variant="ghost" aria-label={at > 0 ? `Move to ${COLUMNS[at - 1].title}` : "Already in the first column"} disabled={at === 0} onClick={() => move(card.id, -1)} className="size-7 rounded-md [&_svg]:size-3.5">
+                                <Button size="icon" variant="ghost" aria-label={at > 0 ? `Move to ${COLUMNS[at - 1].title}` : "Already in the first column"} data-move="-1" disabled={at === 0} onClick={() => move(card.id, -1, 0, "button")} className={MOVE}>
                                   <ChevronLeft />
                                 </Button>
-                                <Button size="icon" variant="ghost" aria-label={at < ORDER.length - 1 ? `Move to ${COLUMNS[at + 1].title}` : "Already in the last column"} disabled={at === ORDER.length - 1} onClick={() => move(card.id, 1)} className="size-7 rounded-md [&_svg]:size-3.5">
+                                <Button size="icon" variant="ghost" aria-label={at < ORDER.length - 1 ? `Move to ${COLUMNS[at + 1].title}` : "Already in the last column"} data-move="1" disabled={at === ORDER.length - 1} onClick={() => move(card.id, 1, 0, "button")} className={MOVE}>
                                   <ChevronRight />
                                 </Button>
                               </div>
@@ -282,14 +296,14 @@ export default function AppKanban() {
                             value={draft}
                             onChange={(e) => setDraft(e.target.value)}
                             onBlur={() => { if (!draft.trim()) setAdding(null); }}
-                            onKeyDown={(e) => { if (e.key === "Escape") { setDraft(""); setAdding(null); } }}
+                            onKeyDown={(e) => { if (e.key === "Escape") closeAdd(e.currentTarget); }}
                           />
                         </form>
                       ) : (
                         <button
                           type="button"
                           onClick={() => { setDraft(""); setAdding(column.id); }}
-                          className="flex h-8 w-full cursor-pointer items-center gap-2 rounded-lg px-2 text-xs text-white/40 outline-none transition-colors hover:bg-white/[0.03] hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                          className="flex h-8 w-full cursor-pointer items-center gap-2 rounded-lg px-2 text-xs text-white/60 outline-none transition-colors hover:bg-white/[0.03] hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                         >
                           <Plus aria-hidden className="size-3.5" /> Add card
                         </button>

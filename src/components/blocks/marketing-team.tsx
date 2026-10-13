@@ -80,7 +80,7 @@ function MemberCard({ member, index }: { member: (typeof TEAM)[number]; index: n
     >
       <div className="relative h-44 overflow-hidden border-b border-white/[0.06] bg-[radial-gradient(ellipse_90%_70%_at_70%_100%,rgb(var(--neon)/0.12),transparent_70%),#07080d] sm:h-52">
         <TideArt seed={index + 3} />
-        <div className="absolute inset-x-4 top-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">
+        <div className="absolute inset-x-4 top-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
           <span>LT/{String(index + 1).padStart(2, "0")}</span>
           <span>{member.city}</span>
         </div>
@@ -94,7 +94,7 @@ function MemberCard({ member, index }: { member: (typeof TEAM)[number]; index: n
         <p className="mt-5 border-t border-white/[0.06] pt-4 text-[13px] leading-relaxed text-white/70">
           {member.fact}
         </p>
-        <p className="mt-auto pt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">Since {member.since}</p>
+        <p className="mt-auto pt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Since {member.since}</p>
       </div>
     </HologramCard>
   );
@@ -118,7 +118,7 @@ export default function MarketingTeam() {
       <div className="mx-auto max-w-[1200px]">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Lowtide Studio · The people</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Lowtide Studio · The people</p>
             <h2
               id="lowtide-team-title"
               className="mt-5 text-[clamp(2.4rem,5.6vw,4.25rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -140,7 +140,7 @@ export default function MarketingTeam() {
                 ["4.6 yrs", "Avg. stay"],
               ].map(([value, label]) => (
                 <div key={label}>
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">{label}</dt>
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{label}</dt>
                   <dd className="mt-1 text-lg font-medium tracking-[-0.02em] text-white/90">{value}</dd>
                 </div>
               ))}
@@ -157,19 +157,19 @@ export default function MarketingTeam() {
             className="max-w-full overflow-x-auto"
           >
             {FILTERS.map((option) => (
-              <ToggleGroupItem key={option.value} value={option.value}>
+              <ToggleGroupItem key={option.value} value={option.value} className="h-8 sm:h-6">
                 {option.label}
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
-          <p aria-live="polite" className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">
+          <p aria-live="polite" className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
             {String(shown.length).padStart(2, "0")} / {String(TEAM.length).padStart(2, "0")} shown
           </p>
         </div>
 
         <ul
           aria-label="Team members"
-          className="-mx-6 mt-6 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto px-6 pb-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 [&::-webkit-scrollbar]:hidden"
+          className="-mx-6 mt-6 flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto overscroll-x-contain px-6 pb-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 [&::-webkit-scrollbar]:hidden"
         >
           {shown.map(({ member, index }) => (
             <li key={member.name} className="contents">
@@ -186,7 +186,7 @@ export default function MarketingTeam() {
                 3 roles
               </Badge>
             </h3>
-            <p className="text-sm text-white/45">Paid trial week. No take-home tests.</p>
+            <p className="text-sm text-white/60">Paid trial week. No take-home tests.</p>
           </div>
           <ul>
             {ROLES.map((role, i) => (
@@ -195,7 +195,7 @@ export default function MarketingTeam() {
                   href={role.href}
                   className="group/role grid grid-cols-[auto_1fr_auto] items-center gap-x-4 gap-y-1 px-5 py-4 outline-none transition-colors duration-200 hover:bg-[rgb(var(--neon)/0.05)] focus-visible:bg-[rgb(var(--neon)/0.06)] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)] lg:grid-cols-[3rem_1fr_14rem_8rem_auto] sm:px-6"
                 >
-                  <span className="font-mono text-[11px] text-white/35">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-mono text-[11px] text-white/55">{String(i + 1).padStart(2, "0")}</span>
                   <span className="text-[15px] text-white/90 transition-colors duration-200 group-hover/role:text-white">
                     {role.title}
                   </span>
@@ -203,11 +203,11 @@ export default function MarketingTeam() {
                     aria-hidden
                     className="size-4 text-white/35 transition-[color,transform] duration-200 group-hover/role:-translate-y-0.5 group-hover/role:translate-x-0.5 group-hover/role:text-[rgb(var(--neon))] lg:order-last"
                   />
-                  <span className="col-start-2 text-[13px] text-white/50 lg:col-start-auto">
+                  <span className="col-start-2 text-[13px] text-white/60 lg:col-start-auto">
                     {role.place}
                     <span className="lg:hidden"> · {role.terms}</span>
                   </span>
-                  <span className="hidden text-[13px] text-white/50 lg:block">{role.terms}</span>
+                  <span className="hidden text-[13px] text-white/60 lg:block">{role.terms}</span>
                 </a>
               </li>
             ))}

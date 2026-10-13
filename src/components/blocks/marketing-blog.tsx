@@ -198,7 +198,7 @@ function Cover({ art, fig, bright = false, className }: { art: Art; fig: number;
             </g>
           )}
         </svg>
-        <span className="absolute bottom-3 left-4 hidden font-mono text-[10px] uppercase tracking-[0.16em] text-white/35 sm:block">
+        <span aria-hidden className="absolute bottom-3 left-4 hidden font-mono text-[10px] uppercase tracking-[0.16em] text-white/35 sm:block">
           Fig. {fig}
         </span>
       </div>
@@ -211,7 +211,7 @@ function Meta({ post }: { post: Post }) {
     <p className="flex flex-wrap items-center gap-x-2.5 font-mono text-[10px] uppercase tracking-[0.16em]">
       <span className="text-[rgb(var(--neon))]">{post.category}</span>
       <span aria-hidden className="text-white/20">/</span>
-      <span className="text-white/45">{post.minutes} min read</span>
+      <span className="text-white/55">{post.minutes} min read</span>
     </p>
   );
 }
@@ -222,13 +222,16 @@ function Byline({ post, size = "sm" }: { post: Post; size?: "sm" | "md" }) {
       <Avatar alt="" fallback={post.initials} size={size} />
       <div className="min-w-0 text-[13px] leading-tight">
         <p className="truncate text-white/85">{post.author}</p>
-        <p className="mt-0.5 truncate text-white/40">
+        <p className="mt-0.5 truncate text-white/60">
           {post.role} · {post.date}
         </p>
       </div>
     </div>
   );
 }
+
+// Taller pills on touch screens, the compact size from sm up.
+const FILTER_ITEM = "h-8 sm:h-6";
 
 const linkClass =
   "group/post block outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]";
@@ -247,7 +250,7 @@ export default function MarketingBlog() {
       <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col gap-8 border-b border-white/[0.08] pb-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
               Field Manual · Engineering notes, vol. 6
             </p>
             <h2
@@ -289,11 +292,11 @@ export default function MarketingBlog() {
 
         <div className="mt-16 flex flex-wrap items-center justify-between gap-4">
           <h3 className="text-lg font-medium tracking-[-0.01em] text-white/90">Recent</h3>
-          <div className="-mx-6 max-w-[calc(100%+3rem)] overflow-x-auto px-6 sm:mx-0 sm:max-w-full sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="-mx-6 max-w-[calc(100%+3rem)] overflow-x-auto overscroll-x-contain px-6 sm:mx-0 sm:max-w-full sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <ToggleGroup aria-label="Filter by category" size="sm" value={category} onValueChange={(value) => setCategory(value as typeof category)}>
-              <ToggleGroupItem value="all">All</ToggleGroupItem>
+              <ToggleGroupItem value="all" className={FILTER_ITEM}>All</ToggleGroupItem>
               {CATEGORIES.map((item) => (
-                <ToggleGroupItem key={item} value={item}>
+                <ToggleGroupItem key={item} value={item} className={FILTER_ITEM}>
                   {item}
                 </ToggleGroupItem>
               ))}
@@ -327,7 +330,7 @@ export default function MarketingBlog() {
         </ul>
 
         <div className="mt-16 flex flex-col gap-3 border-t border-white/[0.08] pt-6 text-[13px] sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-white/45">112 posts since 2021. No ghostwriters, no growth posts.</p>
+          <p className="text-white/60">112 posts since 2021. No ghostwriters, no growth posts.</p>
           <a
             href="#"
             className="inline-flex w-fit items-center gap-1.5 rounded-md text-white/70 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"

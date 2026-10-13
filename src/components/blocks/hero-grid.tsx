@@ -45,7 +45,7 @@ function DeliveryLog() {
 
   return (
     <div className="relative rounded-2xl border border-white/10 bg-[#0a0b11]/90 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)] backdrop-blur-[6px]">
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+      <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
         <span className="flex items-center gap-2">
           <span className="relative flex size-1.5">
             <span className="absolute inset-0 animate-ping rounded-full bg-[rgb(var(--neon))] opacity-60 [animation-duration:1.8s] motion-reduce:animate-none" />
@@ -53,7 +53,7 @@ function DeliveryLog() {
           </span>
           Live deliveries
         </span>
-        <span className="normal-case tracking-normal text-white/30">us-east-1</span>
+        <span className="normal-case tracking-normal text-white/55">us-east-1</span>
       </div>
       <ol aria-label="Recent webhook deliveries" className="divide-y divide-white/[0.05] font-mono text-[12px]">
         {rows.map((row, i) => (
@@ -64,17 +64,17 @@ function DeliveryLog() {
               i === 0 ? "bg-[rgb(var(--neon)/0.06)]" : "bg-transparent",
             )}
           >
-            <span className="hidden text-white/30 sm:block">{row.time}</span>
+            <span className="hidden text-white/50 sm:block">{row.time}</span>
             <span className="min-w-0">
               <span className="block truncate text-white/80">{row.type}</span>
-              <span className="block truncate text-[11px] text-white/35">
+              <span className="block truncate text-[11px] text-white/55">
                 {row.host}
                 {row.note && <span className={row.status >= 500 ? "text-[rgb(255_77_94)]" : "text-[rgb(var(--neon))]"}> · {row.note}</span>}
               </span>
             </span>
             <span className="text-right">
               <span className={cn("block", row.status >= 500 ? "text-[rgb(255_77_94)]" : "text-white/70")}>{row.status}</span>
-              <span className="block text-[11px] text-white/30">{row.ms} ms</span>
+              <span className="block text-[11px] text-white/55">{row.ms} ms</span>
             </span>
           </li>
         ))}
@@ -86,7 +86,7 @@ function DeliveryLog() {
           ["kept", "30 days"],
         ].map(([label, value]) => (
           <div key={label} className="px-2 py-3">
-            <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">{label}</dt>
+            <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">{label}</dt>
             <dd className="mt-1 text-sm font-medium text-white/85">{value}</dd>
           </div>
         ))}
@@ -99,11 +99,24 @@ function SignupForm() {
   const [email, setEmail] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const [state, setState] = React.useState<"idle" | "sending" | "sent">("idle");
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const statusRef = React.useRef<HTMLDivElement>(null);
+  const resetting = React.useRef(false);
+
+  // The form and the confirmation swap places, so carry focus across instead of dropping it on the page.
+  React.useEffect(() => {
+    if (state === "sent") statusRef.current?.focus();
+    else if (state === "idle" && resetting.current) {
+      resetting.current = false;
+      inputRef.current?.focus();
+    }
+  }, [state]);
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
       setError("That doesn't look like a work email.");
+      inputRef.current?.focus();
       return;
     }
     setError(null);
@@ -113,17 +126,18 @@ function SignupForm() {
 
   if (state === "sent") {
     return (
-      <div role="status" className="flex max-w-md items-start gap-3 rounded-xl border border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.06)] px-4 py-3.5">
+      <div ref={statusRef} tabIndex={-1} role="status" className="flex max-w-md items-start gap-3 rounded-xl outline-none border border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.06)] px-4 py-3.5">
         <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)))]" />
         <p className="text-sm leading-6 text-white/75">
           Test key sent to <span className="text-white">{email.trim()}</span>. It works for 10,000 deliveries, no card needed.{" "}
           <button
             type="button"
             onClick={() => {
+              resetting.current = true;
               setEmail("");
               setState("idle");
             }}
-            className="cursor-pointer rounded-md text-white/50 underline underline-offset-4 outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+            className="cursor-pointer rounded-md text-white/60 underline underline-offset-4 outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
           >
             Use another email
           </button>
@@ -135,6 +149,7 @@ function SignupForm() {
   return (
     <form onSubmit={submit} noValidate className="flex max-w-md flex-col gap-2 sm:flex-row sm:items-start">
       <Input
+        ref={inputRef}
         type="email"
         size="lg"
         autoComplete="email"
@@ -186,7 +201,7 @@ export default function HeroGrid() {
           </span>
           <a
             href="#status"
-            className="flex items-center gap-2 rounded-md font-mono text-[11px] uppercase tracking-[0.16em] text-white/45 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+            className="-my-2 flex items-center gap-2 rounded-md py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
           >
             <span className="size-1.5 rounded-full bg-[rgb(52_211_153)] shadow-[0_0_6px_rgb(52_211_153)]" />
             <span className="hidden sm:inline">All regions delivering</span>
@@ -196,7 +211,7 @@ export default function HeroGrid() {
 
         <div className="grid items-start gap-14 pb-56 pt-14 sm:pb-64 lg:grid-cols-[1fr_400px] lg:gap-16 lg:pt-20">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Webhook infrastructure</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Webhook infrastructure</p>
             <h1
               id="relay-hero-title"
               className="mt-5 max-w-2xl [text-wrap:balance] text-[clamp(2.75rem,6.4vw,5.25rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/95"

@@ -58,18 +58,33 @@ export default function MarketingNewsletter() {
   const [error, setError] = React.useState<string>();
   const [status, setStatus] = React.useState<"idle" | "loading" | "done">("idle");
   const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const doneRef = React.useRef<HTMLDivElement>(null);
+  // The form and the confirmation swap places, so focus follows by hand instead of falling to <body>.
+  const focusNext = React.useRef<"done" | "input" | null>(null);
 
   React.useEffect(() => () => clearTimeout(timer.current), []);
+
+  React.useEffect(() => {
+    if (focusNext.current === "done") doneRef.current?.focus();
+    if (focusNext.current === "input") inputRef.current?.select();
+    focusNext.current = null;
+  }, [status]);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!EMAIL.test(email.trim())) {
       setError(email ? "That doesn't look like an email address." : "Enter an email to get Thursday's issue.");
+      inputRef.current?.focus();
       return;
     }
     setError(undefined);
     setStatus("loading");
-    timer.current = setTimeout(() => setStatus("done"), 900);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      focusNext.current = "done";
+      setStatus("done");
+    }, 900);
   }
 
   return (
@@ -90,7 +105,7 @@ export default function MarketingNewsletter() {
 
         <div className="grid lg:grid-cols-[1.1fr_1fr]">
           <div className="flex flex-col p-6 pt-12 sm:p-12">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Weekly since March 2023 · Thursdays, 21:00 CET</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Weekly since March 2023 · Thursdays, 21:00 CET</p>
             <h2 id="night-desk-title" className="mt-5 text-[clamp(2.75rem,6vw,4.5rem)] font-semibold leading-[0.92] tracking-[-0.045em]">
               The Night Desk
             </h2>
@@ -104,23 +119,31 @@ export default function MarketingNewsletter() {
                 <div key={s.label} className="grid gap-1">
                   <dt className="sr-only">{s.label}</dt>
                   <dd className="text-[28px] font-semibold leading-none tracking-[-0.03em] tabular-nums">{s.value}</dd>
-                  <dd className="font-mono text-[11px] uppercase tracking-[0.12em] text-white/40">{s.label}</dd>
+                  <dd className="font-mono text-[11px] uppercase tracking-[0.12em] text-white/55">{s.label}</dd>
                 </div>
               ))}
             </dl>
 
             <div className="mt-auto pt-10">
               {status === "done" ? (
-                <div aria-live="polite" className="rounded-2xl border border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.05)] p-5">
+                <div
+                  ref={doneRef}
+                  tabIndex={-1}
+                  aria-live="polite"
+                  className="rounded-2xl border border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.05)] p-5 outline-none"
+                >
                   <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">You&apos;re on the desk</p>
                   <p className="mt-2 text-[15px] leading-relaxed text-white/70">
-                    Confirm from the email we just sent to <span className="text-white/90">{email}</span>. No.&nbsp;{NEXT.number},
+                    Confirm from the email we just sent to <span className="text-white/90 [overflow-wrap:anywhere]">{email}</span>. No.&nbsp;{NEXT.number},
                     &ldquo;{NEXT.title}&rdquo;, lands {NEXT.when}.
                   </p>
                   <button
                     type="button"
-                    onClick={() => setStatus("idle")}
-                    className="mt-3 rounded-md text-[13px] text-white/55 underline decoration-white/20 underline-offset-4 outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                    onClick={() => {
+                      focusNext.current = "input";
+                      setStatus("idle");
+                    }}
+                    className="mt-1 rounded-md py-2 text-[13px] text-white/60 underline decoration-white/20 underline-offset-4 outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                   >
                     Wrong address?
                   </button>
@@ -129,6 +152,7 @@ export default function MarketingNewsletter() {
                 <form noValidate onSubmit={handleSubmit} className="grid gap-3">
                   <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-start">
                     <Input
+                      ref={inputRef}
                       type="email"
                       name="email"
                       aria-label="Email address"
@@ -146,14 +170,14 @@ export default function MarketingNewsletter() {
                       Subscribe
                     </Button>
                   </div>
-                  <p className="text-[13px] text-white/40">No tracking pixels. One-click unsubscribe. Free, always.</p>
+                  <p className="text-[13px] text-white/60">No tracking pixels. One-click unsubscribe. Free, always.</p>
                 </form>
               )}
             </div>
           </div>
 
           <div className="border-t border-white/[0.06] bg-black/20 p-6 sm:p-12 lg:border-l lg:border-t-0">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">From the archive</h3>
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">From the archive</h3>
             <ul className="mt-4">
               {ISSUES.map((issue) => {
                 const expanded = open === issue.number;
@@ -166,13 +190,13 @@ export default function MarketingNewsletter() {
                       onClick={() => setOpen(expanded ? 0 : issue.number)}
                       className="group grid w-full grid-cols-[3.25rem_1fr_auto] items-baseline gap-3 rounded-lg py-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                     >
-                      <span className={cn("font-mono text-xs tabular-nums transition-colors", expanded ? "text-[rgb(var(--neon))]" : "text-white/35")}>
+                      <span className={cn("font-mono text-xs tabular-nums transition-colors", expanded ? "text-[rgb(var(--neon))]" : "text-white/55")}>
                         No.{issue.number}
                       </span>
                       <span className={cn("text-[15px] leading-snug transition-colors", expanded ? "text-white/95" : "text-white/70 group-hover:text-white/90")}>
                         {issue.title}
                       </span>
-                      <span className="font-mono text-[11px] text-white/35">{issue.minutes} min</span>
+                      <span className="font-mono text-[11px] text-white/55">{issue.minutes} min</span>
                     </button>
                     <div
                       id={`issue-${issue.number}`}
@@ -182,7 +206,7 @@ export default function MarketingNewsletter() {
                       <p className="text-sm leading-relaxed text-white/55">{issue.excerpt}</p>
                       <a
                         href={`#issue-${issue.number}-full`}
-                        className="mt-3 inline-flex items-center gap-1 text-[13px] text-[rgb(var(--neon))] hover:[text-shadow:0_0_12px_rgb(var(--neon)/0.6)]"
+                        className="mt-1 inline-flex items-center gap-1 rounded-md py-2 text-[13px] text-[rgb(var(--neon))] outline-none hover:[text-shadow:0_0_12px_rgb(var(--neon)/0.6)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
                         Read the issue <ArrowUpRight className="size-3.5" />
                       </a>

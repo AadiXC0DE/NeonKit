@@ -59,7 +59,7 @@ function Readout({ done }: { done: boolean }) {
         )}
       />
       <div className="relative flex items-end justify-between gap-4" aria-live="polite">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
           {done ? "Deployed in" : "Waiting for deploy"}
           <span
             className={cn(
@@ -72,7 +72,7 @@ function Readout({ done }: { done: boolean }) {
             {done ? "4.2s" : "0.0s"}
           </span>
         </p>
-        <p className="pb-1 text-right font-mono text-[11px] text-white/45">
+        <p className="pb-1 text-right font-mono text-[11px] text-white/55">
           <span className={done ? "text-white/85" : undefined}>{done ? REGIONS.length : 0}</span>/{REGIONS.length} regions healthy
         </p>
       </div>
@@ -112,7 +112,7 @@ export default function HeroTerminal() {
         <div>
           <a
             href="#changelog"
-            className="group inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] py-1 pl-1 pr-3 text-xs text-white/60 outline-none transition-colors hover:border-white/20 hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+            className="group inline-flex min-h-9 items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] py-1 pl-1 pr-3 sm:min-h-0 text-xs text-white/60 outline-none transition-colors hover:border-white/20 hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
           >
             <span className="rounded-full bg-[rgb(var(--neon)/0.14)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-[rgb(var(--neon))]">
               v3.8
@@ -152,7 +152,7 @@ export default function HeroTerminal() {
           <dl className="mt-12 grid max-w-md grid-cols-3 border-t border-white/[0.07] pt-5">
             {STATS.map((stat) => (
               <div key={stat.label} className="flex flex-col-reverse">
-                <dt className="mt-0.5 font-mono text-[11px] text-white/40">{stat.label}</dt>
+                <dt className="mt-0.5 font-mono text-[11px] text-white/55">{stat.label}</dt>
                 <dd className="text-lg font-semibold tracking-[-0.02em] text-white/90">{stat.value}</dd>
               </div>
             ))}
@@ -160,7 +160,14 @@ export default function HeroTerminal() {
         </div>
 
         <div className="min-w-0">
-          <Terminal ref={terminalRef} title="~/atlas-web — zsh" lines={SESSION} typingSpeed={45} className="min-h-[284px]" />
+          {/* Title and Replay are lifted to AA here; the Terminal's own bar text sits at white/35–40. */}
+          <Terminal
+            ref={terminalRef}
+            title={<span className="text-white/55">~/atlas-web — zsh</span>}
+            lines={SESSION}
+            typingSpeed={45}
+            className="min-h-[284px] [&_button]:text-white/60"
+          />
           <Readout done={done} />
         </div>
       </div>

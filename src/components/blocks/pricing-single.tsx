@@ -48,7 +48,7 @@ export default function PricingSingle() {
       <div className="mx-auto max-w-[1200px]">
         <header className="grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Stillwater · Pricing</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Stillwater · Pricing</p>
             <h2
               id="pricing-single-title"
               className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -71,7 +71,7 @@ export default function PricingSingle() {
             />
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium text-white">Stillwater</h3>
-              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Monthly</span>
+              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Monthly</span>
             </div>
 
             <p className="mt-10 flex items-start">
@@ -82,7 +82,7 @@ export default function PricingSingle() {
               >
                 {volume.price}
               </span>
-              <span className="ml-3 mt-auto pb-2 text-sm leading-tight text-white/45">
+              <span className="ml-3 mt-auto pb-2 text-sm leading-tight text-white/60">
                 per month
                 <br />
                 <span className="font-mono text-[11px]">up to {volume.views} views</span>
@@ -107,7 +107,7 @@ export default function PricingSingle() {
                 formatValue={(v) => `${VOLUMES[v].views} pageviews, $${VOLUMES[v].price} a month`}
                 thumbLabels={["Monthly pageviews"]}
               />
-              <div aria-hidden className="relative mt-3 h-4 font-mono text-[10px] text-white/35">
+              <div aria-hidden className="relative mt-3 h-4 font-mono text-[10px] text-white/50">
                 {VOLUMES.map((v, i) => (
                   <span
                     key={v.views}
@@ -130,12 +130,12 @@ export default function PricingSingle() {
               <Button variant="solid" size="lg" className="w-full">
                 Start a 30-day trial <ArrowRight aria-hidden />
               </Button>
-              <p className="mt-3 text-center text-xs text-white/40">No card needed. Over 5M views? We&apos;ll quote it.</p>
+              <p className="mt-3 text-center text-xs text-white/55">No card needed. Over 5M views? We&apos;ll quote it.</p>
             </div>
           </div>
 
           <div className="flex flex-col p-6 sm:p-9">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Everything included</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Everything included</p>
             <ul className="mt-6 grid gap-x-8 gap-y-3.5 sm:grid-cols-2">
               {INCLUDED.map((item) => (
                 <li key={item} className="flex gap-3 text-[15px] leading-snug text-white/80">
@@ -146,10 +146,10 @@ export default function PricingSingle() {
             </ul>
 
             <div className="mt-10 rounded-2xl border border-dashed border-white/[0.12] p-5">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Not included, on purpose</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Not included, on purpose</p>
               <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
                 {NOT_INCLUDED.map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-white/45">
+                  <li key={item} className="flex items-center gap-2 text-sm text-white/60">
                     <Minus aria-hidden className="size-3.5 text-white/30" />
                     {item}
                   </li>
@@ -161,11 +161,11 @@ export default function PricingSingle() {
             </div>
 
             <div aria-hidden className="flex-1" />
-            <p className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.06] pt-5 text-sm text-white/50">
+            <p className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.06] pt-5 text-sm text-white/60">
               <span>GDPR, switching from another tool, or data export?</span>
               <a
                 href="#faq"
-                className="inline-flex items-center gap-1 rounded-md text-white/85 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
+                className="-my-2 inline-flex items-center gap-1 rounded-md py-2 text-white/85 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
               >
                 Read the FAQ <ArrowRight aria-hidden className="size-3.5" />
               </a>

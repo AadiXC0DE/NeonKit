@@ -149,7 +149,7 @@ export default function CtaSign() {
         </div>
 
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">The Late Shift · Lisbon</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">The Late Shift · Lisbon</p>
           <h2
             id="cta-sign-title"
             className={cn(
@@ -189,14 +189,14 @@ export default function CtaSign() {
               <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-white/[0.08] pt-5">
                 {TONIGHT.map((stat) => (
                   <div key={stat.label} className="flex flex-col-reverse justify-end">
-                    <dt className="mt-1 font-mono text-[11px] leading-snug text-white/40">{stat.label}</dt>
+                    <dt className="mt-1 font-mono text-[11px] leading-snug text-white/55">{stat.label}</dt>
                     <dd className="text-xl font-semibold tabular-nums tracking-[-0.02em] text-white">{stat.value}</dd>
                   </div>
                 ))}
               </dl>
             </div>
             {!on && (
-              <p className="absolute left-0 top-9 font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">
+              <p className="absolute left-0 top-9 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
                 Closed. Flip the switch.
               </p>
             )}

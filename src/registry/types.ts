@@ -26,6 +26,18 @@ export type RegistryBlock = {
   height?: number;
 };
 
+export type RegistryTemplate = {
+  slug: string;
+  name: string;
+  description: string;
+  dependencies: string[];
+  /** NeonKit components the template is built from. */
+  registryDependencies: string[];
+  addedIn: string;
+  /** Pages under the template's base path, "" being its home. */
+  routes: string[];
+};
+
 export type ComponentExample = {
   /** Kebab-case id, also the file name in src/registry/examples/<slug>/. */
   name: string;

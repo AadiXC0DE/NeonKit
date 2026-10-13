@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageShell } from "@/components/site/page-shell";
 import { releases } from "@/config/changelog";
-import { blocks, registry } from "@/registry";
+import { blocks, registry, templates } from "@/registry";
 
 export const metadata: Metadata = {
   title: "Changelog",
@@ -27,6 +27,7 @@ export default function ChangelogPage() {
         {releases.map((release, i) => {
           const added = registry.filter((item) => item.addedIn === release.version);
           const addedBlocks = blocks.filter((block) => block.addedIn === release.version);
+          const addedTemplates = templates.filter((template) => template.addedIn === release.version);
           return (
             <li key={release.version} className="grid gap-4 border-t border-line py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10">
               <div className="font-mono text-[12px] text-dim">
@@ -58,6 +59,24 @@ export default function ChangelogPage() {
                           className="rounded-md border border-line px-2.5 py-1 text-[13px] text-muted transition-colors hover:border-[rgb(var(--neon-accent)/0.5)] hover:text-fg"
                         >
                           {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {addedTemplates.length > 0 && (
+                  <div className="mt-6">
+                    <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-dim">
+                      {addedTemplates.length} templates
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {addedTemplates.map((template) => (
+                        <Link
+                          key={template.slug}
+                          href={`/templates/${template.slug}`}
+                          className="rounded-md border border-line px-2.5 py-1 text-[13px] text-muted transition-colors hover:border-[rgb(var(--neon-accent)/0.5)] hover:text-fg"
+                        >
+                          {template.name}
                         </Link>
                       ))}
                     </div>

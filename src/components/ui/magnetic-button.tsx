@@ -5,6 +5,19 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 const variants = {
   outline:
     "border border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.06)] text-[rgb(var(--neon))] shadow-[0_0_12px_rgb(var(--neon)/0.25),inset_0_0_12px_rgb(var(--neon)/0.12)] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)] hover:border-[rgb(var(--neon))] hover:bg-[rgb(var(--neon)/0.12)] hover:shadow-[0_0_24px_rgb(var(--neon)/0.5),inset_0_0_16px_rgb(var(--neon)/0.2)]",
@@ -75,11 +88,15 @@ export interface MagneticButtonProps
   labelStrength?: number;
   /** Render the child element (e.g. a link) as the magnet. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const MagneticButton = React.forwardRef<HTMLButtonElement, MagneticButtonProps>(
-  (
-    {
+  (raw, ref) => {
+    const {
       className,
       style,
       color,
@@ -92,9 +109,7 @@ const MagneticButton = React.forwardRef<HTMLButtonElement, MagneticButtonProps>(
       disabled,
       children,
       ...props
-    },
-    ref,
-  ) => {
+    } = fromRenderProp(raw);
     const rootRef = React.useRef<HTMLElement | null>(null);
     const labelRef = React.useRef<HTMLSpanElement>(null);
     const child = asChild && React.isValidElement<AnyProps>(children) ? children : null;

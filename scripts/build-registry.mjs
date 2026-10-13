@@ -1,7 +1,7 @@
 // Builds shadcn-compatible registry items into public/r/ and checks that
 // every component only imports what its registry entry declares.
 
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 
@@ -10,7 +10,7 @@ const outDir = path.join(root, "public/r");
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://get-neonkit.vercel.app").replace(/\/$/, "");
 const SCHEMA_ITEM = "https://ui.shadcn.com/schema/registry-item.json";
 
-const { items, blocks = [] } = JSON.parse(await readFile(path.join(root, "src/registry/registry.json"), "utf8"));
+const { items, blocks = [], templates = [] } = JSON.parse(await readFile(path.join(root, "src/registry/registry.json"), "utf8"));
 
 // src/registry/docs/index.ts is generated from registry.json so the two never drift.
 const docIdent = (slug) => `${slug.replace(/-(\w)/g, (_, c) => c.toUpperCase())}Doc`;
@@ -186,6 +186,113 @@ for (const block of blocks) {
   );
 }
 
+// Templates are multi-file: sections under src/components/templates/<slug>/ and Next.js routes under
+// app/preview/<slug>/, which install as components/templates/<slug>/ and app/<slug>/.
+async function filesIn(dir) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const nested = await Promise.all(
+    entries.map((entry) => (entry.isDirectory() ? filesIn(path.join(dir, entry.name)) : [path.join(dir, entry.name)])),
+  );
+  return nested.flat().sort();
+}
+
+const templateFiles = {};
+for (const template of templates) {
+  const { slug } = template;
+  const label = `template ${slug}`;
+  if (slugs.has(slug) || blocks.some((block) => block.slug === slug)) errors.push(`${label}: slug collides with a component or block`);
+  const sectionDir = path.join(root, "src/components/templates", slug);
+  const routeDir = path.join(root, "app/preview", slug);
+  if (!existsSync(sectionDir) || !existsSync(routeDir)) {
+    errors.push(`${label}: needs src/components/templates/${slug}/ and app/preview/${slug}/`);
+    continue;
+  }
+  const sources = [
+    ...(await filesIn(sectionDir)).map((file) => ({
+      file,
+      type: "registry:component",
+      target: `components/templates/${slug}/${path.relative(sectionDir, file)}`,
+    })),
+    ...(await filesIn(routeDir)).map((file) => ({
+      file,
+      type: "registry:page",
+      target: `app/${slug}/${path.relative(routeDir, file)}`,
+    })),
+  ];
+
+  const declared = new Set(template.dependencies);
+  const declaredUi = new Set(template.registryDependencies);
+  const usedUi = new Set();
+  const used = new Set();
+  for (const dep of declaredUi) {
+    if (!slugs.has(dep)) errors.push(`${label}: registryDependencies lists unknown component "${dep}"`);
+  }
+  const resolves = (base) => ["", ".ts", ".tsx", "/index.ts", "/index.tsx"].some((ext) => existsSync(base + ext));
+  const files = [];
+  for (const { file, type, target } of sources) {
+    const rel = path.relative(root, file);
+    const source = await readFile(file, "utf8");
+    if (/\.(tsx?|mjs|js)$/.test(file)) {
+      if (source.includes(`/preview/${slug}`) && path.basename(file) !== "config.ts") {
+        errors.push(`${label}: ${rel} hard-codes /preview/${slug}; link through basePath from config.ts`);
+      }
+      for (const specifier of importsOf(source)) {
+        if (always.has(specifier) || specifier === "next" || specifier.startsWith("next/")) continue;
+        if (specifier.startsWith("@/components/ui/")) {
+          const dep = specifier.slice("@/components/ui/".length);
+          usedUi.add(dep);
+          if (!declaredUi.has(dep)) errors.push(`${label}: ${rel} imports "${specifier}" but registryDependencies does not list "${dep}"`);
+          continue;
+        }
+        if (specifier.startsWith(`@/components/templates/${slug}/`)) {
+          if (!resolves(path.join(sectionDir, specifier.slice(`@/components/templates/${slug}/`.length)))) {
+            errors.push(`${label}: ${rel} imports "${specifier}", which does not exist`);
+          }
+          continue;
+        }
+        if (specifier.startsWith(".")) {
+          if (!resolves(path.resolve(path.dirname(file), specifier))) errors.push(`${label}: ${rel} imports "${specifier}", which does not exist`);
+          continue;
+        }
+        if (specifier.startsWith("@/")) {
+          errors.push(`${label}: ${rel} imports "${specifier}", which an installed template can't resolve`);
+          continue;
+        }
+        const pkg = packageName(specifier);
+        used.add(pkg);
+        if (!declared.has(pkg)) errors.push(`${label}: ${rel} imports "${specifier}" but dependencies does not list "${pkg}"`);
+      }
+    }
+    // The preview lives at /preview/<slug> on this site; installed, the template sits at /<slug>.
+    files.push({ path: rel, type, target, content: source.replaceAll(`/preview/${slug}`, `/${slug}`) });
+  }
+  for (const dep of declared) {
+    if (!used.has(dep)) errors.push(`${label}: dependencies lists "${dep}" but the template never imports it`);
+  }
+  for (const dep of declaredUi) {
+    if (!usedUi.has(dep)) errors.push(`${label}: registryDependencies lists "${dep}" but the template never imports it`);
+  }
+  templateFiles[slug] = files;
+
+  await writeFile(
+    path.join(outDir, `${slug}.json`),
+    JSON.stringify(
+      {
+        $schema: SCHEMA_ITEM,
+        name: slug,
+        type: "registry:block",
+        title: template.name,
+        description: template.description,
+        dependencies: template.dependencies,
+        registryDependencies: itemDeps(template),
+        files,
+      },
+      null,
+      2,
+    ),
+  );
+}
+
 await writeFile(
   path.join(outDir, "registry.json"),
   JSON.stringify(
@@ -213,6 +320,15 @@ await writeFile(
           registryDependencies: itemDeps(block),
           files: [{ path: `components/${block.slug}.tsx`, type: "registry:component" }],
         })),
+        ...templates.map((template) => ({
+          name: template.slug,
+          type: "registry:block",
+          title: template.name,
+          description: template.description,
+          dependencies: template.dependencies,
+          registryDependencies: itemDeps(template),
+          files: (templateFiles[template.slug] ?? []).map(({ path: file, type, target }) => ({ path: file, type, target })),
+        })),
       ],
     },
     null,
@@ -225,4 +341,6 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Registry: ${items.length} components, ${blocks.length} blocks + neon helper written to public/r`);
+console.log(
+  `Registry: ${items.length} components, ${blocks.length} blocks, ${templates.length} templates + neon helper written to public/r`,
+);

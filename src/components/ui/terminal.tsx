@@ -41,7 +41,7 @@ const kinds: Record<TerminalLine["kind"], string> = {
   output: "text-white/55",
   success: "text-[rgb(52_211_153)]",
   error: "text-[rgb(255_77_94)]",
-  comment: "text-white/30",
+  comment: "text-white/45",
 };
 
 function Caret({ blink, className }: { blink: boolean; className?: string }) {
@@ -214,7 +214,7 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
             <span className="size-2.5 rounded-full bg-white/[0.08] shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" />
             <span className="size-2.5 rounded-full bg-white/[0.08] shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" />
           </span>
-          <span className="min-w-0 flex-1 truncate text-center text-[11px] uppercase tracking-[0.16em] text-white/40">
+          <span className="min-w-0 flex-1 truncate text-center text-[11px] uppercase tracking-[0.16em] text-white/60">
             {title}
           </span>
           <span className="flex w-[46px] justify-end">
@@ -225,7 +225,7 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
                   setStep(0);
                   setRun((n) => n + 1);
                 }}
-                className="cursor-pointer rounded-md px-1 text-[10px] uppercase tracking-[0.14em] text-white/35 outline-none transition-colors hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className="cursor-pointer rounded-md px-1.5 py-1 text-[10px] uppercase tracking-[0.14em] text-white/55 outline-none transition-colors hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
               >
                 Replay
               </button>

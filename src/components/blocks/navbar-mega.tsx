@@ -111,7 +111,7 @@ function PipelineCard() {
       className="group relative flex flex-col overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02] p-4 hover:border-white/15"
     >
       <span aria-hidden className="pointer-events-none absolute -right-10 -top-12 size-40 rounded-full bg-[rgb(var(--neon)/0.12)] blur-[40px]" />
-      <span className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+      <span className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
         <span className="flex items-center gap-2">
           <span
             className={cn(
@@ -135,7 +135,7 @@ function PipelineCard() {
           const done = index < current;
           const live = index === current;
           return (
-            <span key={stage.name} className={cn("grid grid-cols-[10px_52px_1fr_auto] items-center gap-2", !done && !live && "text-white/25")}>
+            <span key={stage.name} className={cn("grid grid-cols-[10px_52px_1fr_auto] items-center gap-2", !done && !live && "text-white/50")}>
               <span
                 aria-hidden
                 className={cn(
@@ -145,15 +145,15 @@ function PipelineCard() {
                   !done && !live && "bg-[rgb(var(--neon)/0.14)]",
                 )}
               />
-              <span className={done || live ? "text-white/75" : undefined}>{stage.name}</span>
-              <span className={done || live ? "truncate text-white/40" : "truncate"}>{stage.note}</span>
-              <span className="tabular-nums text-white/45">{done ? `${stage.seconds}s` : live ? "…" : ""}</span>
+              <span className={done || live ? "text-white/85" : undefined}>{stage.name}</span>
+              <span className={done || live ? "truncate text-white/60" : "truncate"}>{stage.note}</span>
+              <span className="tabular-nums text-white/60">{done ? `${stage.seconds}s` : live ? "…" : ""}</span>
             </span>
           );
         })}
       </span>
 
-      <span className="mt-5 flex items-center gap-1 text-xs text-white/50 transition-colors group-hover:text-white/85">
+      <span className="mt-5 flex items-center gap-1 text-xs text-white/60 transition-colors group-hover:text-white/85">
         Run it on your repo
         <ArrowRight aria-hidden className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
       </span>
@@ -172,7 +172,7 @@ function PanelLink({ title, description, href, icon: Icon }: Entry) {
           />
           {title}
         </span>
-        <span className="mt-0.5 block pl-6 text-xs leading-5 text-white/45">{description}</span>
+        <span className="mt-0.5 block pl-6 text-xs leading-5 text-white/60">{description}</span>
       </NavigationMenuLink>
     </li>
   );
@@ -181,7 +181,7 @@ function PanelLink({ title, description, href, icon: Icon }: Entry) {
 function Column({ heading, items }: { heading: string; items: Entry[] }) {
   return (
     <div>
-      <p className="px-3 pb-1.5 pt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">{heading}</p>
+      <p className="px-3 pb-1.5 pt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">{heading}</p>
       <ul className="grid gap-0.5">
         {items.map((item) => (
           <PanelLink key={item.title} {...item} />
@@ -195,7 +195,7 @@ function Wordmark() {
   return (
     <a
       href="#top"
-      className="flex shrink-0 items-center gap-2.5 rounded-md text-[17px] font-semibold tracking-[-0.02em] text-white/90 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#05060a]"
+      className="flex shrink-0 items-center gap-2.5 rounded-md py-1.5 text-[17px] font-semibold tracking-[-0.02em] text-white/90 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#05060a]"
     >
       {/* Three branches merging into one line. */}
       <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="none" strokeWidth={1.7} strokeLinecap="round">
@@ -207,7 +207,15 @@ function Wordmark() {
   );
 }
 
-function MobileSection({ heading, groups }: { heading: string; groups: { heading: string; items: Entry[] }[] }) {
+function MobileSection({
+  heading,
+  groups,
+  onNavigate,
+}: {
+  heading: string;
+  groups: { heading: string; items: Entry[] }[];
+  onNavigate: () => void;
+}) {
   return (
     <Collapsible className="border-b border-white/[0.07]">
       <CollapsibleTrigger className="flex w-full justify-between py-4 text-2xl font-semibold tracking-[-0.03em] text-white/90">
@@ -217,13 +225,17 @@ function MobileSection({ heading, groups }: { heading: string; groups: { heading
         <div className="grid gap-5 pb-5">
           {groups.map((group) => (
             <div key={group.heading}>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">{group.heading}</p>
-              <ul className="mt-2 grid gap-3">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">{group.heading}</p>
+              <ul className="mt-1 grid gap-1">
                 {group.items.map((item) => (
                   <li key={item.title}>
-                    <a href={item.href} className="block rounded-md outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
+                    <a
+                      href={item.href}
+                      onClick={onNavigate}
+                      className="block rounded-md py-1 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                    >
                       <span className="block text-[15px] font-medium text-white/85">{item.title}</span>
-                      <span className="block text-[13px] leading-5 text-white/45">{item.description}</span>
+                      <span className="block text-[13px] leading-5 text-white/60">{item.description}</span>
                     </a>
                   </li>
                 ))}
@@ -237,6 +249,9 @@ function MobileSection({ heading, groups }: { heading: string; groups: { heading
 }
 
 export default function NavbarMega() {
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const close = () => setMenuOpen(false);
+
   return (
     <div
       // Change the color here; everything inside follows it.
@@ -272,13 +287,13 @@ export default function NavbarMega() {
                   </div>
                   <a
                     href="#status"
-                    className="mt-2 flex items-center justify-between rounded-lg border-t border-white/[0.06] px-3 py-3 text-xs text-white/50 outline-none transition-colors hover:text-white/85 focus-visible:ring-1 focus-visible:ring-[rgb(var(--neon)/0.5)]"
+                    className="mt-2 flex items-center justify-between rounded-lg border-t border-white/[0.06] px-3 py-3 text-xs text-white/60 outline-none transition-colors hover:text-white/85 focus-visible:ring-1 focus-visible:ring-[rgb(var(--neon)/0.5)]"
                   >
                     <span className="flex items-center gap-2">
                       <span className="size-1.5 rounded-full bg-[rgb(52_211_153)] shadow-[0_0_6px_rgb(52_211_153)]" />
                       All runners healthy
                     </span>
-                    <span className="font-mono text-[11px] text-white/35">p50 queue 3s</span>
+                    <span className="font-mono text-[11px] text-white/55">p50 queue 3s</span>
                   </a>
                 </NavigationMenuContent>
               </NavigationMenuItem>
@@ -303,7 +318,7 @@ export default function NavbarMega() {
               <a href="#start">Connect a repo</a>
             </Button>
 
-            <Sheet>
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" aria-label="Open menu" className="-mr-2 md:hidden">
                   <Menu />
@@ -311,17 +326,18 @@ export default function NavbarMega() {
               </SheetTrigger>
               <SheetContent side="right" size="sm">
                 <SheetHeader>
-                  <SheetTitle className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/45">
+                  <SheetTitle className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/55">
                     Forgeline
                   </SheetTitle>
                 </SheetHeader>
                 <nav aria-label="Mobile" className="mt-6">
-                  <MobileSection heading="Product" groups={PRODUCT} />
-                  <MobileSection heading="Resources" groups={RESOURCES} />
+                  <MobileSection heading="Product" groups={PRODUCT} onNavigate={close} />
+                  <MobileSection heading="Resources" groups={RESOURCES} onNavigate={close} />
                   {["Pricing", "Enterprise"].map((label) => (
                     <a
                       key={label}
                       href={`#${label.toLowerCase()}`}
+                      onClick={close}
                       className="block border-b border-white/[0.07] py-4 text-2xl font-semibold tracking-[-0.03em] text-white/90 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                     >
                       {label}
@@ -330,12 +346,14 @@ export default function NavbarMega() {
                 </nav>
                 <div className="mt-auto grid gap-2 pt-8">
                   <Button asChild variant="solid" size="lg">
-                    <a href="#start">
+                    <a href="#start" onClick={close}>
                       Connect a repo <ArrowRight />
                     </a>
                   </Button>
                   <Button asChild variant="ghost" size="lg">
-                    <a href="#sign-in">Sign in</a>
+                    <a href="#sign-in" onClick={close}>
+                      Sign in
+                    </a>
                   </Button>
                 </div>
               </SheetContent>
@@ -349,11 +367,11 @@ export default function NavbarMega() {
         aria-hidden
         className="pointer-events-none mx-auto max-w-6xl select-none px-5 pb-12 pt-20 [mask-image:linear-gradient(to_bottom,#000_45%,transparent)] sm:px-8 sm:pt-28"
       >
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">CI/CD for monorepos</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">CI/CD for monorepos</p>
         <p className="mt-5 max-w-4xl [text-wrap:balance] text-[clamp(2.5rem,7vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/90">
           Build what changed. Skip the other 38 packages.
         </p>
-        <p className="mt-6 max-w-lg text-base leading-relaxed text-white/50">
+        <p className="mt-6 max-w-lg text-base leading-relaxed text-white/60">
           Forgeline reads your workspace graph, runs only what a commit affects and shares every artifact through one cache.
         </p>
       </div>

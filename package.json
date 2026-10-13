@@ -32,7 +32,7 @@
     "test": "vitest run",
     "registry:build": "node scripts/build-registry.mjs",
     "shoot": "node scripts/shoot.mjs",
-    "blocks:thumbs": "node scripts/block-thumbs.mjs"
+    "thumbs": "node scripts/thumbs.mjs"
   },
   "engines": {
     "node": ">=20.9.0"

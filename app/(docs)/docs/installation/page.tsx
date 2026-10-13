@@ -38,7 +38,9 @@ export default async function InstallationPage() {
       <Steps>
         <Step title="Set up shadcn (skip if you already use it)">
           <p>
-            This creates <InlineCode>components.json</InlineCode> and <InlineCode>lib/utils.ts</InlineCode>.
+            This creates <InlineCode>components.json</InlineCode> and <InlineCode>lib/utils.ts</InlineCode>. Any
+            style works, Radix or Base UI: in a Base UI project the CLI rewrites <InlineCode>asChild</InlineCode> to{" "}
+            <InlineCode>render</InlineCode>, and NeonKit components accept both.
           </p>
           <CommandBlock commands={init} />
         </Step>

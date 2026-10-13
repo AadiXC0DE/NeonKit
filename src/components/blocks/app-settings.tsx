@@ -84,7 +84,7 @@ function Section({ id, title, description, children, className }: { id: string; 
     <section aria-labelledby={id} className={cn("grid gap-5 border-t border-white/[0.06] py-8 first:border-t-0 first:pt-2 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10", className)}>
       <div>
         <h2 id={id} className="text-[15px] font-semibold tracking-[-0.01em] text-white/90">{title}</h2>
-        <p className="mt-1.5 text-[13px] leading-5 text-white/50">{description}</p>
+        <p className="mt-1.5 text-[13px] leading-5 text-white/60">{description}</p>
       </div>
       <div className="min-w-0">{children}</div>
     </section>
@@ -108,6 +108,16 @@ export default function AppSettings() {
   const timer = React.useRef<number | undefined>(undefined);
 
   const barRef = React.useRef<HTMLDivElement>(null);
+  const formRef = React.useRef<HTMLFormElement>(null);
+
+  // Saving or discarding disables the button that was pressed and then hides the bar, so hand
+  // focus to the open tab rather than letting it fall back to the page.
+  const settleFocus = () =>
+    requestAnimationFrame(() => {
+      const focused = document.activeElement;
+      if (focused !== document.body && !barRef.current?.contains(focused)) return;
+      formRef.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus({ preventScroll: true });
+    });
 
   React.useEffect(() => () => window.clearTimeout(timer.current), []);
 
@@ -141,12 +151,14 @@ export default function AppSettings() {
     setErrors(next);
     if (Object.keys(next).length) {
       setTab(next.name || next.email || next.slug ? "profile" : "billing");
+      requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());
       return;
     }
     setStatus("saving");
     timer.current = window.setTimeout(() => {
       setSaved(draft);
       setStatus("saved");
+      settleFocus();
       timer.current = window.setTimeout(() => setStatus("idle"), 1800);
     }, 900);
   }
@@ -154,6 +166,7 @@ export default function AppSettings() {
   function discard() {
     setDraft(saved);
     setErrors({});
+    settleFocus();
   }
 
   const changed = (t: string) => (TAB_KEYS[t] ?? []).some((k) => JSON.stringify(draft[k]) !== JSON.stringify(saved[k]));
@@ -183,18 +196,18 @@ export default function AppSettings() {
           <path d="M8 9.5 14 19l6-9.5" fill="none" stroke="rgb(var(--neon))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         <nav aria-label="Breadcrumb" className="min-w-0 truncate text-sm">
-          <a href="#overview" className="text-white/45 outline-none hover:text-white/80 focus-visible:text-white">Fernhill</a>
+          <a href="#overview" className="py-2 text-white/60 outline-none hover:text-white/85 focus-visible:text-white">Fernhill</a>
           <span aria-hidden className="mx-2 text-white/20">/</span>
           <span aria-current="page" className="text-white/85">Settings</span>
         </nav>
-        <a href="#overview" className="ml-auto hidden items-center gap-1 text-xs text-white/45 outline-none hover:text-white/80 focus-visible:text-white sm:flex">
+        <a href="#overview" className="ml-auto hidden items-center gap-1 text-xs text-white/60 outline-none hover:text-white/85 focus-visible:text-white sm:flex">
           <ArrowLeft aria-hidden className="size-3.5" /> Dashboard
         </a>
         <Avatar alt={saved.name} src={photo} size="sm" className="ml-auto sm:ml-0" />
       </header>
 
-      <form onSubmit={save} noValidate className="mx-auto w-full max-w-[1000px] px-4 pb-10 pt-10 sm:px-6 lg:pt-14">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Workspace · {saved.workspace}</p>
+      <form ref={formRef} onSubmit={save} noValidate className="mx-auto w-full max-w-[1000px] px-4 pb-10 pt-10 sm:px-6 lg:pt-14">
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Workspace · {saved.workspace}</p>
         <h1 className="mt-2 text-[34px] font-semibold leading-none tracking-[-0.04em] text-white sm:text-[44px]">Settings</h1>
 
         <Tabs value={tab} onValueChange={setTab} variant="underline" className="mt-8 gap-6">
@@ -213,7 +226,7 @@ export default function AppSettings() {
                 <div className="flex items-center gap-4">
                   <Avatar alt={draft.name || "You"} src={photo} size="xl" />
                   <div className="grid gap-2.5">
-                    <p className="text-xs text-white/45">Square image, at least 256 px.</p>
+                    <p className="text-xs text-white/60">Square image, at least 256 px.</p>
                     <input
                       ref={fileRef}
                       type="file"
@@ -252,7 +265,7 @@ export default function AppSettings() {
             <Section id="s-workspace" title="Workspace" description="Shared by everyone at Fernhill. Changes apply to every report.">
               <Panel className="grid gap-5">
                 <Input label="Workspace name" {...text("workspace")} />
-                <Input label="Workspace URL" leading={<span className="font-mono text-xs text-white/40">vantage.app/</span>} error={errors.slug} spellCheck={false} {...text("slug")} />
+                <Input label="Workspace URL" leading={<span className="font-mono text-xs text-white/60">vantage.app/</span>} error={errors.slug} spellCheck={false} {...text("slug")} />
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Select label="Reporting currency" options={CURRENCIES} value={draft.currency} onValueChange={(v) => set("currency", v)} />
                   <Select label="Fiscal year starts" options={FISCAL} value={draft.fiscal} onValueChange={(v) => set("fiscal", v)} />
@@ -285,9 +298,9 @@ export default function AppSettings() {
                   <RadioGroupItem key={p.value} value={p.value} label={p.name}>
                     <span className="mt-3 block text-2xl font-semibold tracking-[-0.03em] text-white">
                       {p.price ? `$${p.price}` : "Free"}
-                      {p.price > 0 && <span className="text-[13px] font-normal tracking-normal text-white/45"> / seat / mo</span>}
+                      {p.price > 0 && <span className="text-[13px] font-normal tracking-normal text-white/60"> / seat / mo</span>}
                     </span>
-                    <span className="mt-1 block text-[13px] leading-[18px] text-white/50">{p.detail}</span>
+                    <span className="mt-1 block text-[13px] leading-[18px] text-white/60">{p.detail}</span>
                   </RadioGroupItem>
                 ))}
               </RadioGroup>
@@ -296,7 +309,7 @@ export default function AppSettings() {
                 <span className="text-white/55">
                   8 seats × ${plan.price} = <span className="font-mono text-white/90">${(plan.price * 8).toLocaleString("en-US")}.00</span> / month
                 </span>
-                <span className="text-white/40">Renews Nov 1, 2026</span>
+                <span className="text-white/60">Renews Nov 1, 2026</span>
               </div>
             </Section>
             <Section id="s-invoices" title="Invoices" description="Paid by card ending 4417, expires 08/28. Invoices go to the billing email.">
@@ -306,7 +319,7 @@ export default function AppSettings() {
                   {INVOICES.map((inv) => (
                     <li key={inv.id} className="flex items-center gap-3 py-3 text-[13px]">
                       <span className="w-28 shrink-0 text-white/80">{inv.date}</span>
-                      <span className="hidden flex-1 font-mono text-xs text-white/40 sm:block">{inv.id}</span>
+                      <span className="hidden flex-1 font-mono text-xs text-white/60 sm:block">{inv.id}</span>
                       <span className="ml-auto font-mono text-white/80 sm:ml-0">{inv.amount}</span>
                       <Button type="button" size="sm" variant="ghost" aria-label={`Download invoice ${inv.id}`} className="size-8 px-0">
                         <Download />
@@ -325,7 +338,7 @@ export default function AppSettings() {
                   <div role="status" className="flex flex-wrap items-center justify-between gap-4 p-5 sm:p-6">
                     <div>
                       <p className="text-sm font-medium text-white/90">{saved.workspace} is scheduled for deletion.</p>
-                      <p className="mt-1 text-[13px] text-white/50">It goes for good on Oct 26, 2026. Until then you can bring it back.</p>
+                      <p className="mt-1 text-[13px] text-white/60">It goes for good on Oct 26, 2026. Until then you can bring it back.</p>
                     </div>
                     <Button type="button" variant="ghost" size="sm" className="border border-white/10" onClick={() => { setDeleted(false); setConfirmText(""); }}>
                       <RotateCcw /> Restore workspace
@@ -349,7 +362,7 @@ export default function AppSettings() {
                       />
                     </div>
                     <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[rgb(255_77_94/0.18)] bg-[rgb(255_77_94/0.03)] px-5 py-3.5 sm:px-6">
-                      <p className="text-xs text-white/45">Exports stay available for 14 days.</p>
+                      <p className="text-xs text-white/60">Exports stay available for 14 days.</p>
                       <HoldButton
                         type="button"
                         color="red"

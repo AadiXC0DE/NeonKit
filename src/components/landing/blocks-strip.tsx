@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { blocks, getBlock } from "@/registry";
+import { blocks, getBlock, templates } from "@/registry";
 import { SectionHeading } from "./section-heading";
 
 // A spread across categories, so the strip reads as "everything a site needs".
@@ -41,13 +41,24 @@ export function BlocksStrip() {
         ))}
       </ul>
 
-      <Link
-        href="/blocks"
-        className="group mt-12 inline-flex items-center gap-2 text-[15px] text-fg underline decoration-white/20 underline-offset-4 transition-colors hover:decoration-[rgb(var(--neon-accent))]"
-      >
-        See all {blocks.length} blocks
-        <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-      </Link>
+      <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3">
+        <Link
+          href="/blocks"
+          className="group inline-flex items-center gap-2 text-[15px] text-fg underline decoration-white/20 underline-offset-4 transition-colors hover:decoration-[rgb(var(--neon-accent))]"
+        >
+          See all {blocks.length} blocks
+          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+        </Link>
+        {templates.length > 0 && (
+          <Link
+            href="/templates"
+            className="group inline-flex items-center gap-2 text-[15px] text-muted transition-colors hover:text-fg"
+          >
+            Or start from one of {templates.length} complete templates
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        )}
+      </div>
     </section>
   );
 }

@@ -174,14 +174,14 @@ function Cell({ customer }: { customer: Customer }) {
           className="absolute inset-0 bg-[radial-gradient(ellipse_62%_58%_at_50%_50%,rgb(var(--neon)/0.075),transparent_72%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
         />
         <span aria-hidden className="relative whitespace-nowrap leading-none">
-          <span className="flex items-center text-[rgb(var(--neon)/0.42)]">{customer.mark}</span>
+          <span className="flex items-center text-[rgb(var(--neon)/0.55)]">{customer.mark}</span>
           <span className="nk-logos-grid-lit absolute inset-0 flex items-center [color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] [filter:drop-shadow(0_0_1px_rgb(var(--neon)))_drop-shadow(0_0_6px_rgb(var(--neon)/0.75))_drop-shadow(0_0_18px_rgb(var(--neon)/0.4))]">
             {customer.mark}
           </span>
         </span>
         <span
           aria-hidden
-          className="absolute bottom-3 left-4 hidden whitespace-nowrap font-mono text-[10px] tracking-[0.02em] text-white/0 transition-colors duration-300 group-hover:text-white/40 group-focus-visible:text-white/40 sm:block"
+          className="absolute bottom-3 left-4 hidden whitespace-nowrap font-mono text-[10px] tracking-[0.02em] text-white/0 transition-colors duration-300 group-hover:text-white/55 group-focus-visible:text-white/55 sm:block"
         >
           {customer.meta}
         </span>
@@ -208,7 +208,7 @@ export default function LogosGrid() {
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:items-end lg:gap-16">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Customers</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Customers</p>
             <h2
               id={titleId}
               className="mt-5 max-w-[16ch] text-balance text-[clamp(2.1rem,5vw,3.5rem)] font-semibold leading-[1] tracking-[-0.04em]"
@@ -223,7 +223,7 @@ export default function LogosGrid() {
             </p>
             <a
               href="#"
-              className="group mt-5 inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-white/80 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
+              className="group mt-3 inline-flex items-center gap-1.5 rounded-md py-2 text-sm font-medium text-white/80 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
             >
               Read their stories
               <ArrowUpRight aria-hidden className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -245,7 +245,7 @@ export default function LogosGrid() {
           </div>
         </div>
 
-        <p className="mt-6 flex flex-wrap justify-between gap-x-6 gap-y-1 font-mono text-[11px] uppercase tracking-[0.14em] text-white/35">
+        <p className="mt-6 flex flex-wrap justify-between gap-x-6 gap-y-1 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
           <span>12 of 1,412 · shown with permission</span>
           <span>Median contract: 3.4 years</span>
         </p>

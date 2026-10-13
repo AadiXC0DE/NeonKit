@@ -136,6 +136,22 @@ describe("Sheet", () => {
     expect(sheet()).not.toHaveAttribute("open");
   });
 
+  it("opens from a render-prop trigger, as the shadcn CLI writes it in base-* projects", () => {
+    render(
+      <Sheet>
+        <SheetTrigger render={<button type="button" className="menu" />}>Menu</SheetTrigger>
+        <SheetContent>
+          <SheetTitle>Menu</SheetTitle>
+        </SheetContent>
+      </Sheet>,
+    );
+    const trigger = screen.getByRole("button", { name: "Menu" });
+    expect(trigger).toHaveClass("menu");
+    expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
+    fireEvent.click(trigger);
+    expect(sheet()).toHaveAttribute("open");
+  });
+
   it("applies color through --neon on the dialog", () => {
     render(<Settings color="lime" defaultOpen />);
     expect(sheet().style.getPropertyValue("--neon")).toBe("163 230 53");

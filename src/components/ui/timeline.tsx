@@ -317,7 +317,7 @@ const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
 
     const timeClass = cn(
       "text-xs tabular-nums",
-      status === "current" ? "text-[rgb(var(--neon)/0.9)]" : "text-white/40",
+      status === "current" ? "text-[rgb(var(--neon)/0.9)]" : "text-white/55",
     );
 
     const heading = (

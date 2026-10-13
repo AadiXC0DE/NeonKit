@@ -81,7 +81,7 @@ export default function FeaturesComparison() {
       <div className="mx-auto max-w-[1200px]">
         <header className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Switchyard · Feature flags</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Switchyard · Feature flags</p>
             <h2
               id="features-comparison-title"
               className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -91,7 +91,7 @@ export default function FeaturesComparison() {
           </div>
           <div className="flex items-center justify-between gap-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] py-3 pl-5 pr-4 md:justify-start">
             <div className="md:text-right">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Try it</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Try it</p>
               <p aria-live="polite" className="mt-1 whitespace-nowrap text-sm text-white/75">
                 Switchyard is {on ? "on" : "off"}
               </p>
@@ -132,19 +132,19 @@ export default function FeaturesComparison() {
             {ROWS.map((row, i) => (
               <span
                 key={row.topic}
-                className="border-t border-white/[0.06] py-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/40 lg:[grid-column:1]"
+                className="border-t border-white/[0.06] py-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 lg:[grid-column:1]"
                 style={{ gridRow: i + 2 }}
               >
                 {row.topic}
               </span>
             ))}
-            <span className="border-t border-white/[0.06] py-6 font-mono text-[11px] uppercase tracking-[0.16em] text-white/40 lg:[grid-column:1]" style={{ gridRow: ROWS.length + 2 }}>
+            <span className="border-t border-white/[0.06] py-6 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 lg:[grid-column:1]" style={{ gridRow: ROWS.length + 2 }}>
               Median rollback
             </span>
           </div>
 
           <div className="rounded-[18px] border border-white/[0.06] bg-white/[0.015] px-5 md:contents">
-            <h3 className="py-5 text-sm font-medium text-white/45 md:px-6 md:[grid-column:1] lg:[grid-column:2] md:[grid-row:1]">Before</h3>
+            <h3 className="py-5 text-sm font-medium text-white/55 md:px-6 md:[grid-column:1] lg:[grid-column:2] md:[grid-row:1]">Before</h3>
             <ul className="md:contents">
               {ROWS.map((row, i) => (
                 <li
@@ -154,7 +154,7 @@ export default function FeaturesComparison() {
                 >
                   <X aria-hidden strokeWidth={2} className="mt-[3px] size-4 shrink-0 text-white/25" />
                   <div>
-                    <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.16em] text-white/30 lg:hidden">{row.topic}</span>
+                    <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.16em] text-white/55 lg:hidden">{row.topic}</span>
                     <span
                       className={cn(
                         "text-[15px] leading-snug transition-colors duration-300",
@@ -202,7 +202,7 @@ export default function FeaturesComparison() {
                 >
                   <TubeCheck lit={lit} delay={180 + i * 140} />
                   <div>
-                    <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.16em] text-white/30 lg:hidden">{row.topic}</span>
+                    <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.16em] text-white/55 lg:hidden">{row.topic}</span>
                     <span className={cn("text-[15px] leading-snug transition-colors duration-300", lit ? "text-white/90" : "text-white/40")}>
                       {row.after}
                     </span>
@@ -226,8 +226,8 @@ export default function FeaturesComparison() {
               >
                 4 s
               </span>
-              <span className="text-sm text-white/45 lg:hidden">median rollback</span>
-              <span className="hidden text-sm text-white/45 lg:inline">flip it off, from anywhere</span>
+              <span className="text-sm text-white/60 lg:hidden">median rollback</span>
+              <span className="hidden text-sm text-white/60 lg:inline">flip it off, from anywhere</span>
             </p>
           </div>
         </div>

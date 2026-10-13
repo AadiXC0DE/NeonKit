@@ -66,8 +66,17 @@ export default function AuthSignUp() {
   const [status, setStatus] = React.useState<"idle" | "loading" | "done">("idle");
   const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
   const formRef = React.useRef<HTMLFormElement>(null);
+  const doneRef = React.useRef<HTMLHeadingElement>(null);
+  // The form and the success panel replace each other, so focus has to be placed by hand or it falls to <body>.
+  const focusAfter = React.useRef<"done" | "email" | null>(null);
 
   React.useEffect(() => () => clearTimeout(timer.current), []);
+
+  React.useEffect(() => {
+    if (focusAfter.current === "done") doneRef.current?.focus();
+    if (focusAfter.current === "email") formRef.current?.querySelector<HTMLInputElement>('[name="email"]')?.select();
+    focusAfter.current = null;
+  }, [status]);
 
   const rules = rulesFor(password, name, email);
   const met = rules.filter((r) => r.met).length;
@@ -92,12 +101,18 @@ export default function AuthSignUp() {
       return;
     }
     setStatus("loading");
-    timer.current = setTimeout(() => setStatus("done"), 1300);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      focusAfter.current = "done";
+      setStatus("done");
+    }, 1300);
   }
 
   function reset() {
+    focusAfter.current = "email";
     setStatus("idle");
     setPassword("");
+    setReveal(false);
     setTerms(false);
   }
 
@@ -109,7 +124,7 @@ export default function AuthSignUp() {
     >
       <div className="mx-auto grid max-w-[1160px] gap-12 lg:grid-cols-[1fr_440px] lg:items-start lg:gap-20">
         <div className="max-w-[560px] lg:pt-16">
-          <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+          <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
             <svg aria-hidden viewBox="0 0 16 16" className="size-3.5 text-[rgb(var(--neon))]" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M8 14V7" strokeLinecap="round" />
               <path d="M8 8.5C8 5.5 6 3.5 3 3.5c0 3 2 5 5 5ZM8 7c0-2.5 1.7-4.5 5-4.5 0 2.8-1.9 4.5-5 4.5Z" />
@@ -131,20 +146,20 @@ export default function AuthSignUp() {
               <div key={s.label} className={cn("py-5", i > 0 && "border-l border-white/[0.08] pl-4 sm:pl-6")}>
                 <dt className="sr-only">{s.label}</dt>
                 <dd className="text-[clamp(1.375rem,3vw,1.875rem)] font-semibold tracking-[-0.03em] tabular-nums">{s.value}</dd>
-                <dd className="mt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-white/40">{s.label}</dd>
+                <dd className="mt-1 font-mono text-[11px] uppercase tracking-[0.08em] text-white/55 sm:tracking-[0.12em]">{s.label}</dd>
               </div>
             ))}
           </dl>
 
           <figure className="mt-8 hidden gap-2 sm:grid">
-            <figcaption className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">Deposited this morning</figcaption>
+            <figcaption className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Deposited this morning</figcaption>
             <div className="flex items-baseline justify-between gap-6 text-sm">
               <span className="text-white/80">{RECENT.title}</span>
-              <span className="shrink-0 font-mono text-xs text-white/40">{RECENT.size}</span>
+              <span className="shrink-0 font-mono text-xs text-white/55">{RECENT.size}</span>
             </div>
             <div className="flex items-baseline justify-between gap-6 font-mono text-xs">
               <span className="text-[rgb(var(--neon))]">doi:{RECENT.doi}</span>
-              <span className="text-white/40">{RECENT.downloads} downloads</span>
+              <span className="text-white/55">{RECENT.downloads} downloads</span>
             </div>
           </figure>
         </div>
@@ -160,11 +175,11 @@ export default function AuthSignUp() {
             {status === "done" ? (
               <div aria-live="polite" className="grid gap-5 py-4">
                 <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">Account created</p>
-                <h2 className="text-[30px] font-semibold leading-[1.05] tracking-[-0.035em]">
+                <h2 ref={doneRef} tabIndex={-1} className="text-[30px] font-semibold leading-[1.05] tracking-[-0.035em] outline-none">
                   Check your inbox, {name.trim().split(/\s+/)[0]}.
                 </h2>
                 <p className="text-[15px] leading-relaxed text-white/55">
-                  We sent a confirmation link to <span className="text-white/90">{email}</span>. Your deposit prefix is
+                  We sent a confirmation link to <span className="text-white/90 [overflow-wrap:anywhere]">{email}</span>. Your deposit prefix is
                   already reserved:
                 </p>
                 <p className="rounded-xl border border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.06)] px-4 py-3 font-mono text-sm text-[rgb(var(--neon))] [overflow-wrap:anywhere]">
@@ -183,7 +198,10 @@ export default function AuthSignUp() {
               <form ref={formRef} noValidate onSubmit={handleSubmit} className="grid gap-5">
                 <div className="mb-1 flex items-baseline justify-between gap-4">
                   <h2 className="text-xl font-semibold tracking-[-0.02em]">Create an account</h2>
-                  <a href="#sign-in" className="text-[13px] text-white/55 transition-colors hover:text-[rgb(var(--neon))]">
+                  <a
+                    href="#sign-in"
+                    className="-my-2 rounded-md py-2 text-[13px] text-white/60 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                  >
                     Sign in instead
                   </a>
                 </div>
@@ -232,7 +250,7 @@ export default function AuthSignUp() {
                         aria-label={reveal ? "Hide password" : "Show password"}
                         aria-pressed={reveal}
                         onClick={() => setReveal((r) => !r)}
-                        className="-mr-1.5 grid size-7 place-items-center rounded-md text-white/45 outline-none transition-colors hover:text-white/90 focus-visible:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                        className="-mr-2.5 grid size-9 place-items-center rounded-md text-white/45 outline-none transition-colors hover:text-white/90 focus-visible:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
                         {reveal ? <EyeOff /> : <Eye />}
                       </button>
@@ -240,7 +258,7 @@ export default function AuthSignUp() {
                   />
                   <div className="grid gap-2">
                     <div className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.14em]">
-                      <span className="text-white/40">Strength</span>
+                      <span className="text-white/55">Strength</span>
                       <span aria-live="polite" className={score >= 0.8 ? "text-[rgb(var(--neon))]" : "text-white/70"}>
                         {level}
                       </span>
@@ -259,7 +277,7 @@ export default function AuthSignUp() {
                     {rules.map((rule) => (
                       <li key={rule.label} className="flex items-center gap-2.5">
                         <Tube lit={rule.met} />
-                        <span className={cn("transition-colors duration-200", rule.met ? "text-white/85" : "text-white/40")}>
+                        <span className={cn("transition-colors duration-200", rule.met ? "text-white/85" : "text-white/55")}>
                           {rule.label}
                           <span className="sr-only">{rule.met ? ", met" : ", not met"}</span>
                         </span>
@@ -277,6 +295,7 @@ export default function AuthSignUp() {
                       clear("terms");
                     }}
                     aria-invalid={errors.terms ? true : undefined}
+                    aria-describedby={errors.terms ? "seedbank-terms-error" : undefined}
                     label={
                       <span className="text-white/70">
                         I accept the{" "}
@@ -287,7 +306,11 @@ export default function AuthSignUp() {
                       </span>
                     }
                   />
-                  {errors.terms && <p className="pl-[26px] text-xs text-[#ff4d5e]">{errors.terms}</p>}
+                  {errors.terms && (
+                    <p id="seedbank-terms-error" className="pl-[26px] text-xs text-[#ff4d5e]">
+                      {errors.terms}
+                    </p>
+                  )}
                 </div>
                 <Button type="submit" variant="solid" size="lg" loading={status === "loading"} className="w-full">
                   {status === "loading" ? "Reserving your prefix" : "Create account"}

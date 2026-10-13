@@ -28,7 +28,7 @@ function Wordmark() {
   return (
     <a
       href="#top"
-      className="flex items-center gap-2.5 rounded-md text-[17px] font-semibold tracking-[-0.02em] text-white/90 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#05060a]"
+      className="flex items-center gap-2.5 rounded-md py-1.5 text-[17px] font-semibold tracking-[-0.02em] text-white/90 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#05060a]"
     >
       {/* A kestrel hovering: two wing strokes over a tail. */}
       <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -115,7 +115,7 @@ export default function NavbarMinimal() {
               </SheetTrigger>
               <SheetContent side="right" size="sm">
                 <SheetHeader>
-                  <SheetTitle className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/45">
+                  <SheetTitle className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/55">
                     Kestrel · menu
                   </SheetTitle>
                 </SheetHeader>
@@ -138,7 +138,7 @@ export default function NavbarMinimal() {
                                   : "text-white/80 hover:text-white",
                               )}
                             >
-                              <span className="w-6 shrink-0 font-mono text-[11px] font-normal tracking-[0.16em] text-white/35 [text-shadow:none]">
+                              <span aria-hidden className="w-6 shrink-0 font-mono text-[11px] font-normal tracking-[0.16em] text-white/35 [text-shadow:none]">
                                 0{index + 1}
                               </span>
                               {link.label}
@@ -173,17 +173,17 @@ export default function NavbarMinimal() {
         className="pointer-events-none mx-auto grid max-w-6xl select-none gap-12 px-5 pb-6 pt-14 [mask-image:linear-gradient(to_bottom,#000_50%,transparent)] sm:px-8 sm:pt-16 lg:grid-cols-[1fr_320px]"
       >
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Field notes, synced · v3.2</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Field notes, synced · v3.2</p>
           <p className="mt-5 max-w-3xl [text-wrap:balance] text-[clamp(2.5rem,7vw,5.25rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/90">
             Write it down before the light goes.
           </p>
-          <p className="mt-6 max-w-md text-base leading-relaxed text-white/50">
+          <p className="mt-6 max-w-md text-base leading-relaxed text-white/60">
             Notebooks that work offline at the trailhead, timestamp every observation and sync when you&apos;re back in range.
           </p>
         </div>
         <div className="hidden self-end rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 lg:block">
-          <p className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">
-            Ridge survey · day 4<span className="text-white/25">offline</span>
+          <p className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+            Ridge survey · day 4<span className="text-white/50">offline</span>
           </p>
           <ul className="mt-4 grid gap-3 border-t border-white/[0.06] pt-4 text-sm">
             {LOG.map((entry) => (

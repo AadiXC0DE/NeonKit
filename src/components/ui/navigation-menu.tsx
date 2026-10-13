@@ -16,6 +16,19 @@ import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 type AnyProps = Record<string, unknown>;
 type OpenReason = "pointer" | "click" | "keyboard";
 type MotionSafe<T> = Omit<
@@ -767,10 +780,15 @@ export interface NavigationMenuLinkProps extends React.AnchorHTMLAttributes<HTML
   active?: boolean;
   /** Render the single child (e.g. your router's Link) with the link's behaviour and styles. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const NavigationMenuLink = React.forwardRef<HTMLAnchorElement, NavigationMenuLinkProps>(
-  ({ active = false, asChild = false, className, onClick, onPointerEnter, onFocus, ...props }, forwardedRef) => {
+  (raw, forwardedRef) => {
+    const { active = false, asChild = false, className, onClick, onPointerEnter, onFocus, ...props } = fromRenderProp(raw);
     const nav = useNav("NavigationMenuLink");
     const item = React.useContext(ItemContext);
     const inPanel = React.useContext(InPanelContext);

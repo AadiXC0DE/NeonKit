@@ -6,6 +6,19 @@ import { ChevronRight, Ellipsis } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 // Revealed items slide in a few pixels from the ellipsis, one after another.
 const keyframes = `@keyframes nk-breadcrumb-reveal{from{opacity:0;transform:translateX(-4px)}}`;
 const revealClass =
@@ -172,10 +185,15 @@ BreadcrumbItem.displayName = "BreadcrumbItem";
 export interface BreadcrumbLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Merge the link styles onto the single child element, such as your router's Link. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
-  ({ className, asChild = false, children, ...props }, ref) => {
+  (raw, ref) => {
+    const { className, asChild = false, children, ...props } = fromRenderProp(raw);
     const child =
       asChild && React.isValidElement<React.HTMLAttributes<HTMLElement>>(children) ? children : null;
     const childRef = child ? getElementRef<HTMLAnchorElement>(child) : undefined;

@@ -19,6 +19,19 @@ import { Check, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 type Side = "top" | "right" | "bottom" | "left";
 type Align = "start" | "center" | "end";
 type Point = { x: number; y: number };
@@ -369,13 +382,16 @@ DropdownMenu.displayName = "DropdownMenu";
 export interface DropdownMenuTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Merge trigger behaviour onto the single child element (e.g. a Button) instead of rendering a button. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const DropdownMenuTrigger = React.forwardRef<HTMLButtonElement, DropdownMenuTriggerProps>(
-  (
-    { asChild = false, disabled, className, style, children, onPointerDown, onClick, onKeyDown, onKeyUp, ...props },
-    forwardedRef,
-  ) => {
+  (raw, forwardedRef) => {
+    const { asChild = false, disabled, className, style, children, onPointerDown, onClick, onKeyDown, onKeyUp, ...props } =
+      fromRenderProp(raw);
     const root = useRoot("DropdownMenuTrigger");
     const ref = useComposedRefs<HTMLButtonElement>(forwardedRef, root.setTriggerEl);
     const pointerType = React.useRef<string | null>(null);
@@ -459,6 +475,10 @@ DropdownMenuTrigger.displayName = "DropdownMenuTrigger";
 
 export interface DropdownMenuAnchorProps extends React.HTMLAttributes<HTMLDivElement> {
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 /**
@@ -466,7 +486,8 @@ export interface DropdownMenuAnchorProps extends React.HTMLAttributes<HTMLDivEle
  * Useful for custom triggers, such as Context Menu's right-click area.
  */
 const DropdownMenuAnchor = React.forwardRef<HTMLDivElement, DropdownMenuAnchorProps>(
-  ({ asChild = false, ...props }, forwardedRef) => {
+  (raw, forwardedRef) => {
+    const { asChild = false, ...props } = fromRenderProp(raw);
     const root = useRoot("DropdownMenuAnchor");
     const ref = useComposedRefs<HTMLDivElement>(forwardedRef, root.setAnchorEl);
     if (asChild) return <Slot ref={ref as React.Ref<HTMLElement>} {...props} />;
@@ -867,6 +888,10 @@ interface ItemShellProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onS
   danger?: boolean;
   inset?: boolean;
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
   textValue?: string;
   leading?: (highlighted: boolean) => React.ReactNode;
   trailing?: (highlighted: boolean) => React.ReactNode;
@@ -876,8 +901,8 @@ interface ItemShellProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onS
 }
 
 const ItemShell = React.forwardRef<HTMLDivElement, ItemShellProps>(
-  (
-    {
+  (raw, forwardedRef) => {
+    const {
       role,
       disabled = false,
       danger = false,
@@ -900,9 +925,7 @@ const ItemShell = React.forwardRef<HTMLDivElement, ItemShellProps>(
       onPointerUp,
       onPointerLeave,
       ...props
-    },
-    forwardedRef,
-  ) => {
+    } = fromRenderProp(raw);
     const root = useRoot("DropdownMenuItem");
     const menu = useMenu("DropdownMenuItem");
     const autoId = React.useId();
@@ -1062,6 +1085,10 @@ export interface DropdownMenuItemProps extends ItemCommonProps {
   variant?: "default" | "danger";
   /** Render the single child (e.g. a link) as the item. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const DropdownMenuItem = React.forwardRef<HTMLDivElement, DropdownMenuItemProps>(

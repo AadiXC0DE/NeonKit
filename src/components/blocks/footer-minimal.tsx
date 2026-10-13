@@ -66,7 +66,7 @@ export default function FooterMinimal() {
                 aria-hidden
                 className="relative grid size-9 place-items-center rounded-[8px] pt-1 border border-[rgb(var(--neon)/0.25)] bg-[rgb(var(--neon)/0.04)] font-mono text-[13px] font-medium text-[rgb(var(--neon))] transition-[border-color,box-shadow] duration-300 group-hover:border-[rgb(var(--neon)/0.7)] group-hover:shadow-[0_0_14px_-2px_rgb(var(--neon)/0.6),inset_0_0_8px_rgb(var(--neon)/0.15)]"
               >
-                <span className="absolute left-[3px] top-[1px] text-[7px] leading-none text-[rgb(var(--neon)/0.6)]">26</span>
+                <span className="absolute left-[3px] top-[1px] text-[7px] leading-none text-[rgb(var(--neon)/0.8)]">26</span>
                 Fe
               </span>
               <span className="text-[15px] font-semibold tracking-[-0.02em] text-white">Ferrous</span>
@@ -80,7 +80,7 @@ export default function FooterMinimal() {
                 <li key={link}>
                   <a
                     href="#"
-                    className="relative rounded-md outline-none transition-colors duration-150 after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:scale-x-0 after:bg-[rgb(var(--neon))] after:shadow-[0_0_6px_rgb(var(--neon))] after:transition-transform after:duration-200 hover:text-white hover:after:scale-x-100 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] motion-reduce:after:transition-none"
+                    className="relative -my-2 inline-block rounded-md py-2 outline-none transition-colors duration-150 after:absolute after:inset-x-0 after:bottom-1 after:h-px after:scale-x-0 after:bg-[rgb(var(--neon))] after:shadow-[0_0_6px_rgb(var(--neon))] after:transition-transform after:duration-200 hover:text-white hover:after:scale-x-100 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] motion-reduce:after:transition-none"
                   >
                     {link}
                   </a>
@@ -90,7 +90,7 @@ export default function FooterMinimal() {
           </nav>
 
           <div className="flex items-center gap-5">
-            <p className="font-mono text-[11px] tracking-[0.04em] text-white/35">© 2026 Ferrous · Made in Rotterdam</p>
+            <p className="font-mono text-[11px] tracking-[0.04em] text-white/55">© 2026 Ferrous · Made in Rotterdam</p>
             <BackToTop className="hidden lg:grid" />
           </div>
         </div>

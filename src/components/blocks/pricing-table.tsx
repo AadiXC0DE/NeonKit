@@ -91,7 +91,7 @@ export default function PricingTable() {
       <div className="mx-auto max-w-[1200px]">
         <header className="grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Cartograph · Maps API</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Cartograph · Maps API</p>
             <h2
               id="pricing-table-title"
               className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -105,13 +105,13 @@ export default function PricingTable() {
           </p>
         </header>
 
-        <p className="mt-12 font-mono text-[11px] text-white/35 md:hidden">Scroll sideways to see every plan →</p>
+        <p className="mt-12 font-mono text-[11px] text-white/55 md:hidden">Scroll sideways to see every plan →</p>
         <Table
           stickyHeader
           aria-label="Plan comparison"
           className="min-w-[640px] table-fixed"
           // Scrolls sideways inside its own frame on small screens; on desktop the header sticks to the page.
-          containerClassName="mt-3 md:mt-12 bg-[#07080c] lg:overflow-visible"
+          containerClassName="mt-3 overscroll-x-contain bg-[#07080c] md:mt-12 lg:overflow-visible"
         >
           <colgroup>
             <col className="w-44 lg:w-[34%]" />
@@ -122,7 +122,7 @@ export default function PricingTable() {
           <TableHeader>
             <TableRow>
               <TableHead className="left-0 z-20 whitespace-normal rounded-tl-xl align-bottom shadow-[1px_0_0_rgb(255_255_255/0.06)] lg:shadow-none">
-                <span className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/40">Billed monthly · USD</span>
+                <span className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/55">Billed monthly · USD</span>
               </TableHead>
               {PLANS.map((plan, i) => (
                 <TableHead
@@ -141,7 +141,7 @@ export default function PricingTable() {
                       {plan.name}
                     </span>
                     <span className="text-[28px] font-semibold leading-none tracking-[-0.03em] text-white">{plan.price}</span>
-                    <span className="text-[11px] font-normal text-white/40">{plan.note}</span>
+                    <span className="text-[11px] font-normal text-white/55">{plan.note}</span>
                     <Button size="sm" variant={i === FEATURED ? "solid" : "ghost"} className={cn("mt-2.5", i !== FEATURED && "border border-white/10")}>
                       {plan.cta}
                     </Button>
@@ -157,7 +157,7 @@ export default function PricingTable() {
                   <th
                     colSpan={4}
                     scope="colgroup"
-                    className="border-b border-white/[0.06] bg-white/[0.015] px-4 pb-2 pt-6 text-left font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/45"
+                    className="border-b border-white/[0.06] bg-white/[0.015] px-4 pb-2 pt-6 text-left font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/55"
                   >
                     <span className="sticky left-4">{group.name}</span>
                   </th>
@@ -172,7 +172,7 @@ export default function PricingTable() {
                       >
                         <button
                           type="button"
-                          className="cursor-help rounded-md text-left underline decoration-white/20 decoration-dashed underline-offset-[5px] outline-none transition-colors hover:text-white hover:decoration-[rgb(var(--neon)/0.7)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                          className="-my-2 cursor-help rounded-md py-2 text-left underline decoration-white/20 decoration-dashed underline-offset-[5px] outline-none transition-colors hover:text-white hover:decoration-[rgb(var(--neon)/0.7)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                         >
                           {row.feature}
                         </button>
@@ -190,7 +190,7 @@ export default function PricingTable() {
           </TableBody>
         </Table>
 
-        <p className="mt-6 text-sm text-white/45">
+        <p className="mt-6 text-sm text-white/60">
           Prices in USD, before tax. Nonprofits and classrooms get Growth free;{" "}
           <a
             href="#education"

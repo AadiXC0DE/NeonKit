@@ -13,7 +13,7 @@ export const doc: ComponentDoc = {
       name: "demo",
       title: "Synth panel",
       description:
-        "Drag up and down, scroll, or use the keys. formatValue maps the 0–100 travel onto hertz and milliseconds, and the bipolar Env amt knob lights from its center detent.",
+        "Drag up and down, use the keys, or click one and scroll. formatValue maps the 0–100 travel onto hertz and milliseconds, and the bipolar Env amt knob lights from its center detent.",
       component: KnobDemo,
     },
     {
@@ -65,7 +65,7 @@ export const doc: ComponentDoc = {
     "The dial has role=\"slider\" with aria-valuemin, aria-valuemax, aria-valuenow, and aria-valuetext when formatValue is set.",
     "Arrow keys move by one step, Shift+Arrow and Page Up/Down by a tenth of the range, Home and End jump to the ends.",
     "Drag vertically to turn it; hold Shift for fine control or Alt for coarse.",
-    "The wheel turns the knob only when the scroll starts over it, so a page scroll passing across a knob keeps scrolling the page.",
+    "The wheel turns a knob once it has focus (click, drag or Tab to it) and the scroll starts over it, so a page scroll never gets caught on a knob. At either end of its travel the knob lets go and the page scrolls on.",
     "A visible label names the slider through aria-labelledby; pass aria-label when the legend is an abbreviation, like A, D, S and R.",
   ],
 };

@@ -77,7 +77,18 @@ Blocks are whole sections (heroes, pricing, auth screens, app shells) built from
 - **Color.** Set it once at the root with `style={neonVars("<color>")}` and a comment saying so. Everything inside inherits it.
 - **Content.** A believable fictional product with specific copy and numbers, kept in constants at the top of the file. Anything that looks interactive works in the preview: forms validate and show a success state, tabs switch, filters filter.
 - **Layout.** Holds up at 1440, 768 and 390 px with no horizontal page scroll. Heroes have one `h1`. Sections that sit inside a page (features, pricing, footers…) use `h2`.
-- **Preview.** Each block renders alone at `/view/<slug>` and in the gallery at `/blocks/<slug>`. After adding or changing one, refresh its thumbnail against a production build: `npm run build && npm start`, then `npm run blocks:thumbs -- <slug>`.
+- **Preview.** Each block renders alone at `/view/<slug>` and in the gallery at `/blocks/<slug>`. After adding or changing one, refresh its thumbnail against a production build: `npm run build && npm start`, then `npm run thumbs -- <slug>`.
+
+## Templates
+
+Templates are complete Next.js sites (several pages, one brand, one color) built from the components. They install into an app router project, so unlike blocks they may use `next/*`.
+
+- **Files.** Sections in `src/components/templates/<slug>/`, routes in `app/preview/<slug>/`. They install to `components/templates/<slug>/` and `app/<slug>/`. List the template in `registry.json` → `templates` with `dependencies`, `registryDependencies`, `addedIn` and its `routes` (`""` first).
+- **Config.** `config.ts` exports `basePath = "/preview/<slug>"`, `color` and `brand`. Every link between pages starts from `basePath`; the registry build rewrites it to `/<slug>` and fails if `/preview/<slug>` appears anywhere else.
+- **Imports.** `react`, `next`, `next/*`, `@/lib/utils`, `@/lib/neon`, listed NeonKit components, files inside the template and listed npm packages.
+- **Next.js.** Must build in an app with `cacheComponents` on (the `create-next-app` default): no `dynamicParams` or other segment config it rejects; unknown params call `notFound()`.
+- **Pages.** One `h1` and a `main` per page, a skip link, metadata, an Open Graph image. Same contrast, layout and interaction bar as blocks.
+- **Preview.** Each route renders at `/preview/<slug><route>` (no-indexed) and in the gallery at `/templates/<slug>`. Refresh screenshots against a production build with `npm run thumbs -- <slug>`.
 
 ## Examples and docs
 

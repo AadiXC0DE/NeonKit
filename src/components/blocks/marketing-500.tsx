@@ -73,7 +73,7 @@ function Breaker({ label, on, tripped, index }: { label: string; on: boolean; tr
           )}
         />
       </span>
-      <span className={cn("font-mono text-[10px] uppercase tracking-[0.12em]", tripped ? "text-[#ff4d5e]" : "text-white/45")}>
+      <span className={cn("font-mono text-[10px] uppercase tracking-[0.12em]", tripped ? "text-[#ff4d5e]" : "text-white/55")}>
         {label}
       </span>
     </div>
@@ -148,7 +148,7 @@ export default function Marketing500() {
             </NeonText>
           </div>
 
-          <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+          <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
             Error 500 · {power ? "Power restored" : "Internal server error"}
           </p>
           <h1 aria-live="polite" className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.045em]">
@@ -176,7 +176,8 @@ export default function Marketing500() {
                 Status page <ArrowUpRight />
               </a>
             </Button>
-            <span aria-live="polite" className="font-mono text-xs text-white/55">
+            {/* Lifted above the dimmed room so the way out stays readable */}
+            <span aria-live="polite" className="relative z-10 font-mono text-xs text-white/60">
               {retry === "ok" ? (
                 <>
                   <span className="text-[rgb(var(--neon))]">200 OK</span> in 182 ms
@@ -196,11 +197,11 @@ export default function Marketing500() {
 
           <div className="flex items-start justify-between gap-4 border-b border-white/[0.06] pb-5">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Panel B · eu-west-2</p>
-              <p className="mt-1.5 text-sm text-white/70">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Panel B · eu-west-2</p>
+              <p className="mt-1.5 text-balance text-sm text-white/70">
                 Incident {INCIDENT.id}: {INCIDENT.title}
               </p>
-              <p className="mt-1 font-mono text-[11px] text-white/40">
+              <p className="mt-1 font-mono text-[11px] text-white/55">
                 {power ? `Monitoring since ${INCIDENT.fixed}` : `Investigating since ${INCIDENT.since}`}
               </p>
             </div>
@@ -215,7 +216,7 @@ export default function Marketing500() {
         </div>
       </main>
 
-      <footer className="flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-white/[0.06] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/35">
+      <footer className="flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-white/[0.06] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
         <span>Request ID req_01J9X4K2QW · POST /v2/deploys</span>
         <span>Edge LHR-3</span>
       </footer>

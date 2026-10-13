@@ -201,7 +201,7 @@ const Step = React.forwardRef<HTMLLIElement, StepProps>(
         </span>
         {optional && <span className="text-xs leading-4 text-white/40">Optional</span>}
         {description && (
-          <span className={cn("text-xs leading-5 text-white/45", !vertical && "hidden sm:block")}>
+          <span className={cn("text-xs leading-5 text-white/60", !vertical && "hidden sm:block")}>
             {description}
           </span>
         )}

@@ -85,6 +85,9 @@ const RELEASES: Release[] = [
 
 const VISIBLE_AT_FIRST = 4;
 
+// Taller pills on touch screens, the compact size from sm up.
+const FILTER_ITEM = "h-8 sm:h-6";
+
 const TAGS: { value: Tag; label: string; color: string; dot: string }[] = [
   { value: "new", label: "New", color: "cyan", dot: "bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" },
   { value: "improved", label: "Improved", color: "white", dot: "bg-white/70" },
@@ -142,6 +145,16 @@ function Node({ lit }: { lit: boolean }) {
 export default function MarketingChangelog() {
   const [filter, setFilter] = React.useState<"all" | Tag>("all");
   const [showAll, setShowAll] = React.useState(false);
+  const listRef = React.useRef<HTMLOListElement>(null);
+  const endRef = React.useRef<HTMLParagraphElement>(null);
+  const revealed = React.useRef(false);
+
+  // The "Older releases" button unmounts on click, so hand focus to the first release it revealed.
+  React.useEffect(() => {
+    if (!showAll || !revealed.current) return;
+    revealed.current = false;
+    (listRef.current?.querySelector<HTMLElement>("[data-older] h3") ?? endRef.current)?.focus();
+  }, [showAll]);
 
   const releases = (showAll ? RELEASES : RELEASES.slice(0, VISIBLE_AT_FIRST))
     .map((release) => ({
@@ -162,7 +175,7 @@ export default function MarketingChangelog() {
     >
       <div className="mx-auto grid max-w-[1200px] gap-12 lg:grid-cols-12 lg:gap-10">
         <header className="lg:sticky lg:top-12 lg:col-span-4 lg:self-start">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Kiln · Changelog</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Kiln · Changelog</p>
           <h2
             id="kiln-changelog-title"
             className="mt-5 text-[clamp(2.4rem,5vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -174,7 +187,7 @@ export default function MarketingChangelog() {
           </p>
 
           <div className="mt-8">
-            <p id="kiln-filter-label" className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">
+            <p id="kiln-filter-label" className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
               Filter
             </p>
             <ToggleGroup
@@ -184,12 +197,12 @@ export default function MarketingChangelog() {
               onValueChange={(value) => setFilter(value as typeof filter)}
               className="mt-2.5 max-w-full overflow-x-auto"
             >
-              <ToggleGroupItem value="all">All</ToggleGroupItem>
+              <ToggleGroupItem value="all" className={FILTER_ITEM}>All</ToggleGroupItem>
               {TAGS.map((tag) => (
-                <ToggleGroupItem key={tag.value} value={tag.value}>
+                <ToggleGroupItem key={tag.value} value={tag.value} className={FILTER_ITEM}>
                   <span aria-hidden className={cn("size-1.5 rounded-full", tag.dot)} />
                   {tag.label}
-                  <span className="font-mono text-[10px] text-white/35">{count(tag.value)}</span>
+                  <span className="font-mono text-[10px] text-white/55">{count(tag.value)}</span>
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
@@ -202,7 +215,7 @@ export default function MarketingChangelog() {
             <a href="#" className="rounded-md text-white/60 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
               Upgrade guide for 4.0
             </a>
-            <span className="font-mono text-[11px] text-white/35">npm i -D kiln@4.2.0</span>
+            <span className="font-mono text-[11px] text-white/55">npm i -D kiln@4.2.0</span>
           </div>
 
           <dl className="mt-8 hidden grid-cols-3 gap-4 lg:grid">
@@ -212,7 +225,7 @@ export default function MarketingChangelog() {
               ["3", "Breaking changes"],
             ].map(([value, label]) => (
               <div key={label} className="flex flex-col-reverse justify-end border-l border-white/[0.08] pl-3">
-                <dt className="mt-1 text-[12px] leading-snug text-white/45">{label}</dt>
+                <dt className="mt-1 text-[12px] leading-snug text-white/60">{label}</dt>
                 <dd className="text-xl font-medium tracking-[-0.02em] text-white/90">{value}</dd>
               </div>
             ))}
@@ -220,12 +233,13 @@ export default function MarketingChangelog() {
         </header>
 
         <div className="lg:col-span-8">
-          <ol aria-label="Releases" className="relative">
+          <ol ref={listRef} aria-label="Releases" className="relative">
             {releases.map((release, index) => {
               const latest = release.version === RELEASES[0].version;
               const last = index === releases.length - 1;
+              const older = RELEASES.findIndex((item) => item.version === release.version) >= VISIBLE_AT_FIRST;
               return (
-                <li key={release.version} className="group/release relative grid grid-cols-[28px_1fr] gap-x-4 sm:grid-cols-[40px_1fr] sm:gap-x-6">
+                <li key={release.version} data-older={older || undefined} className="group/release relative grid grid-cols-[28px_1fr] gap-x-4 sm:grid-cols-[40px_1fr] sm:gap-x-6">
                   <div className="relative flex justify-center pt-[5px]">
                     {/* The tube: lit from the newest release down, dark glass after */}
                     {!last && (
@@ -247,7 +261,7 @@ export default function MarketingChangelog() {
                       <span className={latest ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/70"}>
                         v{release.version}
                       </span>
-                      <time dateTime={release.date} className="text-white/40">
+                      <time dateTime={release.date} className="text-white/55">
                         {formatDate(release.date)}
                       </time>
                       {latest && (
@@ -256,7 +270,7 @@ export default function MarketingChangelog() {
                         </span>
                       )}
                     </div>
-                    <h3 className="mt-3 text-[22px] font-semibold leading-tight tracking-[-0.02em] text-white sm:text-[26px]">
+                    <h3 tabIndex={older ? -1 : undefined} className="mt-3 text-[22px] font-semibold leading-tight tracking-[-0.02em] text-white outline-none sm:text-[26px]">
                       {release.title}
                     </h3>
                     {release.summary && (
@@ -264,7 +278,7 @@ export default function MarketingChangelog() {
                     )}
                     {release.code && (filter === "all" || filter === "new") && (
                       <figure className="mt-5 max-w-lg overflow-hidden rounded-xl border border-white/10 bg-[#0a0b11]">
-                        <figcaption className="border-b border-white/[0.06] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">
+                        <figcaption className="border-b border-white/[0.06] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
                           {release.code.file}
                         </figcaption>
                         <pre className="overflow-x-auto px-4 py-3 font-mono text-[12.5px] leading-6 text-white/75">
@@ -293,18 +307,21 @@ export default function MarketingChangelog() {
           </ol>
 
           {releases.length === 0 && (
-            <p className="rounded-xl border border-dashed border-white/10 px-5 py-8 text-sm text-white/50">
+            <p className="rounded-xl border border-dashed border-white/10 px-5 py-8 text-sm text-white/60">
               Nothing tagged like that in these releases.
             </p>
           )}
 
           <div className="mt-6 pl-[44px] sm:pl-16">
             {!showAll ? (
-              <Button variant="ghost" size="sm" onClick={() => setShowAll(true)} className="-ml-3">
+              <Button variant="ghost" size="sm" onClick={() => {
+                  revealed.current = true;
+                  setShowAll(true);
+                }} className="-ml-3">
                 Older releases <ArrowDown aria-hidden />
               </Button>
             ) : (
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">
+              <p ref={endRef} tabIndex={-1} className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 outline-none">
                 Earlier history lives in the 3.x archive.
               </p>
             )}

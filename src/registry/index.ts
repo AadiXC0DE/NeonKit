@@ -1,10 +1,10 @@
 import data from "./registry.json";
-import type { RegistryBlock, RegistryItem } from "./types";
+import type { RegistryBlock, RegistryItem, RegistryTemplate } from "./types";
 
 /** The release being built. */
-export const currentVersion = "1.3";
+export const currentVersion = "1.4";
 /** Items added in these releases get a "new" badge. */
-export const newVersions = ["1.2", "1.3"];
+export const newVersions = ["1.3", "1.4"];
 
 export const categories = data.categories;
 export const registry: RegistryItem[] = data.items;
@@ -31,7 +31,24 @@ export function getBlockNeighbours(slug: string) {
   };
 }
 
-export { blockCategoryId } from "./ids";
+export { blockCategoryId, templateThumb } from "./ids";
+
+export const templates: RegistryTemplate[] = data.templates;
+
+export function getTemplate(slug: string) {
+  return templates.find((template) => template.slug === slug);
+}
+
+/** Where a template is previewed on this site. Installed, it lives at `/<slug>`. */
+export const templatePreviewPath = (slug: string, route = "") => `/preview/${slug}${route}`;
+
+export function getTemplateNeighbours(slug: string) {
+  const index = templates.findIndex((template) => template.slug === slug);
+  return {
+    prev: index > 0 ? templates[index - 1] : undefined,
+    next: index >= 0 && index < templates.length - 1 ? templates[index + 1] : undefined,
+  };
+}
 
 export const blockPath = (slug: string) => `src/components/blocks/${slug}.tsx`;
 

@@ -89,7 +89,7 @@ function Cell({ title, copy, className, children }: { title: string; copy: strin
   return (
     <article className={cn("relative flex flex-col overflow-hidden rounded-[18px] border border-white/[0.08] bg-white/[0.025]", className)}>
       <div className="relative flex flex-1 flex-col p-5 sm:p-6">{children}</div>
-      <p className="border-t border-white/[0.06] px-5 py-4 text-sm leading-relaxed text-white/50 sm:px-6">
+      <p className="border-t border-white/[0.06] px-5 py-4 text-sm leading-relaxed text-white/60 sm:px-6">
         <span className="font-medium text-white/90">{title}</span> {copy}
       </p>
     </article>
@@ -97,7 +97,7 @@ function Cell({ title, copy, className, children }: { title: string; copy: strin
 }
 
 function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <span className={cn("font-mono text-[11px] uppercase tracking-[0.16em] text-white/45", className)}>{children}</span>;
+  return <span className={cn("font-mono text-[11px] uppercase tracking-[0.16em] text-white/55", className)}>{children}</span>;
 }
 
 function useElapsed(running: boolean) {
@@ -161,7 +161,7 @@ export default function FeaturesBento() {
                 aria-live="polite"
                 className={cn(
                   "font-mono text-[11px] uppercase tracking-[0.16em] transition-colors",
-                  over ? "text-[#ff4d5e] [text-shadow:0_0_10px_rgb(255_77_94/0.6)]" : "text-white/45",
+                  over ? "text-[#ff4d5e] [text-shadow:0_0_10px_rgb(255_77_94/0.6)]" : "text-white/55",
                 )}
               >
                 {over} over line
@@ -177,7 +177,7 @@ export default function FeaturesBento() {
                   <div key={stream.id} className="grid grid-cols-[1fr_3.25rem] items-center gap-x-3 gap-y-1.5 sm:grid-cols-[8.5rem_1fr_3.5rem] sm:gap-x-4">
                     <span className="col-span-2 flex items-center gap-2 truncate font-mono text-xs text-white/70 sm:col-span-1">
                       {stream.id}
-                      {silent && <span className="text-[10px] uppercase tracking-[0.14em] text-white/35">silent</span>}
+                      {silent && <span className="text-[10px] uppercase tracking-[0.14em] text-white/55">silent</span>}
                     </span>
                     <div className="relative min-w-0">
                       <Meter
@@ -207,7 +207,7 @@ export default function FeaturesBento() {
                     <span
                       key={db}
                       className={cn(
-                        "absolute -translate-x-1/2 font-mono text-[10px] tabular-nums text-white/30 first:translate-x-0 last:-translate-x-full",
+                        "absolute -translate-x-1/2 font-mono text-[10px] tabular-nums text-white/50 first:translate-x-0 last:-translate-x-full",
                         db === -6 && "hidden sm:block",
                       )}
                       style={{ left: `calc(4px + ${toLevel(db)} * (100% - 8px))` }}
@@ -216,16 +216,16 @@ export default function FeaturesBento() {
                     </span>
                   ))}
                 </div>
-                <span className="text-right font-mono text-[10px] text-white/30">dBFS</span>
+                <span className="text-right font-mono text-[10px] text-white/50">dBFS</span>
               </div>
             </div>
 
             <dl className="mt-8 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.06]">
               {SUMMARY.map((item) => (
                 <div key={item.label} className="bg-[#08090d] px-3 py-3 sm:px-4">
-                  <dt className="truncate font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">{item.label}</dt>
+                  <dt className="truncate font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">{item.label}</dt>
                   <dd className="mt-1.5 font-mono text-sm tabular-nums text-white/85 sm:text-base">
-                    {item.value} <span className="text-[11px] text-white/40">{item.unit}</span>
+                    {item.value} <span className="text-[11px] text-white/55">{item.unit}</span>
                   </dd>
                 </div>
               ))}
@@ -272,7 +272,7 @@ export default function FeaturesBento() {
                 onValueChange={(v) => v && setProtocol(v as keyof typeof LATENCY)}
               >
                 {Object.entries(LATENCY).map(([key, p]) => (
-                  <ToggleGroupItem key={key} value={key}>
+                  <ToggleGroupItem key={key} value={key} className="h-8 sm:h-6">
                     {p.label}
                   </ToggleGroupItem>
                 ))}
@@ -282,9 +282,9 @@ export default function FeaturesBento() {
               <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_35%_55%,rgb(var(--neon)/0.1),transparent_70%)]" />
               <div className="relative flex items-end gap-2.5">
                 <SevenSegment value={latency.seconds} digits={3} className="[--segment-h:52px]" aria-label={`${latency.seconds} seconds`} />
-                <span className="pb-1 font-mono text-sm text-white/45">s</span>
+                <span className="pb-1 font-mono text-sm text-white/55">s</span>
               </div>
-              <span className="relative mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">{latency.note}</span>
+              <span className="relative mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">{latency.note}</span>
             </div>
           </Cell>
 
@@ -315,7 +315,7 @@ export default function FeaturesBento() {
             <div className="relative mt-5 flex-1 rounded-xl border border-white/[0.06] bg-[#06070b] px-3 py-4 [background-image:linear-gradient(rgb(255_255_255/0.03)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255/0.03)_1px,transparent_1px)] [background-size:18px_18px]">
               <Heartbeat bpm={unplugged ? 0 : 60} height={92} color={unplugged ? "red" : undefined} aria-label="encoder-04 keepalive trace" />
             </div>
-            <p aria-live="polite" className="mt-3 h-4 font-mono text-[11px] text-white/45">
+            <p aria-live="polite" className="mt-3 h-4 font-mono text-[11px] text-white/55">
               {unplugged
                 ? down >= 3
                   ? "Incident #4127 opened · paged Dana Okafor"

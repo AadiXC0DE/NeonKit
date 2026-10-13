@@ -14,6 +14,19 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 const EASE = [0.23, 1, 0.32, 1] as const;
 
 type Side = "top" | "right" | "bottom" | "left";
@@ -134,10 +147,15 @@ Sheet.displayName = "Sheet";
 export interface SheetTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Merge trigger behaviour onto the single child element instead of rendering a button. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const SheetTrigger = React.forwardRef<HTMLButtonElement, SheetTriggerProps>(
-  ({ asChild = false, onClick, children, ...props }, ref) => {
+  (raw, ref) => {
+    const { asChild = false, onClick, children, ...props } = fromRenderProp(raw);
     const { open, setOpen, contentId, triggerRef } = useSheet("SheetTrigger");
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -270,12 +288,18 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
     // The <dialog> stays open while the panel slides out, then closes for real here.
     const finish = () => {
       const dialog = dialogRef.current;
+      // Only take focus back if it is still ours: inside the sheet or lost to the page.
+      const active = document.activeElement;
+      const ours = !active || active === document.body || (dialog?.contains(active) ?? false);
       if (dialog?.open) dialog.close();
       const restore = saved.current;
       saved.current = null;
       if (!restore) return;
       document.documentElement.style.overflow = restore.overflow;
-      if (restore.focus?.isConnected) restore.focus.focus({ preventScroll: true });
+      const target = restore.focus;
+      // Skip a trigger that has since been removed or hidden, e.g. a menu button only shown on mobile.
+      const visible = typeof target?.checkVisibility !== "function" || target.checkVisibility();
+      if (ours && target?.isConnected && visible) target.focus({ preventScroll: true });
     };
 
     const startDrag = React.useCallback(
@@ -502,10 +526,15 @@ SheetDescription.displayName = "SheetDescription";
 export interface SheetCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Merge close behaviour onto the single child element instead of rendering a button. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const SheetClose = React.forwardRef<HTMLButtonElement, SheetCloseProps>(
-  ({ asChild = false, onClick, children, ...props }, ref) => {
+  (raw, ref) => {
+    const { asChild = false, onClick, children, ...props } = fromRenderProp(raw);
     const { setOpen } = useSheet("SheetClose");
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {

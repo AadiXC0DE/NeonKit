@@ -106,13 +106,19 @@ export function BlockPreview({
       </div>
       {tab === "preview" ? (
         <div className="flex justify-center bg-background bg-dots p-0 md:p-4">
-          <iframe
-            title={`${slug} preview`}
-            src={`/view/${slug}`}
-            loading="lazy"
-            className="block max-w-full rounded-none border-line bg-background transition-[width] duration-300 ease-out md:rounded-xl md:border"
-            style={{ width, height: frameHeight }}
-          />
+          {/* The border lives on a wrapper: on the iframe it would eat into the height the frame reports. */}
+          <div
+            className="max-w-full overflow-hidden rounded-none border-line bg-background transition-[width] duration-300 ease-out md:rounded-xl md:border"
+            style={{ width }}
+          >
+            <iframe
+              title={`${slug} preview`}
+              src={`/view/${slug}`}
+              loading="lazy"
+              className="block w-full border-0"
+              style={{ height: frameHeight }}
+            />
+          </div>
         </div>
       ) : (
         <CodeFrame html={html} code={code} maxHeight={640} className="rounded-none border-0" />

@@ -57,7 +57,7 @@ function Wordmark() {
   return (
     <a
       href="#top"
-      className="flex shrink-0 items-center gap-2 rounded-full pl-1 pr-1 text-[15px] font-semibold tracking-[-0.02em] text-white/90 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+      className="flex shrink-0 items-center gap-2 rounded-full py-2 pl-1 pr-1 text-[15px] font-semibold tracking-[-0.02em] text-white/90 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
     >
       {/* Two frames, one shifted: the parallax. */}
       <svg aria-hidden viewBox="0 0 24 24" className="size-[22px]" fill="none" strokeWidth={1.6}>
@@ -72,7 +72,20 @@ function Wordmark() {
 export default function NavbarFloating() {
   const viewportRef = React.useRef<HTMLDivElement>(null);
   const progressRef = React.useRef<HTMLSpanElement>(null);
+  const headerRef = React.useRef<HTMLElement>(null);
+  const menuButtonRef = React.useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
+
+  // A tap anywhere outside the nav closes the menu.
+  React.useEffect(() => {
+    if (!menuOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!headerRef.current?.contains(event.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [menuOpen]);
+
   // The preview scrolls its own box. On a real page, return `window` here instead.
   const getScroller = React.useCallback(() => viewportRef.current, []);
   const scrolled = useScrolled(getScroller, 24, (progress) => {
@@ -86,11 +99,14 @@ export default function NavbarFloating() {
       style={neonVars("cyan")}
       className="relative isolate h-[640px] overflow-hidden bg-[#05060a] text-white"
     >
-      <div ref={viewportRef} className="h-full overflow-y-auto overscroll-contain [scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]">
+      <div ref={viewportRef} className="h-full overflow-y-auto [scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]">
         <header
+          ref={headerRef}
           className="sticky top-0 z-20 px-4 pt-3 sm:px-8 sm:pt-5"
           onKeyDown={(event) => {
-            if (event.key === "Escape") setMenuOpen(false);
+            if (event.key !== "Escape" || !menuOpen) return;
+            setMenuOpen(false);
+            menuButtonRef.current?.focus();
           }}
         >
           <nav
@@ -125,6 +141,7 @@ export default function NavbarFloating() {
                 <a href="#start">Start a review</a>
               </Button>
               <Button
+                ref={menuButtonRef}
                 variant="ghost"
                 size="icon"
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -185,7 +202,7 @@ export default function NavbarFloating() {
           <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-24 -z-10 h-[560px] bg-[radial-gradient(ellipse_60%_60%_at_70%_0%,rgb(var(--neon)/0.1),transparent_70%)]" />
 
           <section aria-labelledby="parallax-hero" className="mx-auto max-w-6xl px-5 pt-16 sm:px-8 sm:pt-24">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Design review · v4.0</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Design review · v4.0</p>
             <h2 id="parallax-hero" className="mt-5 max-w-3xl [text-wrap:balance] text-[clamp(2.5rem,6.5vw,4.75rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/90">
               Review the build, not the screenshot.
             </h2>
@@ -193,7 +210,7 @@ export default function NavbarFloating() {
               Parallax lays the Figma frame over the deployed page, pins comments to real elements and tells you when the fix ships.
               Nobody types &ldquo;see attached&rdquo; again.
             </p>
-            <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.16em] text-white/30">Scroll this preview ↓</p>
+            <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Scroll this preview ↓</p>
 
             <div className="mt-14 grid gap-4 lg:grid-cols-[1fr_300px]">
               {/* A page under review, with the overlay split down the middle. */}
@@ -229,14 +246,14 @@ export default function NavbarFloating() {
                 </span>
               </div>
               <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0a0b11] p-5">
-                <p className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">
+                <p className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
                   Pin 1 · Button
                   <span className="text-[rgb(52_211_153)]">Fixed</span>
                 </p>
                 <ul className="mt-4 grid gap-4 border-t border-white/[0.06] pt-4">
                   {THREAD.map((c) => (
                     <li key={c.when}>
-                      <p className="flex justify-between text-xs text-white/45">
+                      <p className="flex justify-between text-xs text-white/60">
                         <span className="font-medium text-white/80">{c.who}</span>
                         {c.when}
                       </p>
@@ -244,7 +261,7 @@ export default function NavbarFloating() {
                     </li>
                   ))}
                 </ul>
-                <p className="mt-auto border-t border-white/[0.06] pt-4 font-mono text-[11px] leading-5 text-white/40">
+                <p className="mt-auto border-t border-white/[0.06] pt-4 font-mono text-[11px] leading-5 text-white/55">
                   Verified on preview-2291 · 14:02
                 </p>
               </div>
@@ -252,7 +269,7 @@ export default function NavbarFloating() {
           </section>
 
           <section aria-label="Teams using Parallax" className="mx-auto mt-20 max-w-6xl border-y border-white/[0.06] px-5 py-8 sm:px-8">
-            <ul className="flex flex-wrap items-center justify-between gap-x-10 gap-y-4 text-white/40">
+            <ul className="flex flex-wrap items-center justify-between gap-x-10 gap-y-4 text-white/55">
               {TEAMS.map((team, i) => (
                 <li
                   key={team}
@@ -278,7 +295,7 @@ export default function NavbarFloating() {
             <div className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
               {FEATURES.map((f) => (
                 <div key={f.n} className="border-t border-white/10 pt-5">
-                  <p className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">
+                  <p className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
                     {f.n} · {f.title}
                     <span className="text-sm normal-case tracking-normal text-white/80">{f.stat}</span>
                   </p>
@@ -294,7 +311,7 @@ export default function NavbarFloating() {
                 <h2 id="parallax-cta" className="text-2xl font-semibold tracking-[-0.03em] text-white/90 sm:text-3xl">
                   Your next review starts with a URL.
                 </h2>
-                <p className="mt-2 text-sm text-white/50">Free for two editors. $14 per editor after that.</p>
+                <p className="mt-2 text-sm text-white/60">Free for two editors. $14 per editor after that.</p>
               </div>
               <Button asChild variant="solid" className="shadow-[0_0_0_1px_rgb(var(--neon)),inset_0_1px_0_rgb(255_255_255/0.45)]">
                 <a href="#start">
@@ -302,7 +319,7 @@ export default function NavbarFloating() {
                 </a>
               </Button>
             </div>
-            <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-white/30">© 2026 Parallax Labs · Made in Lisbon</p>
+            <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">© 2026 Parallax Labs · Made in Lisbon</p>
           </section>
         </main>
       </div>

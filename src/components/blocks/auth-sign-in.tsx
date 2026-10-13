@@ -100,7 +100,7 @@ function OrbitArt() {
 
       <div className="flex items-start justify-between p-8">
         <Wordmark />
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">ORB-7 · SSO</span>
+        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">ORB-7 · SSO</span>
       </div>
 
       <div className="mt-auto grid gap-6 p-8">
@@ -111,13 +111,13 @@ function OrbitArt() {
           <dl className="flex gap-6">
             {TELEMETRY.map((t) => (
               <div key={t.label} className="grid gap-1">
-                <dt className="text-white/40">{t.label}</dt>
+                <dt className="text-white/55">{t.label}</dt>
                 <dd className="text-white/80">{t.value}</dd>
               </div>
             ))}
           </dl>
           <p className="grid gap-1 text-right">
-            <span className="text-white/40">Next downlink</span>
+            <span className="text-white/55">Next downlink</span>
             <span className="tabular-nums text-[rgb(var(--neon))]">T-{clock}</span>
           </p>
         </div>
@@ -138,13 +138,25 @@ export default function AuthSignIn() {
   const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
+  const titleRef = React.useRef<HTMLHeadingElement>(null);
+  // Switching views unmounts the button that was pressed, so move focus to the new title instead of <body>.
+  const moveFocus = React.useRef(false);
 
   React.useEffect(() => () => clearTimeout(timer.current), []);
+
+  React.useEffect(() => {
+    if (!moveFocus.current) return;
+    moveFocus.current = false;
+    titleRef.current?.focus();
+  }, [view, status]);
 
   function finishAfter(ms: number) {
     setStatus("loading");
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => setStatus("done"), ms);
+    timer.current = setTimeout(() => {
+      moveFocus.current = true;
+      setStatus("done");
+    }, ms);
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -161,11 +173,13 @@ export default function AuthSignIn() {
 
   function startOver(nextView: View) {
     clearTimeout(timer.current);
+    moveFocus.current = true;
     setView(nextView);
     setStatus("idle");
     setProvider(null);
     setErrors({});
     setPassword("");
+    setReveal(false);
   }
 
   const busy = status === "loading";
@@ -190,7 +204,10 @@ export default function AuthSignIn() {
           <span className="lg:invisible">
             <Wordmark />
           </span>
-          <a href="#request-access" className="text-white/55 transition-colors hover:text-white/90">
+          <a
+            href="#request-access"
+            className="-my-2 rounded-md py-2 text-white/60 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+          >
             New to Orbital? <span className="text-[rgb(var(--neon))]">Request access</span>
           </a>
         </header>
@@ -201,18 +218,18 @@ export default function AuthSignIn() {
               <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">
                 {view === "reset" ? "Link sent" : "Signed in"}
               </p>
-              <h1 className="text-[40px] font-semibold leading-[1] tracking-[-0.04em]">
+              <h1 ref={titleRef} tabIndex={-1} className="text-[40px] font-semibold leading-[1] tracking-[-0.04em] outline-none">
                 {view === "reset" ? "Check your inbox." : "Welcome back."}
               </h1>
               {view === "reset" ? (
                 <p className="text-[15px] leading-relaxed text-white/55">
-                  We sent a reset link to <span className="text-white/90">{email}</span>. It works once, for 30 minutes.
+                  We sent a reset link to <span className="text-white/90 [overflow-wrap:anywhere]">{email}</span>. It works once, for 30 minutes.
                 </p>
               ) : (
                 <div className="grid gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-white/55">{provider ? `Signed in with ${provider}` : email}</span>
-                    <span className="size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]" />
+                    <span aria-hidden className="size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]" />
                   </div>
                   <div className="flex items-baseline justify-between border-t border-white/[0.06] pt-3">
                     <span className="text-white/90">Atacama North</span>
@@ -237,15 +254,15 @@ export default function AuthSignIn() {
                 <button
                   type="button"
                   onClick={() => startOver("sign-in")}
-                  className="mb-6 inline-flex w-fit items-center gap-1.5 rounded-md text-sm text-white/55 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                  className="-my-2 mb-4 inline-flex w-fit items-center gap-1.5 rounded-md py-2 text-sm text-white/60 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                 >
                   <ArrowLeft className="size-4" /> Back to sign in
                 </button>
               )}
-              <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+              <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
                 {view === "reset" ? "Account recovery" : "Operator console"}
               </p>
-              <h1 className="text-[40px] font-semibold leading-[1] tracking-[-0.04em]">
+              <h1 ref={titleRef} tabIndex={-1} className="text-[40px] font-semibold leading-[1] tracking-[-0.04em] outline-none">
                 {view === "reset" ? "Reset your password" : "Sign in"}
               </h1>
               <p className="mt-3 text-[15px] leading-relaxed text-white/55">
@@ -278,10 +295,10 @@ export default function AuthSignIn() {
                       </Button>
                     ))}
                   </div>
-                  <div className="my-7 flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">
-                    <span className="h-px flex-1 bg-white/[0.08]" />
+                  <div className="my-7 flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+                    <span aria-hidden className="h-px flex-1 bg-white/[0.08]" />
                     or with email
-                    <span className="h-px flex-1 bg-white/[0.08]" />
+                    <span aria-hidden className="h-px flex-1 bg-white/[0.08]" />
                   </div>
                 </>
               )}
@@ -322,7 +339,7 @@ export default function AuthSignIn() {
                           aria-label={reveal ? "Hide password" : "Show password"}
                           aria-pressed={reveal}
                           onClick={() => setReveal((r) => !r)}
-                          className="-mr-1.5 grid size-7 place-items-center rounded-md text-white/45 outline-none transition-colors hover:text-white/90 focus-visible:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                          className="-mr-2.5 grid size-9 place-items-center rounded-md text-white/45 outline-none transition-colors hover:text-white/90 focus-visible:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                         >
                           {reveal ? <EyeOff /> : <Eye />}
                         </button>
@@ -333,7 +350,7 @@ export default function AuthSignIn() {
                       <button
                         type="button"
                         onClick={() => startOver("reset")}
-                        className="rounded-md text-[13px] text-white/55 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                        className="-my-2 rounded-md py-2 text-[13px] text-white/60 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
                         Forgot password?
                       </button>
@@ -348,12 +365,12 @@ export default function AuthSignIn() {
           )}
         </div>
 
-        <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">
+        <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
           <span>© 2026 Orbital Earth Data</span>
           <span className="flex gap-5">
-            <a href="#terms" className="transition-colors hover:text-white/70">Terms</a>
-            <a href="#privacy" className="transition-colors hover:text-white/70">Privacy</a>
-            <a href="#status" className="transition-colors hover:text-white/70">Status</a>
+            <a href="#terms" className="-my-2 rounded-md py-2 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">Terms</a>
+            <a href="#privacy" className="-my-2 rounded-md py-2 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">Privacy</a>
+            <a href="#status" className="-my-2 rounded-md py-2 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">Status</a>
           </span>
         </footer>
       </main>

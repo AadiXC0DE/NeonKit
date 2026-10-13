@@ -81,7 +81,7 @@ function Reactions({ reactions, onToggle }: { reactions: Reaction[]; onToggle: (
             aria-label={`${r.icon === "thumbs" ? "Thumbs up" : r.icon === "eye" ? "Looking" : "Done"}, ${r.count}`}
             onClick={() => onToggle(i)}
             className={cn(
-              "inline-flex h-6 cursor-pointer items-center gap-1.5 rounded-full border px-2 text-[11px] tabular-nums outline-none transition-[background-color,border-color,color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] [&_svg]:size-3",
+              "relative inline-flex h-6 cursor-pointer items-center gap-1.5 rounded-full border px-2 after:absolute after:-inset-y-1.5 after:inset-x-0 after:content-[''] text-[11px] tabular-nums outline-none transition-[background-color,border-color,color,box-shadow] duration-150 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] [&_svg]:size-3",
               r.mine
                 ? "border-[rgb(var(--neon)/0.5)] bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))] shadow-[0_0_10px_-2px_rgb(var(--neon)/0.5)]"
                 : "border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20",
@@ -104,6 +104,8 @@ export default function AppChat() {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [query, setQuery] = React.useState<string | null>(null);
   const scrollRef = React.useRef<HTMLDivElement>(null);
+  const composerRef = React.useRef<HTMLTextAreaElement>(null);
+  const searchRef = React.useRef<HTMLButtonElement>(null);
   const timers = React.useRef<number[]>([]);
   const turn = React.useRef(0);
 
@@ -138,6 +140,8 @@ export default function AppChat() {
     if (!text) return;
     post(channel, { author: ME, text });
     setDraft("");
+    // The send button disables itself once the draft is empty, so keep focus in the composer.
+    composerRef.current?.focus();
 
     setQuery(null);
     const others = Array.from(new Set(all.map((m) => m.author))).filter((a) => a !== ME && REPLIES[a]);
@@ -174,7 +178,7 @@ export default function AppChat() {
   const channelList = (
     <nav aria-label="Channels" className="grid gap-6">
       <div>
-        <h2 className="px-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">Channels</h2>
+        <h2 className="px-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Channels</h2>
         <ul className="mt-2 grid gap-0.5">
           {CHANNELS.map((c) => {
             const active = c.id === channel;
@@ -187,7 +191,7 @@ export default function AppChat() {
                   onClick={() => open(c.id)}
                   className={cn(
                     "flex h-8 w-full cursor-pointer items-center gap-2 rounded-lg px-2 text-sm outline-none transition-colors duration-150 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
-                    active ? "bg-[rgb(var(--neon)/0.1)] text-white" : unread[c.id] ? "text-white/90 hover:bg-white/[0.04]" : "text-white/50 hover:bg-white/[0.04] hover:text-white/85",
+                    active ? "bg-[rgb(var(--neon)/0.1)] text-white" : unread[c.id] ? "text-white/90 hover:bg-white/[0.04]" : "text-white/60 hover:bg-white/[0.04] hover:text-white/85",
                   )}
                 >
                   <Icon aria-hidden className={cn("size-3.5 shrink-0", active ? "text-[rgb(var(--neon))]" : "text-white/35")} />
@@ -205,13 +209,13 @@ export default function AppChat() {
         </ul>
       </div>
       <div>
-        <h2 className="px-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">People</h2>
+        <h2 className="px-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">People</h2>
         <ul className="mt-2 grid gap-1">
           {Object.entries(PEOPLE).filter(([n]) => n !== ME).map(([name, p]) => (
             <li key={name} className="flex h-8 items-center gap-2.5 px-2 text-sm text-white/60">
               <Avatar alt={name} size="sm" status={p.status} className="size-6 text-[9px]" />
               <span className="truncate">{name}</span>
-              <span className="ml-auto text-[11px] text-white/30">{p.role}</span>
+              <span className="ml-auto text-[11px] text-white/60">{p.role}</span>
             </li>
           ))}
         </ul>
@@ -239,14 +243,14 @@ export default function AppChat() {
             <path d="M7 6.5c4 0 2 7 6 7" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" style={{ filter: "drop-shadow(0 0 3px rgb(var(--neon)))" }} />
           </svg>
           <span className="text-[15px] font-semibold tracking-[-0.02em]">Switchboard</span>
-          <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">Northbound</span>
+          <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">Northbound</span>
         </div>
         {channelList}
         <div className="mt-auto flex items-center gap-2.5 border-t border-white/[0.06] px-2 pt-3">
           <Avatar alt={ME} size="sm" status="online" />
           <div className="min-w-0 text-xs">
             <p className="truncate text-white/85">{ME}</p>
-            <p className="truncate text-white/40">Heads down until 11</p>
+            <p className="truncate text-white/60">Heads down until 11</p>
           </div>
         </div>
       </aside>
@@ -268,7 +272,7 @@ export default function AppChat() {
               <Hash aria-hidden className="size-4 text-white/40" />
               {current.name}
             </h1>
-            <p className="truncate text-xs text-white/45">{current.topic}</p>
+            <p className="truncate text-xs text-white/60">{current.topic}</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <AvatarGroup size="sm" className="hidden sm:flex">
@@ -284,12 +288,16 @@ export default function AppChat() {
                 leading={<Search />}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => e.key === "Escape" && setQuery(null)}
+                onKeyDown={(e) => {
+                  if (e.key !== "Escape") return;
+                  setQuery(null);
+                  requestAnimationFrame(() => searchRef.current?.focus());
+                }}
                 onBlur={() => !query && setQuery(null)}
                 containerClassName="w-40 sm:w-56"
               />
             ) : (
-              <Button variant="ghost" size="icon" aria-label="Search this channel" className="size-8" onClick={() => setQuery("")}>
+              <Button ref={searchRef} variant="ghost" size="icon" aria-label="Search this channel" className="size-8" onClick={() => setQuery("")}>
                 <Search />
               </Button>
             )}
@@ -298,11 +306,11 @@ export default function AppChat() {
 
         <div ref={scrollRef} role="log" aria-label={`Messages in ${current.name}`} className="min-h-0 flex-1 overflow-y-auto [scrollbar-color:rgb(255_255_255/0.1)_transparent] [scrollbar-width:thin]">
           <div className="mx-auto flex min-h-full w-full max-w-[820px] flex-col justify-end px-3 pb-4 pt-10 sm:px-5">
-            <div className="mb-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-              <span className="h-px flex-1 bg-white/[0.06]" /> Today · Oct 13 <span className="h-px flex-1 bg-white/[0.06]" />
+            <div className="mb-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
+              <span aria-hidden className="h-px flex-1 bg-white/[0.06]" /> Today · Oct 13 <span aria-hidden className="h-px flex-1 bg-white/[0.06]" />
             </div>
             {q && (
-              <p className="mb-4 px-2 text-xs text-white/45">
+              <p className="mb-4 px-2 text-xs text-white/60">
                 {messages.length ? `${messages.length} ${messages.length === 1 ? "message matches" : "messages match"} “${query}”` : `Nothing in #${current.name} matches “${query}”.`}
               </p>
             )}
@@ -315,7 +323,7 @@ export default function AppChat() {
                   <li key={m.id} className={cn("group relative flex gap-3 rounded-lg px-2 py-0.5 transition-colors hover:bg-white/[0.02]", !grouped && i > 0 && "mt-4")}>
                     <div className="w-9 shrink-0">
                       {grouped ? (
-                        <span className="block pt-1 text-right font-mono text-[10px] text-white/0 group-hover:text-white/30">{clock(m.time)}</span>
+                        <span className="block pt-1 text-right font-mono text-[10px] text-white/0 group-hover:text-white/55">{clock(m.time)}</span>
                       ) : (
                         <Avatar alt={m.author} size="md" ring={mine} className="mt-0.5" />
                       )}
@@ -324,8 +332,8 @@ export default function AppChat() {
                       {!grouped && (
                         <p className="flex items-baseline gap-2">
                           <span className={cn("text-sm font-semibold", mine ? "text-[rgb(var(--neon))]" : "text-white/90")}>{mine ? "You" : m.author}</span>
-                          <span className="text-[11px] text-white/30">{PEOPLE[m.author]?.role}</span>
-                          <span className="font-mono text-[11px] text-white/35">{clock(m.time)}</span>
+                          <span className="text-[11px] text-white/60">{PEOPLE[m.author]?.role}</span>
+                          <span className="font-mono text-[11px] text-white/55">{clock(m.time)}</span>
                         </p>
                       )}
                       {m.text && <p className="whitespace-pre-wrap break-words text-[14px] leading-6 text-white/75">{m.text}</p>}
@@ -336,7 +344,7 @@ export default function AppChat() {
                         <a href="#file" onClick={(e) => e.preventDefault()} className="mt-2 flex w-fit max-w-full items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] py-2 pl-2.5 pr-4 outline-none transition-colors hover:border-[rgb(var(--neon)/0.4)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
                           <FileText aria-hidden className="size-4 shrink-0 text-[rgb(var(--neon))]" />
                           <span className="truncate text-sm text-white/85">{m.file.name}</span>
-                          <span className="shrink-0 text-xs text-white/40">{m.file.size}</span>
+                          <span className="shrink-0 text-xs text-white/60">{m.file.size}</span>
                         </a>
                       )}
                       {m.reactions && <Reactions reactions={m.reactions} onToggle={(r) => toggleReaction(m.id, r)} />}
@@ -347,7 +355,7 @@ export default function AppChat() {
             </ol>
             <div aria-live="polite" className="mt-3 h-6 px-2">
               {typing?.channel === channel && (
-                <p className="flex items-center gap-2 text-xs text-white/45">
+                <p className="flex items-center gap-2 text-xs text-white/60">
                   <span aria-hidden className="flex gap-[3px]">
                     {[0, 1, 2].map((d) => (
                       <span key={d} className="nk-app-chat-dot size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" style={{ animationDelay: `${d * 160}ms` }} />
@@ -364,6 +372,7 @@ export default function AppChat() {
           <div className="mx-auto max-w-[820px]">
             <div className="relative">
               <Textarea
+                ref={composerRef}
                 aria-label={`Message #${current.name}`}
                 placeholder={`Message #${current.name}`}
                 minRows={1}
@@ -389,7 +398,7 @@ export default function AppChat() {
                 <ArrowUp />
               </Button>
             </div>
-            <p className="mt-2 hidden text-[11px] text-white/30 sm:block">Enter to send · Shift Enter for a new line</p>
+            <p className="mt-2 hidden text-[11px] text-white/55 sm:block">Enter to send · Shift Enter for a new line</p>
           </div>
         </form>
       </main>

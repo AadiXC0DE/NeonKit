@@ -54,7 +54,7 @@ function Preview({ name, purpose, people, done }: { name: string; purpose: strin
     >
       <div className="flex h-8 items-center gap-1.5 border-b border-white/[0.06] px-3">
         {[0, 1, 2].map((i) => <span key={i} className="size-2 rounded-full bg-white/10" />)}
-        <span className="ml-3 truncate font-mono text-[10px] text-white/35">fieldnote.app/{slugify(name) || "your-team"}</span>
+        <span className="ml-3 truncate font-mono text-[10px] text-white/55">fieldnote.app/{slugify(name) || "your-team"}</span>
       </div>
       <div className="grid min-h-[340px] grid-cols-[156px_minmax(0,1fr)]">
         <div className="border-r border-white/[0.06] p-3">
@@ -64,13 +64,13 @@ function Preview({ name, purpose, people, done }: { name: string; purpose: strin
             </span>
             <span className="truncate text-[13px] font-medium text-white/85">{title}</span>
           </div>
-          <div className="mt-3 flex h-7 items-center gap-2 rounded-md border border-white/[0.06] px-2 text-[11px] text-white/30">
+          <div className="mt-3 flex h-7 items-center gap-2 rounded-md border border-white/[0.06] px-2 text-[11px] text-white/55">
             <Search className="size-3" /> Search
           </div>
-          <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.16em] text-white/30">{purpose}</p>
+          <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.16em] text-white/55">{purpose}</p>
           <ul className="mt-2 space-y-1 text-[12px]">
             {PAGES[purpose].map((p, i) => (
-              <li key={p} className={cn("flex items-center gap-2 rounded-md px-2 py-1", i === 0 ? "bg-[rgb(var(--neon)/0.12)] text-[rgb(var(--neon))]" : "text-white/50")}>
+              <li key={p} className={cn("flex items-center gap-2 rounded-md px-2 py-1", i === 0 ? "bg-[rgb(var(--neon)/0.12)] text-[rgb(var(--neon))]" : "text-white/60")}>
                 <FileText className="size-3 shrink-0" /> <span className="truncate">{p}</span>
               </li>
             ))}
@@ -80,11 +80,11 @@ function Preview({ name, purpose, people, done }: { name: string; purpose: strin
             {people.slice(0, 3).map((p) => (
               <Avatar key={p} alt={p.split("@")[0].replace(/[._-]/g, " ")} size="sm" className="-ml-1.5 ring-2 ring-[#0a0b11]" />
             ))}
-            {people.length > 3 && <span className="ml-1.5 font-mono text-[10px] text-white/40">+{people.length - 3}</span>}
+            {people.length > 3 && <span className="ml-1.5 font-mono text-[10px] text-white/55">+{people.length - 3}</span>}
           </div>
         </div>
         <div className="p-5">
-          <p className="flex items-center gap-1.5 font-mono text-[10px] text-white/30"><Hash className="size-3" /> {PAGES[purpose][0].toLowerCase()}</p>
+          <p className="flex items-center gap-1.5 font-mono text-[10px] text-white/55"><Hash className="size-3" /> {PAGES[purpose][0].toLowerCase()}</p>
           <p className="mt-2 text-lg font-semibold leading-tight tracking-[-0.02em] text-white/90">Welcome to {title}</p>
           <div className="mt-4 space-y-2">
             {[92, 84, 96, 60].map((w, i) => <div key={i} className="h-2 rounded-full bg-white/[0.06]" style={{ width: `${w}%` }} />)}
@@ -110,16 +110,20 @@ export default function AppOnboarding() {
   const formRef = React.useRef<HTMLFormElement>(null);
 
   // Focus follows the step, so keyboard users land in the new field.
+  const focusField = () => requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>("[data-autofocus] input")?.focus());
   const goTo = (index: number) => {
     setStep(index);
-    requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>("[data-autofocus] input")?.focus());
+    focusField();
   };
 
   const next = () => {
     if (step === 0) {
       const trimmed = name.trim();
-      if (trimmed.length < 2) return setNameError("Give it a name with at least two characters.");
-      if (trimmed.length > 40) return setNameError("Keep it under 40 characters.");
+      const error = trimmed.length < 2 ? "Give it a name with at least two characters." : trimmed.length > 40 ? "Keep it under 40 characters." : "";
+      if (error) {
+        setNameError(error);
+        return focusField();
+      }
     }
     goTo(step + 1);
   };
@@ -134,14 +138,14 @@ export default function AppOnboarding() {
 
       <div className="mx-auto grid max-w-[1160px] gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:items-start lg:gap-16">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Fieldnote · Set up</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Fieldnote · Set up</p>
           <h1 id="fn-onboarding-title" className="mt-3 text-[clamp(2.25rem,4.6vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em]">
             {done ? "Your wiki is ready." : "Three steps to a wiki people actually read."}
           </h1>
 
           <Stepper value={step} onValueChange={goTo} clickable aria-label="Workspace setup" className="mt-10">
             {STEPS.map((s, i) => (
-              <Step key={s.title} title={s.title} description={s.description} disabled={done || i > step} />
+              <Step key={s.title} title={s.title} description={<span className="text-white/60">{s.description}</span>} disabled={done || i > step} />
             ))}
           </Stepper>
 
@@ -173,7 +177,7 @@ export default function AppOnboarding() {
                 <div className="grid gap-2.5">
                   <span id="fn-purpose" className="text-sm text-white/70">Mostly for</span>
                   <ToggleGroup aria-labelledby="fn-purpose" variant="outline" size="sm" value={purpose} onValueChange={(v) => v && setPurpose(v)} className="flex-wrap">
-                    {PURPOSES.map((p) => <ToggleGroupItem key={p} value={p}>{p}</ToggleGroupItem>)}
+                    {PURPOSES.map((p) => <ToggleGroupItem key={p} value={p} className="max-sm:h-9">{p}</ToggleGroupItem>)}
                   </ToggleGroup>
                 </div>
               </div>
@@ -245,7 +249,7 @@ export default function AppOnboarding() {
         </div>
 
         <div className="hidden md:block">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">Live preview</p>
+          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Live preview</p>
           <Preview name={name} purpose={purpose} people={people} done={done} />
         </div>
       </div>

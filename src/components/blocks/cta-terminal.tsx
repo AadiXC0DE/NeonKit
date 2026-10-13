@@ -62,14 +62,14 @@ export default function CtaTerminal() {
       `}</style>
 
       <div className="mx-auto max-w-[1180px]">
-        <div className="flex items-center justify-between gap-6 border-b border-white/[0.07] pb-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+        <div className="flex items-center justify-between gap-6 border-b border-white/[0.07] pb-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
           <span>Gantry · v2.8.1</span>
           <a
             href="#"
-            className="group inline-flex items-center gap-1.5 rounded-md outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+            className="group -my-2.5 inline-flex items-center gap-1.5 rounded-md py-2.5 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
           >
             Docs
-            <ArrowUpRight className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <ArrowUpRight aria-hidden className="size-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
         </div>
 
@@ -89,7 +89,7 @@ export default function CtaTerminal() {
               onValueChange={(value) => value && choose(value as Manager)}
             >
               {(Object.keys(COMMANDS) as Manager[]).map((key) => (
-                <ToggleGroupItem key={key} value={key} className="font-mono">
+                <ToggleGroupItem key={key} value={key} className="h-9 px-3 font-mono sm:h-6 sm:px-2.5">
                   {key}
                 </ToggleGroupItem>
               ))}
@@ -131,7 +131,7 @@ export default function CtaTerminal() {
               </div>
             </div>
 
-            <p className="mt-4 h-5 font-mono text-[12px] text-white/40">
+            <p className="mt-4 min-h-5 font-mono text-[12px] text-white/55">
               {copied ? (
                 <span className="nk-cta-terminal-in inline-block">
                   Next: <span className="text-white/80">cd</span> into any project and run{" "}
@@ -144,14 +144,14 @@ export default function CtaTerminal() {
           </div>
 
           <div className="lg:pt-12">
-            <p className="max-w-[40ch] text-pretty text-[15px] leading-relaxed text-white/55">
+            <p className="max-w-[40ch] text-pretty text-[15px] leading-relaxed text-white/60">
               Gantry builds from your lockfile, keeps layers on local disk and starts containers without a background
               service. Your existing Dockerfiles work as they are.
             </p>
             <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-white/[0.07] pt-6">
               {SPECS.map((spec) => (
                 <div key={spec.label} className="flex flex-col-reverse justify-end gap-1">
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/35">{spec.label}</dt>
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{spec.label}</dt>
                   <dd className="text-[15px] font-medium tabular-nums text-white/85">{spec.value}</dd>
                 </div>
               ))}

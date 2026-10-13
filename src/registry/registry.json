@@ -1242,7 +1242,7 @@
         "button"
       ],
       "addedIn": "1.3",
-      "height": 965
+      "height": 980
     },
     {
       "slug": "faq-search",
@@ -1257,7 +1257,7 @@
         "kbd"
       ],
       "addedIn": "1.3",
-      "height": 987
+      "height": 997
     },
     {
       "slug": "cta-band",
@@ -1318,7 +1318,7 @@
         "input"
       ],
       "addedIn": "1.3",
-      "height": 996
+      "height": 982
     },
     {
       "slug": "footer-minimal",
@@ -1751,6 +1751,166 @@
       ],
       "addedIn": "1.3",
       "height": 790
+    }
+  ],
+  "templates": [
+    {
+      "slug": "saas",
+      "name": "SaaS landing",
+      "description": "Nightshift, a deploy scheduler: neon sign hero, a live night-run bento, pricing and a plan comparison page.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "accordion",
+        "avatar",
+        "badge",
+        "border-beam",
+        "button",
+        "copy-button",
+        "hardware-switch",
+        "heartbeat",
+        "input",
+        "marquee",
+        "neon-sign",
+        "seven-segment",
+        "switch",
+        "table",
+        "terminal",
+        "toggle-group",
+        "tooltip"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        "",
+        "/pricing"
+      ]
+    },
+    {
+      "slug": "dashboard",
+      "name": "Dashboard",
+      "description": "Switchback, a deploy platform console: live overview, filterable projects and tabbed team settings.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "command",
+        "dialog",
+        "dropdown-menu",
+        "field",
+        "glow-chart",
+        "heartbeat",
+        "hold-button",
+        "input",
+        "kbd",
+        "meter",
+        "popover",
+        "progress",
+        "select",
+        "sheet",
+        "sidebar",
+        "switch",
+        "table",
+        "tabs",
+        "toast",
+        "toggle-group"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        "",
+        "/projects",
+        "/settings"
+      ]
+    },
+    {
+      "slug": "portfolio",
+      "name": "Portfolio",
+      "description": "Juno Park, a design engineer: one page with a neon name sign and a switch that turns every light off.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "copy-button",
+        "crt-overlay",
+        "cursor-glow",
+        "dialog",
+        "hardware-switch",
+        "hologram-card",
+        "input",
+        "kbd",
+        "neon-sign",
+        "sheet",
+        "switch",
+        "terminal",
+        "textarea",
+        "timeline"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        ""
+      ]
+    },
+    {
+      "slug": "launch",
+      "name": "Launch event",
+      "description": "Low Light, a one-night conference: a split-flap countdown that flips to live, then to the replay.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "accordion",
+        "avatar",
+        "badge",
+        "button",
+        "cityscape",
+        "copy-button",
+        "input",
+        "neon-text",
+        "sheet",
+        "split-flap",
+        "timeline",
+        "toggle-group"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        ""
+      ]
+    },
+    {
+      "slug": "docs",
+      "name": "Docs",
+      "description": "Gantry, a container CLI: sidebar nav, ⌘K search, an outline that tracks your reading and MDX-ready blocks.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "alert",
+        "badge",
+        "command",
+        "copy-button",
+        "kbd",
+        "scroll-area",
+        "sheet",
+        "sidebar",
+        "table",
+        "tabs"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        "",
+        "/installation",
+        "/quickstart",
+        "/configuration",
+        "/deploying",
+        "/troubleshooting",
+        "/cli/up",
+        "/cli/build"
+      ]
     }
   ]
 }

@@ -185,10 +185,10 @@ export default function AppMusicPlayer() {
         <header className="flex items-center justify-between gap-4 border-b border-white/[0.06] pb-5">
           <div className="flex items-baseline gap-3">
             <span className="text-lg font-semibold tracking-[-0.03em]">late radio</span>
-            <span className="hidden font-mono text-[11px] uppercase tracking-[0.16em] text-white/40 sm:inline">102.4 · Rotterdam</span>
+            <span className="hidden font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 sm:inline">102.4 · Rotterdam</span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="hidden font-mono text-[11px] text-white/40 md:inline">2,481 listening</span>
+            <span className="hidden font-mono text-[11px] text-white/55 md:inline">2,481 listening</span>
             <span
               className={cn(
                 "rounded-md border px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] transition-[color,border-color,box-shadow,text-shadow] duration-300",
@@ -216,14 +216,14 @@ export default function AppMusicPlayer() {
             </div>
 
             <div className="min-w-0">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
                 Night shift with Ines Maro · {index + 1} of {TRACKS.length}
               </p>
               <h2 id="late-radio-title" className="mt-3 text-[clamp(2.25rem,4.4vw,3.4rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white">
                 {track.title}
               </h2>
               <p className="mt-3 text-lg text-white/70">
-                {track.artist} <span className="text-white/35">· {track.album}</span>
+                {track.artist} <span className="text-white/55">· {track.album}</span>
               </p>
 
               <Equalizer bars={36} height={56} gap={3} playing={playing} className="mt-7" />
@@ -238,14 +238,14 @@ export default function AppMusicPlayer() {
                   thumbLabels={["Seek"]}
                   formatValue={time}
                 />
-                <div className="mt-2 flex justify-between font-mono text-[11px] tabular-nums text-white/45">
+                <div className="mt-2 flex justify-between font-mono text-[11px] tabular-nums text-white/55">
                   <span>{time(elapsed)}</span>
                   <span>-{time(track.seconds - elapsed)}</span>
                 </div>
               </div>
 
               <div className="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-5">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 max-sm:w-full max-sm:justify-between">
                   <IconButton label="Shuffle" aria-pressed={shuffle} active={shuffle} onClick={() => setShuffle((v) => !v)}><Shuffle /></IconButton>
                   <IconButton label="Previous track" onClick={() => dispatch({ type: "skip", step: -1, shuffle })}><SkipBack /></IconButton>
                   <button
@@ -287,8 +287,8 @@ export default function AppMusicPlayer() {
 
           <aside aria-labelledby="late-radio-queue" className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-2">
             <div className="flex items-baseline justify-between px-3 pb-2 pt-3">
-              <h3 id="late-radio-queue" className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Up next</h3>
-              <span className="font-mono text-[11px] text-white/35">{time(TRACKS.reduce((n, t) => n + t.seconds, 0))} total</span>
+              <h3 id="late-radio-queue" className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Up next</h3>
+              <span className="font-mono text-[11px] text-white/55">{time(TRACKS.reduce((n, t) => n + t.seconds, 0))} total</span>
             </div>
             <ol className="mb-2">
               {TRACKS.map((t, i) => {
@@ -321,17 +321,17 @@ export default function AppMusicPlayer() {
                         <span className={cn("block truncate text-sm", active ? "text-[color-mix(in_srgb,rgb(var(--neon))_45%,white)] [text-shadow:0_0_12px_rgb(var(--neon)/0.5)]" : "text-white/85")}>
                           {t.title}
                         </span>
-                        <span className="block truncate text-xs text-white/45">{t.artist}</span>
+                        <span className="block truncate text-xs text-white/60">{t.artist}</span>
                       </span>
-                      <span className="pr-1 font-mono text-[11px] tabular-nums text-white/40">{time(t.seconds)}</span>
+                      <span className="pr-1 font-mono text-[11px] tabular-nums text-white/55">{time(t.seconds)}</span>
                     </button>
                   </li>
                 );
               })}
             </ol>
-            <p className="mt-auto flex items-baseline justify-between gap-3 border-t border-white/[0.06] px-3 pb-2 pt-3 font-mono text-[11px] text-white/40">
+            <p className="mt-auto flex items-baseline justify-between gap-3 border-t border-white/[0.06] px-3 pb-2 pt-3 font-mono text-[11px] text-white/55">
               <span>Next show 03:00</span>
-              <span className="truncate text-white/60">Slow Hands with Dee Okafor</span>
+              <span className="truncate text-white/75">Slow Hands with Dee Okafor</span>
             </p>
           </aside>
         </div>

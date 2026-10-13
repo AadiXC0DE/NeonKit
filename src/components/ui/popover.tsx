@@ -17,6 +17,19 @@ import {
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 type Side = "top" | "right" | "bottom" | "left";
 type Align = "start" | "center" | "end";
 
@@ -178,10 +191,15 @@ Popover.displayName = "Popover";
 export interface PopoverTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Merge trigger behaviour onto the single child element instead of rendering a button. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const PopoverTrigger = React.forwardRef<HTMLButtonElement, PopoverTriggerProps>(
-  ({ asChild = false, id, onClick, onKeyDown, children, ...props }, forwardedRef) => {
+  (raw, forwardedRef) => {
+    const { asChild = false, id, onClick, onKeyDown, children, ...props } = fromRenderProp(raw);
     const { open, setOpen, setTrigger, triggerId, contentId } = usePopover("PopoverTrigger");
     const ref = useComposedRefs<HTMLElement>(forwardedRef as PossibleRef<HTMLElement>, setTrigger);
     const childId =
@@ -227,11 +245,16 @@ PopoverTrigger.displayName = "PopoverTrigger";
 export interface PopoverAnchorProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Merge anchor behaviour onto the single child element instead of rendering a div. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 /** Optional. Positions the content against this element instead of the trigger. */
 const PopoverAnchor = React.forwardRef<HTMLDivElement, PopoverAnchorProps>(
-  ({ asChild = false, children, ...props }, forwardedRef) => {
+  (raw, forwardedRef) => {
+    const { asChild = false, children, ...props } = fromRenderProp(raw);
     const { setAnchor } = usePopover("PopoverAnchor");
     const ref = useComposedRefs<HTMLElement>(forwardedRef as PossibleRef<HTMLElement>, setAnchor);
 
@@ -596,10 +619,15 @@ PopoverContent.displayName = "PopoverContent";
 export interface PopoverCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Merge close behaviour onto the single child element instead of rendering a button. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const PopoverClose = React.forwardRef<HTMLButtonElement, PopoverCloseProps>(
-  ({ asChild = false, onClick, children, ...props }, ref) => {
+  (raw, ref) => {
+    const { asChild = false, onClick, children, ...props } = fromRenderProp(raw);
     const { setOpen } = usePopover("PopoverClose");
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -41,11 +41,19 @@ function Newsletter({ onJoined }: { onJoined: () => void }) {
   const [email, setEmail] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const [state, setState] = React.useState<"idle" | "sending" | "done">("idle");
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const statusRef = React.useRef<HTMLParagraphElement>(null);
+
+  // The form unmounts on success, so hand focus to the confirmation instead of dropping it.
+  React.useEffect(() => {
+    if (state === "done") statusRef.current?.focus();
+  }, [state]);
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!EMAIL.test(email.trim())) {
       setError("That doesn't look like an email address.");
+      inputRef.current?.focus();
       return;
     }
     setError(null);
@@ -58,7 +66,7 @@ function Newsletter({ onJoined }: { onJoined: () => void }) {
 
   if (state === "done") {
     return (
-      <p role="status" className="mt-6 flex items-start gap-3 text-sm leading-relaxed text-white/70">
+      <p ref={statusRef} tabIndex={-1} role="status" className="mt-6 flex items-start gap-3 text-sm leading-relaxed text-white/70 outline-none">
         <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.8))]" />
         <span>
           You&apos;re on the list. Issue 31 lands on 3 November, from{" "}
@@ -71,6 +79,7 @@ function Newsletter({ onJoined }: { onJoined: () => void }) {
   return (
     <form noValidate onSubmit={submit} className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start">
       <Input
+        ref={inputRef}
         type="email"
         name="email"
         autoComplete="email"
@@ -117,14 +126,14 @@ export default function FooterBig() {
             </p>
             <a
               href="#"
-              className="mt-7 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] py-1.5 pl-3 pr-3.5 text-xs text-white/70 outline-none transition-colors hover:border-white/20 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+              className="mt-7 inline-flex min-h-9 items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] py-1.5 pl-3 pr-3.5 sm:min-h-0 text-xs text-white/70 outline-none transition-colors hover:border-white/20 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
             >
               <span className="relative flex size-2">
                 <span className="absolute inset-0 animate-ping rounded-full bg-[rgb(52_211_153/0.6)] [animation-duration:2.4s] motion-reduce:hidden" />
                 <span className="relative size-2 rounded-full bg-[rgb(52_211_153)] shadow-[0_0_8px_rgb(52_211_153/0.8)]" />
               </span>
               All systems normal
-              <span className="font-mono text-[11px] text-white/35">99.98% · 90d</span>
+              <span className="font-mono text-[11px] text-white/55">99.98% · 90d</span>
             </a>
           </div>
 
@@ -142,13 +151,13 @@ export default function FooterBig() {
         <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-10 py-14 sm:grid-cols-4">
           {COLUMNS.map((column) => (
             <div key={column.title}>
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">{column.title}</h2>
-              <ul className="mt-5 space-y-3">
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">{column.title}</h2>
+              <ul className="mt-3 sm:mt-3.5">
                 {column.links.map((link) => (
                   <li key={link}>
                     <a
                       href="#"
-                      className="inline-flex items-center gap-2 rounded-md text-sm text-white/65 outline-none transition-colors duration-150 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                      className="inline-flex items-center gap-2 rounded-md py-2 text-sm text-white/65 outline-none sm:py-1.5 transition-colors duration-150 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                     >
                       {link}
                       {link === "Careers" && (
@@ -165,13 +174,13 @@ export default function FooterBig() {
         </nav>
 
         <div className="flex flex-col gap-6 border-t border-white/[0.07] py-7 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/40">
-            <span className="w-full text-white/50 sm:w-auto">© 2026 Halcyon Labs, Inc.</span>
+          <div className="flex flex-wrap items-center gap-x-5 text-xs text-white/55">
+            <span className="w-full text-white/60 sm:w-auto">© 2026 Halcyon Labs, Inc.</span>
             {LEGAL.map((item) => (
               <a
                 key={item}
                 href="#"
-                className="rounded-md outline-none transition-colors hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className="rounded-md py-2.5 outline-none transition-colors hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
               >
                 {item}
               </a>

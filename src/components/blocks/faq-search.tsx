@@ -112,12 +112,23 @@ export default function FaqSearch() {
   const [highlight, setHighlight] = React.useState("zones");
   const [vote, setVote] = React.useState<Record<string, "yes" | "no">>({});
   const answerRef = React.useRef<HTMLDivElement>(null);
+  const titleRef = React.useRef<HTMLHeadingElement>(null);
+  const voteRef = React.useRef<HTMLSpanElement>(null);
+  // The article remounts per answer, so buttons inside it vanish on click. Say where focus should land next.
+  const focusNext = React.useRef<"title" | "vote" | null>(null);
+
+  React.useEffect(() => {
+    if (focusNext.current === "title") titleRef.current?.focus({ preventScroll: true });
+    if (focusNext.current === "vote") voteRef.current?.focus();
+    focusNext.current = null;
+  }, [selected, vote]);
 
   const current = ALL.find((item) => item.id === selected) ?? ALL[0];
   const related = ALL.filter((item) => item.topic === current.topic && item.id !== current.id);
 
-  function open(id: string) {
+  function open(id: string, moveFocus = false) {
     setSelected(id);
+    if (moveFocus) focusNext.current = "title";
     setHighlight(id);
     // On narrow screens the answer sits under the list, so bring it into view.
     if (window.matchMedia("(max-width: 1023px)").matches) {
@@ -142,7 +153,7 @@ export default function FaqSearch() {
       <div className="mx-auto max-w-[1180px]">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] lg:items-end lg:gap-16">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Tidewater · Answers</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Tidewater · Answers</p>
             <h2
               id="faq-search-title"
               className="mt-5 max-w-[16ch] text-[clamp(2.4rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -180,7 +191,7 @@ export default function FaqSearch() {
                   </a>
                 </CommandEmpty>
                 {TOPICS.map(({ topic, items }) => (
-                  <CommandGroup key={topic} heading={topic}>
+                  <CommandGroup key={topic} heading={<span className="text-white/55">{topic}</span>}>
                     {items.map((item) => (
                       <CommandItem
                         key={item.id}
@@ -200,7 +211,7 @@ export default function FaqSearch() {
                   </CommandGroup>
                 ))}
               </CommandList>
-              <div className="mt-auto hidden items-center gap-4 border-t border-white/[0.06] px-4 py-3 font-mono text-[11px] text-white/35 sm:flex">
+              <div className="mt-auto hidden items-center gap-4 border-t border-white/[0.06] px-4 py-3 font-mono text-[11px] text-white/55 sm:flex">
                 <span className="flex items-center gap-1.5">
                   <Kbd size="sm" listen="ArrowUp">↑</Kbd>
                   <Kbd size="sm" listen="ArrowDown">↓</Kbd>
@@ -227,19 +238,25 @@ export default function FaqSearch() {
               Showing: {current.q}
             </p>
             <article key={current.id} className="nk-faq-search-in">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
                 <span className="text-[rgb(var(--neon))]">{current.topic}</span>
-                <span className="px-2 text-white/20">/</span>
+                <span aria-hidden className="px-2 text-white/20">
+                  /
+                </span>
                 {String(ALL.indexOf(current) + 1).padStart(2, "0")} of {ALL.length}
               </p>
-              <h3 className="mt-5 max-w-[22ch] text-balance text-[clamp(1.5rem,2.6vw,2.125rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white">
+              <h3
+                ref={titleRef}
+                tabIndex={-1}
+                className="mt-5 max-w-[22ch] text-balance outline-none text-[clamp(1.5rem,2.6vw,2.125rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white"
+              >
                 {current.q}
               </h3>
               <p className="mt-5 max-w-[56ch] text-pretty text-base leading-relaxed text-white/60">{current.a}</p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/[0.06] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/35">
+              <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/[0.06] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
                 {vote[current.id] ? (
-                  <span role="status">{vote[current.id] === "yes" ? "Glad it helped." : "Noted. We'll rewrite this one."}</span>
+                  <span ref={voteRef} role="status" tabIndex={-1} className="outline-none">{vote[current.id] === "yes" ? "Glad it helped." : "Noted. We'll rewrite this one."}</span>
                 ) : (
                   <>
                     <span>Answered it?</span>
@@ -247,8 +264,11 @@ export default function FaqSearch() {
                       <button
                         key={value}
                         type="button"
-                        onClick={() => setVote((votes) => ({ ...votes, [current.id]: value }))}
-                        className="cursor-pointer rounded-md border border-white/10 px-2 py-1 uppercase text-white/55 outline-none transition-colors duration-150 hover:border-[rgb(var(--neon)/0.5)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                        onClick={() => {
+                          setVote((votes) => ({ ...votes, [current.id]: value }));
+                          focusNext.current = "vote";
+                        }}
+                        className="inline-flex h-9 cursor-pointer items-center rounded-md border border-white/10 px-3 uppercase text-white/60 outline-none transition-colors duration-150 hover:border-[rgb(var(--neon)/0.5)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
                         {value}
                       </button>
@@ -259,13 +279,13 @@ export default function FaqSearch() {
               </div>
 
               <div className="mt-10">
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">Also in {current.topic}</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Also in {current.topic}</p>
                 <ul className="mt-3">
                   {related.map((item) => (
                     <li key={item.id}>
                       <button
                         type="button"
-                        onClick={() => open(item.id)}
+                        onClick={() => open(item.id, true)}
                         className="group flex w-full cursor-pointer items-center justify-between gap-4 rounded-md border-b border-white/[0.06] py-3 text-left text-sm text-white/65 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
                         {item.q}

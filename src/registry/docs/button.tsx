@@ -39,13 +39,14 @@ export const doc: ComponentDoc = {
         { prop: "variant", type: '"solid" | "outline" | "soft" | "ghost" | "link"', default: '"outline"', description: "Visual style." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex. Falls back to --neon-accent, then cyan." },
         { prop: "size", type: '"sm" | "md" | "lg" | "icon"', default: '"md"', description: "Height and padding." },
-        { prop: "loading", type: "boolean", default: "false", description: "Shows a spinner and disables the button." },
+        { prop: "loading", type: "boolean", default: "false", description: "Shows a spinner and ignores presses; the button keeps focus." },
         { prop: "asChild", type: "boolean", default: "false", description: "Merges props onto the single child element instead of rendering a button." },
+        { prop: "render", type: "ReactElement", description: "Base UI's spelling of asChild, render={<Link href=\"/\" />}. The shadcn CLI rewrites asChild into it in base-* projects, so both work." },
       ],
     },
   ],
   notes: [
     "Icon-only buttons need an aria-label.",
-    "loading sets aria-busy so screen readers announce the pending state.",
+    "loading sets aria-busy and aria-disabled instead of disabled, so keyboard focus stays on the button while it works.",
   ],
 };

@@ -57,18 +57,18 @@ function Panel({
     <article
       aria-label={`Step ${index + 1}: ${title}`}
       className={cn(
-        "relative flex flex-col rounded-[18px] border p-5 transition-[border-color,background-color,opacity,box-shadow] duration-500 sm:p-6",
+        "relative flex flex-col rounded-[18px] border p-5 transition-[border-color,background-color,box-shadow] duration-500 sm:p-6",
         state === "current"
           ? "border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.035)] shadow-[0_0_0_1px_rgb(var(--neon)/0.06),0_30px_80px_-40px_rgb(var(--neon)/0.6)]"
           : "border-white/[0.08] bg-white/[0.02]",
-        state === "upcoming" && "lg:opacity-55",
       )}
     >
-      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
         <span className={state === "upcoming" ? "" : "text-[rgb(var(--neon))]"}>0{index + 1}</span> · {title}
       </p>
       <p className="mt-2 text-[15px] leading-relaxed text-white/60">{copy}</p>
-      <div className="mt-5 flex flex-1 flex-col">{children}</div>
+      {/* Only the live artifact dims while upcoming; the step copy stays readable. */}
+      <div className={cn("mt-5 flex flex-1 flex-col transition-opacity duration-500", state === "upcoming" && "lg:opacity-[0.55]")}>{children}</div>
     </article>
   );
 }
@@ -105,11 +105,20 @@ export default function FeaturesSteps() {
   const [logged, setLogged] = React.useState(0);
   const [sending, setSending] = React.useState(false);
   const sequence = useSequence();
+  const actions = React.useRef<(HTMLButtonElement | null)[]>([]);
+  const moved = React.useRef(false);
+
+  // Each step's button unmounts when it's done, so hand focus to the next one instead of dropping it on the page.
+  React.useEffect(() => {
+    if (!moved.current || (document.activeElement && document.activeElement !== document.body)) return;
+    actions.current[Math.min(step, 3)]?.focus({ preventScroll: true });
+  }, [step]);
 
   const stateOf = (i: number) => (i < step ? "complete" : i === step ? "current" : "upcoming");
   const dnsDone = step > 0 || verified === DNS.length;
 
   function verify() {
+    moved.current = true;
     setVerifying(true);
     setVerified(0);
     sequence(DNS.length, 360, (i) => setVerified(i + 1), () => {
@@ -135,14 +144,20 @@ export default function FeaturesSteps() {
     });
   }
 
-  function reset() {
+  // Jumping steps from the stepper cancels whatever was mid-run, so a stale timer can't move it again.
+  function goTo(next: number) {
+    moved.current = true;
     sequence(0, 0, () => {}, () => {});
-    setStep(0);
-    setVerified(0);
-    setLogged(0);
     setVerifying(false);
     setPublishing(false);
     setSending(false);
+    setStep(next);
+  }
+
+  function reset() {
+    goTo(0);
+    setVerified(0);
+    setLogged(0);
   }
 
   const panels = [
@@ -161,9 +176,9 @@ export default function FeaturesSteps() {
           const ok = dnsDone || i < verified;
           return (
             <li key={r.label} className="flex items-center gap-3 px-3.5 py-2.5 text-xs">
-              <span className="w-12 shrink-0 font-mono text-white/35">{r.record}</span>
+              <span className="w-12 shrink-0 font-mono text-white/55">{r.record}</span>
               <span className="min-w-0 flex-1 truncate font-mono text-white/70">{r.host}</span>
-              <span className={cn("flex items-center gap-1.5 transition-colors", ok ? "text-[rgb(var(--neon))]" : "text-white/35")}>
+              <span className={cn("flex items-center gap-1.5 transition-colors", ok ? "text-[rgb(var(--neon))]" : "text-white/55")}>
                 {ok ? <Check aria-hidden className="size-3.5" /> : verifying && i === verified ? <LoaderCircle aria-hidden className="size-3.5 animate-spin" /> : null}
                 {r.label}
               </span>
@@ -175,7 +190,7 @@ export default function FeaturesSteps() {
         {step > 0 ? (
           <Done>fieldcraft.co verified</Done>
         ) : (
-          <Button size="sm" variant="solid" onClick={verify} loading={verifying}>
+          <Button ref={(el) => void (actions.current[0] = el)} size="sm" variant="solid" onClick={verify} loading={verifying}>
             {verifying ? "Checking DNS" : "Verify fieldcraft.co"}
           </Button>
         )}
@@ -191,7 +206,7 @@ export default function FeaturesSteps() {
     >
       <div className="overflow-hidden rounded-xl border border-white/[0.07] bg-[#0b0c11]">
         <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-2.5">
-          <span className="font-mono text-[11px] text-white/45">receipt.mrml</span>
+          <span className="font-mono text-[11px] text-white/55">receipt.mrml</span>
           <Badge size="sm" variant="outline">{step > 1 ? "v3 live" : "v3 draft"}</Badge>
         </div>
         <div className="space-y-2.5 px-4 py-4 text-[13px] leading-relaxed text-white/75">
@@ -200,7 +215,7 @@ export default function FeaturesSteps() {
             We charged <Var>{"{{amount}}"}</Var> to the card ending <Var>{"{{last4}}"}</Var>. Your order ships from
             Portland on <Var>{"{{ship_date}}"}</Var>.
           </p>
-          <div className="flex items-center justify-between border-t border-dashed border-white/10 pt-2.5 font-mono text-[11px] text-white/45">
+          <div className="flex items-center justify-between border-t border-dashed border-white/10 pt-2.5 font-mono text-[11px] text-white/55">
             <span>Order FC-30418</span>
             <span>2 items</span>
           </div>
@@ -210,7 +225,14 @@ export default function FeaturesSteps() {
         {step > 1 ? (
           <Done>v3 is live</Done>
         ) : (
-          <Button size="sm" variant={step === 1 ? "solid" : "outline"} onClick={publish} disabled={step !== 1} loading={publishing}>
+          <Button
+            ref={(el) => void (actions.current[1] = el)}
+            size="sm"
+            variant={step === 1 ? "solid" : "outline"}
+            onClick={publish}
+            disabled={step !== 1}
+            loading={publishing}
+          >
             Publish template
           </Button>
         )}
@@ -225,7 +247,7 @@ export default function FeaturesSteps() {
       copy="One call from your backend. Every message gets a delivery log you can hand to support."
     >
       <Mono>
-        <span className="text-white/40">await</span> mailroom.<span className="text-white/90">send</span>({"{"}
+        <span className="text-white/55">await</span> mailroom.<span className="text-white/90">send</span>({"{"}
         <br />
         <span className="pl-4">to: </span>
         <span className="text-[rgb(var(--neon))]">&quot;maya@fieldcraft.co&quot;</span>,
@@ -237,13 +259,13 @@ export default function FeaturesSteps() {
       </Mono>
       <ol aria-live="polite" className="relative mt-3 min-h-[124px] space-y-1 rounded-xl border border-white/[0.07] px-3.5 py-3 font-mono text-[11px] leading-5">
         {step < 3 && logged === 0 && (
-          <li className="absolute inset-0 grid place-items-center text-white/30">{sending ? "Connecting…" : "Delivery log appears here"}</li>
+          <li className="absolute inset-0 grid place-items-center text-white/55">{sending ? "Connecting…" : "Delivery log appears here"}</li>
         )}
         {LOG.map((line, i) => {
           const shown = step > 2 || i < logged;
           return (
             <li key={line.at} className={cn("flex gap-3 transition-opacity duration-200", shown ? "opacity-100" : "opacity-0")}>
-              <span className="w-12 shrink-0 text-right text-white/35">{line.at}</span>
+              <span className="w-12 shrink-0 text-right text-white/55">{line.at}</span>
               <span className={cn("truncate", i === LOG.length - 1 ? "text-[rgb(var(--neon))]" : "text-white/65")}>{line.text}</span>
             </li>
           );
@@ -253,12 +275,19 @@ export default function FeaturesSteps() {
         {step > 2 ? (
           <>
             <Done>Delivered in 812 ms</Done>
-            <Button size="sm" variant="ghost" onClick={reset} className="ml-auto">
+            <Button ref={(el) => void (actions.current[3] = el)} size="sm" variant="ghost" onClick={reset} className="ml-auto">
               <RotateCcw aria-hidden /> Start over
             </Button>
           </>
         ) : (
-          <Button size="sm" variant={step === 2 ? "solid" : "outline"} onClick={send} disabled={step !== 2} loading={sending}>
+          <Button
+            ref={(el) => void (actions.current[2] = el)}
+            size="sm"
+            variant={step === 2 ? "solid" : "outline"}
+            onClick={send}
+            disabled={step !== 2}
+            loading={sending}
+          >
             Send a test
           </Button>
         )}
@@ -276,7 +305,7 @@ export default function FeaturesSteps() {
       <div className="mx-auto max-w-[1200px]">
         <header className="grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Mailroom · Transactional email</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Mailroom · Transactional email</p>
             <h2
               id="features-steps-title"
               className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -290,7 +319,7 @@ export default function FeaturesSteps() {
           </p>
         </header>
 
-        <Stepper value={step} onValueChange={setStep} clickable className="mt-14 lg:mt-16">
+        <Stepper value={step} onValueChange={goTo} clickable className="mt-14 lg:mt-16">
           {STEPS.map((s) => (
             <Step key={s.title} title={s.title} description={s.description} />
           ))}

@@ -6,6 +6,19 @@ import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 const EASE = [0.23, 1, 0.32, 1] as const;
 
 // Overflow is clipped only while the height moves, so focus rings inside aren't cut off at rest.
@@ -149,10 +162,15 @@ Collapsible.displayName = "Collapsible";
 export interface CollapsibleTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Merge trigger behaviour onto the single child element instead of rendering a button. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const CollapsibleTrigger = React.forwardRef<HTMLButtonElement, CollapsibleTriggerProps>(
-  ({ asChild = false, className, onClick, children, ...props }, ref) => {
+  (raw, ref) => {
+    const { asChild = false, className, onClick, children, ...props } = fromRenderProp(raw);
     const { open, setOpen, disabled, contentId } = useCollapsible("CollapsibleTrigger");
 
     const triggerProps = {

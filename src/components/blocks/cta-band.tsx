@@ -120,7 +120,7 @@ export default function CtaBand() {
                   <a href="#">Book a 20-minute call</a>
                 </Button>
               </div>
-              <ul className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] text-white/40 lg:justify-end">
+              <ul className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] text-white/55 lg:justify-end">
                 {TRUST.map((item) => (
                   <li key={item} className="flex items-center gap-2">
                     <span aria-hidden className="size-1 rounded-full bg-[rgb(var(--neon)/0.45)]" />

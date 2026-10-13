@@ -132,12 +132,16 @@ export default function TestimonialHero() {
       <style>{css}</style>
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-between gap-6 border-b border-white/[0.07] pb-5">
-          <h2 id={titleId} className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+          <h2 id={titleId} className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
             <span className="hidden sm:inline">Backline · </span>Customer stories
           </h2>
           <div className="flex items-center gap-3">
-            <p className="whitespace-nowrap font-mono text-[11px] tabular-nums tracking-[0.16em] text-white/40">
+            <p className="whitespace-nowrap font-mono text-[11px] tabular-nums tracking-[0.16em] text-white/55">
               <span className="text-white/80">0{index + 1}</span> / 0{stories.length}
+            </p>
+            {/* The figure remounts on every switch, so announce from a region that stays put. */}
+            <p aria-live="polite" className="sr-only">
+              Story {index + 1} of {stories.length}: {stories[index].name}, {stories[index].company}
             </p>
             <PagerButton label="Previous story" onClick={() => go(-1)}>
               <ArrowLeft />
@@ -151,7 +155,6 @@ export default function TestimonialHero() {
         <div className="mt-20 grid gap-14 sm:mt-24 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-20">
           <figure
             key={shown}
-            aria-live="polite"
             className={cn(
               "nk-testimonial-hero-in relative transition-opacity duration-200 motion-reduce:transition-none",
               switching && "opacity-0",
@@ -193,7 +196,7 @@ export default function TestimonialHero() {
                 <span className="text-sm font-medium text-white/85">
                   {story.role}, {story.company}
                 </span>
-                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">{story.detail}</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{story.detail}</span>
               </span>
             </figcaption>
           </figure>
@@ -211,7 +214,7 @@ export default function TestimonialHero() {
                   key={stat.label}
                   className="flex flex-col-reverse gap-2 border-t border-white/[0.07] pt-4 lg:border-b lg:border-t-0 lg:py-6 lg:first:pt-0"
                 >
-                  <dt className="text-sm text-white/50">{stat.label}</dt>
+                  <dt className="text-sm text-white/60">{stat.label}</dt>
                   <dd className="text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tabular-nums leading-none tracking-[-0.035em] text-white/95">
                     {stat.value}
                   </dd>
@@ -220,7 +223,7 @@ export default function TestimonialHero() {
             </dl>
             <a
               href="#"
-              className="group mt-8 inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
+              className="group mt-6 inline-flex items-center gap-1.5 rounded-md py-2 text-sm font-medium text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
             >
               Read the case study
               <ArrowUpRight aria-hidden className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

@@ -62,6 +62,11 @@ const NAV = [
   { id: "reports", label: "Reports", icon: <BookOpen /> },
 ];
 
+const WORKSPACE_NAV = [
+  { id: "integrations", label: "Integrations", icon: <Plug /> },
+  { id: "settings", label: "Settings", icon: <Settings /> },
+];
+
 const RANGES = {
   "7d": { days: 7, label: "7 days", nrr: [112.4, 0.3], churn: [0.5, -0.1], losses: [610, 980] },
   "30d": { days: 30, label: "30 days", nrr: [111.8, 1.2], churn: [1.9, -0.4], losses: [2310, 3920] },
@@ -132,7 +137,7 @@ function Brand() {
       </svg>
       <span className={cn("grid min-w-0 transition-opacity duration-200", collapsed && "md:opacity-0")}>
         <span className="truncate text-sm font-semibold tracking-[-0.01em] text-white/90">Vantage</span>
-        <span className="truncate font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">Fernhill Inc.</span>
+        <span className="truncate font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">Fernhill Inc.</span>
       </span>
     </a>
   );
@@ -144,16 +149,70 @@ function SeatUsage() {
     <div className={cn("grid gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 transition-opacity duration-200", collapsed && "md:pointer-events-none md:opacity-0")}>
       <div className="flex items-baseline justify-between text-xs">
         <span className="text-white/70">Growth plan</span>
-        <span className="tabular-nums text-white/45">8 / 10 seats</span>
+        <span className="tabular-nums text-white/60">8 / 10 seats</span>
       </div>
       <div className="h-1 overflow-hidden rounded-full bg-white/[0.06]">
         <div className="h-full w-4/5 rounded-full bg-[rgb(var(--neon)/0.7)]" />
       </div>
-      <a href="#billing" className="w-fit text-xs text-white/45 underline-offset-4 outline-none hover:text-white/80 hover:underline focus-visible:text-white/90 focus-visible:underline">
+      <a href="#billing" className="w-fit text-xs text-white/60 underline-offset-4 outline-none hover:text-white/80 hover:underline focus-visible:text-white/90 focus-visible:underline">
         Manage billing
       </a>
     </div>
   );
+}
+
+// Lives inside the provider so a pick from the mobile drawer can close it.
+function SidebarNav({ page, onSelect }: { page: string; onSelect: (id: string) => void }) {
+  const { setOpenMobile } = useSidebar();
+  const item = ({ id, label, icon, badge }: { id: string; label: string; icon: React.ReactNode; badge?: number }) => (
+    <SidebarItem
+      key={id}
+      href={`#${id}`}
+      icon={icon}
+      badge={badge}
+      active={page === id}
+      onClick={(e) => {
+        e.preventDefault();
+        onSelect(id);
+        setOpenMobile(false);
+      }}
+    >
+      {label}
+    </SidebarItem>
+  );
+  return (
+    <SidebarContent>
+      <SidebarGroup>{NAV.map(item)}</SidebarGroup>
+      <SidebarGroup label={<span className="text-white/55">Workspace</span>}>{WORKSPACE_NAV.map(item)}</SidebarGroup>
+    </SidebarContent>
+  );
+}
+
+// The mobile drawer hands focus over while it is still invisible, so the hand-off can miss.
+// Once it has started to slide, move focus into the open drawer, or back to its trigger once it closes.
+function DrawerFocus() {
+  const { isMobile, openMobile, sidebarId } = useSidebar();
+  const open = isMobile && openMobile;
+  const wasOpen = React.useRef(false);
+
+  React.useEffect(() => {
+    if (!open && !wasOpen.current) return;
+    wasOpen.current = open;
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => {
+        const panel = document.getElementById(sidebarId);
+        const focused = document.activeElement;
+        if (open) {
+          if (!panel?.contains(focused)) panel?.querySelector<HTMLElement>("a[href], button")?.focus();
+        } else if (focused === document.body || panel?.contains(focused)) {
+          document.querySelector<HTMLElement>(`[aria-controls="${sidebarId}"]`)?.focus();
+        }
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [open, sidebarId]);
+
+  return null;
 }
 
 export default function AppDashboard() {
@@ -227,7 +286,7 @@ export default function AppDashboard() {
 
   const point = active !== null ? data.series[0].data[active] : null;
   const maxMove = Math.max(...data.movement.map((m) => Math.abs(m.value)));
-  const title = NAV.find((n) => n.id === page)?.label ?? "Overview";
+  const title = [...NAV, ...WORKSPACE_NAV].find((n) => n.id === page)?.label ?? "Overview";
 
   const kpis = [
     { label: "MRR", value: money(data.mrr), delta: data.mrrDelta, spark: data.sparkMrr },
@@ -236,9 +295,16 @@ export default function AppDashboard() {
     { label: "Logo churn", value: `${r.churn[0].toFixed(1)}%`, delta: r.churn[1], invert: true, spark: [2.6, 2.4, 2.5, 2.3, 2.2, 2.3, 2.1, 2.0, 2.1, 1.9].map((v) => (v * r.churn[0]) / 1.9) },
   ];
 
+  const searchButton = React.useRef<HTMLButtonElement>(null);
+  const closeSearch = () => {
+    setSearchOpen(false);
+    requestAnimationFrame(() => searchButton.current?.focus());
+  };
+
   const search = (autoFocus = false) => (
     <Input
       autoFocus={autoFocus}
+      onKeyDown={autoFocus ? (e) => e.key === "Escape" && closeSearch() : undefined}
       size="sm"
       type="search"
       aria-label="Search accounts"
@@ -256,27 +322,12 @@ export default function AppDashboard() {
       style={neonVars("cyan")}
       className="min-h-[100svh] bg-[#05060a] text-white/90"
     >
+      <DrawerFocus />
       <Sidebar aria-label="Vantage">
         <SidebarHeader className="px-2 pt-3">
           <Brand />
         </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup>
-            {NAV.map((item) => (
-              <SidebarItem key={item.id} href={`#${item.id}`} icon={item.icon} badge={item.badge} active={page === item.id} onClick={(e) => { e.preventDefault(); setPage(item.id); }}>
-                {item.label}
-              </SidebarItem>
-            ))}
-          </SidebarGroup>
-          <SidebarGroup label="Workspace">
-            <SidebarItem href="#integrations" icon={<Plug />} active={page === "integrations"} onClick={(e) => { e.preventDefault(); setPage("integrations"); }}>
-              Integrations
-            </SidebarItem>
-            <SidebarItem href="#settings" icon={<Settings />} active={page === "settings"} onClick={(e) => { e.preventDefault(); setPage("settings"); }}>
-              Settings
-            </SidebarItem>
-          </SidebarGroup>
-        </SidebarContent>
+        <SidebarNav page={page} onSelect={setPage} />
         <SidebarFooter className="p-3">
           <SeatUsage />
         </SidebarFooter>
@@ -287,7 +338,7 @@ export default function AppDashboard() {
           {searchOpen ? (
             <>
               <div className="flex-1">{search(true)}</div>
-              <Button variant="ghost" size="icon" aria-label="Close search" className="size-8" onClick={() => setSearchOpen(false)}>
+              <Button variant="ghost" size="icon" aria-label="Close search" className="size-8" onClick={closeSearch}>
                 <X />
               </Button>
             </>
@@ -296,11 +347,11 @@ export default function AppDashboard() {
               <SidebarTrigger />
               <span aria-hidden className="h-4 w-px bg-white/10" />
               <p className="min-w-0 truncate px-1 text-sm">
-                <span className="hidden text-white/40 sm:inline">Fernhill / </span>
+                <span className="hidden text-white/60 sm:inline">Fernhill / </span>
                 <span className="text-white/85">{title}</span>
               </p>
               <div className="ml-auto hidden w-48 sm:block lg:w-64">{search()}</div>
-              <Button variant="ghost" size="icon" aria-label="Search accounts" className="ml-auto size-8 sm:hidden" onClick={() => setSearchOpen(true)}>
+              <Button ref={searchButton} variant="ghost" size="icon" aria-label="Search accounts" className="ml-auto size-8 sm:hidden" onClick={() => setSearchOpen(true)}>
                 <Search />
               </Button>
               <Button variant="ghost" size="icon" aria-label={unread ? "Notifications, 3 unread" : "Notifications"} className="relative size-8" onClick={() => setUnread(false)}>
@@ -309,14 +360,14 @@ export default function AppDashboard() {
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button type="button" aria-label="Account menu" className="cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]">
+                  <button type="button" aria-label="Account menu" className="relative cursor-pointer rounded-full outline-none after:absolute after:-inset-1 after:content-[''] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]">
                     <Avatar alt="Ines Ortega" size="sm" status="online" />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>
                     <span className="block text-sm text-white/90">Ines Ortega</span>
-                    <span className="block text-xs font-normal text-white/45">ines@fernhill.co</span>
+                    <span className="block text-xs font-normal text-white/60">ines@fernhill.co</span>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem icon={<UserRound />}>Profile</DropdownMenuItem>
@@ -333,16 +384,16 @@ export default function AppDashboard() {
         <main className="mx-auto w-full max-w-[1240px] px-4 pb-12 pt-7 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
                 Billing synced 3 min ago
               </p>
               <h1 className="mt-2 text-[32px] font-semibold leading-none tracking-[-0.035em] text-white sm:text-[40px]">{title}</h1>
             </div>
             <div className="flex items-center gap-2">
               <ToggleGroup size="sm" aria-label="Date range" value={range} onValueChange={(v) => { if (!v) return; setActive(null); setRange(v as Range); }}>
-                <ToggleGroupItem value="7d">7D</ToggleGroupItem>
-                <ToggleGroupItem value="30d">30D</ToggleGroupItem>
-                <ToggleGroupItem value="90d">90D</ToggleGroupItem>
+                <ToggleGroupItem value="7d" className="max-sm:h-8">7D</ToggleGroupItem>
+                <ToggleGroupItem value="30d" className="max-sm:h-8">30D</ToggleGroupItem>
+                <ToggleGroupItem value="90d" className="max-sm:h-8">90D</ToggleGroupItem>
               </ToggleGroup>
               <Button variant="ghost" size="sm" loading={exportState === "busy"} onClick={exportCsv} className="border border-white/10">
                 {exportState === "done" ? <Check /> : exportState === "idle" ? <Download /> : null}
@@ -360,7 +411,7 @@ export default function AppDashboard() {
                 </dt>
                 <dd className="mt-3">
                   <p className="text-[22px] font-semibold leading-none tracking-[-0.03em] text-white tabular-nums sm:text-[28px]">{kpi.value}</p>
-                  <p className="mt-2 flex items-center gap-1.5 text-xs text-white/40">
+                  <p className="mt-2 flex items-center gap-1.5 text-xs text-white/60">
                     <Delta value={kpi.delta} invert={kpi.invert} />
                     <span className="hidden sm:inline">vs prior {r.label}</span>
                   </p>
@@ -376,11 +427,11 @@ export default function AppDashboard() {
                 <div>
                   <h2 id="mrr-title" className="text-sm text-white/55">Monthly recurring revenue</h2>
                   <p className="mt-1.5 text-[28px] font-semibold leading-none tracking-[-0.03em] text-white tabular-nums">{money(point ? (point.y ?? 0) : data.mrr)}</p>
-                  <p className="mt-2 text-xs text-white/45">
+                  <p className="mt-2 text-xs text-white/60">
                     {point ? new Intl.DateTimeFormat("en-US", { weekday: "long", month: "short", day: "numeric", timeZone: "UTC" }).format(point.x as Date) : `Last ${r.label}, against the ${r.label} before`}
                   </p>
                 </div>
-                <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.12em] text-white/45">
+                <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.12em] text-white/55">
                   <span className="flex items-center gap-1.5"><span aria-hidden className="h-0.5 w-3 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />Current</span>
                   <span className="flex items-center gap-1.5"><span aria-hidden className="h-0.5 w-3 rounded-full bg-white/30" />Prior</span>
                 </div>
@@ -403,13 +454,13 @@ export default function AppDashboard() {
               <p className="mt-1.5 text-[28px] font-semibold leading-none tracking-[-0.03em] text-white tabular-nums">
                 {data.net >= 0 ? "+" : ""}{money(data.net)}
               </p>
-              <p className="mt-2 text-xs text-white/45">Net change, last {r.label}</p>
+              <p className="mt-2 text-xs text-white/60">Net change, last {r.label}</p>
               <ul className="mt-7 grid gap-4">
                 {data.movement.map((m) => (
                   <li key={m.label} className="grid gap-1.5">
                     <div className="flex items-baseline justify-between text-xs">
                       <span className="text-white/65">{m.label}</span>
-                      <span className={cn("font-mono tabular-nums", m.value >= 0 ? "text-white/85" : "text-white/45")}>
+                      <span className={cn("font-mono tabular-nums", m.value >= 0 ? "text-white/85" : "text-white/60")}>
                         {m.value >= 0 ? "+" : ""}{money(m.value)}
                       </span>
                     </div>
@@ -425,7 +476,7 @@ export default function AppDashboard() {
                   </li>
                 ))}
               </ul>
-              <dl className="mt-auto grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-4 text-xs [&_dd]:mt-1 [&_dd]:font-mono [&_dd]:text-sm [&_dd]:text-white/85 [&_dt]:text-white/45 max-lg:mt-6">
+              <dl className="mt-auto grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-4 text-xs [&_dd]:mt-1 [&_dd]:font-mono [&_dd]:text-sm [&_dd]:text-white/85 [&_dt]:text-white/60 max-lg:mt-6">
                 <div>
                   <dt>Quick ratio</dt>
                   <dd>{data.quickRatio.toFixed(1)}</dd>
@@ -442,14 +493,14 @@ export default function AppDashboard() {
             <div className="flex items-center justify-between gap-3 px-1 pb-3 pt-4">
               <h2 id="accounts-title" className="text-base font-semibold tracking-[-0.01em] text-white/90">
                 Largest accounts
-                <span className="ml-2 font-mono text-xs font-normal text-white/40">{rows.length}</span>
+                <span className="ml-2 font-mono text-xs font-normal text-white/55">{rows.length}</span>
               </h2>
               {query ? (
-                <button type="button" onClick={() => setQuery("")} className="flex cursor-pointer items-center gap-1.5 rounded-md text-xs text-white/55 outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
+                <button type="button" onClick={() => setQuery("")} className="-my-2 flex cursor-pointer items-center gap-1.5 rounded-md py-2 text-xs text-white/60 outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
                   <Filter aria-hidden className="size-3.5" />“{query}” <X aria-hidden className="size-3" />
                 </button>
               ) : (
-                <a href="#accounts" className="text-xs text-white/55 underline-offset-4 outline-none hover:text-white/90 hover:underline focus-visible:underline">View all</a>
+                <a href="#accounts" className="-my-2 py-2 text-xs text-white/60 underline-offset-4 outline-none hover:text-white/90 hover:underline focus-visible:underline">View all</a>
               )}
             </div>
             <Table>
@@ -471,7 +522,7 @@ export default function AppDashboard() {
                         <Avatar alt="" fallback={a.name.slice(0, 2).toUpperCase()} size="sm" shape="square" className="text-[10px]" />
                         <div className="min-w-0">
                           <p className="truncate text-white/90">{a.name}</p>
-                          <p className="truncate text-xs text-white/40">{a.domain}</p>
+                          <p className="truncate text-xs text-white/60">{a.domain}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -481,12 +532,12 @@ export default function AppDashboard() {
                     </TableCell>
                     <TableCell align="right" className="hidden text-white/70 lg:table-cell">{a.seats}</TableCell>
                     <TableCell align="right" className="font-mono text-[13px] text-white/90">{money(a.mrr)}</TableCell>
-                    <TableCell align="right" className="hidden text-white/45 xl:table-cell">{a.since}</TableCell>
+                    <TableCell align="right" className="hidden text-white/60 xl:table-cell">{a.since}</TableCell>
                   </TableRow>
                 ))}
                 {rows.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="py-10 text-center text-white/45">
+                    <TableCell colSpan={6} className="py-10 text-center text-white/60">
                       No accounts match “{query}”.
                     </TableCell>
                   </TableRow>

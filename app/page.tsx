@@ -10,7 +10,7 @@ import { JsonLd } from "@/components/site/json-ld";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { siteConfig } from "@/config/site";
-import { blocks, registry } from "@/registry";
+import { blocks, registry, templates } from "@/registry";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -68,7 +68,7 @@ export default function HomePage() {
       <JsonLd data={structuredData} />
       <SiteHeader />
       <main>
-        <Hero componentCount={registry.length} blockCount={blocks.length} />
+        <Hero componentCount={registry.length} blockCount={blocks.length} templateCount={templates.length} />
         <Showcase />
         <InstallFlow />
         <Directory />

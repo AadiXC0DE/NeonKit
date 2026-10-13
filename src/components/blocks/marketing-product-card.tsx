@@ -160,7 +160,15 @@ export default function MarketingProductCard() {
   const [cart, setCart] = React.useState<Line[]>(STARTING_CART);
   const [flash, setFlash] = React.useState<string | null>(null);
   const flashTimer = React.useRef<number | undefined>(undefined);
+  const cartRef = React.useRef<HTMLElement>(null);
+  // Removing a line (or the add-on row) unmounts the focused button, so pick where focus lands next.
+  const focusNext = React.useRef<((cart: HTMLElement) => HTMLElement | null | undefined) | null>(null);
   React.useEffect(() => () => window.clearTimeout(flashTimer.current), []);
+  React.useEffect(() => {
+    const pick = focusNext.current;
+    focusNext.current = null;
+    if (pick && cartRef.current) (pick(cartRef.current) ?? cartRef.current.querySelector<HTMLElement>("h3"))?.focus();
+  }, [cart]);
 
   const variant = VARIANTS.find((v) => v.id === variantId)!;
   const count = qty ?? 1;
@@ -181,6 +189,7 @@ export default function MarketingProductCard() {
   }
 
   function addOn() {
+    focusNext.current = (root) => root.querySelector<HTMLElement>(`[data-line="${ADD_ON.id}"] button`);
     setCart((lines) => (lines.some((line) => line.id === ADD_ON.id) ? lines : [...lines, ADD_ON]));
     setFlash(ADD_ON.id);
     window.clearTimeout(flashTimer.current);
@@ -188,6 +197,13 @@ export default function MarketingProductCard() {
   }
 
   function changeQty(id: string, delta: number) {
+    const index = cart.findIndex((line) => line.id === id);
+    if (index !== -1 && cart[index].qty + delta <= 0) {
+      focusNext.current = (root) => {
+        const rows = root.querySelectorAll<HTMLElement>("[data-line]");
+        return rows[Math.min(index, rows.length - 1)]?.querySelector<HTMLElement>("button[aria-label^='Remove']");
+      };
+    }
     setCart((lines) =>
       lines.flatMap((line) => {
         if (line.id !== id) return [line];
@@ -214,10 +230,10 @@ export default function MarketingProductCard() {
               className="relative flex min-h-[300px] flex-col border-b border-white/[0.06] bg-[radial-gradient(ellipse_70%_60%_at_50%_45%,rgb(var(--neon)/0.1),transparent_70%),#07080c] md:min-h-[460px] md:border-b-0 md:border-r"
             >
               <div className="flex items-center justify-between p-4">
-                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">VS-HAL-{variant.id.slice(0, 3).toUpperCase()}</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">VS-HAL-{variant.id.slice(0, 3).toUpperCase()}</span>
                 <ToggleGroup aria-label="View" size="sm" variant="segmented" value={exploded ? "exploded" : "assembled"} onValueChange={(value) => setExploded(value === "exploded")}>
-                  <ToggleGroupItem value="assembled">Assembled</ToggleGroupItem>
-                  <ToggleGroupItem value="exploded">Exploded</ToggleGroupItem>
+                  <ToggleGroupItem value="assembled" className="h-8 sm:h-6">Assembled</ToggleGroupItem>
+                  <ToggleGroupItem value="exploded" className="h-8 sm:h-6">Exploded</ToggleGroupItem>
                 </ToggleGroup>
               </div>
               <div className="relative flex-1 px-6 pb-6">
@@ -229,7 +245,7 @@ export default function MarketingProductCard() {
             </div>
 
             <div className="flex flex-col p-6 sm:p-8">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Volt Supply · Switches</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Volt Supply · Switches</p>
               <h2 id="volt-product-title" className="mt-3 text-[32px] font-semibold leading-none tracking-[-0.035em] text-white">
                 Halyard switches
               </h2>
@@ -240,12 +256,12 @@ export default function MarketingProductCard() {
 
               <div className="mt-6 flex items-baseline gap-2">
                 <AnimatedMoney value={variant.price} className="text-[28px] font-semibold tracking-[-0.02em] text-white" />
-                <span className="text-sm text-white/45">/ 70 pack</span>
+                <span className="text-sm text-white/60">/ 70 pack</span>
               </div>
 
               <fieldset className="mt-6">
                 <legend className="text-sm font-medium text-white/80">
-                  Stem <span className="font-normal text-white/45">· {variant.name}, {variant.force}</span>
+                  Stem <span className="font-normal text-white/60">· {variant.name}, {variant.force}</span>
                 </legend>
                 <div className="mt-3 flex gap-2.5">
                   {VARIANTS.map((option) => {
@@ -290,12 +306,12 @@ export default function MarketingProductCard() {
                   ["Pins", "5-pin"],
                 ].map(([label, value]) => (
                   <div key={label}>
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">{label}</dt>
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{label}</dt>
                     <dd className="mt-1 text-white/85">{value}</dd>
                   </div>
                 ))}
               </dl>
-              <p className="mt-3 text-[13px] text-white/45">{variant.feel}</p>
+              <p className="mt-3 text-[13px] text-white/60">{variant.feel}</p>
 
               <div className="mt-6 flex items-end gap-3 md:mt-auto md:pt-6">
                 <NumberInput
@@ -315,23 +331,24 @@ export default function MarketingProductCard() {
           </div>
         </article>
 
-        <aside aria-labelledby="volt-cart-title" className="rounded-[20px] border border-white/10 bg-[#0a0b11] lg:col-span-4">
+        <aside ref={cartRef} aria-labelledby="volt-cart-title" className="rounded-[20px] border border-white/10 bg-[#0a0b11] lg:col-span-4">
           <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-4">
-            <h3 id="volt-cart-title" className="text-sm font-medium text-white/90">
+            <h3 id="volt-cart-title" tabIndex={-1} className="text-sm font-medium text-white/90 outline-none">
               Cart
             </h3>
-            <span aria-live="polite" className="font-mono text-[11px] text-white/45">
+            <span aria-live="polite" className="font-mono text-[11px] text-white/55">
               {items} {items === 1 ? "item" : "items"}
             </span>
           </div>
 
           {cart.length === 0 ? (
-            <p className="px-5 py-10 text-center text-sm text-white/45">Empty. The switches are right there.</p>
+            <p className="px-5 py-10 text-center text-sm text-white/60">Empty. The switches are right there.</p>
           ) : (
             <ul className="divide-y divide-white/[0.06]">
               {cart.map((line) => (
                 <li
                   key={line.id}
+                  data-line={line.id}
                   className={cn(
                     "flex gap-3.5 px-5 py-4 transition-colors duration-700",
                     flash === line.id && "bg-[rgb(var(--neon)/0.07)] duration-150",
@@ -348,14 +365,14 @@ export default function MarketingProductCard() {
                       <p className="truncate text-sm text-white/90">{line.name}</p>
                       <p className="text-sm tabular-nums text-white/90">{money(line.price * line.qty)}</p>
                     </div>
-                    <p className="mt-0.5 truncate text-[12px] text-white/45">{line.detail}</p>
+                    <p className="mt-0.5 truncate text-[12px] text-white/60">{line.detail}</p>
                     <div className="mt-2.5 flex items-center justify-between">
                       <div className="flex items-center rounded-md border border-white/10">
                         <button
                           type="button"
                           aria-label={`One fewer ${line.name}`}
                           onClick={() => changeQty(line.id, -1)}
-                          className="grid size-7 place-items-center rounded-l-md text-white/55 outline-none hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                          className="grid size-9 place-items-center rounded-l-md sm:size-7 text-white/55 outline-none hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]"
                         >
                           <Minus aria-hidden className="size-3.5" />
                         </button>
@@ -364,7 +381,7 @@ export default function MarketingProductCard() {
                           type="button"
                           aria-label={`One more ${line.name}`}
                           onClick={() => changeQty(line.id, 1)}
-                          className="grid size-7 place-items-center rounded-r-md text-white/55 outline-none hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                          className="grid size-9 place-items-center rounded-r-md sm:size-7 text-white/55 outline-none hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]"
                         >
                           <Plus aria-hidden className="size-3.5" />
                         </button>
@@ -373,7 +390,7 @@ export default function MarketingProductCard() {
                         type="button"
                         aria-label={`Remove ${line.name}`}
                         onClick={() => changeQty(line.id, -line.qty)}
-                        className="grid size-7 place-items-center rounded-md text-white/35 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                        className="-mr-1 grid size-9 place-items-center rounded-md text-white/55 sm:mr-0 sm:size-7 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
                         <X aria-hidden className="size-3.5" />
                       </button>
@@ -386,8 +403,8 @@ export default function MarketingProductCard() {
 
           {!cart.some((line) => line.id === ADD_ON.id) && (
             <div className="flex items-center gap-3 border-t border-dashed border-white/[0.08] px-5 py-3.5">
-              <p className="min-w-0 flex-1 text-[12px] leading-snug text-white/50">
-                <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">Pairs well with</span>
+              <p className="min-w-0 flex-1 text-[12px] leading-snug text-white/60">
+                <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">Pairs well with</span>
                 {ADD_ON.name} · {money(ADD_ON.price)}
               </p>
               <Button variant="ghost" size="sm" onClick={addOn}>
@@ -418,7 +435,7 @@ export default function MarketingProductCard() {
                 <a href="#">Checkout</a>
               </Button>
             )}
-            <p className="mt-3 text-center text-[11px] text-white/35">Taxes calculated at checkout. 30-day returns, unopened.</p>
+            <p className="mt-3 text-center text-[11px] text-white/60">Taxes calculated at checkout. 30-day returns, unopened.</p>
           </div>
         </aside>
       </div>

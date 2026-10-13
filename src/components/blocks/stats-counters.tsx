@@ -155,7 +155,7 @@ function LiveCounter() {
           </span>
           Live · since you opened this page
         </p>
-        <p className="hidden font-mono text-[11px] tabular-nums tracking-[0.06em] text-white/40 sm:block">
+        <p className="hidden font-mono text-[11px] tabular-nums tracking-[0.06em] text-white/55 sm:block">
           {(rate / 1e6).toFixed(2)}M req/s
         </p>
       </div>
@@ -166,7 +166,7 @@ function LiveCounter() {
           aria-label={`${millions} million requests`}
           className="relative [--segment-h:44px] sm:[--segment-h:64px] lg:[--segment-h:96px]"
         />
-        <span className="relative pb-1 font-mono text-xs uppercase tracking-[0.14em] text-white/50 sm:text-sm">
+        <span className="relative pb-1 font-mono text-xs uppercase tracking-[0.14em] text-white/60 sm:text-sm">
           M req
         </span>
       </Display>
@@ -196,7 +196,7 @@ export default function StatsCounters() {
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-16">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
               Tachyon network · trailing 30 days
             </p>
             <h2
@@ -224,7 +224,7 @@ export default function StatsCounters() {
                 key={stat.label}
                 className="flex flex-col gap-5 rounded-[20px] border border-white/[0.07] bg-white/[0.02] p-5 sm:p-6"
               >
-                <p className="flex items-center justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+                <p className="flex items-center justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
                   {stat.label}
                   <span aria-hidden className="tabular-nums text-white/25">
                     0{i + 2}
@@ -237,7 +237,7 @@ export default function StatsCounters() {
                     aria-label={`${final} ${stat.unit}`}
                     className="relative [--segment-h:40px] sm:[--segment-h:48px]"
                   />
-                  <span className="relative pb-0.5 font-mono text-xs uppercase tracking-[0.14em] text-white/50">
+                  <span className="relative pb-0.5 font-mono text-xs uppercase tracking-[0.14em] text-white/60">
                     {stat.unit}
                   </span>
                 </Display>
@@ -246,7 +246,7 @@ export default function StatsCounters() {
                   <dl className="mt-auto hidden grid-cols-5 border-t border-white/[0.06] pt-4 lg:grid">
                     {stat.regions.map(([region, count]) => (
                       <div key={region} className="grid gap-1">
-                        <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">{region}</dt>
+                        <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{region}</dt>
                         <dd className="font-mono text-sm tabular-nums text-white/75">{count}</dd>
                       </div>
                     ))}

@@ -467,9 +467,10 @@ const ToggleGroupItem = React.forwardRef<HTMLButtonElement, ToggleGroupItemProps
           (single ? (
             <motion.span
               aria-hidden
-              layoutId={group.reduceMotion ? undefined : `${group.baseId}-indicator`}
+              // Always set, so the server and client agree; reduced motion only drops the slide.
+              layoutId={`${group.baseId}-indicator`}
               initial={false}
-              transition={{ duration: 0.3, ease: EASE }}
+              transition={group.reduceMotion ? { duration: 0 } : { duration: 0.3, ease: EASE }}
               style={{ borderRadius: radius }}
               className={cn("pointer-events-none", v.indicator)}
             >

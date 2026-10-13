@@ -114,7 +114,7 @@ function StatusBadge({ status }: { status: Status }) {
   if (status === "firing")
     return <Badge size="sm" color="red" variant="outline" pulse>Firing</Badge>;
   if (status === "acked") return <Badge size="sm" dot>Acknowledged</Badge>;
-  return <Badge size="sm" className="border-white/10 bg-white/[0.04] text-white/50">Resolved</Badge>;
+  return <Badge size="sm" className="border-white/10 bg-white/[0.04] text-white/60">Resolved</Badge>;
 }
 
 function BeaconMark() {
@@ -141,10 +141,10 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
   return (
     <article aria-labelledby={`${note.id}-title`} className="flex h-full flex-col">
       <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-5 py-3">
-        <button type="button" onClick={onBack} className="-ml-1 inline-flex items-center gap-1.5 rounded-md px-1 py-1 text-xs text-white/55 outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] lg:hidden">
-          <ArrowLeft className="size-3.5" /> Back
+        <button type="button" onClick={onBack} className="-my-1 -ml-1 inline-flex items-center gap-1.5 rounded-md px-1 py-2 text-xs text-white/60 outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] lg:hidden">
+          <ArrowLeft aria-hidden className="size-3.5" /> Back
         </button>
-        <span className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45 lg:inline-flex">
+        <span className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 lg:inline-flex">
           <Icon className="size-3.5" aria-hidden /> {note.kind}
         </span>
         <Button variant="ghost" size="sm" onClick={onUnread} disabled={note.unread}>
@@ -154,7 +154,7 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
 
       <div className="flex-1 space-y-6 p-5 sm:p-6">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
             {note.source}{note.severity ? ` · SEV${note.severity}` : ""}
           </p>
           <h2 id={`${note.id}-title`} className="mt-2 text-[22px] font-semibold leading-[1.15] tracking-[-0.02em] text-white/90">
@@ -168,7 +168,7 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
             <figure className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
               <figcaption className="flex items-center gap-2.5 text-sm text-white/70">
                 <Avatar alt={note.author ?? ""} size="sm" /> {note.author}
-                <span className="ml-auto font-mono text-[11px] text-white/35">{note.time}</span>
+                <span className="ml-auto font-mono text-[11px] text-white/55">{note.time}</span>
               </figcaption>
               <blockquote className="mt-3 text-[15px] leading-relaxed text-white/80">
                 <span className="text-[rgb(var(--neon))]">@you</span> {note.body}
@@ -204,7 +204,7 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
 
         {note.trend && (
           <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
-            <div className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">
+            <div className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
               <span>{note.metric?.[0]} · last 30 min</span>
               <span className="text-white/70">{note.trend[note.trend.length - 1]}{note.metric?.[1]}</span>
             </div>
@@ -216,7 +216,7 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
           <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
             {note.facts.map(([k, v]) => (
               <div key={k}>
-                <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">{k}</dt>
+                <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{k}</dt>
                 <dd className="mt-0.5 text-white/80">{v}</dd>
               </div>
             ))}
@@ -227,12 +227,12 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
           <ol className="space-y-2 border-l border-white/10 pl-4">
             {note.log.map(([t, text]) => (
               <li key={t + text} className="flex gap-3 text-[13px] text-white/60">
-                <span className="w-10 shrink-0 font-mono text-[11px] leading-5 text-white/35">{t}</span> {text}
+                <span className="w-10 shrink-0 font-mono text-[11px] leading-5 text-white/55">{t}</span> {text}
               </li>
             ))}
             {note.status !== "firing" && note.id === "n1" && (
               <li className="flex gap-3 text-[13px] text-white/80">
-                <span className="w-10 shrink-0 font-mono text-[11px] leading-5 text-white/35">02:15</span>
+                <span className="w-10 shrink-0 font-mono text-[11px] leading-5 text-white/55">02:15</span>
                 {note.status === "acked" ? "Acknowledged by you" : "Resolved by you"}
               </li>
             )}
@@ -241,7 +241,7 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
       </div>
 
       {note.status && note.status !== "resolved" && (
-        <div className="flex flex-wrap gap-2 border-t border-white/[0.06] px-5 py-4 sm:px-6">
+        <div data-actions className="flex flex-wrap gap-2 border-t border-white/[0.06] px-5 py-4 sm:px-6">
           {note.status === "firing" && <Button variant="solid" onClick={onAck}>Acknowledge</Button>}
           <Button variant={note.status === "firing" ? "ghost" : "solid"} onClick={onResolve}>Resolve</Button>
         </div>
@@ -265,10 +265,38 @@ export default function AppNotifications() {
   const count = (kind: string) => unread.filter((n) => kind === "all" || n.kind === kind).length;
   const selected = notes.find((n) => n.id === selectedId) ?? notes[0];
 
+  const detailRef = React.useRef<HTMLDivElement>(null);
+  const listRef = React.useRef<HTMLDivElement>(null);
+  const narrow = () => window.matchMedia("(max-width: 1023.98px)").matches;
+
   const open = (id: string) => {
     setSelectedId(id);
     update(id, { unread: false });
     setMobileDetail(true);
+    if (!narrow()) return;
+    // Below lg the list gives way to the detail, so bring focus and the detail's top into view.
+    requestAnimationFrame(() => {
+      const detail = detailRef.current;
+      if (!detail) return;
+      detail.focus({ preventScroll: true });
+      const top = detail.getBoundingClientRect().top;
+      if (top < 0) window.scrollBy({ top: top - 16 });
+    });
+  };
+
+  const back = () => {
+    setMobileDetail(false);
+    requestAnimationFrame(() => listRef.current?.querySelector<HTMLElement>("button[aria-current]")?.focus());
+  };
+
+  // Acting on a note can remove the button that was pressed; keep focus inside the detail.
+  const act = (patch: Partial<Note>) => {
+    update(selected.id, patch);
+    requestAnimationFrame(() => {
+      const detail = detailRef.current;
+      if (!detail || detail.contains(document.activeElement)) return;
+      (detail.querySelector<HTMLElement>("[data-actions] button:not(:disabled)") ?? detail).focus({ preventScroll: true });
+    });
   };
 
   return (
@@ -280,10 +308,10 @@ export default function AppNotifications() {
       <div aria-hidden className="absolute -left-40 -top-40 -z-10 size-[520px] rounded-full bg-[rgb(var(--neon)/0.07)] blur-[120px]" />
 
       <header className="flex h-14 items-center gap-6 border-b border-white/[0.06] px-4 sm:px-8">
-        <a href="#" className="flex items-center gap-2 rounded-md text-[15px] font-semibold tracking-[-0.01em] outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
+        <a href="#" className="-my-2 flex items-center gap-2 rounded-md py-2 text-[15px] font-semibold tracking-[-0.01em] outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
           <BeaconMark /> Beacon
         </a>
-        <nav aria-label="Primary" className="hidden items-center gap-5 text-sm text-white/50 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-5 text-sm text-white/60 md:flex">
           {["Incidents", "On-call", "Services", "Postmortems"].map((item) => (
             <a key={item} href="#" className="rounded-md outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">{item}</a>
           ))}
@@ -303,16 +331,17 @@ export default function AppNotifications() {
       <main className="mx-auto max-w-[1240px] px-4 pb-10 pt-8 sm:px-8 sm:pt-10">
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Inbox · Payments primary</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Inbox · Payments primary</p>
             <h1 className="mt-2 text-4xl font-semibold leading-none tracking-[-0.035em] sm:text-[44px]">Notifications</h1>
-            <p className="mt-3 flex items-center gap-3 font-mono text-xs text-white/45">
+            <p className="mt-3 flex items-center gap-3 font-mono text-xs text-white/60">
               <span aria-live="polite">{unread.length ? `${unread.length} unread` : "All read"}</span>
               <span aria-hidden className="h-3 w-px bg-white/15" />
+              {/* aria-disabled rather than disabled, so focus stays put after the click empties the list. */}
               <button
                 type="button"
-                disabled={!unread.length}
-                onClick={() => setNotes((all) => all.map((n) => ({ ...n, unread: false })))}
-                className="inline-flex items-center gap-1.5 rounded-md text-white/70 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] disabled:pointer-events-none disabled:text-white/30"
+                aria-disabled={!unread.length}
+                onClick={() => unread.length && setNotes((all) => all.map((n) => ({ ...n, unread: false })))}
+                className="-my-2 inline-flex items-center gap-1.5 rounded-md py-2 text-white/70 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] aria-disabled:cursor-default aria-disabled:text-white/30 aria-disabled:hover:text-white/30"
               >
                 <CheckCheck className="size-3.5" aria-hidden /> Mark all read
               </button>
@@ -321,9 +350,9 @@ export default function AppNotifications() {
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
             <ToggleGroup aria-label="Filter notifications" value={filter} onValueChange={(v) => v && setFilter(v)} size="sm">
               {FILTERS.map((f) => (
-                <ToggleGroupItem key={f.value} value={f.value}>
+                <ToggleGroupItem key={f.value} value={f.value} className="max-sm:h-8">
                   {f.label}
-                  <span className="font-mono text-[10px] opacity-60">{count(f.value)}</span>
+                  <span className="font-mono text-[10px]">{count(f.value)}</span>
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
@@ -332,7 +361,7 @@ export default function AppNotifications() {
         </div>
 
         <div className="mt-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_420px]">
-          <div className={cn("flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] lg:max-h-[680px] lg:overflow-y-auto", mobileDetail && "hidden lg:flex")}>
+          <div ref={listRef} className={cn("flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] lg:max-h-[680px] lg:overflow-y-auto", mobileDetail && "hidden lg:flex")}>
             {visible.length === 0 && (
               <div className="grid flex-1 place-items-center content-center px-6 py-24 text-center">
                 <svg aria-hidden viewBox="0 0 24 24" className="size-14" fill="none" strokeLinecap="round" strokeWidth="1.4" stroke="rgb(var(--neon) / 0.18)">
@@ -340,7 +369,7 @@ export default function AppNotifications() {
                   <circle cx="12" cy="12" r="1.6" fill="rgb(var(--neon) / 0.18)" stroke="none" />
                 </svg>
                 <p className="mt-5 text-[15px] text-white/80">Nothing unread here.</p>
-                <p className="mt-1 text-sm text-white/45">The pager is quiet. Go get some sleep.</p>
+                <p className="mt-1 text-sm text-white/60">The pager is quiet. Go get some sleep.</p>
               </div>
             )}
             {DAYS.map((day) => {
@@ -350,7 +379,7 @@ export default function AppNotifications() {
                 <div key={day.key} role="group" aria-label={day.label}>
                   <div className="sticky top-0 z-10 flex items-baseline justify-between border-b border-white/[0.06] bg-[#08090e] px-5 py-2 font-mono text-[11px] uppercase tracking-[0.16em]">
                     <span className="text-white/60">{day.label}</span>
-                    <span className="text-white/30">{day.date}</span>
+                    <span className="text-white/55">{day.date}</span>
                   </div>
                   <ul>
                     {items.map((n) => {
@@ -373,14 +402,14 @@ export default function AppNotifications() {
                             )}
                             <Icon aria-hidden className={cn("mt-0.5 size-4", n.status === "firing" ? "text-[rgb(255_77_94)]" : "text-white/35")} />
                             <span className="min-w-0">
-                              <span className={cn("block text-[15px] leading-snug", n.unread ? "font-medium text-white/90" : "text-white/60")}>{n.title}</span>
-                              <span className={cn("mt-1 line-clamp-2 text-sm leading-relaxed sm:line-clamp-1", n.unread ? "text-white/55" : "text-white/40")}>{n.body}</span>
-                              <span className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[11px] text-white/35">
+                              <span className={cn("block text-[15px] leading-snug", n.unread ? "font-medium text-white/90" : "text-white/70")}>{n.title}</span>
+                              <span className={cn("mt-1 line-clamp-2 text-sm leading-relaxed sm:line-clamp-1", n.unread ? "text-white/70" : "text-white/60")}>{n.body}</span>
+                              <span className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[11px] text-white/55">
                                 {n.source}
                                 {n.status && <StatusBadge status={n.status} />}
                               </span>
                             </span>
-                            <span className="flex flex-col items-end gap-2.5 font-mono text-[11px] leading-6 text-white/35">
+                            <span className="flex flex-col items-end gap-2.5 font-mono text-[11px] leading-6 text-white/55">
                               {n.time}
                               {n.unread && (
                                 <span className="size-1.5 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_10px_rgb(var(--neon)/0.7)]">
@@ -398,14 +427,14 @@ export default function AppNotifications() {
             })}
           </div>
 
-          <div className={cn("rounded-2xl border border-white/10 bg-[#0a0b11] lg:sticky lg:top-6 lg:block lg:self-start", !mobileDetail && "hidden")}>
+          <div ref={detailRef} tabIndex={-1} className={cn("rounded-2xl border border-white/10 bg-[#0a0b11] outline-none lg:sticky lg:top-6 lg:block lg:self-start", !mobileDetail && "hidden")}>
             <Detail
               key={selected.id}
               note={selected}
-              onAck={() => update(selected.id, { status: "acked", unread: false })}
-              onResolve={() => update(selected.id, { status: "resolved", unread: false })}
-              onUnread={() => update(selected.id, { unread: true })}
-              onBack={() => setMobileDetail(false)}
+              onAck={() => act({ status: "acked", unread: false })}
+              onResolve={() => act({ status: "resolved", unread: false })}
+              onUnread={() => act({ unread: true })}
+              onBack={back}
             />
           </div>
         </div>

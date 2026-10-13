@@ -101,7 +101,7 @@ function Tier({ tier, billing }: { tier: (typeof TIERS)[number]; billing: Billin
           </Badge>
         )}
       </div>
-      <p className="mt-1.5 text-sm text-white/50 md:min-h-10 lg:min-h-0">{tier.pitch}</p>
+      <p className="mt-1.5 text-sm text-white/60 md:min-h-10 lg:min-h-0">{tier.pitch}</p>
 
       <p className="mt-8 flex items-end gap-2">
         <span
@@ -118,7 +118,7 @@ function Tier({ tier, billing }: { tier: (typeof TIERS)[number]; billing: Billin
         <span className="sr-only">
           ${price} per month{billing === "yearly" ? `, billed $${price * 12} yearly` : ""}
         </span>
-        <span aria-hidden className="pb-1 text-sm leading-tight text-white/45">
+        <span aria-hidden className="pb-1 text-sm leading-tight text-white/60">
           / month
           <br />
           <span className="font-mono text-[11px]">{billing === "yearly" ? `$${(price * 12).toLocaleString("en-US")} billed yearly` : "billed monthly"}</span>
@@ -128,7 +128,7 @@ function Tier({ tier, billing }: { tier: (typeof TIERS)[number]; billing: Billin
       <dl className="mt-7 grid grid-cols-3 overflow-hidden rounded-xl border border-white/[0.07]">
         {tier.limits.map(([k, v], i) => (
           <div key={k} className={cn("px-3 py-2.5", i > 0 && "border-l border-white/[0.07]")}>
-            <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">{k}</dt>
+            <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{k}</dt>
             <dd className="mt-1 text-sm tabular-nums text-white/85">{v}</dd>
           </div>
         ))}
@@ -177,7 +177,7 @@ export default function PricingTiers() {
       <div className="mx-auto max-w-[1200px]">
         <header className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Wavelength · Podcast hosting</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Wavelength · Podcast hosting</p>
             <h2
               id="pricing-tiers-title"
               className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -193,7 +193,7 @@ export default function PricingTiers() {
             <span
               className={cn(
                 "whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.14em] transition-[color,text-shadow] duration-300",
-                billing === "yearly" ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/35",
+                billing === "yearly" ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/55",
               )}
             >
               2 months free
@@ -220,11 +220,11 @@ export default function PricingTiers() {
           )}
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/[0.06] pt-6 text-sm text-white/50 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/[0.06] pt-6 text-sm text-white/60 lg:flex-row lg:items-center lg:justify-between">
           <p>Every plan: unlimited downloads, no overage, and a 301 redirect for your RSS if you ever leave.</p>
           <a
             href="#contact"
-            className="inline-flex items-center gap-1 self-start rounded-md text-white/80 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a] lg:self-auto"
+            className="-my-2 inline-flex items-center gap-1 self-start rounded-md py-2 text-white/80 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a] lg:self-auto"
           >
             Hosting a network of 50+ shows? <span className="underline decoration-white/25 underline-offset-4">Let&apos;s talk</span>
           </a>

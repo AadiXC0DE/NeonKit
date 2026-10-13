@@ -57,10 +57,13 @@ export default function Marketing404() {
       />
 
       <header className="flex items-center justify-between">
-        <a href={HOME} className="text-[17px] font-semibold tracking-[-0.02em] text-white/90">
+        <a
+          href={HOME}
+          className="-my-1.5 rounded-md py-1.5 text-[17px] font-semibold tracking-[-0.02em] text-white/90 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+        >
           wayside<span className="text-[rgb(var(--neon))]">.</span>
         </a>
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">Roadside stays since 2014</span>
+        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Roadside stays since 2014</span>
       </header>
 
       <main className="grid flex-1 items-center gap-12 py-12 lg:grid-cols-[1fr_1.05fr] lg:gap-8 lg:py-16">
@@ -81,7 +84,7 @@ export default function Marketing404() {
         </div>
 
         <div className="max-w-[540px]">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
             Error <span className="text-[rgb(var(--neon))]">404</span> · Page not found
           </p>
           <h1 className="mt-5 text-[clamp(2.5rem,6vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.045em]">
@@ -115,7 +118,7 @@ export default function Marketing404() {
         </div>
       </main>
 
-      <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-white/[0.06] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/35">
+      <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-white/[0.06] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
         <span className="[overflow-wrap:anywhere]">
           GET {REQUESTED} <span className="text-[rgb(var(--neon)/0.8)]">→ 404</span>
         </span>

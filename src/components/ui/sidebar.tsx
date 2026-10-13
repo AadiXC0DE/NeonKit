@@ -8,6 +8,19 @@ import { PanelLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 const EASE = [0.23, 1, 0.32, 1] as const;
 const GLIDE = { duration: 0.3, ease: EASE };
 const MOBILE_QUERY = "(max-width: 767.98px)";
@@ -306,8 +319,13 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       if (!drawerOpen) return;
       const panel = panelRef.current;
       const restore = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      const first = panel?.querySelector<HTMLElement>(FOCUSABLE);
-      (first ?? panel)?.focus({ preventScroll: true });
+      // Wait two frames: the panel is still visibility:hidden until its transition starts.
+      let frame = requestAnimationFrame(() => {
+        frame = requestAnimationFrame(() => {
+          const first = panel?.querySelector<HTMLElement>(FOCUSABLE);
+          (first ?? panel)?.focus({ preventScroll: true });
+        });
+      });
 
       const onKeyDown = (event: KeyboardEvent) => {
         if (event.key !== "Escape" || event.defaultPrevented) return;
@@ -318,6 +336,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       document.body.style.overflow = "hidden";
       document.addEventListener("keydown", onKeyDown);
       return () => {
+        cancelAnimationFrame(frame);
         document.removeEventListener("keydown", onKeyDown);
         document.body.style.overflow = overflow;
         if (restore?.isConnected) restore.focus({ preventScroll: true });
@@ -490,7 +509,7 @@ const SidebarGroup = React.forwardRef<HTMLDivElement, SidebarGroupProps>(
             <span
               id={labelId}
               className={cn(
-                "truncate text-xs font-medium text-white/40 transition-opacity ease-out",
+                "truncate text-xs font-medium text-white/55 transition-opacity ease-out",
                 rail ? "duration-100 md:opacity-0" : "delay-75 duration-200",
               )}
             >
@@ -525,11 +544,15 @@ export interface SidebarItemProps extends Omit<React.AnchorHTMLAttributes<HTMLEl
   disabled?: boolean;
   /** Merge the item onto the single child element, such as your router's Link. Its children become the label. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
-  (
-    {
+  (raw, ref) => {
+    const {
       className,
       icon,
       href,
@@ -545,9 +568,7 @@ const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
       onFocus,
       onBlur,
       ...props
-    },
-    ref,
-  ) => {
+    } = fromRenderProp(raw);
     const { isMobile, setOpenMobile } = useSidebarContext("SidebarItem");
     const instance = useSidebarInstance("SidebarItem");
     const { rail } = instance;
@@ -558,13 +579,10 @@ const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
     const label = child ? childProps.children : children;
     const hasBadge = badge != null && badge !== false;
     const childRef = child ? getElementRef<HTMLElement>(child) : undefined;
-    const mergedRef = React.useCallback(
-      (node: HTMLElement | null) => {
-        setRef(ref, node);
-        setRef(childRef, node);
-      },
-      [ref, childRef],
-    );
+    const mergedRef = (node: HTMLElement | null) => {
+      setRef(ref, node);
+      setRef(childRef, node);
+    };
 
     const handlers = {
       onClick: (event: React.MouseEvent<HTMLElement>) => {
@@ -783,22 +801,18 @@ SidebarTrigger.displayName = "SidebarTrigger";
 const SidebarInset = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const { isMobile, openMobile } = useSidebarContext("SidebarInset");
-    const localRef = React.useRef<HTMLDivElement>(null);
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        setRef(ref, node);
-        localRef.current = node;
-      },
-      [ref],
-    );
+    // While the drawer is open the page behind it can't be focused or clicked. Set during render, so it is
+    // already gone when the drawer hands focus back.
     const inert = isMobile && openMobile;
 
-    // While the drawer is open the page behind it can't be focused or clicked.
-    React.useEffect(() => {
-      localRef.current?.toggleAttribute("inert", inert);
-    }, [inert]);
-
-    return <div ref={mergedRef} className={cn("relative flex min-w-0 flex-1 flex-col", className)} {...props} />;
+    return (
+      <div
+        ref={ref}
+        inert={inert || undefined}
+        className={cn("relative flex min-w-0 flex-1 flex-col", className)}
+        {...props}
+      />
+    );
   },
 );
 SidebarInset.displayName = "SidebarInset";

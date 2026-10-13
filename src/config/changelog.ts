@@ -8,6 +8,19 @@ export type Release = {
 
 export const releases: Release[] = [
   {
+    version: "1.4",
+    date: "2026-10-14",
+    title: "Templates",
+    notes: [
+      "Complete Next.js sites built from NeonKit components: a SaaS landing with a pricing page, a deploy dashboard, a portfolio with a lights-off mode, a launch event that changes as the doors open, and a docs starter.",
+      "One shadcn command installs a template's pages, its sections and every component it uses. Change one color in its config and the whole site re-tints.",
+      "Scrolling over a block preview always moves the page: previews no longer catch the first pixels of a scroll, inner panes hand off at their ends, and a knob only takes the wheel once you've picked it up.",
+      "Works in Base UI shadcn projects too. The CLI rewrites asChild to render there, and every NeonKit component now accepts both.",
+      "A loading Button keeps keyboard focus. Sheets and the sidebar drawer hand focus back properly, and dim labels across the library now pass contrast.",
+      "A polish pass over every block: focus that no longer drops to the page, bigger tap targets on phones, and fixes found at 390 px.",
+    ],
+  },
+  {
     version: "1.3",
     date: "2026-10-13",
     title: "Blocks",

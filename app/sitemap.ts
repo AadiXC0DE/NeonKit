@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
-import { blocks, registry } from "@/registry";
+import { blocks, registry, templates } from "@/registry";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -8,6 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["", 1],
     ["/components", 0.9],
     ...(blocks.length ? ([["/blocks", 0.9]] as [string, number][]) : []),
+    ...(templates.length ? ([["/templates", 0.9]] as [string, number][]) : []),
     ["/docs", 0.8],
     ["/docs/installation", 0.8],
     ["/docs/theming", 0.7],
@@ -34,6 +35,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.7,
+    })),
+    ...templates.map((template) => ({
+      url: `${siteConfig.url}/templates/${template.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
     })),
   ];
 }

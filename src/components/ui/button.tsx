@@ -7,6 +7,19 @@ import { LoaderCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 const variants = {
   solid:
     "bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/0.45),inset_0_1px_0_rgb(255_255_255/0.45)] hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_32px_rgb(var(--neon)/0.7),inset_0_1px_0_rgb(255_255_255/0.45)] hover:brightness-110",
@@ -32,15 +45,19 @@ export interface ButtonProps
   color?: NeonColor;
   variant?: keyof typeof variants;
   size?: keyof typeof sizes;
-  /** Shows a spinner and disables the button. */
+  /** Shows a spinner and ignores presses. The button stays focusable, so keyboard focus isn't dropped. */
   loading?: boolean;
   /** Render the child element (e.g. a link) with button styles. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
+  (raw, ref) => {
+    const {
       className,
       style,
       color,
@@ -50,24 +67,29 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       asChild = false,
       disabled,
       children,
+      onClick,
       ...props
-    },
-    ref,
-  ) => {
+    } = fromRenderProp(raw);
     const Comp = asChild ? Slot : "button";
 
     return (
       <Comp
         ref={ref}
         style={neonVars(color, style)}
-        disabled={disabled || loading}
+        disabled={disabled}
+        aria-disabled={loading || undefined}
         aria-busy={loading || undefined}
+        onClick={(event) => {
+          // Also stops a loading submit button from sending its form again.
+          if (loading) return event.preventDefault();
+          onClick?.(event);
+        }}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
           "relative inline-flex shrink-0 cursor-pointer select-none items-center justify-center whitespace-nowrap font-medium outline-none",
           "transition-[background-color,border-color,color,box-shadow,filter,transform] duration-200 ease-out active:scale-[0.97]",
           "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
-          "disabled:pointer-events-none disabled:opacity-50",
+          "disabled:pointer-events-none disabled:opacity-50 aria-disabled:cursor-default aria-disabled:opacity-50",
           "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
           sizes[size],
           variants[variant],

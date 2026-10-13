@@ -38,7 +38,7 @@ function Progress({ step }: { step: Step }) {
               i > step && "bg-[rgb(var(--neon)/0.14)]",
             )}
           />
-          <span className={cn("font-mono text-[10px] uppercase tracking-[0.16em]", i <= step ? "text-white/60" : "text-white/25")}>
+          <span className={cn("font-mono text-[10px] uppercase tracking-[0.16em]", i <= step ? "text-white/75" : "text-white/50")}>
             0{i + 1} {label}
           </span>
         </li>
@@ -82,6 +82,19 @@ function SignupCard() {
   const [busy, setBusy] = React.useState(false);
   const [code, setCode] = React.useState("");
   const [resendIn, setResendIn] = React.useState(0);
+  const headingRef = React.useRef<HTMLHeadingElement>(null);
+  const emailRef = React.useRef<HTMLInputElement>(null);
+  const teamRef = React.useRef<HTMLInputElement>(null);
+  const moved = React.useRef(false);
+
+  // Each step replaces the last, so focus moves to the new step's heading. Step 1 focuses its code input itself.
+  React.useEffect(() => {
+    if (!moved.current) {
+      moved.current = true;
+      return;
+    }
+    if (step !== 1) headingRef.current?.focus();
+  }, [step]);
 
   React.useEffect(() => {
     if (resendIn <= 0) return;
@@ -97,7 +110,10 @@ function SignupCard() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) next.email = "Enter the email you use for work.";
     if (team.trim().length < 2) next.team = "Give the vault a name, at least 2 characters.";
     setErrors(next);
-    if (next.email || next.team) return;
+    if (next.email || next.team) {
+      (next.email ? emailRef : teamRef).current?.focus();
+      return;
+    }
     setBusy(true);
     window.setTimeout(() => {
       setBusy(false);
@@ -124,23 +140,33 @@ function SignupCard() {
         {step === 0 && (
           <form onSubmit={sendCode} noValidate className="flex flex-1 flex-col gap-5">
             <div>
-              <h2 className="text-xl font-semibold tracking-[-0.02em] text-white/90">Create a team vault</h2>
-              <p className="mt-1 text-sm text-white/50">Free for 3 people. No card.</p>
+              <h2 ref={headingRef} tabIndex={-1} className="text-xl font-semibold tracking-[-0.02em] text-white/90 outline-none">
+                Create a team vault
+              </h2>
+              <p className="mt-1 text-sm text-white/60">Free for 3 people. No card.</p>
             </div>
             <Input
+              ref={emailRef}
               label="Work email"
               type="email"
               autoComplete="email"
               placeholder="ana@quayside.co"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                if (errors.email) setErrors((e) => ({ ...e, email: undefined }));
+              }}
               error={errors.email}
             />
             <Input
+              ref={teamRef}
               label="Vault name"
               placeholder="Quayside Ops"
               value={team}
-              onChange={(event) => setTeam(event.target.value)}
+              onChange={(event) => {
+                setTeam(event.target.value);
+                if (errors.team) setErrors((e) => ({ ...e, team: undefined }));
+              }}
               error={errors.team}
               description={team.trim() ? `harbor.app/${slug}` : "You can add more vaults later."}
             />
@@ -154,7 +180,7 @@ function SignupCard() {
           <div className="flex flex-1 flex-col gap-5">
             <div>
               <h2 className="text-xl font-semibold tracking-[-0.02em] text-white/90">Check your inbox</h2>
-              <p className="mt-1 text-sm leading-6 text-white/50">
+              <p className="mt-1 text-sm leading-6 text-white/60">
                 We sent a 6-digit code to <span className="text-white/85">{email.trim()}</span>.
               </p>
             </div>
@@ -166,9 +192,9 @@ function SignupCard() {
               disabled={busy}
               className="w-full justify-between"
             />
-            <p className="font-mono text-[11px] text-white/35">Demo: any six digits work.</p>
+            <p className="font-mono text-[11px] text-white/55">Demo: any six digits work.</p>
             <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">When you verify</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">When you verify</p>
               <ol className="mt-3 grid gap-2 text-[13px] leading-5 text-white/60">
                 {VERIFY_STEPS.map((text, i) => (
                   <li key={text} className="flex gap-3">
@@ -182,7 +208,7 @@ function SignupCard() {
               <button
                 type="button"
                 onClick={() => setStep(0)}
-                className="inline-flex cursor-pointer items-center gap-1.5 rounded-md text-white/50 outline-none hover:text-white/85 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className="-my-2 inline-flex cursor-pointer items-center gap-1.5 rounded-md py-2 text-white/60 outline-none hover:text-white/85 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
               >
                 <ArrowLeft aria-hidden className="size-3.5" /> Change email
               </button>
@@ -190,7 +216,7 @@ function SignupCard() {
                 type="button"
                 disabled={resendIn > 0 || busy}
                 onClick={() => setResendIn(30)}
-                className="cursor-pointer rounded-md text-[rgb(var(--neon))] outline-none hover:underline focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] disabled:cursor-default disabled:text-white/35 disabled:no-underline"
+                className="-my-2 cursor-pointer rounded-md py-2 text-[rgb(var(--neon))] outline-none hover:underline focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] disabled:cursor-default disabled:text-white/35 disabled:no-underline"
               >
                 {resendIn > 0 ? `Resend in ${resendIn}s` : "Resend code"}
               </button>
@@ -202,8 +228,10 @@ function SignupCard() {
           <div className="grid flex-1 content-center gap-6 text-center">
             <VaultDial />
             <div>
-              <h2 className="text-xl font-semibold tracking-[-0.02em] text-white/90">Vault created</h2>
-              <p className="mt-1 font-mono text-[12px] text-white/50">harbor.app/{slug}</p>
+              <h2 ref={headingRef} tabIndex={-1} className="text-xl font-semibold tracking-[-0.02em] text-white/90 outline-none">
+                Vault created
+              </h2>
+              <p className="mt-1 font-mono text-[12px] text-white/60">harbor.app/{slug}</p>
             </div>
             <dl className="grid grid-cols-3 rounded-xl border border-white/[0.07] py-3 text-xs">
               {[
@@ -212,7 +240,7 @@ function SignupCard() {
                 ["Recovery", "Kit ready"],
               ].map(([label, value]) => (
                 <div key={label} className="flex flex-col-reverse gap-1">
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">{label}</dt>
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{label}</dt>
                   <dd className="text-white/80">{value}</dd>
                 </div>
               ))}
@@ -228,7 +256,7 @@ function SignupCard() {
                   setEmail("");
                   setTeam("");
                 }}
-                className="cursor-pointer rounded-md py-1 text-sm text-white/45 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className="cursor-pointer rounded-md py-2 text-sm text-white/60 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
               >
                 Start over
               </button>
@@ -284,7 +312,7 @@ export default function HeroSplitForm() {
               </li>
             ))}
           </ul>
-          <p className="mt-10 border-t border-white/[0.07] pt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">
+          <p className="mt-10 border-t border-white/[0.07] pt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
             2,480 teams · audited by Halyard Security, Aug 2026
           </p>
         </div>

@@ -221,7 +221,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               >
                 {length}
                 {maxLength !== undefined && (
-                  <span className={tone === "limit" ? undefined : "text-white/25"}>
+                  <span className={tone === "limit" ? undefined : "text-white/50"}>
                     {" / "}
                     {maxLength}
                   </span>

@@ -223,9 +223,15 @@ const Knob = React.forwardRef<HTMLDivElement, KnobProps>(
     function handleWheel(event: WheelEvent) {
       const gesture = wheel.current;
       if (disabled || !gesture.inside) return;
-      event.preventDefault();
       // Shift turns the wheel sideways on some systems, so take whichever axis moved.
       const delta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+      // At the end of its travel the knob lets go, and the rest of the gesture scrolls the page.
+      const current = gesture.raw ?? value;
+      if ((delta > 0 && current <= min) || (delta < 0 && current >= max)) {
+        gesture.inside = false;
+        return;
+      }
+      event.preventDefault();
       const pixels = event.deltaMode === 1 ? delta * 16 : delta;
       const factor = event.shiftKey ? 0.1 : event.altKey ? 4 : 1;
       if (gesture.raw === null) gesture.start = value;
@@ -246,11 +252,12 @@ const Knob = React.forwardRef<HTMLDivElement, KnobProps>(
       const node = dialRef.current;
       if (!node) return;
       const gesture = wheel.current;
-      // A scroll that starts elsewhere keeps scrolling the page when it passes
-      // over the knob; only a gesture that begins on the knob turns it.
+      // The wheel belongs to the page until the knob has been picked up: only a
+      // gesture that begins on a focused knob turns it, so resting the pointer on
+      // one while reading never hijacks the scroll.
       const track = (event: WheelEvent) => {
         if (event.timeStamp - gesture.last > 300) {
-          gesture.inside = node.contains(event.target as Node);
+          gesture.inside = node.contains(event.target as Node) && document.activeElement === node;
           gesture.raw = null;
         }
         gesture.last = event.timeStamp;

@@ -5,6 +5,19 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 // The beam is stacked dashes on an SVG rect with pathLength 100, so it travels at
 // one speed around the whole border (a conic gradient races along long edges).
 // Each dash pattern is "0 gap dash 0" (an even count, or SVG doubles it) so every
@@ -111,11 +124,15 @@ export interface ShimmerButtonProps
   shimmerDuration?: number;
   /** Render the child element (e.g. a link) with the shimmer. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
-  (
-    {
+  (raw, ref) => {
+    const {
       className,
       style,
       color,
@@ -127,20 +144,15 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
       disabled,
       children,
       ...props
-    },
-    ref,
-  ) => {
+    } = fromRenderProp(raw);
     const s = sizes[size];
     const v = variants[variant];
     const child = asChild && React.isValidElement<AnyProps>(children) ? children : null;
     const childRef = child ? getElementRef(child) : undefined;
-    const composedRef = React.useCallback(
-      (node: HTMLButtonElement | null) => {
-        setRef(ref, node);
-        setRef(childRef as PossibleRef<HTMLButtonElement>, node);
-      },
-      [ref, childRef],
-    );
+    const composedRef = (node: HTMLButtonElement | null) => {
+      setRef(ref, node);
+      setRef(childRef as PossibleRef<HTMLButtonElement>, node);
+    };
 
     const timing = {
       "--nk-shimmer-button-lap": `${beamDuration}s`,

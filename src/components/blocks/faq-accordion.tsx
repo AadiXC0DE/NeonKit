@@ -55,23 +55,34 @@ const CREW = ["Ines Carvalho", "Tomasz Wolny", "Mariam Okafor"];
 
 function Helpful() {
   const [vote, setVote] = React.useState<"yes" | "no" | null>(null);
+  const thanksRef = React.useRef<HTMLParagraphElement>(null);
+
+  // The buttons unmount on vote, so hand focus to the thank-you line instead of dropping it on <body>.
+  React.useEffect(() => {
+    if (vote) thanksRef.current?.focus();
+  }, [vote]);
 
   if (vote) {
     return (
-      <p role="status" className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-white/45">
+      <p
+        ref={thanksRef}
+        role="status"
+        tabIndex={-1}
+        className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55 outline-none"
+      >
         {vote === "yes" ? "Noted. Thanks." : "Thanks. We read every one of these."}
       </p>
     );
   }
   return (
-    <div className="mt-4 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-white/35">
+    <div className="mt-4 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
       <span>Helpful?</span>
       {(["yes", "no"] as const).map((value) => (
         <button
           key={value}
           type="button"
           onClick={() => setVote(value)}
-          className="cursor-pointer rounded-md border border-white/10 px-2 py-1 uppercase text-white/55 outline-none transition-colors duration-150 hover:border-[rgb(var(--neon)/0.5)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+          className="inline-flex h-9 cursor-pointer items-center rounded-md border border-white/10 px-3 uppercase text-white/60 outline-none transition-colors duration-150 hover:border-[rgb(var(--neon)/0.5)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
         >
           {value}
         </button>
@@ -98,7 +109,7 @@ export default function FaqAccordion() {
 
       <div className="mx-auto grid max-w-[1180px] gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-[auto_1fr] lg:gap-x-20 lg:gap-y-10">
         <div className="lg:col-start-1 lg:row-start-1">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Brightline · Help desk</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Brightline · Help desk</p>
           <h2
             id="faq-accordion-title"
             className="mt-5 max-w-[14ch] text-[clamp(2.4rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
@@ -112,7 +123,7 @@ export default function FaqAccordion() {
         </div>
 
         <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-          <div className="flex items-baseline justify-between border-b border-white/10 pb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/35">
+          <div className="flex items-baseline justify-between border-b border-white/10 pb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
             <span>{String(FAQS.length).padStart(2, "0")} questions</span>
             <span>Updated 2 Oct 2026</span>
           </div>
@@ -124,9 +135,10 @@ export default function FaqAccordion() {
                   <AccordionTrigger className="gap-5 py-5 text-[15px] sm:text-base">
                     <span className="flex min-w-0 items-baseline gap-4 sm:gap-6">
                       <span
+                        aria-hidden
                         className={cn(
                           "w-5 shrink-0 font-mono text-[11px] tabular-nums transition-colors duration-200",
-                          isOpen ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/30",
+                          isOpen ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/50",
                         )}
                       >
                         {String(i + 1).padStart(2, "0")}
@@ -146,7 +158,7 @@ export default function FaqAccordion() {
           </Accordion>
           <a
             href="#"
-            className="group mt-8 inline-flex items-center gap-1.5 rounded-md text-sm text-white/55 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+            className="group mt-6 inline-flex items-center gap-1.5 rounded-md py-2 text-sm text-white/60 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
           >
             All 140 help articles
             <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -164,7 +176,7 @@ export default function FaqAccordion() {
                 <Avatar key={name} alt={name} status={i === CREW.length - 1 ? "online" : undefined} />
               ))}
             </AvatarGroup>
-            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">Median reply 9 min</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">Median reply 9 min</span>
           </div>
           <h3 className="mt-5 text-lg font-semibold tracking-[-0.02em] text-white">Still stuck?</h3>
           <p className="mt-2 text-pretty text-sm leading-relaxed text-white/55">
@@ -183,7 +195,7 @@ export default function FaqAccordion() {
               </a>
             </Button>
           </div>
-          <p className="mt-5 border-t border-white/[0.06] pt-4 font-mono text-[11px] tracking-[0.04em] text-white/35">
+          <p className="mt-5 border-t border-white/[0.06] pt-4 font-mono text-[11px] tracking-[0.04em] text-white/55">
             Mon–Sat, 07:00–19:00 CET
           </p>
         </div>

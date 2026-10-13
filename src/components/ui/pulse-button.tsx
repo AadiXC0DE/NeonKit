@@ -5,6 +5,19 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 // Rings travel with outline-offset, so they grow by the same distance on every
 // side and keep the button's corner radius (a scale would stretch a wide pill).
 const css = `
@@ -81,11 +94,15 @@ export interface PulseButtonProps
   rings?: 1 | 2 | 3;
   /** Render the child element (e.g. a link) with the pulse. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const PulseButton = React.forwardRef<HTMLButtonElement, PulseButtonProps>(
-  (
-    {
+  (raw, ref) => {
+    const {
       className,
       style,
       color,
@@ -98,9 +115,7 @@ const PulseButton = React.forwardRef<HTMLButtonElement, PulseButtonProps>(
       disabled,
       children,
       ...props
-    },
-    ref,
-  ) => {
+    } = fromRenderProp(raw);
     const s = sizes[size];
     const child = asChild && React.isValidElement<AnyProps>(children) ? children : null;
     const childRef = child ? getElementRef(child) : undefined;

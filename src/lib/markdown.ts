@@ -3,7 +3,7 @@ import "server-only";
 import { registryUrl, siteConfig } from "@/config/site";
 import { readSource } from "@/lib/highlight";
 import { neonColorNames } from "@/lib/neon";
-import { blocks, categories, componentPath, examplePath, getItem, registry } from "@/registry";
+import { blocks, categories, componentPath, examplePath, getItem, registry, templates } from "@/registry";
 import { docs } from "@/registry/docs";
 
 const fence = (code: string, lang = "tsx") => `\`\`\`${lang}\n${code.trimEnd()}\n\`\`\``;
@@ -144,6 +144,17 @@ export function llmsTxt() {
             `Whole sections built from NeonKit components. Gallery: ${siteConfig.url}/blocks`,
             ...blocks.map(
               (block) => `- [${block.name}](${siteConfig.url}/blocks/${block.slug}): ${block.description} Install: \`npx shadcn@latest add ${registryUrl(block.slug)}\``,
+            ),
+          ].join("\n"),
+        ]
+      : []),
+    ...(templates.length
+      ? [
+          `## Templates`,
+          [
+            `Complete Next.js sites built from NeonKit components. Each installs pages to app/<name> and sections to components/templates/<name>. Gallery: ${siteConfig.url}/templates`,
+            ...templates.map(
+              (template) => `- [${template.name}](${siteConfig.url}/templates/${template.slug}): ${template.description} Install: \`npx shadcn@latest add ${registryUrl(template.slug)}\``,
             ),
           ].join("\n"),
         ]

@@ -87,8 +87,8 @@ function UptimeBars({ days, data, degradedToday }: { days: number; data: number[
           );
         })}
       </div>
-      <div className="mt-1.5 flex justify-between gap-3 font-mono text-[11px] text-white/35">
-        <span className={cn(hover !== null && "text-white/75")}>
+      <div className="mt-1.5 flex justify-between gap-3 font-mono text-[11px] text-white/55">
+        <span className={cn(hover !== null && "text-white/85")}>
           {ago === 0 ? "Today" : dayLabel(ago)} · {slice[shown].toFixed(2)}%
         </span>
         <span>{average.toFixed(2)}% · {days}d</span>
@@ -119,7 +119,7 @@ export default function AppServerStatus() {
       <div className="mx-auto max-w-[1240px]">
         <header className="grid gap-8 border-b border-white/[0.06] pb-8 lg:grid-cols-[minmax(0,1fr)_440px] lg:items-end">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Groundcontrol · Status board</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Groundcontrol · Status board</p>
             <h1 id="gc-status-title" className="mt-3 text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.95] tracking-[-0.04em]">
               {degraded ? (
                 <>
@@ -136,7 +136,7 @@ export default function AppServerStatus() {
           </div>
           <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
             <div aria-hidden className="absolute inset-x-10 bottom-0 h-16 rounded-full bg-[rgb(var(--neon)/0.14)] blur-[40px]" />
-            <div className="relative flex items-center justify-between px-4 pt-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <div className="relative flex items-center justify-between px-4 pt-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
               <span>Fleet pulse</span>
               <span className="text-white/70">1,440 checks / min</span>
             </div>
@@ -148,7 +148,7 @@ export default function AppServerStatus() {
                 ["Open", String(degraded)],
               ].map(([k, v]) => (
                 <div key={k} className="border-r border-white/[0.06] px-2 py-2.5 last:border-r-0">
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">{k}</dt>
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{k}</dt>
                   <dd className="mt-0.5 text-sm tabular-nums text-white/85">{v}</dd>
                 </div>
               ))}
@@ -161,8 +161,8 @@ export default function AppServerStatus() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 id="gc-services" className="text-lg font-semibold tracking-[-0.02em]">Services</h2>
               <ToggleGroup size="sm" aria-label="Uptime range" value={days} onValueChange={(v) => v && setDays(v)}>
-                <ToggleGroupItem value="30">30 days</ToggleGroupItem>
-                <ToggleGroupItem value="90">90 days</ToggleGroupItem>
+                <ToggleGroupItem value="30" className="max-sm:h-8">30 days</ToggleGroupItem>
+                <ToggleGroupItem value="90" className="max-sm:h-8">90 days</ToggleGroupItem>
               </ToggleGroup>
             </div>
 
@@ -183,8 +183,8 @@ export default function AppServerStatus() {
                           />
                           <span className="truncate">{s.name}</span>
                         </p>
-                        <p className="mt-1 truncate pl-4 font-mono text-[11px] text-white/40">
-                          {s.where} · <span className={down ? "text-[rgb(251_191_36)]" : undefined}>{down ? 412 : s.latency} ms</span>
+                        <p className="mt-1 pl-4 font-mono text-[11px] text-white/55 sm:truncate">
+                          {s.where} <span className="whitespace-nowrap">· <span className={down ? "text-[rgb(251_191_36)]" : undefined}>{down ? 412 : s.latency} ms</span></span>
                         </p>
                       </div>
                       {/* Only a service in trouble gets a live trace; healthy rows stay quiet. */}
@@ -208,13 +208,13 @@ export default function AppServerStatus() {
           <aside aria-labelledby="gc-incidents" className="grid content-start gap-6">
             <div className="flex items-center justify-between">
               <h2 id="gc-incidents" className="text-lg font-semibold tracking-[-0.02em]">Incidents</h2>
-              <span className="font-mono text-[11px] text-white/40">Updated 02:14 UTC</span>
+              <span className="font-mono text-[11px] text-white/55">Updated 02:14 UTC</span>
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">GC-418 · Orbit determination</p>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">GC-418 · Orbit determination</p>
                   <h3 className="mt-1.5 text-base font-semibold leading-snug text-white/90">{INCIDENT.title}</h3>
                 </div>
                 {resolved ? <Badge size="sm" dot>Resolved</Badge> : <Badge size="sm" color="amber" pulse>Monitoring</Badge>}
@@ -234,19 +234,19 @@ export default function AppServerStatus() {
                 <Button size="sm" variant={resolved ? "ghost" : "outline"} onClick={() => setResolved((r) => !r)}>
                   {resolved ? "Reopen incident" : "Mark resolved"}
                 </Button>
-                <span className="font-mono text-[11px] text-white/35">{resolved ? "Post-mortem due Fri" : "On call: R. Okonkwo"}</span>
+                <span className="font-mono text-[11px] text-white/55">{resolved ? "Post-mortem due Fri" : "On call: R. Okonkwo"}</span>
               </div>
             </div>
 
             <div>
-              <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Past 90 days</h3>
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Past 90 days</h3>
               <ul className="mt-3 divide-y divide-white/[0.06] border-y border-white/[0.06]">
                 {PAST.map((p) => (
                   <li key={p.title} className="grid grid-cols-[52px_minmax(0,1fr)] gap-3 py-3 text-sm">
-                    <span className="font-mono text-[11px] leading-5 text-white/40">{p.date}</span>
+                    <span className="font-mono text-[11px] leading-5 text-white/55">{p.date}</span>
                     <span>
                       <span className="block leading-5 text-white/75">{p.title}</span>
-                      <span className="font-mono text-[11px] text-white/35">Resolved · {p.length}</span>
+                      <span className="font-mono text-[11px] text-white/55">Resolved · {p.length}</span>
                     </span>
                   </li>
                 ))}

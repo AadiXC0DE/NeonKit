@@ -66,7 +66,7 @@ export default function TestimonialsMarquee() {
     >
       <div className="mx-auto grid max-w-6xl gap-6 px-5 sm:px-10 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Marginalia · reader mail</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Marginalia · reader mail</p>
           <h2
             id={titleId}
             className="mt-5 max-w-[15ch] text-balance text-[clamp(2.1rem,5vw,3.5rem)] font-semibold leading-[1] tracking-[-0.04em]"
@@ -83,7 +83,7 @@ export default function TestimonialsMarquee() {
             type="button"
             aria-pressed={paused}
             onClick={() => setPaused((value) => !value)}
-            className="inline-flex h-8 items-center gap-2 self-start rounded-full border border-white/10 bg-white/[0.03] px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-white/60 outline-none transition-colors hover:border-white/20 hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a] lg:self-end"
+            className="inline-flex h-9 items-center gap-2 self-start rounded-full border border-white/10 bg-white/[0.03] px-3 font-mono text-[11px] uppercase tracking-[0.14em] text-white/60 outline-none transition-colors hover:border-white/20 hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a] lg:self-end"
           >
             {paused ? <Play aria-hidden className="size-3" /> : <Pause aria-hidden className="size-3" />}
             {paused ? "Play" : "Pause"}
@@ -112,7 +112,7 @@ export default function TestimonialsMarquee() {
                 <Avatar alt={story.name} size="sm" />
                 <span className="min-w-0 text-sm leading-tight">
                   <span className="block truncate font-medium text-white/90">{story.name}</span>
-                  <span className="block truncate text-[13px] text-white/45">{story.role}</span>
+                  <span className="block truncate text-[13px] text-white/60">{story.role}</span>
                 </span>
               </figcaption>
             </figure>
@@ -129,8 +129,8 @@ export default function TestimonialsMarquee() {
                 <p>{note.quote}</p>
               </blockquote>
               <figcaption className="flex items-baseline justify-between gap-3">
-                <span className="truncate text-xs text-white/50">{note.who}</span>
-                <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.12em] text-white/25">
+                <span className="truncate text-xs text-white/60">{note.who}</span>
+                <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.12em] text-white/55">
                   via {note.source}
                 </span>
               </figcaption>

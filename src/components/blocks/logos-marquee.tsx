@@ -104,7 +104,7 @@ export default function LogosMarquee() {
     >
       <div className="mx-auto grid max-w-6xl gap-6 px-5 sm:px-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">In production</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">In production</p>
           <h2
             id={titleId}
             className="mt-4 text-balance text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1] tracking-[-0.04em]"
@@ -154,16 +154,15 @@ export default function LogosMarquee() {
             </span>
           ))}
         </Marquee>
-
       </div>
 
       <div className="mx-auto mt-8 flex max-w-6xl flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 sm:px-10">
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/35">
-          <span className="text-white/60">+41</span> since Monday · list updated weekly
+        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
+          <span className="text-white/80">+41</span> since Monday · list updated weekly
         </p>
         <a
           href="#"
-          className="group inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
+          className="group -my-2 inline-flex items-center gap-1.5 rounded-md py-2 text-sm font-medium text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
         >
           Customer stories
           <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />

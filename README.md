@@ -2,7 +2,7 @@
 
 Neon UI components for React and Tailwind. Calm at rest, lit when it matters. Copy them in or add them with the shadcn CLI. Either way the code is yours.
 
-**[get-neonkit.vercel.app](https://get-neonkit.vercel.app)** · [Components](https://get-neonkit.vercel.app/components) · [Blocks](https://get-neonkit.vercel.app/blocks) · [Use with AI](https://get-neonkit.vercel.app/docs/ai) · [Request a component](https://get-neonkit.vercel.app/request)
+**[get-neonkit.vercel.app](https://get-neonkit.vercel.app)** · [Components](https://get-neonkit.vercel.app/components) · [Blocks](https://get-neonkit.vercel.app/blocks) · [Templates](https://get-neonkit.vercel.app/templates) · [Use with AI](https://get-neonkit.vercel.app/docs/ai) · [Request a component](https://get-neonkit.vercel.app/request)
 
 ![NeonKit](https://get-neonkit.vercel.app/opengraph-image)
 
@@ -33,6 +33,16 @@ npx shadcn@latest add @neonkit/switch @neonkit/tabs @neonkit/toast
 ```bash
 npx shadcn@latest add https://get-neonkit.vercel.app/r/hero-city.json
 ```
+
+## Start from a template
+
+[Templates](https://get-neonkit.vercel.app/templates) are complete Next.js sites: a SaaS landing, a dashboard, a portfolio, a launch event and a docs starter. One command writes the pages to `app/<name>`, their sections to `components/templates/<name>` and installs every component they use:
+
+```bash
+npx shadcn@latest add https://get-neonkit.vercel.app/r/saas.json
+```
+
+Each template keeps its color, brand and base path in one `config.ts`. Change the color there and the whole site follows.
 
 ## With AI agents
 

@@ -32,9 +32,9 @@ export default function HeroSign() {
         style={{ opacity: on ? 1 : 0 }}
       />
 
-      <header className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-white/40">
+      <header className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-white/55">
         <span>Nightshift</span>
-        <Switch size="sm" checked={on} onCheckedChange={setOn} label={<span className="text-xs uppercase tracking-[0.2em] text-white/40">Power</span>} />
+        <Switch size="sm" checked={on} onCheckedChange={setOn} label={<span className="text-xs uppercase tracking-[0.2em] text-white/55">Power</span>} />
       </header>
 
       <div className="flex flex-1 flex-col items-center justify-center py-16 text-center">

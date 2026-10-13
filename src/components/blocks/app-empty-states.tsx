@@ -53,7 +53,7 @@ function Panel({ eyebrow, title, children, art }: { eyebrow: string; title: stri
     <article aria-labelledby={id} className="group flex flex-col rounded-[20px] border border-white/10 bg-white/[0.02] p-3 outline-none transition-colors duration-300 hover:border-white/[0.16]">
       {art}
       <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">{eyebrow}</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">{eyebrow}</p>
         <h3 id={id} className="mt-2 text-xl font-semibold tracking-[-0.02em] text-white/90">{title}</h3>
         {children}
       </div>
@@ -67,10 +67,20 @@ export default function AppEmptyStates() {
   const [network, setNetwork] = React.useState<"offline" | "busy" | "online">("offline");
   const [quiet, setQuiet] = React.useState(false);
   const searchRef = React.useRef<HTMLInputElement>(null);
+  const createRef = React.useRef<HTMLButtonElement>(null);
+  const undoRef = React.useRef<HTMLButtonElement>(null);
+  const networkRef = React.useRef<HTMLButtonElement>(null);
   const timers = React.useRef<number[]>([]);
 
   React.useEffect(() => () => timers.current.forEach(window.clearTimeout), []);
   const later = (fn: () => void, ms: number) => timers.current.push(window.setTimeout(fn, ms));
+  // Loading buttons are disabled, which drops focus. Put it back once the action settles,
+  // unless the person has already moved on to something else.
+  const refocus = (ref: React.RefObject<HTMLElement | null>) =>
+    requestAnimationFrame(() => {
+      const active = document.activeElement;
+      if (!active || active === document.body) ref.current?.focus();
+    });
 
   const q = query.trim().toLowerCase();
   const results = q ? NOTES.filter((n) => `${n.title} ${n.room}`.toLowerCase().includes(q)) : [];
@@ -87,7 +97,7 @@ export default function AppEmptyStates() {
       <div className="mx-auto max-w-[1120px]">
         <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,360px)] md:items-end">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Quietroom · Empty states</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Quietroom · Empty states</p>
             <h2 id="qr-empty-title" className="mt-3 text-[clamp(2.25rem,4.6vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em]">
               Nothing here yet,
               <span className="block text-white/40">and that&apos;s fine.</span>
@@ -108,13 +118,13 @@ export default function AppEmptyStates() {
                 <p role="status" className="flex items-center gap-2 text-sm text-white/80">
                   <span className="size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]" />
                   Untitled room created.
-                  <button type="button" onClick={() => setCreating("idle")} className="rounded-md text-white/45 underline-offset-4 outline-none hover:text-white/80 hover:underline focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
+                  <button ref={undoRef} type="button" onClick={() => { setCreating("idle"); requestAnimationFrame(() => createRef.current?.focus()); }} className="rounded-md text-white/60 underline-offset-4 outline-none hover:text-white/80 hover:underline focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
                     Undo
                   </button>
                 </p>
               ) : (
                 <>
-                  <Button variant="solid" size="sm" loading={creating === "busy"} onClick={() => { setCreating("busy"); later(() => setCreating("done"), 800); }}>
+                  <Button ref={createRef} variant="solid" size="sm" loading={creating === "busy"} onClick={() => { setCreating("busy"); later(() => { setCreating("done"); refocus(undoRef); }, 800); }}>
                     Create a room
                   </Button>
                   <Button variant="ghost" size="sm">Import from Slack</Button>
@@ -132,14 +142,14 @@ export default function AppEmptyStates() {
               onChange={(e) => setQuery(e.target.value)}
               leading={<Search />}
               trailing={query && (
-                <button type="button" aria-label="Clear search" onClick={() => { setQuery(""); searchRef.current?.focus(); }} className="rounded-md text-white/40 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
+                <button type="button" aria-label="Clear search" onClick={() => { setQuery(""); searchRef.current?.focus(); }} className="-m-1.5 grid size-6 place-items-center rounded-md text-white/55 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
                   <X />
                 </button>
               )}
               containerClassName="mt-3"
             />
             <div aria-live="polite" className="mt-3 min-h-[60px] text-sm">
-              {!q && <p className="text-white/45">Try <span className="text-white/75">standup</span>, <span className="text-white/75">retro</span> or a room name.</p>}
+              {!q && <p className="text-white/60">Try <span className="text-white/75">standup</span>, <span className="text-white/75">retro</span> or a room name.</p>}
               {q && !results.length && (
                 <p className="leading-relaxed text-white/55">
                   Nothing for &ldquo;<span className="text-white/85">{query.trim()}</span>&rdquo; in 5 notes. Check the spelling or search all rooms.
@@ -150,7 +160,7 @@ export default function AppEmptyStates() {
                   {results.slice(0, 2).map((n) => (
                     <li key={n.title} className="flex items-baseline justify-between gap-3 py-1.5">
                       <span className="truncate text-white/85">{n.title}</span>
-                      <span className="shrink-0 font-mono text-[11px] text-white/40">{n.room} · {n.length}</span>
+                      <span className="shrink-0 font-mono text-[11px] text-white/55">{n.room} · {n.length}</span>
                     </li>
                   ))}
                 </ul>
@@ -170,13 +180,13 @@ export default function AppEmptyStates() {
             </p>
             <div className="mt-auto flex items-center gap-3 pt-6">
               {network === "online" ? (
-                <Button variant="ghost" size="sm" onClick={() => setNetwork("offline")}>Simulate drop</Button>
+                <Button ref={networkRef} variant="ghost" size="sm" onClick={() => setNetwork("offline")}>Simulate drop</Button>
               ) : (
-                <Button variant="outline" size="sm" loading={network === "busy"} onClick={() => { setNetwork("busy"); later(() => setNetwork("online"), 1200); }}>
+                <Button ref={networkRef} variant="outline" size="sm" loading={network === "busy"} onClick={() => { setNetwork("busy"); later(() => { setNetwork("online"); refocus(networkRef); }, 1200); }}>
                   {network === "busy" ? "Reconnecting" : "Try again"}
                 </Button>
               )}
-              <span className="font-mono text-[11px] text-white/35">{network === "online" ? "Synced just now" : "Last sync 14:02"}</span>
+              <span className="font-mono text-[11px] text-white/55">{network === "online" ? "Synced just now" : "Last sync 14:02"}</span>
             </div>
           </Panel>
 

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { blocks } from "@/registry";
+import { blocks, templates } from "@/registry";
 import { DocsNav } from "./docs-nav";
 import { GitHubIcon } from "./icons";
 import { Logo } from "./logo";
@@ -17,6 +17,7 @@ const links = [
   { title: "Components", href: "/components" },
   // Advertised once there's a real gallery, not a single pilot block.
   ...(blocks.length >= 6 ? [{ title: "Blocks", href: "/blocks" }] : []),
+  ...(templates.length > 0 ? [{ title: "Templates", href: "/templates" }] : []),
   { title: "Use with AI", href: "/docs/ai" },
   { title: "Sponsor", href: "/sponsor" },
 ];

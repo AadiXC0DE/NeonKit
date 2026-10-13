@@ -106,7 +106,7 @@ function Row({
   return (
     <div className="grid gap-10 border-t border-white/[0.07] py-14 lg:grid-cols-12 lg:items-center lg:gap-x-12 lg:py-20">
       <div className={cn("lg:row-start-1 lg:col-span-5", flip ? "lg:col-start-8" : "lg:col-start-1")}>
-        <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+        <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
           <span className="text-[rgb(var(--neon))]">{index}</span>
           <span aria-hidden className="h-px w-8 bg-white/15" />
           {label}
@@ -118,7 +118,7 @@ function Row({
         <dl className="mt-8 max-w-md border-b border-white/[0.06]">
           {specs.map(([k, v]) => (
             <div key={k} className="flex items-baseline justify-between gap-6 border-t border-white/[0.06] py-2.5">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">{k}</dt>
+              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{k}</dt>
               <dd className="text-right text-sm text-white/75">{v}</dd>
             </div>
           ))}
@@ -149,8 +149,20 @@ function InvoiceSearch() {
 
   return (
     <Stage>
-      <Command label="Search invoices" onValueChange={setActive} className="shadow-none">
-        <CommandInput ref={inputRef} placeholder="Search invoices, clients, amounts…" value={search} onValueChange={setSearch} />
+      <Command
+        label="Search invoices"
+        onValueChange={setActive}
+        className="shadow-none [&_[data-command-group-heading]]:text-white/55"
+      >
+        <CommandInput
+          ref={inputRef}
+          placeholder="Search invoices, clients, amounts…"
+          value={search}
+          onValueChange={(v) => {
+            setSearch(v);
+            setResult(null);
+          }}
+        />
         <CommandList className="h-[248px] max-h-none">
           <CommandEmpty>No invoice matches that. Try a client or an amount.</CommandEmpty>
           <CommandGroup heading="Invoices">
@@ -162,7 +174,7 @@ function InvoiceSearch() {
                 onSelect={() => setResult(`Opened ${inv.id} for ${inv.client}`)}
               >
                 <span className="flex items-center gap-3">
-                  <span className="w-[4.25rem] shrink-0 font-mono text-xs text-white/45">
+                  <span className="w-[4.25rem] shrink-0 font-mono text-xs text-white/60">
                     <Mark text={inv.id} query={search} />
                   </span>
                   <span className="truncate">
@@ -190,11 +202,11 @@ function InvoiceSearch() {
               </Badge>
             </>
           ) : (
-            <span className="text-white/45">Enter to run</span>
+            <span className="text-white/60">Enter to run</span>
           )}
         </div>
       </Command>
-      <p aria-live="polite" className="flex h-9 items-center gap-2 px-2 pt-2 font-mono text-[11px] text-white/45">
+      <p aria-live="polite" className="flex h-11 items-center gap-2 px-2 pt-2 font-mono text-[11px] text-white/60 sm:h-9">
         {result ? (
           <>
             <span aria-hidden className="size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />
@@ -211,7 +223,7 @@ function InvoiceSearch() {
                   setSearch(q);
                   inputRef.current?.focus();
                 }}
-                className="cursor-pointer rounded-md border border-white/10 px-1.5 py-0.5 text-white/65 outline-none transition-colors hover:border-[rgb(var(--neon)/0.5)] hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className="inline-flex h-8 cursor-pointer items-center rounded-md border border-white/10 px-2 text-white/65 sm:h-6 sm:px-1.5 outline-none transition-colors hover:border-[rgb(var(--neon)/0.5)] hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
               >
                 {q}
               </button>
@@ -233,7 +245,7 @@ function DueCalendar() {
       <div className="grid overflow-hidden rounded-xl border border-white/10 bg-[#0a0b11] sm:grid-cols-[auto_1fr]">
         <div className="flex justify-center border-b border-white/[0.06] p-3 sm:border-b-0 sm:border-r">
           <Calendar
-            className="nk-features-alternating-cal"
+            className="nk-features-alternating-cal [&_[role=columnheader]]:text-white/55"
             selected={day}
             onSelect={setDay}
             defaultMonth={MONTH}
@@ -241,7 +253,7 @@ function DueCalendar() {
           />
         </div>
         <div className="flex min-w-0 flex-col p-5">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">Due</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Due</p>
           <p className="mt-1.5 text-lg font-medium tracking-[-0.01em] text-white">{longDay.format(day)}</p>
           <ul aria-live="polite" className="mt-4 flex-1 space-y-2">
             {due.length ? (
@@ -251,17 +263,17 @@ function DueCalendar() {
                     <span className="truncate text-sm text-white/85">{d.client}</span>
                     <span className="shrink-0 font-mono text-[13px] tabular-nums text-white/85">{d.amount}</span>
                   </div>
-                  <div className="mt-1 font-mono text-[11px] text-white/40">{d.ref} · reminder 3 days before</div>
+                  <div className="mt-1 font-mono text-[11px] text-white/55">{d.ref} · reminder 3 days before</div>
                 </li>
               ))
             ) : (
-              <li className="rounded-lg border border-dashed border-white/10 px-3 py-4 text-sm text-white/45">
+              <li className="rounded-lg border border-dashed border-white/10 px-3 py-4 text-sm text-white/60">
                 Nothing due. A good day to send invoices.
               </li>
             )}
           </ul>
           <div className="mt-5 flex items-baseline justify-between border-t border-white/[0.06] pt-3">
-            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/40">November</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">November</span>
             <span className="font-mono text-sm tabular-nums text-[rgb(var(--neon))]">$22,785.50</span>
           </div>
         </div>
@@ -294,7 +306,7 @@ function BankFeed() {
       <div className="flex flex-wrap items-center justify-between gap-3 px-2 pb-3 pt-1">
         <div className="min-w-0">
           <p className="truncate text-sm text-white/85">Northline Credit Union ··4410</p>
-          <p className="font-mono text-[11px] text-white/40">
+          <p className="font-mono text-[11px] text-white/55">
             {rows.length - open.length} of {rows.length} reconciled · synced 4 min ago
           </p>
         </div>
@@ -302,7 +314,7 @@ function BankFeed() {
           {selected.size ? `Reconcile ${selected.size}` : open.length ? "Select to reconcile" : "All reconciled"}
         </Button>
       </div>
-      <Table density="compact" containerClassName="bg-[#0a0b11]" className="min-w-[560px]">
+      <Table density="compact" containerClassName="bg-[#0a0b11] overscroll-x-contain" className="min-w-[560px]">
         <TableHeader>
           <TableRow>
             <TableHead className="w-10">
@@ -333,7 +345,7 @@ function BankFeed() {
                   onCheckedChange={(on) => toggle(row.id, on)}
                 />
               </TableCell>
-              <TableCell className="whitespace-nowrap font-mono text-xs text-white/45">{row.date}</TableCell>
+              <TableCell className="whitespace-nowrap font-mono text-xs text-white/60">{row.date}</TableCell>
               <TableCell className="whitespace-nowrap font-mono text-xs text-white/80">{row.memo}</TableCell>
               <TableCell className="whitespace-nowrap">
                 {row.matched ? (
@@ -368,7 +380,7 @@ export default function FeaturesAlternating() {
     >
       <div className="mx-auto max-w-[1200px]">
         <header className="max-w-2xl pb-12 lg:pb-16">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Ledgerline · Books for studios of 2 to 40</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Ledgerline · Books for studios of 2 to 40</p>
           <h2
             id="features-alternating-title"
             className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"

@@ -515,7 +515,7 @@ const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
                           key={column}
                           role="columnheader"
                           aria-label={name.long}
-                          className="flex h-8 items-center justify-center text-[11px] font-medium text-white/40"
+                          className="flex h-8 items-center justify-center text-[11px] font-medium text-white/55"
                         >
                           <span aria-hidden>{name.short}</span>
                         </div>
@@ -620,7 +620,7 @@ const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
                                           outside ? "text-white/55" : "text-white",
                                         )
                                       : outside
-                                        ? "text-white/30 hover:bg-white/[0.05] hover:text-white/60"
+                                        ? "text-white/50 hover:bg-white/[0.05] hover:text-white/60"
                                         : "text-white/80 hover:bg-white/[0.07] hover:text-white",
                                   previewing && "text-white shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.7)]",
                                   dayDisabled &&

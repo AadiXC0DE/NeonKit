@@ -16,6 +16,19 @@ import {
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
+
+/**
+ * Base UI spells asChild as `render={<Link />}` plus `nativeButton`, and the shadcn CLI rewrites
+ * asChild into that form in base-* projects. Folds it back into asChild and children.
+ */
+function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }: P): Omit<P, "render" | "nativeButton"> {
+  void nativeButton; // Only meaningful to Base UI.
+  if (!render) return props;
+  const children = props.children === undefined ? render : React.cloneElement(render, undefined, props.children);
+  return { ...props, asChild: true, children };
+}
+
 type Side = "top" | "right" | "bottom" | "left";
 type Align = "start" | "center" | "end";
 type AnyProps = Record<string, unknown>;
@@ -280,11 +293,15 @@ HoverCard.displayName = "HoverCard";
 export interface HoverCardTriggerProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Merge hover behaviour onto the single child element instead of rendering a link. */
   asChild?: boolean;
+  /** Base UI-style asChild: `render={<Link href="/" />}`. */
+  render?: React.ReactElement;
+  /** Accepted for Base UI compatibility; no effect. */
+  nativeButton?: boolean;
 }
 
 const HoverCardTrigger = React.forwardRef<HTMLAnchorElement, HoverCardTriggerProps>(
-  (
-    {
+  (raw, forwardedRef) => {
+    const {
       asChild = false,
       className,
       onPointerEnter,
@@ -293,9 +310,7 @@ const HoverCardTrigger = React.forwardRef<HTMLAnchorElement, HoverCardTriggerPro
       onBlur,
       "aria-describedby": ariaDescribedBy,
       ...props
-    },
-    forwardedRef,
-  ) => {
+    } = fromRenderProp(raw);
     const card = useHoverCard("HoverCardTrigger");
     const ref = useComposedRefs<HTMLAnchorElement>(forwardedRef, card.setTriggerEl);
     const describedBy = [ariaDescribedBy, card.open ? card.contentId : undefined].filter(Boolean).join(" ") || undefined;

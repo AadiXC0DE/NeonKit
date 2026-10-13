@@ -73,7 +73,7 @@ function Dashboard() {
         <div className="flex items-center gap-2 px-2 py-1.5">
           <span className="grid size-6 place-items-center rounded-md bg-[rgb(var(--neon)/0.16)] text-[11px] font-semibold text-[rgb(var(--neon))]">F</span>
           <span className="text-sm font-medium text-white/85">Fernway</span>
-          <span className="ml-auto font-mono text-[10px] text-white/30">prod</span>
+          <span className="ml-auto font-mono text-[10px] text-white/55">prod</span>
         </div>
         <ul className="mt-4 grid gap-0.5 text-[13px]">
           {NAV.map((item, i) => (
@@ -81,16 +81,16 @@ function Dashboard() {
               key={item.label}
               className={cn(
                 "flex items-center gap-2.5 rounded-lg px-2 py-1.5",
-                i === 0 ? "bg-white/[0.05] text-white/90" : "text-white/50",
+                i === 0 ? "bg-white/[0.05] text-white/90" : "text-white/60",
               )}
             >
               <item.icon aria-hidden className={cn("size-3.5", i === 0 ? "text-[rgb(var(--neon))]" : "text-white/35")} />
               {item.label}
-              {item.count && <span className="ml-auto font-mono text-[10px] text-white/30">{item.count}</span>}
+              {item.count && <span className="ml-auto font-mono text-[10px] text-white/55">{item.count}</span>}
             </li>
           ))}
         </ul>
-        <p className="mt-8 flex items-center gap-2 px-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">
+        <p className="mt-8 flex items-center gap-2 px-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
           <span className="size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />
           312 online now
         </p>
@@ -99,9 +99,9 @@ function Dashboard() {
       <div className="min-w-0 p-4 sm:p-5">
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm font-medium text-white/85">
-            Overview <span className="text-white/35">· last 30 days</span>
+            Overview <span className="text-white/55">· last 30 days</span>
           </p>
-          <span className="hidden rounded-md border border-white/10 px-2 py-1 font-mono text-[10px] text-white/45 sm:block">Sep 13 – Oct 12</span>
+          <span className="hidden rounded-md border border-white/10 px-2 py-1 font-mono text-[10px] text-white/55 sm:block">Sep 13 – Oct 12</span>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-4">
@@ -121,7 +121,7 @@ function Dashboard() {
                     : "border-white/[0.07] bg-white/[0.02] hover:border-white/15",
                 )}
               >
-                <span className="block truncate text-[11px] text-white/45">{m.label}</span>
+                <span className="block truncate text-[11px] text-white/60">{m.label}</span>
                 <span className="mt-1 flex items-baseline justify-between gap-2">
                   <span className="text-lg font-semibold tracking-[-0.02em] text-white/90 sm:text-xl">{m.value}</span>
                   <span className={cn("font-mono text-[10px]", m.up ? "text-[rgb(52_211_153)]" : "text-[rgb(255_77_94)]")}>{m.delta}</span>
@@ -148,7 +148,7 @@ function Dashboard() {
         <table className="mt-4 w-full text-[13px]">
           <caption className="sr-only">Top events this month</caption>
           <thead>
-            <tr className="border-b border-white/[0.06] text-left font-mono text-[10px] uppercase tracking-[0.14em] text-white/35">
+            <tr className="border-b border-white/[0.06] text-left font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
               <th scope="col" className="py-2 font-normal">Event</th>
               <th scope="col" className="hidden py-2 text-right font-normal sm:table-cell">Users</th>
               <th scope="col" className="py-2 text-right font-normal">Count</th>
@@ -167,7 +167,7 @@ function Dashboard() {
                     )}
                   </span>
                 </td>
-                <td className="hidden py-2.5 text-right tabular-nums text-white/45 sm:table-cell">{event.users}</td>
+                <td className="hidden py-2.5 text-right tabular-nums text-white/60 sm:table-cell">{event.users}</td>
                 <td className="py-2.5 text-right tabular-nums text-white/75">{event.count}</td>
               </tr>
             ))}
@@ -189,7 +189,7 @@ export default function HeroProduct() {
       <div aria-hidden className="absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(ellipse_50%_70%_at_50%_0%,rgb(var(--neon)/0.12),transparent_70%)]" />
 
       <div className="mx-auto max-w-3xl text-center">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Product analytics · no cookies</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Product analytics · no cookies</p>
         <h1
           id="tally-hero-title"
           className="mt-5 [text-wrap:balance] text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/95"
@@ -210,7 +210,7 @@ export default function HeroProduct() {
             <a href="#demo">Open the live demo</a>
           </Button>
         </div>
-        <p className="mt-5 font-mono text-[11px] text-white/35">Free to 100k events a month · $0.09 per 1k after</p>
+        <p className="mt-5 font-mono text-[11px] text-white/55">Free to 100k events a month · $0.09 per 1k after</p>
       </div>
 
       {/* The screenshot, laid back in perspective, with its light pooling on the floor beneath. */}
