@@ -8,6 +8,17 @@ export type Release = {
 
 export const releases: Release[] = [
   {
+    version: "1.3",
+    date: "2026-10-13",
+    title: "Blocks",
+    notes: [
+      "Whole sections built from NeonKit components: navbars, heroes, features, pricing, testimonials, FAQs, calls to action, footers, auth screens, app screens and marketing pages.",
+      "Every block works in the preview. Forms validate, tabs switch, cards move, players play. Each one holds up at desktop, tablet and phone widths.",
+      "One shadcn command adds a block and every component it uses. Change the color at the block's root and everything inside follows.",
+      "A page for every block, with a viewport switcher, the source and install steps.",
+    ],
+  },
+  {
     version: "1.2",
     date: "2026-10-12",
     title: "Signature neon",

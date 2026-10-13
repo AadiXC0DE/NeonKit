@@ -68,6 +68,17 @@ src/lib/utils.ts                    cn()
 
 **Code style.** `"use client"` at the top when the file uses hooks or events. Two-space indent, double quotes, semicolons. Keep comments to the ones that explain a non-obvious why. Put named exports at the bottom.
 
+## Blocks
+
+Blocks are whole sections (heroes, pricing, auth screens, app shells) built from the components. Same rules as components, plus:
+
+- **File.** `src/components/blocks/<slug>.tsx`, one file with a default export. List it in `registry.json` → `blocks` with `dependencies`, `registryDependencies`, `addedIn` and the preview `height`. The build fails if the imports and the entry disagree.
+- **Imports.** `react`, `@/lib/utils`, `@/lib/neon`, NeonKit components and listed npm packages. No `next/*`: blocks get pasted into any React app.
+- **Color.** Set it once at the root with `style={neonVars("<color>")}` and a comment saying so. Everything inside inherits it.
+- **Content.** A believable fictional product with specific copy and numbers, kept in constants at the top of the file. Anything that looks interactive works in the preview: forms validate and show a success state, tabs switch, filters filter.
+- **Layout.** Holds up at 1440, 768 and 390 px with no horizontal page scroll. Heroes have one `h1`. Sections that sit inside a page (features, pricing, footers…) use `h2`.
+- **Preview.** Each block renders alone at `/view/<slug>` and in the gallery at `/blocks/<slug>`. After adding or changing one, refresh its thumbnail against a production build: `npm run build && npm start`, then `npm run blocks:thumbs -- <slug>`.
+
 ## Examples and docs
 
 - Each example is a default-exported component in `src/registry/examples/<slug>/<name>.tsx`. Readers copy these, so imports point at `@/components/ui/...` and the content is realistic. No lorem ipsum, no "Option 1".

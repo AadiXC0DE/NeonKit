@@ -2,9 +2,9 @@ import data from "./registry.json";
 import type { RegistryBlock, RegistryItem } from "./types";
 
 /** The release being built. */
-export const currentVersion = "1.2";
+export const currentVersion = "1.3";
 /** Items added in these releases get a "new" badge. */
-export const newVersions = ["1.1", "1.2"];
+export const newVersions = ["1.2", "1.3"];
 
 export const categories = data.categories;
 export const registry: RegistryItem[] = data.items;
@@ -17,6 +17,21 @@ export const blocks: RegistryBlock[] = data.blocks;
 export function getBlock(slug: string) {
   return blocks.find((block) => block.slug === slug);
 }
+
+/** Blocks in gallery order: by category, then registry order within each. */
+export const orderedBlocks: RegistryBlock[] = blockCategories.flatMap((category) =>
+  blocks.filter((block) => block.category === category),
+);
+
+export function getBlockNeighbours(slug: string) {
+  const index = orderedBlocks.findIndex((block) => block.slug === slug);
+  return {
+    prev: index > 0 ? orderedBlocks[index - 1] : undefined,
+    next: index >= 0 && index < orderedBlocks.length - 1 ? orderedBlocks[index + 1] : undefined,
+  };
+}
+
+export { blockCategoryId } from "./ids";
 
 export const blockPath = (slug: string) => `src/components/blocks/${slug}.tsx`;
 

@@ -25,7 +25,7 @@ function Screw({ className }: { className?: string }) {
   );
 }
 
-export function Hero({ componentCount }: { componentCount: number }) {
+export function Hero({ componentCount, blockCount }: { componentCount: number; blockCount: number }) {
   const accent = useAccent();
   const [on, setOn] = React.useState(true);
 
@@ -43,7 +43,7 @@ export function Hero({ componentCount }: { componentCount: number }) {
         <h1 className="sr-only">NeonKit: neon UI components for React and Tailwind CSS</h1>
         <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
           <span>Neon UI for React</span>
-          <span className="hidden sm:inline">{componentCount} components · MIT</span>
+          <span className="hidden sm:inline">{componentCount} components · {blockCount} blocks · MIT</span>
         </div>
 
         {/* The sign */}

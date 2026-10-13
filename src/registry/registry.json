@@ -464,7 +464,7 @@
       "slug": "command",
       "name": "Command",
       "category": "Overlay",
-      "description": "A \u2318K palette with groups, fuzzy search and keyboard navigation.",
+      "description": "A ⌘K palette with groups, fuzzy search and keyboard navigation.",
       "dependencies": [
         "motion",
         "lucide-react"
@@ -615,7 +615,7 @@
       "slug": "led-matrix",
       "name": "LED Matrix",
       "category": "Text",
-      "description": "Dot-matrix marquee with a built-in 5\u00d77 font.",
+      "description": "Dot-matrix marquee with a built-in 5×7 font.",
       "dependencies": [],
       "addedIn": "1.2"
     },
@@ -841,12 +841,14 @@
     }
   ],
   "blockCategories": [
+    "Navigation",
     "Heroes",
     "Features",
-    "Pricing",
+    "Social proof",
     "Testimonials",
+    "Pricing",
+    "FAQ",
     "Calls to action",
-    "Navigation",
     "Footers",
     "Auth",
     "App",
@@ -868,6 +870,887 @@
       ],
       "addedIn": "1.1",
       "height": 720
+    },
+    {
+      "slug": "navbar-minimal",
+      "name": "Minimal Navbar",
+      "category": "Navigation",
+      "description": "Quiet navbar with a lit tube under the active link and a large-type mobile sheet.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "sheet"
+      ],
+      "addedIn": "1.3",
+      "height": 425
+    },
+    {
+      "slug": "navbar-mega",
+      "name": "Mega Menu Navbar",
+      "category": "Navigation",
+      "description": "Mega menu with a live CI pipeline readout and a collapsible mobile sheet.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "collapsible",
+        "navigation-menu",
+        "sheet"
+      ],
+      "addedIn": "1.3",
+      "height": 520
+    },
+    {
+      "slug": "navbar-floating",
+      "name": "Floating Navbar",
+      "category": "Navigation",
+      "description": "Floating pill nav that tightens on scroll and grows a glowing reading-progress hairline.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "addedIn": "1.3",
+      "height": 640
+    },
+    {
+      "slug": "hero-grid",
+      "name": "Grid Hero",
+      "category": "Heroes",
+      "description": "Retro-grid hero with a working email capture and a live webhook delivery log.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "input",
+        "retro-grid"
+      ],
+      "addedIn": "1.3",
+      "height": 948
+    },
+    {
+      "slug": "hero-terminal",
+      "name": "Terminal Hero",
+      "category": "Heroes",
+      "description": "Split hero where a typing terminal deploys, then 38 region bars light up on success.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "copy-button",
+        "terminal"
+      ],
+      "addedIn": "1.3",
+      "height": 802
+    },
+    {
+      "slug": "hero-city",
+      "name": "City Hero",
+      "category": "Heroes",
+      "description": "Night-skyline launch hero with a neon-tube countdown and a notify-me form.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "cityscape",
+        "countdown",
+        "input"
+      ],
+      "addedIn": "1.3",
+      "height": 1049
+    },
+    {
+      "slug": "hero-product",
+      "name": "Product Hero",
+      "category": "Heroes",
+      "description": "Centered hero over a tilted, interactive analytics dashboard with light pooling beneath.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "glow-chart"
+      ],
+      "addedIn": "1.3",
+      "height": 1224
+    },
+    {
+      "slug": "hero-split-form",
+      "name": "Split Form Hero",
+      "category": "Heroes",
+      "description": "Split hero with a working email, OTP and vault-created sign-up flow.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "otp-input"
+      ],
+      "addedIn": "1.3",
+      "height": 875
+    },
+    {
+      "slug": "features-bento",
+      "name": "Bento Features",
+      "category": "Features",
+      "description": "Live bento of meters, a threshold knob, latency readout, ECG watchdog and terminal.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "heartbeat",
+        "knob",
+        "meter",
+        "seven-segment",
+        "terminal",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1429
+    },
+    {
+      "slug": "features-alternating",
+      "name": "Alternating Features",
+      "category": "Features",
+      "description": "Three alternating rows of live UI: invoice search, due-date calendar, bank reconcile.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "calendar",
+        "checkbox",
+        "command",
+        "table"
+      ],
+      "addedIn": "1.3",
+      "height": 1945
+    },
+    {
+      "slug": "features-spotlight",
+      "name": "Spotlight Features",
+      "category": "Features",
+      "description": "Spotlight cards where the number is the hero and lights up like a tube on hover.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "spotlight-card"
+      ],
+      "addedIn": "1.3",
+      "height": 1190
+    },
+    {
+      "slug": "features-comparison",
+      "name": "Before and After",
+      "category": "Features",
+      "description": "Before and after columns; a rocker switch powers the lit column's checks in sequence.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "hardware-switch"
+      ],
+      "addedIn": "1.3",
+      "height": 937
+    },
+    {
+      "slug": "features-steps",
+      "name": "Feature Steps",
+      "category": "Features",
+      "description": "Three working steps joined by a Stepper tube that fills as each one completes.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "stepper"
+      ],
+      "addedIn": "1.3",
+      "height": 983
+    },
+    {
+      "slug": "logos-grid",
+      "name": "Logo Grid",
+      "category": "Social proof",
+      "description": "A hairline grid of twelve type-drawn wordmarks that flicker on like signs when hovered.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.3",
+      "height": 838
+    },
+    {
+      "slug": "logos-marquee",
+      "name": "Logo Marquee",
+      "category": "Social proof",
+      "description": "A logo marquee under a strip lamp: each wordmark lights up as it passes the middle.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "marquee"
+      ],
+      "addedIn": "1.3",
+      "height": 533
+    },
+    {
+      "slug": "stats-counters",
+      "name": "Stat Counters",
+      "category": "Social proof",
+      "description": "Seven-segment stats that count up in view, led by a live requests-served counter.",
+      "dependencies": [],
+      "registryDependencies": [
+        "seven-segment"
+      ],
+      "addedIn": "1.3",
+      "height": 1037
+    },
+    {
+      "slug": "stats-chart",
+      "name": "Stats with Chart",
+      "category": "Social proof",
+      "description": "Uptime KPIs and a glowing p95 chart with an SLO line and a 7/30/90-day range switch.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "glow-chart",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1049
+    },
+    {
+      "slug": "testimonials-wall",
+      "name": "Testimonial Wall",
+      "category": "Testimonials",
+      "description": "A masonry wall of twelve quotes with one lit featured card and a show-all toggle.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button"
+      ],
+      "addedIn": "1.3",
+      "height": 1097
+    },
+    {
+      "slug": "testimonials-marquee",
+      "name": "Testimonial Marquee",
+      "category": "Testimonials",
+      "description": "Two opposing quote marquees; hovering a card pauses it and lights its highlighted line.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "marquee"
+      ],
+      "addedIn": "1.3",
+      "height": 790
+    },
+    {
+      "slug": "testimonial-hero",
+      "name": "Big Quote",
+      "category": "Testimonials",
+      "description": "An editorial big quote signed with a neon name sign that re-strikes per story.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "neon-sign"
+      ],
+      "addedIn": "1.3",
+      "height": 765
+    },
+    {
+      "slug": "pricing-tiers",
+      "name": "Pricing Tiers",
+      "category": "Pricing",
+      "description": "Three plans with an odometer price roll on billing switch and a beamed featured tier.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "border-beam",
+        "button",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1044
+    },
+    {
+      "slug": "pricing-single",
+      "name": "Single Plan",
+      "category": "Pricing",
+      "description": "One plan with a lit price driven by a pageview slider and an honest not-included list.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "slider"
+      ],
+      "addedIn": "1.3",
+      "height": 967
+    },
+    {
+      "slug": "pricing-table",
+      "name": "Plan Comparison",
+      "category": "Pricing",
+      "description": "Full plan comparison table with tooltips, grouped rows and a sticky lit plan header.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "table",
+        "tooltip"
+      ],
+      "addedIn": "1.3",
+      "height": 1430
+    },
+    {
+      "slug": "faq-accordion",
+      "name": "FAQ Accordion",
+      "category": "FAQ",
+      "description": "Two-column FAQ: an Accordion whose open answer lights a tube, plus a support card.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "accordion",
+        "avatar",
+        "button"
+      ],
+      "addedIn": "1.3",
+      "height": 965
+    },
+    {
+      "slug": "faq-search",
+      "name": "Searchable FAQ",
+      "category": "FAQ",
+      "description": "Command-powered FAQ search with grouped topics and a lit answer panel.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "command",
+        "kbd"
+      ],
+      "addedIn": "1.3",
+      "height": 987
+    },
+    {
+      "slug": "cta-band",
+      "name": "CTA Band",
+      "category": "Calls to action",
+      "description": "Full-width call to action between two neon tubes that strike as it scrolls in.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "tube-divider"
+      ],
+      "addedIn": "1.3",
+      "height": 781
+    },
+    {
+      "slug": "cta-sign",
+      "name": "Open Sign CTA",
+      "category": "Calls to action",
+      "description": "An OPEN neon sign on a brick wall; flip the switch and the CTA lights up.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "hardware-switch",
+        "neon-sign"
+      ],
+      "addedIn": "1.3",
+      "height": 892
+    },
+    {
+      "slug": "cta-terminal",
+      "name": "Install Command CTA",
+      "category": "Calls to action",
+      "description": "Big headline over a glowing install prompt with a package-manager switch.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "copy-button",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 925
+    },
+    {
+      "slug": "footer-big",
+      "name": "Big Footer",
+      "category": "Footers",
+      "description": "Link columns, newsletter and status, over a giant outlined name that lights up.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input"
+      ],
+      "addedIn": "1.3",
+      "height": 996
+    },
+    {
+      "slug": "footer-minimal",
+      "name": "Minimal Footer",
+      "category": "Footers",
+      "description": "One calm row under a thin neon tube with electrode caps.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "tube-divider"
+      ],
+      "addedIn": "1.3",
+      "height": 150
+    },
+    {
+      "slug": "footer-sign",
+      "name": "Sign Footer",
+      "category": "Footers",
+      "description": "A neon sign signature over a city skyline, with address and live opening hours.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "cityscape",
+        "neon-sign"
+      ],
+      "addedIn": "1.3",
+      "height": 927
+    },
+    {
+      "slug": "auth-sign-in",
+      "name": "Sign In",
+      "category": "Auth",
+      "description": "Split sign-in with an orbiting satellite over a lit planet limb and a working form.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "input",
+        "starfield"
+      ],
+      "addedIn": "1.3",
+      "height": 820
+    },
+    {
+      "slug": "auth-sign-up",
+      "name": "Sign Up",
+      "category": "Auth",
+      "description": "Sign-up form whose LED strength meter and rule tubes light as the password improves.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "input",
+        "meter"
+      ],
+      "addedIn": "1.3",
+      "height": 864
+    },
+    {
+      "slug": "auth-verify",
+      "name": "Two-Factor Verify",
+      "category": "Auth",
+      "description": "OTP check with a resend timer and a neon keystone that lights on success, red on failure.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "otp-input"
+      ],
+      "addedIn": "1.3",
+      "height": 760
+    },
+    {
+      "slug": "app-dashboard",
+      "name": "Dashboard",
+      "category": "App",
+      "description": "Metrics dashboard with a rail sidebar, a glowing MRR chart and a sortable accounts table.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "dropdown-menu",
+        "glow-chart",
+        "input",
+        "sidebar",
+        "table",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1364
+    },
+    {
+      "slug": "app-settings",
+      "name": "Settings",
+      "category": "App",
+      "description": "Tabbed settings with a save bar that lights on changes and a hold-to-delete danger zone.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "field",
+        "hold-button",
+        "input",
+        "radio-group",
+        "select",
+        "switch",
+        "tabs"
+      ],
+      "addedIn": "1.3",
+      "height": 1213
+    },
+    {
+      "slug": "app-inbox",
+      "name": "Inbox",
+      "category": "App",
+      "description": "Three-pane mail client with glowing unread dots, labels, archive, reply and compose.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "input",
+        "sheet",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "addedIn": "1.3",
+      "height": 760
+    },
+    {
+      "slug": "app-kanban",
+      "name": "Kanban Board",
+      "category": "App",
+      "description": "Production board where cards fly between columns and WIP limits buzz red when exceeded.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "input",
+        "kbd",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 820
+    },
+    {
+      "slug": "app-chat",
+      "name": "Team Chat",
+      "category": "App",
+      "description": "Team chat with grouped messages, a working composer, glowing typing dots and replies.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "input",
+        "sheet",
+        "textarea"
+      ],
+      "addedIn": "1.3",
+      "height": 760
+    },
+    {
+      "slug": "app-notifications",
+      "name": "Notification Center",
+      "category": "App",
+      "description": "Incident notification center with filters, day groups and a lit firing-alert detail pane.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "glow-chart",
+        "input",
+        "switch",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 953
+    },
+    {
+      "slug": "app-music-player",
+      "name": "Music Player",
+      "category": "App",
+      "description": "Now-playing radio screen with SVG tube cover art, a live Equalizer, fader volume and queue.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "equalizer",
+        "fader",
+        "slider"
+      ],
+      "addedIn": "1.3",
+      "height": 605
+    },
+    {
+      "slug": "app-server-status",
+      "name": "Status Board",
+      "category": "App",
+      "description": "Status board with a fleet Heartbeat, live load meters, 90-day uptime bars and an incident Timeline.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "heartbeat",
+        "meter",
+        "timeline",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1231
+    },
+    {
+      "slug": "app-onboarding",
+      "name": "Onboarding",
+      "category": "App",
+      "description": "Three-step workspace setup with a Stepper and a live preview that retints to the chosen accent.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "color-picker",
+        "input",
+        "stepper",
+        "tag-input",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 720
+    },
+    {
+      "slug": "app-empty-states",
+      "name": "Empty States",
+      "category": "App",
+      "description": "Four empty states with unlit glass tube illustrations that light on hover or success.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "switch"
+      ],
+      "addedIn": "1.3",
+      "height": 1129
+    },
+    {
+      "slug": "marketing-404",
+      "name": "404 No Vacancy",
+      "category": "Marketing",
+      "description": "Full-page 404 under a motel sign whose 0 is dying, with key-fob links to popular pages.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "neon-sign"
+      ],
+      "addedIn": "1.3",
+      "height": 900
+    },
+    {
+      "slug": "marketing-500",
+      "name": "500 Power Outage",
+      "category": "Marketing",
+      "description": "Browned-out 500 page; flip the breaker panel's main switch to bring the lights back.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "hardware-switch",
+        "neon-text"
+      ],
+      "addedIn": "1.3",
+      "height": 780
+    },
+    {
+      "slug": "marketing-newsletter",
+      "name": "Newsletter",
+      "category": "Marketing",
+      "description": "Newsletter capture card lit by a desk-lamp tube, with an expandable issue archive.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input"
+      ],
+      "addedIn": "1.3",
+      "height": 724
+    },
+    {
+      "slug": "marketing-waitlist",
+      "name": "Waitlist",
+      "category": "Marketing",
+      "description": "Waitlist that hands you a split-flap ticket number and a referral link to copy.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "copy-button",
+        "input",
+        "split-flap"
+      ],
+      "addedIn": "1.3",
+      "height": 724
+    },
+    {
+      "slug": "marketing-team",
+      "name": "Team Grid",
+      "category": "Marketing",
+      "description": "Team grid of hologram ID cards, each with a lit tide line, plus filters and open roles.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "hologram-card",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1660
+    },
+    {
+      "slug": "marketing-contact",
+      "name": "Contact",
+      "category": "Marketing",
+      "description": "Contact form with validation and studio hours on a live seven-segment clock.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "select",
+        "seven-segment",
+        "textarea",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 900
+    },
+    {
+      "slug": "marketing-changelog",
+      "name": "Changelog",
+      "category": "Marketing",
+      "description": "Release notes on a tube timeline lit from the newest version, with tag filters.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1740
+    },
+    {
+      "slug": "marketing-blog",
+      "name": "Blog Grid",
+      "category": "Marketing",
+      "description": "Featured post and filterable card grid with blueprint covers, each with one lit stroke.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1900
+    },
+    {
+      "slug": "marketing-event-ticket",
+      "name": "Event Ticket",
+      "category": "Marketing",
+      "description": "Notched event ticket with a neon wordmark, seeded QR stub, countdown and wallet button.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "countdown",
+        "neon-text"
+      ],
+      "addedIn": "1.3",
+      "height": 780
+    },
+    {
+      "slug": "marketing-product-card",
+      "name": "Product Card",
+      "category": "Marketing",
+      "description": "Product card with an exploding isometric switch lit in its stem color, plus a live cart.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "number-input",
+        "progress",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 790
     }
   ]
 }

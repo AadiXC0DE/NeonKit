@@ -143,7 +143,7 @@ export function llmsTxt() {
           [
             `Whole sections built from NeonKit components. Gallery: ${siteConfig.url}/blocks`,
             ...blocks.map(
-              (block) => `- [${block.name}](${registryUrl(block.slug)}): ${block.description} Install: \`npx shadcn@latest add ${registryUrl(block.slug)}\``,
+              (block) => `- [${block.name}](${siteConfig.url}/blocks/${block.slug}): ${block.description} Install: \`npx shadcn@latest add ${registryUrl(block.slug)}\``,
             ),
           ].join("\n"),
         ]

@@ -31,7 +31,8 @@
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "registry:build": "node scripts/build-registry.mjs",
-    "shoot": "node scripts/shoot.mjs"
+    "shoot": "node scripts/shoot.mjs",
+    "blocks:thumbs": "node scripts/block-thumbs.mjs"
   },
   "engines": {
     "node": ">=20.9.0"
@@ -62,6 +63,7 @@
     "eslint-config-next": "^16.4.0",
     "jsdom": "^29.1.1",
     "playwright-core": "1.64",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "vitest": "^5.0.3"

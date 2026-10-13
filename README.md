@@ -2,7 +2,7 @@
 
 Neon UI components for React and Tailwind. Calm at rest, lit when it matters. Copy them in or add them with the shadcn CLI. Either way the code is yours.
 
-**[get-neonkit.vercel.app](https://get-neonkit.vercel.app)** · [Components](https://get-neonkit.vercel.app/components) · [Use with AI](https://get-neonkit.vercel.app/docs/ai) · [Request a component](https://get-neonkit.vercel.app/request)
+**[get-neonkit.vercel.app](https://get-neonkit.vercel.app)** · [Components](https://get-neonkit.vercel.app/components) · [Blocks](https://get-neonkit.vercel.app/blocks) · [Use with AI](https://get-neonkit.vercel.app/docs/ai) · [Request a component](https://get-neonkit.vercel.app/request)
 
 ![NeonKit](https://get-neonkit.vercel.app/opengraph-image)
 
@@ -24,6 +24,14 @@ Or register the namespace once in `components.json` and use short names:
 
 ```bash
 npx shadcn@latest add @neonkit/switch @neonkit/tabs @neonkit/toast
+```
+
+## Add a block
+
+[Blocks](https://get-neonkit.vercel.app/blocks) are whole sections built from the components: navbars, heroes, pricing, testimonials, auth screens, app shells and more. Each one works in the preview and holds up from desktop to phone. The same command adds a block and every component it uses:
+
+```bash
+npx shadcn@latest add https://get-neonkit.vercel.app/r/hero-city.json
 ```
 
 ## With AI agents

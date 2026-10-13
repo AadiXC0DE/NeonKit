@@ -26,7 +26,7 @@ const items = [
 export function Principles() {
   return (
     <section className="mx-auto max-w-[88rem] px-4 py-20 sm:px-6 sm:py-28">
-      <SectionHeading index="05" label="Under the glass" title="Built like a sign, not a sticker.">
+      <SectionHeading index="06" label="Under the glass" title="Built like a sign, not a sticker.">
         The glow is the easy part. Underneath it you get proper focus management, real form elements and code you
         can read in one sitting.
       </SectionHeading>
