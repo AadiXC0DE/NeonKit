@@ -14,7 +14,7 @@ import {
   FileVideoCamera,
   RotateCw,
   X,
-} from "lucide-react";
+} from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -106,6 +106,10 @@ export interface FileDropzoneProps
   color?: NeonColor;
   /** Replaces the default icon, label and description. Keep it non-interactive. */
   children?: React.ReactNode;
+  /** Submits the last accepted files under this name with a surrounding form (multipart). */
+  name?: string;
+  /** Blocks form submission until a file is accepted. Needs `name`. */
+  required?: boolean;
 }
 
 const FileDropzone = React.forwardRef<HTMLDivElement, FileDropzoneProps>(
@@ -121,6 +125,8 @@ const FileDropzone = React.forwardRef<HTMLDivElement, FileDropzoneProps>(
       label,
       description,
       color,
+      name,
+      required = false,
       className,
       style,
       children,
@@ -169,6 +175,17 @@ const FileDropzone = React.forwardRef<HTMLDivElement, FileDropzoneProps>(
       return () => observer.disconnect();
     }, []);
 
+    const submitted = React.useRef<File[]>([]);
+    React.useEffect(() => {
+      const form = inputRef.current?.form;
+      if (!form) return;
+      const onReset = () => {
+        submitted.current = [];
+      };
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     function process(list: File[], point?: { x: number; y: number }) {
       if (list.length === 0) return;
       const accepted: File[] = [];
@@ -205,6 +222,19 @@ const FileDropzone = React.forwardRef<HTMLDivElement, FileDropzoneProps>(
         : "";
       const refused = rejected.map((rejection) => `${rejection.file.name}: ${rejection.message}.`).join(" ");
       setAnnouncement([added, refused].filter(Boolean).join(" "));
+
+      if (accepted.length) submitted.current = accepted;
+      // With a name, the native input carries the last accepted files, so a plain form submit sends them.
+      const input = inputRef.current;
+      if (name && input && typeof DataTransfer !== "undefined") {
+        try {
+          const transfer = new DataTransfer();
+          submitted.current.forEach((file) => transfer.items.add(file));
+          input.files = transfer.files;
+        } catch {
+          // Browsers that can't assign files still report them through onFilesChange.
+        }
+      }
 
       if (accepted.length) onFilesChange?.(accepted);
       if (rejected.length) onReject?.(rejected);
@@ -438,17 +468,23 @@ const FileDropzone = React.forwardRef<HTMLDivElement, FileDropzoneProps>(
           <input
             ref={inputRef}
             type="file"
-            hidden
             tabIndex={-1}
+            aria-hidden
+            name={name}
+            required={Boolean(name) && required}
             accept={accept}
             multiple={multiple}
             disabled={disabled}
             onClick={(event) => event.stopPropagation()}
+            onFocus={() => zoneRef.current?.focus()}
             onChange={(event) => {
-              process(Array.from(event.target.files ?? []));
-              // Let the same file be picked again.
-              event.target.value = "";
+              const picked = Array.from(event.target.files ?? []);
+              // Let the same file be picked again; a named input keeps what was accepted instead.
+              if (!name) event.target.value = "";
+              process(picked);
             }}
+            // Visually hidden, not display:none, so a required one can still show the browser's message.
+            className="pointer-events-none absolute bottom-0 left-1/2 size-px -translate-x-1/2 opacity-0"
           />
         </div>
         <span role="status" className="sr-only">
@@ -641,7 +677,7 @@ const FileList = React.forwardRef<HTMLUListElement, FileListProps>(
                         )}
                       />
                     </div>
-                    <span aria-hidden className="w-14 shrink-0 text-right text-[11px] tabular-nums text-white/40">
+                    <span aria-hidden className="w-14 shrink-0 text-right text-[11px] tabular-nums text-white/50">
                       {formatBytes(file.size)}
                     </span>
                   </div>

@@ -21,7 +21,7 @@ export const doc: ComponentDoc = {
     {
       name: "loading",
       title: "Loading and disabled",
-      description: "loading swaps in a spinner and blocks clicks until it clears.",
+      description: "loading hides the label behind a spinner without changing the width, and ignores presses until it clears.",
       component: ButtonLoading,
     },
     {
@@ -38,8 +38,8 @@ export const doc: ComponentDoc = {
       props: [
         { prop: "variant", type: '"solid" | "outline" | "soft" | "ghost" | "link"', default: '"outline"', description: "Visual style." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex. Falls back to --neon-accent, then cyan." },
-        { prop: "size", type: '"sm" | "md" | "lg" | "icon"', default: '"md"', description: "Height and padding." },
-        { prop: "loading", type: "boolean", default: "false", description: "Shows a spinner and ignores presses; the button keeps focus." },
+        { prop: "size", type: '"sm" | "md" | "lg" | "icon" | "icon-sm" | "icon-lg"', default: '"md"', description: "Height and padding. The icon sizes are square: 32, 40 and 48px." },
+        { prop: "loading", type: "boolean", default: "false", description: "Swaps the label for a spinner at the same width and ignores presses. The button keeps focus and full color." },
         { prop: "asChild", type: "boolean", default: "false", description: "Merges props onto the single child element instead of rendering a button." },
         { prop: "render", type: "ReactElement", description: "Base UI's spelling of asChild, render={<Link href=\"/\" />}. The shadcn CLI rewrites asChild into it in base-* projects, so both work." },
       ],

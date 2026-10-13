@@ -1,47 +1,43 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-/** The numbered mono label above every section title. */
-export function Eyebrow({ index, children }: { index: number; children: React.ReactNode }) {
-  return (
-    <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">
-      <span className="text-[rgb(var(--neon))]">{String(index).padStart(2, "0")}</span>
-      <span aria-hidden className="h-px w-6 bg-white/20" />
-      {children}
-    </p>
-  );
-}
+/** Juno's display face: the sans pushed wide and tight, like lettering cut for a shopfront. */
+export const display =
+  "[font-stretch:112%] [font-weight:620] tracking-[-0.038em] leading-[0.98]";
 
-/** The shared section opener: a numbered eyebrow, a tight headline and an optional note on the right. */
+
+/**
+ * A section opener: one headline, and a sentence under it that earns its place.
+ * No labels above it. The headline says what the section is.
+ */
 export function SectionHeading({
-  index,
-  eyebrow,
   id,
   title,
-  note,
+  lede,
   className,
+  size = "lg",
 }: {
-  index: number;
-  eyebrow: string;
   id: string;
   title: React.ReactNode;
-  note?: React.ReactNode;
+  lede?: React.ReactNode;
   className?: string;
+  size?: "lg" | "md";
 }) {
   return (
-    <div className={cn("grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-8", className)}>
-      <div className="lg:col-span-7">
-        <Eyebrow index={index}>{eyebrow}</Eyebrow>
-        <h2
-          id={id}
-          className="mt-5 text-balance text-[clamp(32px,4.6vw,56px)] font-medium leading-[1.02] tracking-[-0.04em] text-white"
-        >
-          {title}
-        </h2>
-      </div>
-      {note && (
-        <p className="max-w-md text-[15px] leading-relaxed text-white/60 lg:col-span-4 lg:col-start-9 lg:pb-1.5">{note}</p>
-      )}
+    <div className={className}>
+      <h2
+        id={id}
+        className={cn(
+          display,
+          "text-balance text-white",
+          // Size first, then leading: a font-size class would otherwise drop the line height when merged.
+          size === "lg" ? "text-[clamp(40px,6.2vw,88px)]" : "text-[clamp(34px,4.4vw,60px)]",
+          "leading-[0.98]",
+        )}
+      >
+        {title}
+      </h2>
+      {lede && <p className="mt-6 max-w-[46ch] text-pretty text-[16px] leading-[1.6] text-white/60">{lede}</p>}
     </div>
   );
 }

@@ -7,9 +7,9 @@ import { neonVars, type NeonColor } from "@/lib/neon";
 
 // The hardware is drawn in em, so the font size on the button scales all of it.
 const sizes = {
-  sm: { device: "text-[12px]", label: "text-[10px]" },
-  md: { device: "text-[16px]", label: "text-[10px]" },
-  lg: { device: "text-[20px]", label: "text-[11px]" },
+  sm: { device: "text-[12px]", label: "text-[12px]" },
+  md: { device: "text-[16px]", label: "text-[12.5px]" },
+  lg: { device: "text-[20px]", label: "text-[13px]" },
 } as const;
 
 // A struck lamp: two quick drops in brightness, then it holds.
@@ -281,7 +281,7 @@ const HardwareSwitch = React.forwardRef<HTMLButtonElement, HardwareSwitchProps>(
             id={labelId}
             htmlFor={id}
             className={cn(
-              "cursor-pointer font-medium uppercase leading-none tracking-[0.16em] text-white/55",
+              "cursor-pointer font-medium leading-none tracking-[0.01em] text-white/60",
               disabled && "cursor-not-allowed",
               s.label,
             )}

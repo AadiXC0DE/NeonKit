@@ -19,9 +19,9 @@ const CAPTION: Record<Phase, string> = {
 };
 
 const UNITS: Record<Phase, [string, string, string, string]> = {
-  before: ["Days", "Hrs", "Min", "Sec"],
-  live: ["Session", "Hrs", "Min", "Sec"],
-  after: ["Sessions", "Hrs", "Min", "Sec"],
+  before: ["days", "hrs", "min", "sec"],
+  live: ["session", "hrs", "min", "sec"],
+  after: ["sessions", "hrs", "min", "sec"],
 };
 
 const filmed = agenda.filter((slot) => slot.room === "Main hall");
@@ -51,13 +51,13 @@ function Lamp({ lit }: { lit: boolean }) {
         "size-1.5 rounded-full transition-[background-color,box-shadow] duration-300",
         lit
           ? "bg-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_12px_rgb(var(--neon)/0.7)]"
-          : "bg-[rgb(var(--neon)/0.18)]",
+          : "bg-white/15",
       )}
     />
   );
 }
 
-const label = "flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-white/60";
+const label = "flex items-center gap-2 text-[13px] text-white/60";
 
 /** The split-flap board in the hero: status on top, the countdown to doors (or the night's clock) under it. */
 export function DepartureBoard({ className }: { className?: string }) {
@@ -71,23 +71,26 @@ export function DepartureBoard({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "relative isolate rounded-[20px] border border-white/10 bg-[linear-gradient(to_bottom,#0e0f15,#08090d)] p-4 [--board-h:31px] sm:p-7 sm:[--board-h:56px] xl:[--board-h:58px]",
-        "shadow-[inset_0_1px_0_rgb(255_255_255/0.06),inset_0_0_0_1px_rgb(0_0_0/0.6),0_50px_100px_-40px_rgb(0_0_0),0_0_0_1px_rgb(var(--neon)/0.04)]",
+        "relative isolate rounded-[18px] border border-white/10 bg-[linear-gradient(to_bottom,#0e0f15,#08090d)] p-4 [--board-h:31px] sm:p-7 sm:[--board-h:56px] xl:[--board-h:60px]",
+        "shadow-[inset_0_1px_0_rgb(255_255_255/0.06),inset_0_0_0_1px_rgb(0_0_0/0.6),0_50px_100px_-40px_rgb(0_0_0)]",
         className,
       )}
     >
+      {/* The two hangers it's bolted to. */}
+      <span aria-hidden className="absolute -top-12 left-[18%] -z-10 hidden h-12 w-px bg-[linear-gradient(transparent,rgb(255_255_255/0.14))] lg:block" />
+      <span aria-hidden className="absolute -top-12 right-[18%] -z-10 hidden h-12 w-px bg-[linear-gradient(transparent,rgb(255_255_255/0.14))] lg:block" />
       {/* Light from the flaps washing over the housing. */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] bg-[radial-gradient(ellipse_80%_55%_at_50%_35%,rgb(var(--neon)/0.08),transparent_75%)]"
       />
 
-      <div className="flex items-center justify-between gap-4 border-b border-white/[0.07] pb-3.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-white/60 sm:pb-4">
+      <div className="flex items-baseline justify-between gap-4 border-b border-white/[0.07] pb-3 text-[13px] text-white/60 sm:pb-4">
         <span>
-          LL27 <span className="text-white/35">·</span> Gate K
+          Gate K<span className="hidden sm:inline">, Wolfraamhal</span>
         </span>
-        <span className="tabular-nums">
-          Rotterdam <span className="text-white/85">{local}</span>
+        <span>
+          Rotterdam <span className="font-mono tabular-nums text-white/90">{local}</span>
         </span>
       </div>
 
@@ -122,7 +125,7 @@ export function DepartureBoard({ className }: { className?: string }) {
                 flipDuration={55}
                 stagger={35}
               />
-              <span className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/55">{units[index]}</span>
+              <span className="text-[12px] text-white/55">{units[index]}</span>
             </div>
           ))}
         </div>

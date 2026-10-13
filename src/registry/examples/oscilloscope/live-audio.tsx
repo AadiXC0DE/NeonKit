@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Mic, Volume2 } from "lucide-react";
+import { Mic, Volume2 } from "@/components/ui/icons";
 import { Oscilloscope } from "@/components/ui/oscilloscope";
 
 type Source = "tone" | "mic";

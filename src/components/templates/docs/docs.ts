@@ -1,5 +1,3 @@
-import { BookOpen, Download, FileCog, Hammer, LifeBuoy, Play, Rocket, Zap, type LucideIcon } from "lucide-react";
-
 import { basePath } from "./config";
 
 export const groups = ["Getting started", "Guides", "CLI reference"] as const;
@@ -17,12 +15,13 @@ export type Doc = {
   /** Path below basePath. "" is the docs home; "cli/up" lives at basePath/cli/up. */
   slug: string;
   title: string;
+  /** The page's h1, when it should say more than the title in the sidebar. */
+  headline?: string;
   /** Shorter label for the sidebar, if it differs from the title. */
   navTitle?: string;
   /** Mono labels read as commands in the sidebar and search. */
   mono?: boolean;
   group: DocGroup;
-  icon: LucideIcon;
   description: string;
   updated: string;
   readingTime: string;
@@ -34,10 +33,10 @@ export const docs: Doc[] = [
   {
     slug: "",
     title: "Introduction",
+    headline: "Containers from your lockfile.",
     group: "Getting started",
-    icon: BookOpen,
     description:
-      "Gantry builds containers from your lockfile and runs them without a daemon. One 9.4 MB binary, no root, and the Dockerfiles you already have.",
+      "Gantry reads the lockfile you already commit, builds images in layers it can reuse and runs them without a daemon. One 9.4 MB binary, no root, and your Dockerfiles keep working.",
     updated: "2 Oct 2026",
     readingTime: "3 min",
     headings: [
@@ -51,7 +50,6 @@ export const docs: Doc[] = [
     slug: "installation",
     title: "Installation",
     group: "Getting started",
-    icon: Download,
     description:
       "Install the gantry binary with your package manager, check it runs, and turn on shell completion.",
     updated: "30 Sep 2026",
@@ -69,7 +67,6 @@ export const docs: Doc[] = [
     slug: "quickstart",
     title: "Quickstart",
     group: "Getting started",
-    icon: Zap,
     description:
       "Go from an empty folder to a running web service and database in about five minutes, then change code and watch it reload.",
     updated: "30 Sep 2026",
@@ -87,7 +84,6 @@ export const docs: Doc[] = [
     slug: "configuration",
     title: "Configuration",
     group: "Guides",
-    icon: FileCog,
     description:
       "Everything gantry.toml can describe: services, build settings, environment variables and profiles for CI.",
     updated: "24 Sep 2026",
@@ -106,7 +102,6 @@ export const docs: Doc[] = [
     slug: "deploying",
     title: "Deploying",
     group: "Guides",
-    icon: Rocket,
     description:
       "Ship the image you tested locally to a registry or straight to a server over SSH, swap it in without downtime, and roll back in one command.",
     updated: "28 Sep 2026",
@@ -124,7 +119,6 @@ export const docs: Doc[] = [
     slug: "troubleshooting",
     title: "Troubleshooting",
     group: "Guides",
-    icon: LifeBuoy,
     description:
       "Fixes for the problems people hit most: busy ports, permission errors on Linux, stale layers and slow first builds.",
     updated: "1 Oct 2026",
@@ -143,7 +137,6 @@ export const docs: Doc[] = [
     title: "gantry up",
     mono: true,
     group: "CLI reference",
-    icon: Play,
     description:
       "Build what changed, start every service in dependency order and wait for health checks. Watches your source and rebuilds on save.",
     updated: "30 Sep 2026",
@@ -161,7 +154,6 @@ export const docs: Doc[] = [
     title: "gantry build",
     mono: true,
     group: "CLI reference",
-    icon: Hammer,
     description:
       "Build an OCI image from your lockfile or Dockerfile, reuse cached layers, and optionally push it, for one platform or several.",
     updated: "30 Sep 2026",

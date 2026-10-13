@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { BellOff, Eye, Pin, Star } from "lucide-react";
+import { BellOff, Eye, Pin, Star } from "@/components/ui/icons";
 import { Toggle } from "@/components/ui/toggle-group";
 
 export default function ToggleExample() {

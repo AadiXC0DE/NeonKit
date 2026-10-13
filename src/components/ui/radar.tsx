@@ -51,6 +51,10 @@ function restingOpacity(angle: number) {
   return 0.06;
 }
 
+// Trig results can differ in the last bit between the server's and the browser's
+// engine, so anything rendered from them is rounded first to hydrate cleanly.
+const fix = (value: number) => value.toFixed(3);
+
 const bearing = (angle: number) => String(Math.round(((angle % 360) + 360) % 360)).padStart(3, "0");
 
 export interface RadarBlip {
@@ -166,10 +170,10 @@ const Radar = React.forwardRef<HTMLDivElement, RadarProps>(
             return (
               <line
                 key={deg}
-                x1={Math.sin(rad) * inner}
-                y1={-Math.cos(rad) * inner}
-                x2={Math.sin(rad) * 86}
-                y2={-Math.cos(rad) * 86}
+                x1={fix(Math.sin(rad) * inner)}
+                y1={fix(-Math.cos(rad) * inner)}
+                x2={fix(Math.sin(rad) * 86)}
+                y2={fix(-Math.cos(rad) * 86)}
                 stroke={major ? "rgb(255 255 255 / 0.5)" : "rgb(255 255 255 / 0.22)"}
                 strokeWidth={major ? 0.9 : 0.6}
               />
@@ -182,8 +186,8 @@ const Radar = React.forwardRef<HTMLDivElement, RadarProps>(
               return (
                 <text
                   key={deg}
-                  x={Math.sin(rad) * 92.5}
-                  y={-Math.cos(rad) * 92.5}
+                  x={fix(Math.sin(rad) * 92.5)}
+                  y={fix(-Math.cos(rad) * 92.5)}
                   textAnchor="middle"
                   dominantBaseline="central"
                   fontSize="6.2"
@@ -215,10 +219,10 @@ const Radar = React.forwardRef<HTMLDivElement, RadarProps>(
               return (
                 <line
                   key={deg}
-                  x1={-Math.sin(rad) * 98}
-                  y1={Math.cos(rad) * 98}
-                  x2={Math.sin(rad) * 98}
-                  y2={-Math.cos(rad) * 98}
+                  x1={fix(-Math.sin(rad) * 98)}
+                  y1={fix(Math.cos(rad) * 98)}
+                  x2={fix(Math.sin(rad) * 98)}
+                  y2={fix(-Math.cos(rad) * 98)}
                   stroke={cross ? "rgb(var(--neon) / 0.2)" : "rgb(var(--neon) / 0.07)"}
                   strokeWidth="0.6"
                 />
@@ -248,8 +252,8 @@ const Radar = React.forwardRef<HTMLDivElement, RadarProps>(
                 className="nk-radar-blip pointer-events-none absolute size-0"
                 style={
                   {
-                    left: `${50 + Math.sin(rad) * reach}%`,
-                    top: `${50 - Math.cos(rad) * reach}%`,
+                    left: `${fix(50 + Math.sin(rad) * reach)}%`,
+                    top: `${fix(50 - Math.cos(rad) * reach)}%`,
                     "--nk-radar-tint": blip.color ? toNeonRgb(blip.color) : "var(--neon)",
                     "--nk-radar-rest": restingOpacity(blip.angle).toFixed(3),
                   } as React.CSSProperties

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ const TIERS = [
     monthly: 12,
     yearly: 10,
     limits: [["Shows", "1"], ["Upload", "4 h/mo"], ["Seats", "1"]],
+    summary: "1 show, 4 hours of upload a month, 1 seat",
     features: [
       "Unlimited downloads, no bandwidth bills",
       "Apple, Spotify and 20 more directories",
@@ -34,12 +35,13 @@ const TIERS = [
     yearly: 30,
     featured: true,
     limits: [["Shows", "3"], ["Upload", "20 h/mo"], ["Seats", "3"]],
+    summary: "3 shows, 20 hours of upload a month, 3 seats",
     features: [
-      "Everything in Hobby, analytics kept forever",
+      "Analytics kept forever",
       "IAB-certified download counts",
       "Private feeds for up to 500 listeners",
       "Transcripts in 31 languages",
-      "Dynamic ad insertion, your own sponsors",
+      "Ad insertion, your own sponsors",
     ],
     cta: "Start 14-day trial",
   },
@@ -49,8 +51,9 @@ const TIERS = [
     monthly: 120,
     yearly: 100,
     limits: [["Shows", "No limit"], ["Upload", "100 h/mo"], ["Seats", "10"]],
+    summary: "Any number of shows, 100 hours of upload a month, 10 seats",
     features: [
-      "Everything in Studio, unlimited private listeners",
+      "Everything in Studio, unlimited private feeds",
       "SSO, SCIM and an audit log",
       "Ad marketplace at a 70/30 split",
       "Support that answers in 4 hours",
@@ -68,11 +71,13 @@ const css = `
 function RollingPrice({ value }: { value: number }) {
   const digits = String(value).split("");
   return (
-    <span className="inline-flex tabular-nums" aria-hidden>
+    <span className="inline-flex" aria-hidden>
       {digits.map((d, i) => (
         <span key={digits.length - i} className="relative inline-block h-[1em] overflow-hidden leading-none">
+          {/* The resting digit sizes the cell, so a 1 doesn't sit in a 0-wide slot. */}
+          <span className="invisible block h-[1em]">{d}</span>
           <span
-            className="nk-pricing-tiers-reel flex flex-col"
+            className="nk-pricing-tiers-reel absolute left-0 top-0 flex flex-col"
             style={{ transform: `translateY(-${Number(d) * 10}%)`, transitionDelay: `${(digits.length - 1 - i) * 60}ms` }}
           >
             {Array.from({ length: 10 }, (_, n) => (
@@ -87,72 +92,109 @@ function RollingPrice({ value }: { value: number }) {
   );
 }
 
-function Tier({ tier, billing }: { tier: (typeof TIERS)[number]; billing: Billing }) {
-  const featured = "featured" in tier && tier.featured;
-  const price = tier[billing];
-
+function Price({ value, billing, size }: { value: number; billing: Billing; size: "lg" | "md" }) {
+  const lit = size === "lg";
   return (
-    <div className={cn("relative flex h-full flex-col p-6 sm:p-7", featured && "lg:py-9")}>
-      <div className="flex items-center justify-between gap-3">
-        <h3 className={cn("text-lg font-medium tracking-[-0.01em]", featured ? "text-white" : "text-white/85")}>{tier.name}</h3>
-        {featured && (
+    <p className={cn("flex items-end", lit ? "gap-3" : "gap-2.5")}>
+      <span
+        className={cn(
+          "flex items-start font-[620] leading-none tracking-[-0.05em] [font-stretch:112%]",
+          lit
+            ? "text-[clamp(5rem,9vw,7.5rem)] [color:color-mix(in_srgb,rgb(var(--neon))_22%,white)] [filter:drop-shadow(0_0_2px_rgb(var(--neon)/0.7))_drop-shadow(0_0_22px_rgb(var(--neon)/0.45))]"
+            : "text-[44px] text-white/90",
+        )}
+      >
+        <span className={cn("font-medium text-white/50", lit ? "mr-1 mt-[0.12em] text-[0.32em]" : "mr-0.5 mt-1 text-xl")}>$</span>
+        <RollingPrice value={value} />
+      </span>
+      <span className="sr-only">
+        ${value} per month{billing === "yearly" ? `, billed $${value * 12} yearly` : ""}
+      </span>
+      <span aria-hidden className={cn("whitespace-nowrap text-[13px] leading-[1.35] text-white/55", lit ? "pb-3" : "pb-1")}>
+        a month
+        {lit ? <br /> : ", "}
+        {billing === "yearly" ? `$${(value * 12).toLocaleString("en-US")} billed yearly` : "billed monthly"}
+      </span>
+    </p>
+  );
+}
+
+const STUDIO = TIERS[1];
+const OTHERS = [TIERS[0], TIERS[2]];
+
+function Featured({ billing }: { billing: Billing }) {
+  return (
+    <BorderBeam
+      duration={9}
+      size={80}
+      className="h-full rounded-[20px] border border-[rgb(var(--neon)/0.22)] bg-[linear-gradient(160deg,rgb(var(--neon)/0.09),rgb(255_255_255/0.015)_42%)] shadow-[0_50px_120px_-50px_rgb(var(--neon)/0.6)]"
+    >
+      <div className="flex h-full flex-col p-6 sm:p-9 lg:p-10">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <h3 className="text-[22px] font-medium tracking-[-0.02em] text-white">{STUDIO.name}</h3>
           <Badge size="sm" variant="outline">
             Most shows pick this
           </Badge>
-        )}
+        </div>
+        <p className="mt-1.5 text-[15px] text-white/60">{STUDIO.pitch}</p>
+
+        <div className="mt-8 sm:mt-10">
+          <Price value={STUDIO[billing]} billing={billing} size="lg" />
+        </div>
+
+        <dl className="mt-9 flex flex-wrap gap-x-12 gap-y-4 border-t border-white/[0.08] pt-6">
+          {STUDIO.limits.map(([k, v]) => (
+            <div key={k} className="flex flex-col-reverse">
+              <dt className="text-[13px] text-white/55">{k}</dt>
+              <dd className="text-[26px] font-[560] leading-tight tracking-[-0.02em] text-white">{v}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <ul className="mt-8 grid content-start sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-1">
+          {STUDIO.features.map((f) => (
+            <li key={f} className="flex gap-3 border-b border-white/[0.06] py-3 text-[15px] leading-snug text-white/80">
+              <Check
+                aria-hidden
+                strokeWidth={2.25}
+                className="mt-0.5 size-4 shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.7))]"
+              />
+              {f}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5 lg:mt-auto lg:pt-10">
+          <Button variant="solid" size="lg" className="sm:px-8">
+            {STUDIO.cta}
+            <ArrowRight aria-hidden />
+          </Button>
+          <span className="text-[13px] text-white/55">No card for the trial. Cancel from the dashboard.</span>
+        </div>
       </div>
-      <p className="mt-1.5 text-sm text-white/60 md:min-h-10 lg:min-h-0">{tier.pitch}</p>
+    </BorderBeam>
+  );
+}
 
-      <p className="mt-8 flex items-end gap-2">
-        <span
-          className={cn(
-            "flex items-start text-[56px] font-semibold leading-none tracking-[-0.045em]",
-            featured
-              ? "[color:color-mix(in_srgb,rgb(var(--neon))_25%,white)] [filter:drop-shadow(0_0_14px_rgb(var(--neon)/0.55))]"
-              : "text-white",
-          )}
-        >
-          <span className="mr-0.5 mt-1.5 text-2xl font-medium text-white/50">$</span>
-          <RollingPrice value={price} />
-        </span>
-        <span className="sr-only">
-          ${price} per month{billing === "yearly" ? `, billed $${price * 12} yearly` : ""}
-        </span>
-        <span aria-hidden className="pb-1 text-sm leading-tight text-white/60">
-          / month
-          <br />
-          <span className="font-mono text-[11px]">{billing === "yearly" ? `$${(price * 12).toLocaleString("en-US")} billed yearly` : "billed monthly"}</span>
-        </span>
-      </p>
-
-      <dl className="mt-7 grid grid-cols-3 overflow-hidden rounded-xl border border-white/[0.07]">
-        {tier.limits.map(([k, v], i) => (
-          <div key={k} className={cn("px-3 py-2.5", i > 0 && "border-l border-white/[0.07]")}>
-            <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{k}</dt>
-            <dd className="mt-1 text-sm tabular-nums text-white/85">{v}</dd>
-          </div>
-        ))}
-      </dl>
-
-      <ul className="mt-7 flex-1 space-y-3">
+function Quiet({ tier, billing }: { tier: (typeof TIERS)[number]; billing: Billing }) {
+  return (
+    <div className="flex flex-col border-t border-white/[0.08] py-8 first:pt-8 lg:first:border-t-0 lg:first:pt-2">
+      <h3 className="text-lg font-medium tracking-[-0.01em] text-white/90">{tier.name}</h3>
+      <p className="mt-1 text-sm text-white/55">{tier.pitch}</p>
+      <div className="mt-5">
+        <Price value={tier[billing]} billing={billing} size="md" />
+      </div>
+      <p className="mt-4 text-sm text-white/80">{tier.summary}</p>
+      <ul className="mt-4 space-y-2">
         {tier.features.map((f) => (
-          <li key={f} className="flex gap-3 text-sm leading-snug text-white/70">
-            <Check
-              aria-hidden
-              strokeWidth={2.25}
-              className={cn(
-                "mt-px size-4 shrink-0",
-                featured ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.7))]" : "text-white/35",
-              )}
-            />
+          <li key={f} className="flex gap-3 text-sm leading-snug text-white/60">
+            <Check aria-hidden strokeWidth={2} className="mt-px size-3.5 shrink-0 text-white/35" />
             {f}
           </li>
         ))}
       </ul>
-
-      <Button variant={featured ? "solid" : "soft"} size="lg" className="mt-9 w-full">
-        {tier.cta}
-        {featured && <ArrowRight aria-hidden />}
+      <Button variant="ghost" className="-ml-4 mt-5 self-start text-white/85">
+        {tier.cta} <ArrowRight aria-hidden />
       </Button>
     </div>
   );
@@ -166,61 +208,50 @@ export default function PricingTiers() {
       aria-labelledby="pricing-tiers-title"
       // Change the color here; everything inside follows it.
       style={neonVars("magenta")}
-      className="relative isolate overflow-hidden bg-[#05060a] px-5 py-20 text-white/90 sm:px-10 sm:py-24 lg:px-16"
+      className="relative isolate overflow-hidden bg-[#05060a] px-5 py-20 text-white/90 sm:px-10 sm:py-24 lg:px-16 lg:py-28"
     >
       <style>{css}</style>
-      {/* The featured plan throws light on the floor beneath it */}
+      {/* The featured plan throws light on the wall behind it */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-1/2 -z-10 hidden h-72 w-[38rem] -translate-x-1/2 translate-y-1/3 rounded-[50%] bg-[rgb(var(--neon)/0.12)] blur-[90px] lg:block"
+        className="pointer-events-none absolute left-[30%] top-[55%] -z-10 hidden h-[28rem] w-[44rem] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[rgb(var(--neon)/0.08)] blur-[110px] lg:block"
       />
       <div className="mx-auto max-w-[1200px]">
         <header className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Wavelength · Podcast hosting</p>
-            <h2
-              id="pricing-tiers-title"
-              className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
-            >
-              Pay for the show, not for the downloads.
-            </h2>
-          </div>
-          <div className="flex items-center gap-3">
+          <h2
+            id="pricing-tiers-title"
+            className="text-[clamp(2.3rem,5.6vw,4.5rem)] md:max-w-[13ch] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
+          >
+            Pay for the show, not the downloads.
+          </h2>
+          <div className="flex items-center gap-4 md:pb-2">
             <ToggleGroup aria-label="Billing period" value={billing} onValueChange={(v) => v && setBilling(v as Billing)}>
               <ToggleGroupItem value="monthly">Monthly</ToggleGroupItem>
               <ToggleGroupItem value="yearly">Yearly</ToggleGroupItem>
             </ToggleGroup>
             <span
               className={cn(
-                "whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.14em] transition-[color,text-shadow] duration-300",
-                billing === "yearly" ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/55",
+                "whitespace-nowrap text-[13px] transition-[color,text-shadow] duration-300",
+                billing === "yearly" ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.5)]" : "text-white/55",
               )}
             >
-              2 months free
+              Two months free
             </span>
           </div>
         </header>
 
-        <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:items-center lg:gap-5">
-          {TIERS.map((tier) =>
-            "featured" in tier && tier.featured ? (
-              <BorderBeam
-                key={tier.name}
-                duration={9}
-                size={70}
-                className="rounded-[22px] border border-white/10 md:order-first md:col-span-2 lg:order-none lg:col-span-1 bg-[linear-gradient(180deg,rgb(var(--neon)/0.07),rgb(255_255_255/0.02)_45%)] shadow-[0_40px_100px_-40px_rgb(var(--neon)/0.55)]"
-              >
-                <Tier tier={tier} billing={billing} />
-              </BorderBeam>
-            ) : (
-              <div key={tier.name} className="rounded-[20px] border border-white/[0.08] bg-white/[0.02]">
-                <Tier tier={tier} billing={billing} />
-              </div>
-            ),
-          )}
+        <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:gap-14">
+          <div className="lg:col-span-7">
+            <Featured billing={billing} />
+          </div>
+          <div className="flex flex-col md:grid md:grid-cols-2 md:gap-x-10 lg:col-span-5 lg:flex">
+            {OTHERS.map((tier) => (
+              <Quiet key={tier.name} tier={tier} billing={billing} />
+            ))}
+          </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-white/[0.06] pt-6 text-sm text-white/60 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-white/[0.06] pt-6 text-sm text-white/60 lg:flex-row lg:items-center lg:justify-between">
           <p>Every plan: unlimited downloads, no overage, and a 301 redirect for your RSS if you ever leave.</p>
           <a
             href="#contact"

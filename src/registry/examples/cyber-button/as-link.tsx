@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { CyberButton } from "@/components/ui/cyber-button";
 
 export default function CyberButtonAsLink() {

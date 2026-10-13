@@ -11,7 +11,7 @@ import { event } from "./config";
 import { agenda, rooms, speakers } from "./data";
 import { slotStatus, useEvent, useNow, type Phase } from "./event-state";
 
-const KIND = { doors: "Doors", talk: "Talk", workshop: "Workshop", break: "Break", panel: "Panel" } as const;
+const KIND = { doors: "doors", talk: "talk", workshop: "workshop, 30 seats", break: "break", panel: "panel" } as const;
 const clock = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Amsterdam" });
 
 const NOTE: Record<Phase, string> = {
@@ -28,18 +28,17 @@ export function Agenda() {
   const slots = agenda.filter((slot) => room === "all" || slot.room === room);
 
   return (
-    <section id="agenda" aria-labelledby="agenda-title" className="scroll-mt-20 border-t border-white/[0.06] px-5 py-24 sm:px-8 lg:py-32">
-      <div className="mx-auto grid max-w-[1176px] gap-12 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:gap-20">
-        <div className="lg:sticky lg:top-28 lg:self-start">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">Agenda · {event.shortDate}</p>
+    <section id="agenda" aria-labelledby="agenda-title" className="scroll-mt-20 border-t border-white/[0.06] bg-[#07070c] px-5 py-24 sm:px-8 lg:py-32">
+      <div className="mx-auto grid max-w-[1176px] gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:sticky lg:top-28 lg:col-span-4 lg:self-start">
           <h2
             id="agenda-title"
-            className="mt-6 text-[clamp(2.5rem,5.6vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white"
+            className="text-[clamp(2.6rem,6vw,5rem)] font-[640] leading-[0.92] tracking-[-0.045em] text-white [font-stretch:112%]"
           >
             The running order.
           </h2>
-          <p className="mt-6 max-w-[40ch] text-pretty text-[15px] leading-relaxed text-white/65">
-            Rotterdam time, CET. Talks run 25 minutes with five for questions. The main hall is streamed; the Cellar
+          <p className="mt-7 max-w-[40ch] text-pretty text-[16px] leading-[1.6] text-white/70">
+            {event.dateLabel}, Rotterdam time. Talks run 25 minutes with five for questions. The main hall is streamed; the Cellar
             isn&apos;t, so get there early.
           </p>
 
@@ -59,7 +58,7 @@ export function Agenda() {
             </ToggleGroup>
           </div>
 
-          <p className="mt-6 flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">
+          <p className="mt-6 flex items-center gap-2.5 text-[13px] text-white/60">
             <span
               aria-hidden
               className={cn(
@@ -70,11 +69,11 @@ export function Agenda() {
               )}
             />
             {NOTE[shown]}
-            {shown === "live" && now !== null && <span className="tabular-nums text-white/85">{clock.format(now)}</span>}
+            {shown === "live" && now !== null && <span className="font-mono tabular-nums text-white/90">{clock.format(now)}</span>}
           </p>
         </div>
 
-        <div>
+        <div className="lg:col-span-7 lg:col-start-6">
           <p className="sr-only" aria-live="polite">
             {slots.length} sessions shown
           </p>
@@ -91,25 +90,28 @@ export function Agenda() {
                   className="scroll-mt-28"
                   title={
                     <span className="block">
-                      <span className="flex flex-wrap items-center gap-x-2.5 font-mono text-[11px] font-normal uppercase tracking-[0.14em] text-white/60">
-                        <time dateTime={`${event.doorsAt.slice(0, 10)}T${slot.start}`} className={cn("tabular-nums", status === "current" && "text-white/90")}>
-                          {slot.start}–{slot.end}
+                      <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <time
+                          dateTime={`${event.doorsAt.slice(0, 10)}T${slot.start}`}
+                          className={cn(
+                            "text-[17px] font-[620] tracking-[-0.01em] [font-stretch:112%]",
+                            status === "current" ? "[color:color-mix(in_srgb,rgb(var(--neon))_40%,white)]" : "text-white/90",
+                          )}
+                        >
+                          {slot.start}
+                          <span className="font-normal text-white/50">–{slot.end}</span>
                         </time>
-                        <span aria-hidden className="text-white/25">/</span>
-                        <span>{slot.room}</span>
-                        {slot.kind !== "talk" && (
-                          <>
-                            <span aria-hidden className="text-white/25">/</span>
-                            <span>{KIND[slot.kind]}</span>
-                          </>
-                        )}
+                        <span className="text-[14px] font-normal text-white/60">
+                          {slot.room}
+                          {slot.kind !== "talk" && <>, {KIND[slot.kind]}</>}
+                        </span>
                         {status === "current" && (
-                          <Badge variant="outline" size="sm" pulse className="ml-1 font-mono uppercase tracking-[0.12em]">
+                          <Badge variant="outline" size="sm" pulse className="ml-1">
                             Now
                           </Badge>
                         )}
                       </span>
-                      <h3 className={cn("mt-2 text-lg font-semibold tracking-[-0.02em] sm:text-xl", quiet ? "text-white/70" : "text-white")}>
+                      <h3 className={cn("mt-2 text-[20px] font-semibold leading-tight tracking-[-0.02em] sm:text-[24px]", quiet ? "text-white/65" : "text-white")}>
                         {slot.title}
                       </h3>
                     </span>

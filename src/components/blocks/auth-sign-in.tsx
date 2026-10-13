@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, EyeOff } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -9,9 +9,9 @@ import { Starfield } from "@/components/ui/starfield";
 import { neonVars } from "@/lib/neon";
 
 const TELEMETRY = [
-  { label: "Alt", value: "512 km" },
-  { label: "Incl", value: "97.4°" },
-  { label: "GSD", value: "0.5 m" },
+  { label: "Altitude", value: "512 km" },
+  { label: "Inclination", value: "97.4°" },
+  { label: "Ground res.", value: "0.5 m" },
   { label: "Revisit", value: "6 h" },
 ];
 const DOWNLINK_SECONDS = 4 * 60 + 12;
@@ -100,25 +100,28 @@ function OrbitArt() {
 
       <div className="flex items-start justify-between p-8">
         <Wordmark />
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">ORB-7 · SSO</span>
+        <span className="flex items-center gap-2 text-[13px] text-white/60">
+          <span aria-hidden className="size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]" />
+          ORB-7 over the Andes
+        </span>
       </div>
 
       <div className="mt-auto grid gap-6 p-8">
-        <p className="max-w-[28ch] text-balance text-[32px] font-medium leading-[1.05] tracking-[-0.035em] text-white/90">
+        <p className="max-w-[20ch] text-balance text-[clamp(2rem,3vw,2.75rem)] font-[620] leading-[0.98] tracking-[-0.04em] text-white/95 [font-stretch:112%]">
           Fresh tiles over the Atacama, 41 minutes after the pass.
         </p>
-        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 border-t border-white/[0.08] pt-5 font-mono text-[11px] uppercase tracking-[0.16em]">
+        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 border-t border-white/[0.08] pt-5">
           <dl className="flex gap-6">
             {TELEMETRY.map((t) => (
               <div key={t.label} className="grid gap-1">
-                <dt className="text-white/55">{t.label}</dt>
-                <dd className="text-white/80">{t.value}</dd>
+                <dt className="text-[12px] text-white/50">{t.label}</dt>
+                <dd className="font-mono text-[13px] tabular-nums text-white/85">{t.value}</dd>
               </div>
             ))}
           </dl>
           <p className="grid gap-1 text-right">
-            <span className="text-white/55">Next downlink</span>
-            <span className="tabular-nums text-[rgb(var(--neon))]">T-{clock}</span>
+            <span className="text-[12px] text-white/50">Next downlink</span>
+            <span className="font-mono text-[13px] tabular-nums text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.5)]">T−{clock}</span>
           </p>
         </div>
       </div>
@@ -215,14 +218,11 @@ export default function AuthSignIn() {
         <div className="mx-auto flex w-full max-w-[380px] flex-1 flex-col justify-center py-14">
           {status === "done" ? (
             <div aria-live="polite" className="grid gap-6">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">
-                {view === "reset" ? "Link sent" : "Signed in"}
-              </p>
-              <h1 ref={titleRef} tabIndex={-1} className="text-[40px] font-semibold leading-[1] tracking-[-0.04em] outline-none">
+              <h1 ref={titleRef} tabIndex={-1} className="text-[clamp(2.5rem,4vw,3.25rem)] font-[620] leading-[0.96] tracking-[-0.04em] outline-none [font-stretch:112%]">
                 {view === "reset" ? "Check your inbox." : "Welcome back."}
               </h1>
               {view === "reset" ? (
-                <p className="text-[15px] leading-relaxed text-white/55">
+                <p className="text-[16px] leading-[1.55] text-white/60">
                   We sent a reset link to <span className="text-white/90 [overflow-wrap:anywhere]">{email}</span>. It works once, for 30 minutes.
                 </p>
               ) : (
@@ -259,16 +259,13 @@ export default function AuthSignIn() {
                   <ArrowLeft className="size-4" /> Back to sign in
                 </button>
               )}
-              <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-                {view === "reset" ? "Account recovery" : "Operator console"}
-              </p>
-              <h1 ref={titleRef} tabIndex={-1} className="text-[40px] font-semibold leading-[1] tracking-[-0.04em] outline-none">
+              <h1 ref={titleRef} tabIndex={-1} className="text-[clamp(2.5rem,4vw,3.25rem)] font-[620] leading-[0.96] tracking-[-0.04em] outline-none [font-stretch:112%]">
                 {view === "reset" ? "Reset your password" : "Sign in"}
               </h1>
-              <p className="mt-3 text-[15px] leading-relaxed text-white/55">
+              <p className="mt-4 text-[16px] leading-[1.55] text-white/60">
                 {view === "reset"
                   ? "Enter the email on your account and we'll send a one-time link."
-                  : "Tasking, archive and the 0.5 m catalogue, all behind one login."}
+                  : "The operator console: tasking, the archive and the 0.5 m catalogue."}
               </p>
 
               {view === "sign-in" && (
@@ -295,7 +292,7 @@ export default function AuthSignIn() {
                       </Button>
                     ))}
                   </div>
-                  <div className="my-7 flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+                  <div className="my-7 flex items-center gap-4 text-[13px] text-white/50">
                     <span aria-hidden className="h-px flex-1 bg-white/[0.08]" />
                     or with email
                     <span aria-hidden className="h-px flex-1 bg-white/[0.08]" />
@@ -339,7 +336,7 @@ export default function AuthSignIn() {
                           aria-label={reveal ? "Hide password" : "Show password"}
                           aria-pressed={reveal}
                           onClick={() => setReveal((r) => !r)}
-                          className="-mr-2.5 grid size-9 place-items-center rounded-md text-white/45 outline-none transition-colors hover:text-white/90 focus-visible:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                          className="-mr-2.5 grid size-9 place-items-center rounded-md text-white/50 outline-none transition-colors hover:text-white/90 focus-visible:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                         >
                           {reveal ? <EyeOff /> : <Eye />}
                         </button>
@@ -365,7 +362,7 @@ export default function AuthSignIn() {
           )}
         </div>
 
-        <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+        <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-[13px] text-white/50">
           <span>© 2026 Orbital Earth Data</span>
           <span className="flex gap-5">
             <a href="#terms" className="-my-2 rounded-md py-2 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">Terms</a>

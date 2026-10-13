@@ -31,11 +31,11 @@ export default function ComboboxFramework() {
         value={value}
         onValueChange={setValue}
       />
-      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2.5 font-mono text-xs">
-        <dt className="text-white/40">Build</dt>
-        <dd className="truncate text-white/80">{preset ? preset.build : "–"}</dd>
-        <dt className="text-white/40">Output</dt>
-        <dd className="truncate text-white/80">{preset ? preset.output : "–"}</dd>
+      <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-1 rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2.5 text-xs">
+        <dt className="text-white/55">Build</dt>
+        <dd className="truncate font-mono text-white/85">{preset ? preset.build : "–"}</dd>
+        <dt className="text-white/55">Output</dt>
+        <dd className="truncate font-mono text-white/85">{preset ? preset.output : "–"}</dd>
       </dl>
     </div>
   );

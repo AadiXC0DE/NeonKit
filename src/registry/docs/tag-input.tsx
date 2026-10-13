@@ -63,7 +63,8 @@ export const doc: ComponentDoc = {
           description: "Accept a tag that's already there. Duplicates are compared case-insensitively.",
         },
         { prop: "suggestions", type: "string[]", description: "Offered in a list that filters as you type." },
-        { prop: "name", type: "string", description: "Submits each tag under this name with a surrounding form." },
+        { prop: "name", type: "string", description: "Submits each tag under this name with a surrounding form. A form reset puts back the starting tags." },
+        { prop: "required", type: "boolean", default: "false", description: "Satisfied by at least one tag; the empty text box after a commit doesn't count against it." },
         { prop: "label", type: "ReactNode", description: "Visible label for the input." },
         { prop: "description", type: "ReactNode", description: "Helper text under the field. Replaced by any error." },
         {
@@ -79,6 +80,7 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "When the browser rejects the field on submit (required, type, pattern), it turns red until it's edited or the form resets. The browser shows its own message.",
     "A separator key commits the typed text. Pasting splits on commas, newlines and any character separators, and the field commits what's typed when you leave it.",
     "Backspace in an empty input lights up the last chip; a second Backspace removes it. Any other key cancels.",
     "ArrowLeft from the start of an empty input moves onto the chips. ArrowLeft and ArrowRight move between them, Home goes to the first, End or Escape returns to the input.",

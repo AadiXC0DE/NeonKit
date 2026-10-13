@@ -75,4 +75,17 @@ describe("Gauge", () => {
     expect(ref.current).toBe(screen.getByRole("meter"));
     expect(screen.getByTestId("gauge")).toBe(ref.current);
   });
+  it("prints the legend under the hub, clear of the numerals", () => {
+    const { container } = render(<Gauge value={40} label="Coolant" />);
+    const legend = Array.from(container.querySelectorAll("text")).find((t) => t.textContent === "COOLANT");
+    expect(Number(legend?.getAttribute("y"))).toBeGreaterThan(110);
+  });
+
+  it("uses a true minus sign on the scale and readout", () => {
+    const { container } = render(<Gauge value={-62} min={-100} max={-30} />);
+    const texts = Array.from(container.querySelectorAll("text")).map((t) => t.textContent);
+    expect(texts).toContain("\u2212100");
+    expect(texts).toContain("\u221262");
+    expect(texts.some((t) => t?.startsWith("-"))).toBe(false);
+  });
 });

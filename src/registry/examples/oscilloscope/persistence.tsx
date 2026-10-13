@@ -1,9 +1,9 @@
 import { Oscilloscope } from "@/components/ui/oscilloscope";
 
 const settings = [
-  { persistence: 0, label: "0 · digital" },
-  { persistence: 0.85, label: "0.85 · default" },
-  { persistence: 0.96, label: "0.96 · long glow" },
+  { persistence: 0, label: "Digital, no afterglow" },
+  { persistence: 0.85, label: "Default phosphor" },
+  { persistence: 0.96, label: "Long glow" },
 ];
 
 export default function OscilloscopePersistence() {
@@ -19,7 +19,10 @@ export default function OscilloscopePersistence() {
             grid={false}
             className="aspect-square rounded-xl"
           />
-          <figcaption className="font-mono text-[11px] tracking-[0.08em] text-white/45">{label}</figcaption>
+          <figcaption className="flex items-baseline justify-between gap-3 text-[13px] text-white/55">
+            {label}
+            <code className="font-mono text-xs tabular-nums text-white/70">{persistence}</code>
+          </figcaption>
         </figure>
       ))}
     </div>

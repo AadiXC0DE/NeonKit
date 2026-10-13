@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Timeline, TimelineItem, type TimelineStatus } from "@/components/ui/timeline";
 

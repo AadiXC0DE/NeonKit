@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { BorderBeam } from "@/components/ui/border-beam";
 
 export default function BorderBeamButton() {

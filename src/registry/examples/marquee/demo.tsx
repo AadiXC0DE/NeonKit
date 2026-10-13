@@ -26,7 +26,7 @@ export default function MarqueeDemo() {
       </Marquee>
       <Marquee reverse speed={22} gap={28} className="mt-2 py-2">
         {cities.map((city) => (
-          <span key={city} className="whitespace-nowrap font-mono text-xs uppercase tracking-[0.3em] text-white/40">
+          <span key={city} className="whitespace-nowrap text-sm text-white/55">
             {city}
           </span>
         ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Flag, Pause, Play, RotateCcw } from "lucide-react";
+import { Flag, Pause, Play, RotateCcw } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { SevenSegment } from "@/components/ui/seven-segment";
 
@@ -56,7 +56,7 @@ export default function SevenSegmentStopwatch() {
         <ol className="w-full divide-y divide-white/[0.06] border-y border-white/[0.06]">
           {laps.map((lap, index) => (
             <li key={lap} className="flex items-center justify-between py-2">
-              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">Lap {laps.length - index}</span>
+              <span className="text-[13px] text-white/55">Lap {laps.length - index}</span>
               <SevenSegment value={format(lap)} size={18} unlit={0.05} />
             </li>
           ))}

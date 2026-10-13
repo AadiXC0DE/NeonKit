@@ -87,7 +87,8 @@ export const doc: ComponentDoc = {
     },
     {
       name: "DropdownMenuContent",
-      description: "The menu panel, portaled and positioned with floating-ui. It flips and shifts to stay on screen and scrolls when it's taller than the space.",
+      description:
+        "The menu panel, portaled and positioned with floating-ui. It flips and shifts to stay on screen and scrolls when it's taller than the space. Inside a modal dialog it portals into the dialog. --menu-trigger-width holds the trigger's width, so className=\"w-[var(--menu-trigger-width)]\" matches it.",
       props: [
         { prop: "side", type: '"top" | "right" | "bottom" | "left"', default: '"bottom"', description: "Preferred side of the trigger." },
         { prop: "align", type: '"start" | "center" | "end"', default: '"start"', description: "Alignment along that side." },

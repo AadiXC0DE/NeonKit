@@ -8,8 +8,8 @@ const steps = [
   {
     value: "dependencies",
     title: "1. Install the dependencies",
-    body: "Only the packages a component imports. For Accordion that is motion and lucide-react.",
-    code: "npm install motion lucide-react",
+    body: "Only the packages a component imports. For Accordion that is motion.",
+    code: "npm install motion",
   },
   {
     value: "helper",

@@ -1,4 +1,4 @@
-import { Mail, MessagesSquare, Rss } from "lucide-react";
+import { Mail, MessagesSquare, Rss } from "@/components/ui/icons";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 
 const links = [

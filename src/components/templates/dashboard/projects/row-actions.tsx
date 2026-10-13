@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Ellipsis, ExternalLink, Pause, Play, RotateCw, Trash2 } from "lucide-react";
+import { Copy, Ellipsis, ExternalLink, Pause, Play, RotateCw, Trash2 } from "@/components/ui/icons";
 import {
   DropdownMenu,
   DropdownMenuContent,

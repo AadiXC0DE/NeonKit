@@ -12,7 +12,7 @@ export default function CopyButtonWithLabel() {
     <div className="flex w-full min-w-0 max-w-md items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5">
       <div className="min-w-0">
         <p className="text-sm font-medium text-white/90">Production key</p>
-        <p className="truncate font-mono text-[13px] text-white/45">nk_live_••••••••••••••••d6Fy</p>
+        <p className="truncate font-mono text-[13px] text-white/50">nk_live_••••••••••••••••d6Fy</p>
       </div>
       <CopyButton value={revealKey} variant="outline" size="sm" copiedLabel="Key copied">
         Copy key

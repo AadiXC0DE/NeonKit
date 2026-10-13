@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { NeonText } from "@/components/ui/neon-text";
 import { Switch } from "@/components/ui/switch";
@@ -29,10 +29,12 @@ export function Hero({
   componentCount,
   blockCount,
   templateCount,
+  version,
 }: {
   componentCount: number;
   blockCount: number;
   templateCount: number;
+  version: string;
 }) {
   const accent = useAccent();
   const [on, setOn] = React.useState(true);
@@ -49,9 +51,13 @@ export function Hero({
 
       <div className="mx-auto flex min-h-[calc(100svh-3.5rem)] max-w-[88rem] flex-col px-4 pb-10 pt-8 sm:px-6 lg:pb-14">
         <h1 className="sr-only">NeonKit: neon UI components for React and Tailwind CSS</h1>
-        <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
-          <span>Neon UI for React</span>
-          <span className="hidden sm:inline">{componentCount} components · {blockCount} blocks · {templateCount} templates · MIT</span>
+        <div className="flex items-baseline justify-between gap-6 text-[13.5px] text-muted">
+          <p>
+            {componentCount} components, {blockCount} blocks and {templateCount} templates
+          </p>
+          <p className="hidden sm:block">
+            MIT licensed, <span className="font-mono text-[12.5px]">v{version}</span>
+          </p>
         </div>
 
         {/* The sign */}
@@ -98,10 +104,10 @@ export function Hero({
           <div className="w-full rounded-2xl border border-line bg-white/[0.015] backdrop-blur-sm lg:w-auto">
             <div className="grid grid-cols-2 sm:grid-cols-[auto_auto_1fr]">
               <div className="flex flex-col justify-between gap-4 border-r border-line p-4 sm:p-5">
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-dim">Power</span>
+                <span className="text-[13px] text-muted">Power</span>
                 <div className="flex items-center gap-3">
                   <Switch size="lg" checked={on} onCheckedChange={setOn} aria-label="Sign power" />
-                  <span className="w-6 font-mono text-[11px] uppercase text-muted">{on ? "on" : "off"}</span>
+                  <span className="w-6 text-[13px] text-muted">{on ? "On" : "Off"}</span>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-4 sm:border-r sm:border-line sm:p-5">
@@ -110,17 +116,17 @@ export function Hero({
                   onChange={(hue) => setAccent({ hue, rgb: hueToRgb(hue) })}
                 />
                 <div className="flex flex-col gap-1">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-dim">Hue</span>
+                  <span className="text-[13px] text-muted">Hue</span>
                   <span className="font-mono text-[13px] tabular-nums text-fg">{String(accent.hue).padStart(3, "0")}°</span>
                 </div>
               </div>
               <div className="col-span-2 flex flex-col justify-between gap-3 border-t border-line p-4 sm:col-span-1 sm:border-t-0 sm:p-5">
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-dim">Gels</span>
+                  <span className="text-[13px] text-muted">Gels</span>
                   <button
                     type="button"
                     onClick={resetAccent}
-                    className="cursor-pointer font-mono text-[10px] uppercase tracking-[0.18em] text-dim transition-colors hover:text-fg"
+                    className="cursor-pointer rounded text-[13px] text-muted transition-colors hover:text-fg"
                   >
                     Reset
                   </button>
@@ -155,7 +161,7 @@ export function Hero({
                 </div>
               </div>
             </div>
-            <p className="border-t border-line px-4 py-2.5 font-mono text-[10.5px] text-dim sm:px-5">
+            <p className="border-t border-line px-4 py-2.5 text-[13px] text-muted sm:px-5">
               Turn the knob. Every component on the site follows.
             </p>
           </div>

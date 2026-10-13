@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Heart, Star, Zap } from "lucide-react";
+import { Heart, Star, Zap } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -146,6 +146,26 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
       }
       setIgnition({ display, keys, delays, fills, count: ignition.count + 1 });
     }
+
+    // A form reset puts the starting rating back.
+    const hiddenRef = React.useRef<HTMLInputElement>(null);
+    const initialValue = React.useRef(value);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialValue.current;
+        if (initial === value) return;
+        if (!isControlled) setUncontrolled(initial);
+        onValueChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = hiddenRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
 
     function setHoverValue(next: number | null) {
       if (next === hover) return;
@@ -318,7 +338,7 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
     );
 
     const hidden = name ? (
-      <input type="hidden" name={name} value={value} disabled={disabled} />
+      <input ref={hiddenRef} type="hidden" name={name} value={value} disabled={disabled} />
     ) : null;
 
     if (!label) {

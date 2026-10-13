@@ -19,7 +19,7 @@ export default function NeonIconStatusBar() {
               <NeonIcon icon="battery" size={22} value={state.battery} animated={state.charging} />
             </span>
           </div>
-          <p className="px-5 text-xs text-white/45">{state.note}</p>
+          <p className="px-5 text-xs text-white/55">{state.note}</p>
         </div>
       ))}
     </div>

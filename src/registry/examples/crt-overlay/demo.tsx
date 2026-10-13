@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Power } from "lucide-react";
+import { Power } from "@/components/ui/icons";
 import { CrtOverlay } from "@/components/ui/crt-overlay";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +38,7 @@ export default function CrtOverlayDemo() {
       </CrtOverlay>
 
       <div className="mt-3 flex items-center justify-between px-2">
-        <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/35">NK-14 · Colour monitor</span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">NK-14 colour monitor</span>
         <div className="flex items-center gap-3">
           <span
             aria-hidden

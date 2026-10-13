@@ -19,6 +19,11 @@ const IGNITE_LABEL =
 const FOCUS_RING =
   "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]";
 
+// An invisible target at least 44px tall, so small items are still easy to tap. It
+// overlaps neighbours by a pixel to cover the gap between segments.
+const HIT_AREA =
+  "before:absolute before:-inset-x-px before:top-1/2 before:h-[max(100%,2.75rem)] before:-translate-y-1/2 before:content-['']";
+
 const LIT_LABEL =
   "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.55)] [&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/0.7))]";
 
@@ -109,6 +114,7 @@ const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
             "[--neon:var(--neon-accent,34_211_238)]",
             "relative inline-flex shrink-0 cursor-pointer select-none items-center justify-center whitespace-nowrap font-medium outline-none",
             "transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.97]",
+            HIT_AREA,
             FOCUS_RING,
             "disabled:pointer-events-none disabled:opacity-50",
             "[&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -239,6 +245,8 @@ interface ToggleGroupBaseProps
   orientation?: Orientation;
   /** Disables every item. */
   disabled?: boolean;
+  /** Submits the selected value (one entry per value for `multiple`) under this name. */
+  name?: string;
 }
 
 export interface ToggleGroupSingleProps extends ToggleGroupBaseProps {
@@ -272,6 +280,7 @@ const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>((props, r
     size = "md",
     orientation = "horizontal",
     disabled = false,
+    name,
     color,
     style,
     className,
@@ -288,6 +297,28 @@ const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>((props, r
   const values = toList(valueProp) ?? uncontrolled;
   const [focused, setFocused] = React.useState<string | null>(null);
   const single = type === "single";
+
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  React.useImperativeHandle(ref, () => rootRef.current as HTMLDivElement);
+
+  // A form reset puts the selection back where it started.
+  const initialValues = React.useRef(values);
+  const resetRef = React.useRef<() => void>(() => {});
+  React.useEffect(() => {
+    resetRef.current = () => {
+      const initial = initialValues.current;
+      if (initial.length === values.length && initial.every((value, i) => value === values[i])) return;
+      if (valueProp === undefined) setUncontrolled(initial);
+      (onValueChange as ((value: string | string[]) => void) | undefined)?.(single ? (initial[0] ?? "") : initial);
+    };
+  });
+  React.useEffect(() => {
+    const form = rootRef.current?.closest("form");
+    if (!form) return;
+    const onReset = () => resetRef.current();
+    form.addEventListener("reset", onReset);
+    return () => form.removeEventListener("reset", onReset);
+  }, []);
 
   const tabStop = focused ?? (single ? (values[0] ?? null) : null);
 
@@ -362,7 +393,7 @@ const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>((props, r
   return (
     <ToggleGroupContext.Provider value={context}>
       <div
-        ref={ref}
+        ref={rootRef}
         role={single ? "radiogroup" : "toolbar"}
         aria-orientation={orientation}
         aria-disabled={disabled || undefined}
@@ -393,6 +424,10 @@ const ToggleGroup = React.forwardRef<HTMLDivElement, ToggleGroupProps>((props, r
       >
         {children}
         {!single && <style>{keyframes}</style>}
+        {name &&
+          values.map((value) => (
+            <input key={value} type="hidden" name={name} value={value} disabled={disabled} />
+          ))}
       </div>
     </ToggleGroupContext.Provider>
   );
@@ -451,6 +486,8 @@ const ToggleGroupItem = React.forwardRef<HTMLButtonElement, ToggleGroupItemProps
         className={cn(
           "relative inline-flex shrink-0 cursor-pointer select-none items-center whitespace-nowrap font-medium outline-none",
           "transition-[background-color,color] duration-150 ease-out",
+          // Stacked items would steal each other's taps, so only rows get the taller target.
+          !vertical && HIT_AREA,
           "disabled:pointer-events-none disabled:opacity-40",
           "[&_svg]:pointer-events-none [&_svg]:shrink-0",
           vertical ? "justify-start" : "justify-center",

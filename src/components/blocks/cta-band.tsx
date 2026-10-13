@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { TubeDivider } from "@/components/ui/tube-divider";
 import { neonVars } from "@/lib/neon";
@@ -28,19 +28,19 @@ function RequestTicker() {
   const r = REQUESTS[index];
   const limited = r.status === 429;
   return (
-    <p aria-hidden className="flex min-w-0 items-center gap-3 font-mono text-[11px] text-white/45">
+    <p aria-hidden className="flex min-w-0 items-center gap-3 font-mono text-[12px] text-white/50">
       <span className="relative flex size-1.5 shrink-0">
         <span className="absolute inset-0 animate-ping rounded-full bg-[rgb(var(--neon)/0.6)] [animation-duration:2.2s] motion-reduce:hidden" />
         <span className="relative size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]" />
       </span>
       <span key={index} className="nk-cta-band-tick flex min-w-0 items-center gap-2 whitespace-nowrap">
         <span className="shrink-0 text-white/70">{r.method}</span>
-        <span className="truncate text-white/55">{r.path}</span>
-        <span className="hidden text-white/25 sm:inline">→ {r.service}</span>
-        <span className={cn("tabular-nums", limited ? "text-white/40 line-through" : "text-[rgb(var(--neon))]")}>
+        <span className="truncate text-white/65">{r.path}</span>
+        <span className="hidden text-white/50 sm:inline">→ {r.service}</span>
+        <span className={cn("tabular-nums", limited ? "text-white/50 line-through" : "text-[rgb(var(--neon))]")}>
           {r.status}
         </span>
-        <span className="tabular-nums text-white/30">{r.ms} ms</span>
+        <span className="tabular-nums text-white/55">{r.ms} ms</span>
       </span>
     </p>
   );
@@ -95,19 +95,24 @@ export default function CtaBand() {
         />
 
         <div className="mx-auto max-w-[1180px]">
-          <RequestTicker />
           <h2
             id="cta-band-title"
-            className="mt-7 max-w-[20ch] text-balance text-[clamp(2.5rem,6.4vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white"
+            className="max-w-[18ch] text-balance text-[clamp(2.6rem,6.8vw,6rem)] font-[620] leading-[0.94] tracking-[-0.045em] text-white [font-stretch:112%]"
           >
             First request routed in under ten minutes.
           </h2>
 
           <div className="mt-10 grid gap-10 border-t border-white/[0.07] pt-8 lg:mt-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start lg:gap-20">
-            <p className="max-w-[52ch] text-pretty text-base leading-relaxed text-white/55 sm:text-[17px]">
-              Overpass sits in front of your services and handles keys, rate limits and retries from one YAML file.
-              Point a DNS record at it and you&apos;re live.
-            </p>
+            <div>
+              <p className="max-w-[50ch] text-pretty text-[17px] leading-[1.6] text-white/60">
+                Overpass sits in front of your services and handles keys, rate limits and retries from one YAML file.{" "}
+                <span className="text-white/50">Point a DNS record at it and you&apos;re live.</span>
+              </p>
+              <div className="mt-6 flex flex-col gap-2">
+                <span className="text-[13px] text-white/55">Our own gateway, right now</span>
+                <RequestTicker />
+              </div>
+            </div>
 
             <div className="flex flex-col gap-5 lg:items-end">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -120,7 +125,7 @@ export default function CtaBand() {
                   <a href="#">Book a 20-minute call</a>
                 </Button>
               </div>
-              <ul className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] text-white/55 lg:justify-end">
+              <ul className="flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-white/55 lg:justify-end">
                 {TRUST.map((item) => (
                   <li key={item} className="flex items-center gap-2">
                     <span aria-hidden className="size-1 rounded-full bg-[rgb(var(--neon)/0.45)]" />

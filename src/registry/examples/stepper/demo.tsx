@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, ArrowRight, CircleCheck, CreditCard, RotateCcw, Truck } from "lucide-react";
+import { ArrowLeft, ArrowRight, CircleCheck, CreditCard, RotateCcw, Truck } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Step, Stepper } from "@/components/ui/stepper";
 
@@ -21,14 +21,14 @@ function Panel({ step }: { step: number }) {
         <div className={row}>
           <span className="grid">
             <span className="text-white/90">Halo desk lamp</span>
-            <span className="text-xs text-white/45">Graphite · 2700K</span>
+            <span className="text-xs text-white/50">Graphite · 2700K</span>
           </span>
           <span className="tabular-nums text-white/80">$129.00</span>
         </div>
         <div className={row}>
           <span className="grid">
             <span className="text-white/90">Spare tube, 40 cm</span>
-            <span className="text-xs text-white/45">Qty 2</span>
+            <span className="text-xs text-white/50">Qty 2</span>
           </span>
           <span className="tabular-nums text-white/80">$36.00</span>
         </div>
@@ -42,14 +42,14 @@ function Panel({ step }: { step: number }) {
 
   if (step === 1) {
     return (
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid content-start gap-4 sm:grid-cols-2">
         <div className="grid gap-0.5 text-sm">
-          <span className="text-xs text-white/45">Ship to</span>
+          <span className="text-xs text-white/50">Ship to</span>
           <span className="text-white/90">Mira Okafor</span>
           <span className="text-white/60">18 Harbour Street, Leith</span>
           <span className="text-white/60">Edinburgh EH6 6PZ</span>
         </div>
-        <div className="flex items-start gap-3 rounded-lg border border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.06)] p-3 text-sm">
+        <div className="flex items-start gap-3 self-start rounded-lg border border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.06)] p-3 text-sm">
           <Truck aria-hidden className="mt-0.5 size-4 shrink-0 text-[rgb(var(--neon))]" />
           <span className="grid gap-0.5">
             <span className="text-white/90">Standard delivery</span>
@@ -67,11 +67,11 @@ function Panel({ step }: { step: number }) {
           <CreditCard aria-hidden className="size-4 shrink-0 text-white/60" />
           <span className="grid flex-1 text-sm">
             <span className="text-white/90">Visa ending 4242</span>
-            <span className="text-xs text-white/45">Expires 08/28</span>
+            <span className="text-xs text-white/50">Expires 08/28</span>
           </span>
-          <span className="text-xs text-white/45">Default</span>
+          <span className="text-xs text-white/50">Default</span>
         </div>
-        <p className="text-xs text-white/45">Billing address is the same as shipping.</p>
+        <p className="text-xs text-white/50">Billing address is the same as shipping.</p>
       </div>
     );
   }
@@ -139,7 +139,7 @@ export default function StepperDemo() {
         ))}
       </Stepper>
 
-      <div className="grid min-h-[156px] rounded-xl border border-white/10 bg-white/[0.03] p-5">
+      <div className="grid min-h-[156px] content-start rounded-xl border border-white/10 bg-white/[0.03] p-5">
         <Panel step={step} />
       </div>
 

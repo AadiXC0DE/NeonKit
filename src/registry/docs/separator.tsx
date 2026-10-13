@@ -2,17 +2,18 @@ import type { ComponentDoc } from "../types";
 import SeparatorDemo from "../examples/separator/demo";
 import SeparatorVariants from "../examples/separator/variants";
 import SeparatorVertical from "../examples/separator/vertical";
-import SeparatorUnread from "../examples/separator/unread";
+import SeparatorSignIn from "../examples/separator/sign-in";
 
 export const doc: ComponentDoc = {
   usage: `import { Separator } from "@/components/ui/separator"
 
-<Separator variant="tube" label="or" />`,
+<Separator variant="tube" label="2 new messages" decorative={false} />`,
   examples: [
     {
       name: "demo",
-      title: "Tube with a label",
-      description: "The tube breaks around the label, and each half gets its own end caps.",
+      title: "Unread marker",
+      description:
+        "The tube is for the one line that matters: here, where unread messages start. With decorative={false} it is announced, named by its label.",
       component: SeparatorDemo,
     },
     {
@@ -28,11 +29,10 @@ export const doc: ComponentDoc = {
       component: SeparatorVertical,
     },
     {
-      name: "unread",
-      title: "Section labels",
-      description:
-        "With decorative={false} the separator is announced, named by its label. Here the tube marks where unread messages start.",
-      component: SeparatorUnread,
+      name: "sign-in",
+      title: "Label on a hairline",
+      description: "Most dividers should stay quiet. The label breaks the line and centers itself.",
+      component: SeparatorSignIn,
     },
   ],
   api: [

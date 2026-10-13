@@ -20,7 +20,7 @@ export default function GlowChartRevenue() {
           <p className="text-sm text-white/55">Monthly recurring revenue</p>
           <p className="mt-1 text-3xl font-semibold tracking-[-0.02em] text-white">$268,920</p>
         </div>
-        <p className="text-xs text-white/45">
+        <p className="text-xs text-white/50">
           <span className="font-medium text-[rgb(52_211_153)]">+4.9%</span> vs September · 47.4% year over year
         </p>
       </div>

@@ -17,7 +17,9 @@ src/lib/utils.ts                    cn()
 
 ## Component rules
 
-**Imports.** Only `react`, `react-dom`, `@/lib/utils`, `@/lib/neon`, and the npm packages listed for the component in `registry.json` (`motion`, `lucide-react`, `@radix-ui/react-slot`, `@floating-ui/react-dom`). Import motion from `motion/react`.
+**Imports.** Only `react`, `react-dom`, `@/lib/utils`, `@/lib/neon`, other NeonKit components listed in `registryDependencies`, and the npm packages listed for the component in `registry.json` (`motion`, `@radix-ui/react-slot`, `@floating-ui/react-dom`). Import motion from `motion/react`.
+
+**Icons.** Use NeonKit's own set from `@/components/ui/icons` (list `icons` in `registryDependencies`), never lucide-react. The names match lucide's. A new glyph is drawn as bent tube: 24px grid, 1.75 stroke, real bend radii, and a blockout gap where one tube passes behind another.
 
 **Building on other components.** A component may import another NeonKit component from `@/components/ui/<slug>` only when its registry entry lists that slug in `registryDependencies`. The CLI then installs both. The build fails on any mismatch either way. Prefer composition (Date Picker = Calendar + Popover) over copying internals.
 
@@ -56,7 +58,7 @@ src/lib/utils.ts                    cn()
 | Popover / overlay | `bg-[#0a0b11]` + `border-white/10`     |
 | Text              | `text-white/90`                        |
 | Secondary text    | `text-white/55`                        |
-| Placeholder       | `placeholder:text-white/30`            |
+| Placeholder       | `placeholder:text-white/50`            |
 
 **Glow is a signal.** Light up interactive or active state (focus, checked, selected, hover) and leave resting UI calm. One element per component carries the strongest glow.
 

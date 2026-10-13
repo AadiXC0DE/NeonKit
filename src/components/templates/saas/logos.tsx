@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Marquee } from "@/components/ui/marquee";
 import { stats } from "./data";
-import { Eyebrow } from "./primitives";
 
 // Fictional customers, drawn with type and a few SVG primitives in currentColor.
 const logos: { name: string; mark: React.ReactNode }[] = [
@@ -13,7 +12,7 @@ const logos: { name: string; mark: React.ReactNode }[] = [
           <path d="M2 18V8l8-6 8 6v10h-5v-6H7v6Z" />
         </svg>
         <span className="text-[22px] font-bold tracking-[-0.04em]">okapi</span>
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em]">freight</span>
+        <span className="text-[11px] font-medium tracking-[0.3em]">FREIGHT</span>
       </span>
     ),
   },
@@ -106,26 +105,20 @@ const lamp = `linear-gradient(90deg, transparent, rgb(0 0 0 / 0.32) ${edge}, rgb
 
 export function Logos() {
   return (
-    <section aria-labelledby="logos-title" className="relative overflow-hidden py-20 sm:py-24">
+    <section aria-labelledby="logos-title" className="relative overflow-hidden pb-24 pt-8 sm:pb-32">
       <div className="px-5 sm:px-8">
-        <div className="mx-auto grid max-w-[1120px] gap-6 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
-          <div>
-            <Eyebrow>Asleep at 2am</Eyebrow>
-            <h2
-              id="logos-title"
-              className="mt-4 text-balance text-[clamp(1.9rem,4.4vw,3rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-white"
-            >
-              <span className="tabular-nums">{stats.teams}</span> teams ship while they sleep.
-            </h2>
-          </div>
-          <p className="max-w-sm text-pretty text-[15px] leading-relaxed text-white/60">
-            Freight, rail, payments and storefronts: teams whose busiest hour is nobody&apos;s 2am. A few of them,
-            passing under the lamp.
-          </p>
-        </div>
+        <h2
+          id="logos-title"
+          className="mx-auto max-w-[60ch] text-balance text-center text-[15px] leading-relaxed text-white/60 sm:text-[17px]"
+        >
+          <span className="font-medium text-white">
+            <span className="tabular-nums">{stats.teams}</span> teams ship while they sleep.
+          </span>{" "}
+          Freight, rail, payments and shops whose busiest hour is nobody&apos;s 2am, passing under the lamp.
+        </h2>
       </div>
 
-      <div className="relative isolate mt-12 sm:mt-16">
+      <div className="relative isolate mt-10 sm:mt-12">
         <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-white/[0.06]" />
         <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-white/[0.06]" />
         <span

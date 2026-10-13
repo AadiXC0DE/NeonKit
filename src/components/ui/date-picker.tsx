@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CalendarDays, X } from "lucide-react";
+import { CalendarDays, X } from "@/components/ui/icons";
 
 import { Calendar, type DateRange } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -57,6 +57,35 @@ function useWide() {
   );
 }
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 export interface DatePickerPreset<T> {
   label: string;
   value: T;
@@ -86,6 +115,8 @@ interface DatePickerBaseProps
   size?: keyof typeof sizes;
   /** Submits yyyy-mm-dd (or yyyy-mm-dd/yyyy-mm-dd for a range) under this name. */
   name?: string;
+  /** Blocks form submission until a date (or a full range) is picked. */
+  required?: boolean;
   label?: React.ReactNode;
   /** Helper text under the field. Hidden while `error` is set. */
   description?: React.ReactNode;
@@ -140,6 +171,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
       size = "md",
       disabled,
       name,
+      required = false,
       label,
       description,
       error,
@@ -160,9 +192,9 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
     const id = idProp ?? autoId;
     const labelId = `${id}-label`;
     const valueId = `${id}-value`;
-    const invalid = Boolean(error);
-    const message = invalid ? (error === true ? null : error) : description;
-    const messageId = message ? `${id}-${invalid ? "error" : "description"}` : undefined;
+    const errored = Boolean(error);
+    const message = errored ? (error === true ? null : error) : description;
+    const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
     const s = sizes[size];
     const range = mode === "range";
 
@@ -216,11 +248,34 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
         ? sameDay(preset.value, single)
         : !!span && sameDay(preset.value.from, span.from) && sameDay(preset.value.to, span.to);
 
+    // A form reset goes back to the date the picker started with.
+    const proxyRef = React.useRef<HTMLInputElement>(null);
+    const initialValue = React.useRef(value);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialValue.current;
+        setOpen(false);
+        setDraft(null);
+        if (initial === value) return;
+        commit(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = proxyRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     const formValue = single
       ? isoDay(single)
       : span?.from && span.to
         ? `${isoDay(span.from)}/${isoDay(span.to)}`
         : "";
+    const rejected = useRejected(proxyRef, formValue);
+    const invalid = errored || rejected;
 
     const calendarProps = {
       month,
@@ -251,6 +306,13 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             className={cn("w-fit font-medium text-white/80", s.label)}
           >
             {label}
+            {required && (
+              <span
+                aria-hidden
+                title="Required"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+              />
+            )}
           </label>
         )}
         <Popover open={open && !disabled} onOpenChange={setOpenState}>
@@ -301,7 +363,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                 {...props}
               >
                 <CalendarDays aria-hidden />
-                <span id={valueId} className={cn("min-w-0 flex-1 truncate tabular-nums", !hasValue && "text-white/30")}>
+                <span id={valueId} className={cn("min-w-0 flex-1 truncate tabular-nums", !hasValue && "text-white/50")}>
                   {text}
                 </span>
               </button>
@@ -324,6 +386,20 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                 <X aria-hidden />
               </button>
             )}
+            {/* Carries the date into forms, under the field so a validation bubble points at it. */}
+            <input
+              ref={proxyRef}
+              aria-hidden
+              tabIndex={-1}
+              autoComplete="off"
+              name={name}
+              value={formValue}
+              required={required}
+              disabled={disabled}
+              onChange={() => {}}
+              onFocus={() => triggerRef.current?.focus()}
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-px w-full opacity-0"
+            />
           </div>
           <PopoverContent align="start" className="w-auto p-0">
             <div className="flex flex-col sm:flex-row">
@@ -401,9 +477,8 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             </div>
           </PopoverContent>
         </Popover>
-        {name && <input type="hidden" name={name} value={formValue} disabled={disabled} />}
         {message && (
-          <p id={messageId} className={cn("text-xs leading-5", invalid ? "text-[#ff4d5e]" : "text-white/55")}>
+          <p id={messageId} className={cn("text-xs leading-5", errored ? "text-[#ff4d5e]" : "text-white/55")}>
             {message}
           </p>
         )}

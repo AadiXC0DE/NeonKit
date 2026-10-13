@@ -1,4 +1,4 @@
-import { Sparkles } from "lucide-react";
+import { Sparkles } from "@/components/ui/icons";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 
 export default function ShimmerButtonVariants() {

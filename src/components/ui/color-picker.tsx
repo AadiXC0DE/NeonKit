@@ -104,6 +104,8 @@ function rgbToHex(rgb: Rgb) {
   return `#${rgb.map((n) => clamp(Math.round(n), 0, 255).toString(16).padStart(2, "0")).join("")}`;
 }
 
+const round = (value: number) => Math.round(value * 1000) / 1000;
+
 /** A palette name, `#rgb`/`#rrggbb`, or the `rgb(…)` string some browsers return from EyeDropper. */
 function toHex(color: string): string | null {
   if (color in neonColors) {
@@ -291,10 +293,11 @@ function HueKnob({ hue, onChange, size, disabled }: HueKnobProps) {
           return (
             <line
               key={i}
-              x1={36 + Math.sin(angle) * 31}
-              y1={36 - Math.cos(angle) * 31}
-              x2={36 + Math.sin(angle) * outer}
-              y2={36 - Math.cos(angle) * outer}
+              // Rounded: Node and browsers disagree on the last digits of sin and cos, which breaks hydration.
+              x1={round(36 + Math.sin(angle) * 31)}
+              y1={round(36 - Math.cos(angle) * 31)}
+              x2={round(36 + Math.sin(angle) * outer)}
+              y2={round(36 - Math.cos(angle) * outer)}
               stroke={`hsl(${tickHue} 95% 62%)`}
               strokeOpacity={near && !disabled ? 1 : 0.32}
               strokeWidth={1.2}
@@ -512,6 +515,25 @@ const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       setHslHex(nextHex);
       emit(nextHex);
     }
+
+    // A form reset puts the starting color back.
+    const hiddenRef = React.useRef<HTMLInputElement>(null);
+    const initialHex = React.useRef(hex);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        setDraft(null);
+        setAttempted(false);
+        emit(initialHex.current);
+      };
+    });
+    React.useEffect(() => {
+      const form = hiddenRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
 
     /** Discrete picks (gels, hex, sampler) re-strike the tube. */
     function commitHex(nextHex: string) {
@@ -782,7 +804,7 @@ const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                     s.field,
                   )}
                 >
-                  <label htmlFor={hexInputId} className={cn("shrink-0 cursor-text font-mono text-white/35", s.hash)}>
+                  <label htmlFor={hexInputId} className={cn("shrink-0 cursor-text font-mono text-white/50", s.hash)}>
                     <span aria-hidden>#</span>
                     <span className="sr-only">Hex color</span>
                   </label>
@@ -826,7 +848,7 @@ const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             </div>
           )}
         </div>
-        {name && <input type="hidden" name={name} value={hex} disabled={disabled} />}
+        {name && <input ref={hiddenRef} type="hidden" name={name} value={hex} disabled={disabled} />}
       </div>
     );
   },

@@ -36,7 +36,7 @@ export default function TableUsage() {
         {usage.map((row) => (
           <TableRow key={row.resource}>
             <TableCell className="whitespace-nowrap text-white/90">{row.resource}</TableCell>
-            <TableCell align="right" className="text-white/45">
+            <TableCell align="right" className="text-white/50">
               {row.included}
             </TableCell>
             <TableCell align="right">{row.used}</TableCell>

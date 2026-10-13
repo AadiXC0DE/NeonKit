@@ -62,9 +62,23 @@ export default function FaderDemo() {
     gainsRef.current = gains;
   }, [gains]);
 
+  const rootRef = React.useRef<HTMLDivElement>(null);
+
+  // The meters only run while the desk is on screen.
   React.useEffect(() => {
+    const node = rootRef.current;
+    if (!node) return;
     const start = performance.now();
-    const id = window.setInterval(() => {
+    let id = 0;
+    const stop = () => {
+      window.clearInterval(id);
+      id = 0;
+    };
+    const run = () => {
+      if (id) return;
+      id = window.setInterval(tick, 50);
+    };
+    const tick = () => {
       const t = (performance.now() - start) / 1000;
       const g = gainsRef.current;
       const next: Record<string, number> = {};
@@ -76,21 +90,29 @@ export default function FaderDemo() {
       }
       next.main = toMeter(Math.sqrt(sum) * 0.7 * gainOf(g.main));
       setLevels(next);
-    }, 50);
-    return () => window.clearInterval(id);
+    };
+    const io = new IntersectionObserver(([entry]) => (entry.isIntersecting ? run() : stop()));
+    io.observe(node);
+    return () => {
+      io.disconnect();
+      stop();
+    };
   }, []);
 
   const setGain = (id: string) => (value: number) => setGains((g) => ({ ...g, [id]: value }));
 
   return (
-    <div className="w-full max-w-[700px] overflow-x-auto rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,#141720,#0b0d12)] shadow-[inset_0_1px_0_rgb(255_255_255/0.07),0_30px_60px_-30px_rgb(0_0_0/0.9)]">
+    <div
+      ref={rootRef}
+      className="w-full max-w-[700px] overflow-x-auto rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,#141720,#0b0d12)] shadow-[inset_0_1px_0_rgb(255_255_255/0.07),0_30px_60px_-30px_rgb(0_0_0/0.9)]"
+    >
       <div className="flex min-w-max">
         {channels.map((c, i) => (
           <div
             key={c.id}
             className="flex flex-1 flex-col items-center gap-4 border-r border-white/[0.05] px-3 pb-5 pt-4"
           >
-            <span className="font-mono text-[10px] tabular-nums text-white/30">{String(i + 1).padStart(2, "0")}</span>
+            <span className="text-[10px] font-medium tabular-nums text-white/40">{String(i + 1).padStart(2, "0")}</span>
             <Knob
               size="sm"
               aria-label={`${c.name} pan`}
@@ -118,7 +140,7 @@ export default function FaderDemo() {
           </div>
         ))}
         <div className="flex flex-1 flex-col items-center gap-4 border-l border-white/[0.08] bg-white/[0.02] px-4 pb-5 pt-4">
-          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">Main</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">Main</span>
           <div className="h-14" aria-hidden />
           <Fader
             label="Stereo"

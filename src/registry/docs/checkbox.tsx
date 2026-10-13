@@ -45,6 +45,8 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "A form reset puts the box back to where it started and calls onCheckedChange, so a controlled parent stays in sync.",
+    "The native input reaches 6px past the box, so a bare checkbox in a dense table is easier to hit.",
     "It is a real input, so Space toggles it, forms submit it and name, value and required work as usual.",
     "The label is wired with aria-labelledby, so the description is announced as a description rather than as part of the name.",
     "Indeterminate sets the native indeterminate property, which screen readers announce as mixed.",

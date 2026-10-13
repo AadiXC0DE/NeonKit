@@ -21,7 +21,7 @@ export default function CardDemo() {
       <CardContent className="grid gap-5">
         <div>
           <p className="text-3xl font-semibold tabular-nums tracking-tight text-white">$38.20</p>
-          <p className="mt-1 text-xs text-white/45">Estimated bill, including $18.20 in overages</p>
+          <p className="mt-1 text-xs text-white/50">Estimated bill, including $18.20 in overages</p>
         </div>
         <div className="grid gap-4">
           {metrics.map((metric) => (

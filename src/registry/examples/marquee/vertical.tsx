@@ -13,7 +13,7 @@ function Quote({ body, name, role }: (typeof quotes)[number]) {
   return (
     <figure className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
       <blockquote className="text-sm leading-relaxed text-white/80">{body}</blockquote>
-      <figcaption className="mt-3 text-xs text-white/45">
+      <figcaption className="mt-3 text-xs text-white/55">
         <span className="text-white/80">{name}</span> · {role}
       </figcaption>
     </figure>

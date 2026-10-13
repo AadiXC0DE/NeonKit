@@ -26,8 +26,8 @@ export default function Image() {
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ display: "flex", fontSize: 22, letterSpacing: 6, textTransform: "uppercase", color: "rgba(255,255,255,0.6)" }}>
-          {`${role} · ${city}`}
+        <div style={{ display: "flex", fontSize: 28, color: "rgba(255,255,255,0.65)" }}>
+          {`${role} in ${city}`}
         </div>
         <div
           style={{

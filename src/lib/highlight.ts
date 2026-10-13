@@ -12,7 +12,7 @@ const theme: ThemeRegistration = {
     "editor.foreground": "#c8d0de",
   },
   tokenColors: [
-    { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: "#4f586b", fontStyle: "italic" } },
+    { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: "#7a8396", fontStyle: "italic" } },
     { scope: ["keyword", "storage", "storage.type", "keyword.control", "keyword.operator.new", "keyword.operator.expression"], settings: { foreground: "#f58ac6" } },
     { scope: ["string", "string.template", "punctuation.definition.string"], settings: { foreground: "#7ee8f8" } },
     { scope: ["constant.numeric", "constant.language", "constant.language.boolean"], settings: { foreground: "#fbbf24" } },

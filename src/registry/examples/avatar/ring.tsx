@@ -24,7 +24,7 @@ export default function AvatarRing() {
         {participants.map((person) => (
           <div key={person.name} className="flex w-16 flex-col items-center gap-2.5">
             <Avatar size="lg" src={person.src} alt={person.name} ring={person.speaking} />
-            <span className={person.speaking ? "text-xs text-white/90" : "text-xs text-white/45"}>
+            <span className={person.speaking ? "text-xs text-white/90" : "text-xs text-white/50"}>
               {person.name.split(" ")[0]}
             </span>
           </div>

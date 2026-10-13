@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { basePath } from "./config";
@@ -39,11 +39,9 @@ export function MobileBar() {
       )}
     >
       <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#0a0b11]/90 py-2 pl-4 pr-2 shadow-[0_-12px_40px_-12px_rgb(0_0_0/0.9),inset_0_1px_0_rgb(255_255_255/0.05)] backdrop-blur-[14px]">
-        <p className="min-w-0 font-mono text-[11px] uppercase leading-4 tracking-[0.12em] text-white/60">
-          Next window
-          <span className="block text-[13px] tabular-nums tracking-[0.04em] text-white/90">
-            {formatCountdown(left)}
-          </span>
+        <p className="min-w-0 text-[12px] leading-4 text-white/55">
+          Next window in
+          <span className="mt-0.5 block font-mono text-[14px] tabular-nums text-white">{formatCountdown(left)}</span>
         </p>
         <Button asChild variant="solid" size="md" className="rounded-xl">
           <Link href={`${basePath}/pricing`}>

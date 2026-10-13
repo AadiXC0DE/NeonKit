@@ -78,6 +78,7 @@ export const doc: ComponentDoc = {
           description: "Layout direction and which arrow keys move between items.",
         },
         { prop: "disabled", type: "boolean", default: "false", description: "Disables every item." },
+        { prop: "name", type: "string", description: "Submits the selected value, one entry per value for multiple, with a surrounding form. A form reset puts back the starting selection." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex. Falls back to --neon-accent, then cyan." },
       ],
     },
@@ -103,6 +104,7 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "Items in a row get an invisible target at least 44px tall, so the 24px small segments are still easy to tap.",
     "Single groups are a radiogroup of radio items with aria-checked; multiple groups are a toolbar of buttons with aria-pressed.",
     "The group is one Tab stop. Arrow keys move between items and wrap, Home and End jump to the ends, and disabled items are skipped.",
     "In a single group, moving with the arrows also selects, as in a native radio group. In a toolbar the arrows only move focus; Space or Enter presses.",

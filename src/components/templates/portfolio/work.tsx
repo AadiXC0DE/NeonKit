@@ -1,65 +1,132 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight } from "lucide-react";
-import { HologramCard } from "@/components/ui/hologram-card";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { CaseStudy } from "./case-study";
 import { Cover } from "./covers";
 import { projects, type Project } from "./data";
 import { useLights } from "./lights";
-import { SectionHeading } from "./section-heading";
+import { SectionHeading, display } from "./section-heading";
 
-// Alternating wide and narrow cards, so the grid reads as a layout, not a list.
-const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7"];
-
-function ProjectCard({ project, index, onOpen }: { project: Project; index: number; onOpen: () => void }) {
+/** The cover of whichever project you're pointing at, on a lit table that follows you down the list. */
+function LightTable({ active }: { active: number }) {
   const { on } = useLights();
+  const project = projects[active];
   return (
-    <HologramCard
-      foil="lines"
-      maxTilt={4}
-      intensity={0.55}
-      className="group/card flex w-full flex-col overflow-hidden rounded-[20px]"
-    >
-      <Cover art={project.cover} lit={on} className="h-[220px] border-b border-white/[0.06] sm:h-[280px]" />
-      <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <p className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">
-          <span>
-            {project.client} · {project.year}
-          </span>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-        </p>
-        <h3 className="mt-4 text-[22px] font-medium leading-tight tracking-[-0.025em] text-white">
-          <button
-            type="button"
-            onClick={onOpen}
-            aria-haspopup="dialog"
-            className="text-left outline-none after:absolute after:inset-0 after:rounded-[20px] after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-[rgb(var(--neon)/0.7)]"
-          >
-            {project.title}
-          </button>
-        </h3>
-        <p className="mt-2 max-w-[46ch] text-[15px] leading-relaxed text-white/60">{project.outcome}</p>
-        <div className="mt-auto flex items-center justify-between gap-4 pt-6 text-sm">
-          <span className="text-white/60">{project.role}</span>
-          <span
-            aria-hidden
-            className="flex shrink-0 items-center gap-1 whitespace-nowrap text-white/70 transition-colors duration-200 group-hover/card:text-[rgb(var(--neon))]"
-          >
-            Case study
-            <ArrowUpRight className="size-4 transition-transform duration-200 group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
-          </span>
-        </div>
+    <figure className="sticky top-24">
+      <div className="relative aspect-[5/4] overflow-hidden rounded-[14px] border border-white/[0.08] bg-[#07080d]">
+        {projects.map((item, i) => (
+          <Cover
+            key={item.slug}
+            art={item.cover}
+            lit={on && i === active}
+            className={cn(
+              "absolute inset-0 transition-opacity duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]",
+              i === active ? "opacity-100" : "opacity-0",
+            )}
+          />
+        ))}
       </div>
-    </HologramCard>
+      <figcaption aria-live="polite" className="mt-4 flex items-baseline justify-between gap-4 text-[14px]">
+        <span className="text-white/85">
+          {project.client}, {project.year}
+        </span>
+        <span className="text-right text-white/55">
+          {project.team}. {project.duration}.
+        </span>
+      </figcaption>
+    </figure>
+  );
+}
+
+function ProjectRow({
+  project,
+  active,
+  onActivate,
+  onOpen,
+}: {
+  project: Project;
+  active: boolean;
+  onActivate: () => void;
+  onOpen: () => void;
+}) {
+  const { on } = useLights();
+  const [stat] = project.stats;
+  const lit = active && on;
+
+  return (
+    <li
+      onPointerEnter={onActivate}
+      onFocus={onActivate}
+      className="group/row relative border-t border-white/[0.08] py-9 last:border-b sm:py-11"
+    >
+      {/* The cover sits in the row on small screens; on wide ones it lives on the light table. */}
+      <Cover
+        art={project.cover}
+        lit={on}
+        className="mb-7 aspect-[16/10] rounded-xl border border-white/[0.08] lg:hidden"
+      />
+      <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-10">
+        <div className="min-w-0">
+          <p className="text-[14px] text-white/55">
+            <span className="text-white/80">{project.client}</span>, {project.year}
+            <span className="text-white/30"> / </span>
+            {project.role}
+          </p>
+          <h3 className={cn(display, "mt-3 max-w-[16ch] text-[clamp(28px,3.3vw,44px)] leading-[1.02]")}>
+            <button
+              type="button"
+              onClick={onOpen}
+              aria-haspopup="dialog"
+              className={cn(
+                "text-left outline-none transition-colors duration-200 after:absolute after:inset-0 after:content-['']",
+                "focus-visible:after:rounded-xl focus-visible:after:ring-2 focus-visible:after:ring-[rgb(var(--neon)/0.6)]",
+                active ? "text-white" : "text-white/80",
+              )}
+            >
+              {project.title}
+            </button>
+          </h3>
+          <p className="mt-4 max-w-[44ch] text-[16px] leading-relaxed text-white/60">{project.outcome}</p>
+        </div>
+
+        <p className="flex items-baseline gap-3 sm:block sm:pt-6 sm:text-right">
+          <span
+            className={cn(
+              display,
+              "block text-[clamp(44px,5vw,72px)] leading-none transition-[color,text-shadow] duration-300",
+              lit
+                ? "text-[color-mix(in_srgb,rgb(var(--neon))_55%,white)] [text-shadow:0_0_2px_rgb(var(--neon)/0.8),0_0_24px_rgb(var(--neon)/0.45)]"
+                : "text-white/85",
+            )}
+          >
+            {stat.value}
+          </span>
+          <span className="mt-2 block max-w-[18ch] text-balance text-[14px] leading-snug text-white/55 sm:ml-auto">
+            {stat.label.toLowerCase()}
+          </span>
+        </p>
+      </div>
+      <span
+        aria-hidden
+        className={cn(
+          "mt-6 inline-flex items-center gap-1 text-[14px] transition-colors duration-200",
+          active ? "text-[rgb(var(--neon))]" : "text-white/55",
+        )}
+      >
+        Read the case study
+        <ArrowUpRight className="size-4 transition-transform duration-200 group-hover/row:-translate-y-0.5 group-hover/row:translate-x-0.5" />
+      </span>
+    </li>
   );
 }
 
 export function Work() {
   const [open, setOpen] = React.useState(false);
   const [index, setIndex] = React.useState(0);
+  const [active, setActive] = React.useState(0);
 
   const openProject = (next: number) => {
     setIndex(next);
@@ -77,22 +144,29 @@ export function Work() {
 
   return (
     <section id="work" aria-labelledby="work-title" className="scroll-mt-16">
-      <div className="mx-auto max-w-[1200px] px-5 py-24 sm:px-10 sm:py-32">
+      <div className="mx-auto max-w-[1200px] px-5 pb-28 pt-8 sm:px-10 sm:pb-40">
         <SectionHeading
-          index={1}
-          eyebrow="Selected work"
           id="work-title"
-          title="Four projects, from first sketch to shipped."
-          note="Each one designed and built by me, usually alongside a small team. Open a card for the long version."
+          title="Four things I drew, then shipped."
+          lede="Each one designed and built by me, usually alongside a small team. Open one for the long version: the problem, what I did, and what the numbers did after."
         />
 
-        <ul className="mt-12 grid gap-5 sm:mt-16 md:grid-cols-2 lg:grid-cols-12 lg:gap-6">
-          {projects.map((project, i) => (
-            <li key={project.slug} className={cn("flex", spans[i % spans.length])}>
-              <ProjectCard project={project} index={i} onOpen={() => openProject(i)} />
-            </li>
-          ))}
-        </ul>
+        <div className="mt-16 grid gap-10 sm:mt-20 lg:grid-cols-12 lg:gap-12">
+          <div className="hidden lg:col-span-5 lg:block">
+            <LightTable active={active} />
+          </div>
+          <ol className="lg:col-span-7" aria-label="Selected work">
+            {projects.map((project, i) => (
+              <ProjectRow
+                key={project.slug}
+                project={project}
+                active={active === i}
+                onActivate={() => setActive(i)}
+                onOpen={() => openProject(i)}
+              />
+            ))}
+          </ol>
+        </div>
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>

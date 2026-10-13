@@ -4,7 +4,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, FileCode2 } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CopyButton } from "@/components/ui/copy-button";
@@ -25,7 +25,7 @@ function H2({ id, children, className }: { id: string; children: React.ReactNode
       id={id}
       tabIndex={-1}
       className={cn(
-        "group mt-16 scroll-mt-24 outline-none text-[1.45rem] font-semibold leading-tight tracking-[-0.025em] text-white",
+        "group mt-20 scroll-mt-[108px] text-balance text-[1.625rem] font-[620] leading-[1.12] tracking-[-0.03em] text-white outline-none [font-stretch:108%]",
         className,
       )}
     >
@@ -39,7 +39,7 @@ function H3({ id, children, className }: { id: string; children: React.ReactNode
     <h3
       id={id}
       tabIndex={-1}
-      className={cn("group mt-10 scroll-mt-24 outline-none text-[1.05rem] font-semibold tracking-[-0.01em] text-white", className)}
+      className={cn("group mt-12 scroll-mt-[108px] text-[1.125rem] font-semibold tracking-[-0.015em] text-white outline-none", className)}
     >
       <HeadingAnchor id={id}>{children}</HeadingAnchor>
     </h3>
@@ -61,15 +61,15 @@ function HeadingAnchor({ id, children }: { id: string; children: React.ReactNode
 }
 
 function P({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <p className={cn("mt-5 text-[15px] leading-7 text-white/70", className)}>{children}</p>;
+  return <p className={cn("mt-5 text-[15.5px] leading-[1.75] text-white/70", className)}>{children}</p>;
 }
 
 function UL({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
     <ul
       className={cn(
-        "mt-5 list-disc space-y-2.5 pl-5 text-[15px] leading-7 text-white/70",
-        "[&>li::marker]:text-[rgb(var(--neon)/0.7)] [&>li]:pl-1.5",
+        "mt-5 list-disc space-y-2.5 pl-5 text-[15.5px] leading-[1.75] text-white/70",
+        "[&>li::marker]:text-white/35 [&>li]:pl-1.5",
         className,
       )}
     >
@@ -82,8 +82,8 @@ function OL({ children, className }: { children: React.ReactNode; className?: st
   return (
     <ol
       className={cn(
-        "mt-5 list-decimal space-y-2.5 pl-5 text-[15px] leading-7 text-white/70",
-        "[&>li::marker]:font-mono [&>li::marker]:text-[13px] [&>li::marker]:text-white/60 [&>li]:pl-1.5",
+        "mt-5 list-decimal space-y-2.5 pl-5 text-[15.5px] leading-[1.75] text-white/70",
+        "[&>li::marker]:text-[14px] [&>li::marker]:tabular-nums [&>li::marker]:text-white/55 [&>li]:pl-1.5",
         className,
       )}
     >
@@ -147,7 +147,8 @@ function Callout({ type = "note", title, children }: CalloutProps) {
       status={status}
       // Notes and tips wear the brand color; warnings and dangers keep their amber and red.
       color={type === "note" || type === "tip" ? color : undefined}
-      className="mt-7 rounded-xl"
+      // Quieter than the stock soft alert: the colored rule and icon carry the type, the box barely lifts.
+      className="mt-7 rounded-xl border-white/[0.08] bg-white/[0.025] px-5 py-4"
     >
       <AlertTitle>{title ?? fallback}</AlertTitle>
       <AlertDescription className="leading-6 text-white/70 [&_p+p]:mt-2">{children}</AlertDescription>
@@ -166,12 +167,12 @@ function Steps({ children }: { children: React.ReactNode }) {
           {index < items.length - 1 && (
             <span
               aria-hidden
-              className="absolute bottom-0 left-[13px] top-9 w-px bg-[linear-gradient(rgb(var(--neon)/0.35),rgb(255_255_255/0.08)_40%)]"
+              className="absolute bottom-0 left-[13.5px] top-10 w-px bg-white/[0.08]"
             />
           )}
           <span
             aria-hidden
-            className="absolute left-0 top-0 grid size-7 place-items-center rounded-full border border-[rgb(var(--neon)/0.45)] bg-[#07090c] font-mono text-xs text-[rgb(var(--neon))] shadow-[0_0_14px_-4px_rgb(var(--neon)/0.6)]"
+            className="absolute left-0 top-0 grid size-7 place-items-center rounded-full border border-white/15 bg-[#05060a] text-[13px] font-medium tabular-nums text-white/80"
           >
             {index + 1}
           </span>
@@ -210,11 +211,12 @@ type CodeBlockProps = {
 function CodeBlock({ code, lang = "sh", title, highlight: lit, className }: CodeBlockProps) {
   const copy = copyText(code, lang);
   if (!title) {
-    // The copy button gets its own column, so long lines scroll beneath nothing.
+    // The copy button floats on a patch of the frame's color, and lines keep clear of it,
+    // so lit lines still run edge to edge.
     return (
-      <figure className={cn(codeFrame, "flex items-start", className)}>
-        <Pre code={code} lang={lang} lit={lit} className="min-w-0 flex-1" />
-        <div className="shrink-0 py-3 pr-2">
+      <figure className={cn(codeFrame, className)}>
+        <Pre code={code} lang={lang} lit={lit} gutter />
+        <div className="absolute right-0 top-3 bg-[linear-gradient(90deg,transparent,#0a0b11_14px)] pl-5 pr-2">
           <CopyButton size="sm" value={copy} aria-label="Copy code" />
         </div>
       </figure>
@@ -223,10 +225,7 @@ function CodeBlock({ code, lang = "sh", title, highlight: lit, className }: Code
   return (
     <figure className={cn(codeFrame, className)}>
       <figcaption className="flex h-10 items-center justify-between gap-3 border-b border-white/[0.06] pl-4 pr-1 sm:pl-5">
-        <span className="flex min-w-0 items-center gap-2 font-mono text-xs text-white/60">
-          <FileCode2 aria-hidden className="size-3.5 shrink-0 text-white/50" />
-          <span className="truncate">{title}</span>
-        </span>
+        <span className="min-w-0 truncate font-mono text-[12.5px] text-white/60">{title}</span>
         <CopyButton size="sm" value={copy} aria-label={`Copy ${title}`} />
       </figcaption>
       <Pre code={code} lang={lang} lit={lit} />

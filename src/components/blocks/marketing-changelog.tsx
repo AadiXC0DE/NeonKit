@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowDown, Rss } from "lucide-react";
+import { ArrowDown, Rss } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -175,20 +175,22 @@ export default function MarketingChangelog() {
     >
       <div className="mx-auto grid max-w-[1200px] gap-12 lg:grid-cols-12 lg:gap-10">
         <header className="lg:sticky lg:top-12 lg:col-span-4 lg:self-start">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Kiln · Changelog</p>
           <h2
             id="kiln-changelog-title"
-            className="mt-5 text-[clamp(2.4rem,5vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
+            className="text-[clamp(2.5rem,4vw,3.25rem)] font-[620] leading-[0.96] tracking-[-0.045em] text-white [font-stretch:112%]"
           >
-            What changed, and why.
+            What changed,
+            <br />
+            <span className="text-white/50">and why.</span>
           </h2>
-          <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-white/55">
-            Release notes for Kiln, the build tool. Shipped every other Tuesday, written by whoever did the work.
+          <p className="mt-6 max-w-[36ch] text-[16px] leading-[1.6] text-white/60">
+            <span className="text-white/90">Release notes for Kiln, the build tool.</span> Shipped every other Tuesday,
+            written by whoever did the work.
           </p>
 
           <div className="mt-8">
-            <p id="kiln-filter-label" className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
-              Filter
+            <p id="kiln-filter-label" className="text-[13px] text-white/55">
+              Show
             </p>
             <ToggleGroup
               aria-labelledby="kiln-filter-label"
@@ -202,7 +204,7 @@ export default function MarketingChangelog() {
                 <ToggleGroupItem key={tag.value} value={tag.value} className={FILTER_ITEM}>
                   <span aria-hidden className={cn("size-1.5 rounded-full", tag.dot)} />
                   {tag.label}
-                  <span className="font-mono text-[10px] text-white/55">{count(tag.value)}</span>
+                  <span className="text-[11px] tabular-nums text-white/55">{count(tag.value)}</span>
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
@@ -215,7 +217,7 @@ export default function MarketingChangelog() {
             <a href="#" className="rounded-md text-white/60 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
               Upgrade guide for 4.0
             </a>
-            <span className="font-mono text-[11px] text-white/55">npm i -D kiln@4.2.0</span>
+            <code className="font-mono text-[12px] text-white/60">npm i -D kiln@4.2.0</code>
           </div>
 
           <dl className="mt-8 hidden grid-cols-3 gap-4 lg:grid">
@@ -224,9 +226,9 @@ export default function MarketingChangelog() {
               ["2.4 d", "Median time to fix"],
               ["3", "Breaking changes"],
             ].map(([value, label]) => (
-              <div key={label} className="flex flex-col-reverse justify-end border-l border-white/[0.08] pl-3">
-                <dt className="mt-1 text-[12px] leading-snug text-white/60">{label}</dt>
-                <dd className="text-xl font-medium tracking-[-0.02em] text-white/90">{value}</dd>
+              <div key={label} className="flex flex-col-reverse justify-end">
+                <dt className="mt-1.5 text-[12px] leading-snug text-white/55">{label}</dt>
+                <dd className="text-[28px] font-[620] leading-none tracking-[-0.04em] tabular-nums text-white/90 [font-stretch:112%]">{value}</dd>
               </div>
             ))}
           </dl>
@@ -265,20 +267,18 @@ export default function MarketingChangelog() {
                         {formatDate(release.date)}
                       </time>
                       {latest && (
-                        <span className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-white/55">
-                          Latest
-                        </span>
+                        <span className="font-sans text-[12px] text-white/60">Latest</span>
                       )}
                     </div>
-                    <h3 tabIndex={older ? -1 : undefined} className="mt-3 text-[22px] font-semibold leading-tight tracking-[-0.02em] text-white outline-none sm:text-[26px]">
+                    <h3 tabIndex={older ? -1 : undefined} className="mt-3 text-[22px] font-[620] leading-[1.1] tracking-[-0.03em] text-white outline-none [font-stretch:108%] sm:text-[28px]">
                       {release.title}
                     </h3>
                     {release.summary && (
-                      <p className="mt-2.5 max-w-[60ch] text-[15px] leading-relaxed text-white/55">{release.summary}</p>
+                      <p className="mt-3 max-w-[58ch] text-[15.5px] leading-[1.6] text-white/60">{release.summary}</p>
                     )}
                     {release.code && (filter === "all" || filter === "new") && (
                       <figure className="mt-5 max-w-lg overflow-hidden rounded-xl border border-white/10 bg-[#0a0b11]">
-                        <figcaption className="border-b border-white/[0.06] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
+                        <figcaption className="border-b border-white/[0.06] px-4 py-2 font-mono text-[12px] text-white/55">
                           {release.code.file}
                         </figcaption>
                         <pre className="overflow-x-auto px-4 py-3 font-mono text-[12.5px] leading-6 text-white/75">
@@ -290,11 +290,11 @@ export default function MarketingChangelog() {
                         </pre>
                       </figure>
                     )}
-                    <ul className="mt-5 grid gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.06]">
+                    <ul className="mt-6 border-t border-white/[0.07]">
                       {release.changes.map((change) => (
-                        <li key={change.text} className="flex flex-col gap-2 bg-[#07080c] px-4 py-3.5 sm:flex-row sm:items-start sm:gap-4">
+                        <li key={change.text} className="flex flex-col gap-2 border-b border-white/[0.07] py-3.5 sm:flex-row sm:items-start sm:gap-5">
                           <TagBadge tag={change.tag} />
-                          <p className="text-[14px] leading-relaxed text-white/75">
+                          <p className="text-[14.5px] leading-[1.6] text-white/75">
                             <Prose text={change.text} />
                           </p>
                         </li>
@@ -321,7 +321,7 @@ export default function MarketingChangelog() {
                 Older releases <ArrowDown aria-hidden />
               </Button>
             ) : (
-              <p ref={endRef} tabIndex={-1} className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 outline-none">
+              <p ref={endRef} tabIndex={-1} className="text-[13px] text-white/55 outline-none">
                 Earlier history lives in the 3.x archive.
               </p>
             )}

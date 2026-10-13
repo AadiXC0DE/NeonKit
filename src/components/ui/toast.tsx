@@ -18,7 +18,7 @@ import {
   TriangleAlert,
   X,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -203,6 +203,21 @@ const positions: Record<ToastPosition, string> = {
   "bottom-right": "bottom-4 right-4",
 };
 
+type Announcement = { key: string; urgent: boolean; title: React.ReactNode; description?: React.ReactNode };
+
+/** The newest toast that is new or changed since `previous`, as text for the live regions. */
+function announcementFor(items: ToastRecord[], previous: ToastRecord[]): Announcement | null {
+  const seen = new Map(previous.map((item) => [item.id, item.version]));
+  const changed = items.find((item) => seen.get(item.id) !== item.version);
+  if (!changed) return null;
+  return {
+    key: `${changed.id}-${changed.version}`,
+    urgent: changed.status === "error",
+    title: changed.title,
+    description: changed.description,
+  };
+}
+
 type StackTarget = {
   y: number;
   scaleX: number;
@@ -234,6 +249,16 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(
     const [heights, setHeights] = React.useState<Record<string, number>>({});
     const [hovered, setHovered] = React.useState(false);
     const [focused, setFocused] = React.useState(false);
+
+    // Toasts are announced through two live regions that stay mounted, because screen readers
+    // often skip a live region that arrives together with its text.
+    const [announced, setAnnounced] = React.useState(items);
+    const [announcement, setAnnouncement] = React.useState<Announcement | null>(null);
+    if (announced !== items) {
+      setAnnounced(items);
+      const next = announcementFor(items, announced);
+      if (next) setAnnouncement(next);
+    }
 
     React.useImperativeHandle(ref, () => sectionRef.current as HTMLElement);
     React.useEffect(() => registerToaster(id), [id]);
@@ -319,6 +344,22 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(
           if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false);
         }}
       >
+        <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+          {announcement && !announcement.urgent && (
+            <span key={announcement.key}>
+              {announcement.title}
+              {announcement.description != null && <>. {announcement.description}</>}
+            </span>
+          )}
+        </div>
+        <div role="alert" aria-atomic="true" className="sr-only">
+          {announcement?.urgent && (
+            <span key={announcement.key}>
+              {announcement.title}
+              {announcement.description != null && <>. {announcement.description}</>}
+            </span>
+          )}
+        </div>
         <ol className="relative m-0 list-none p-0">
           <AnimatePresence onExitComplete={syncInteraction}>
             {items.map((item, index) => (
@@ -377,7 +418,6 @@ function ToastItem({
   const x = useMotionValue(0);
   const swipeOpacity = useTransform(x, [-220, 0, 220], [0, 1, 0]);
   const Icon = statusIcons[status];
-  const isError = status === "error";
   const hidden = target.opacity === 0;
 
   React.useLayoutEffect(() => {
@@ -423,9 +463,6 @@ function ToastItem({
   return (
     <motion.li
       ref={ref}
-      role={isError ? "alert" : "status"}
-      aria-live={isError ? undefined : "polite"}
-      aria-atomic="true"
       aria-hidden={hidden || undefined}
       initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -dir * ENTER_OFFSET }}
       animate={target}

@@ -60,6 +60,7 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "With name, a form reset puts back the starting color.",
     "The hue knob and the saturation and lightness strips are each a role=\"slider\". Arrow keys step by 1, Shift by 10, Home and End jump to the ends.",
     "Drag around the knob to point it at a hue, or scroll on it.",
     "Gels form a radio group with one tab stop. Arrow keys move through them and select as they go.",

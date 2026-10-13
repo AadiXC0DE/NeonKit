@@ -108,6 +108,28 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     const isControlled = valueProp !== undefined;
     const value = isControlled ? valueProp : uncontrolled;
 
+    const rootRef = React.useRef<HTMLDivElement>(null);
+    React.useImperativeHandle(ref, () => rootRef.current as HTMLDivElement);
+
+    // A form reset moves the native radios back without a change event. Follow it.
+    const initialValue = React.useRef(value);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialValue.current;
+        if (initial === value) return;
+        if (!isControlled) setUncontrolled(initial);
+        if (initial !== undefined) onValueChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = rootRef.current?.closest("form");
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     const context = React.useMemo<RadioGroupContextValue>(
       () => ({
         name: name ?? autoName,
@@ -129,7 +151,7 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     return (
       <RadioGroupContext.Provider value={context}>
         <div
-          ref={ref}
+          ref={rootRef}
           role="radiogroup"
           aria-required={required || undefined}
           aria-disabled={disabled || undefined}

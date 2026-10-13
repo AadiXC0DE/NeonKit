@@ -13,7 +13,7 @@ export default function HeartbeatServiceStatus() {
         <li key={service.name} className="grid grid-cols-[1fr_7rem] items-center gap-4 px-4 py-3">
           <div className="min-w-0">
             <p className="truncate font-mono text-[13px] text-white/90">{service.name}</p>
-            <p className={service.pulse ? "text-xs text-white/45" : "text-xs text-[#ff4d5e]"}>
+            <p className={service.pulse ? "text-xs text-white/55" : "text-xs text-[#ff4d5e]"}>
               {service.region} · {service.latency}
             </p>
           </div>

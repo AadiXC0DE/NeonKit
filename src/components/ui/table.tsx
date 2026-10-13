@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -133,7 +133,7 @@ const TableCaption = React.forwardRef<
     <caption
       ref={ref}
       className={cn(
-        "border-t border-white/[0.06] text-left text-xs leading-5 text-white/45",
+        "border-t border-white/[0.06] text-left text-xs leading-5 text-white/55",
         densities[density].caption,
         className,
       )}

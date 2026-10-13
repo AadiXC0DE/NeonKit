@@ -40,7 +40,7 @@ export default function FieldDemo() {
         label={
           <>
             Build concurrency
-            <span aria-hidden className="ml-2 font-mono text-xs tabular-nums text-white/45">
+            <span aria-hidden className="ml-2 font-mono text-xs tabular-nums text-white/50">
               {concurrency[0]} of 8
             </span>
           </>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { BatteryLow, Plane, Wifi, type LucideIcon } from "lucide-react";
+import { BatteryLow, Plane, Wifi, type LucideIcon } from "@/components/ui/icons";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
@@ -56,7 +56,7 @@ export default function SwitchDemo() {
           <span
             className={cn(
               "flex size-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] transition-colors duration-150",
-              checked ? "text-white/90" : "text-white/45",
+              checked ? "text-white/90" : "text-white/50",
             )}
           >
             <Icon className="size-4" />

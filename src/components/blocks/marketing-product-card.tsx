@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Minus, Plus, ShoppingBag, Truck, X } from "lucide-react";
+import { Minus, Plus, ShoppingBag, Truck, X } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { NumberInput } from "@/components/ui/number-input";
 import { Progress } from "@/components/ui/progress";
@@ -222,46 +222,45 @@ export default function MarketingProductCard() {
     >
       <style>{css}</style>
       <div className="mx-auto grid max-w-[1200px] items-start gap-6 lg:grid-cols-12">
-        <article className="overflow-hidden rounded-[20px] border border-white/10 bg-white/[0.02] lg:col-span-8">
-          <div className="grid md:grid-cols-2">
+        <article className="lg:col-span-8">
+          <div className="grid gap-8 md:grid-cols-2 md:gap-10">
             <div
               // The art follows the chosen stem color.
               style={{ "--neon": toNeonRgb(variant.stem) } as React.CSSProperties}
-              className="relative flex min-h-[300px] flex-col border-b border-white/[0.06] bg-[radial-gradient(ellipse_70%_60%_at_50%_45%,rgb(var(--neon)/0.1),transparent_70%),#07080c] md:min-h-[460px] md:border-b-0 md:border-r"
+              className="relative flex min-h-[320px] flex-col rounded-[20px] bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgb(var(--neon)/0.1),transparent_70%)] md:min-h-[520px]"
             >
-              <div className="flex items-center justify-between p-4">
-                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">VS-HAL-{variant.id.slice(0, 3).toUpperCase()}</span>
+              <div className="flex items-center justify-between gap-3 py-1">
+                <span className="font-mono text-[12px] text-white/50">VS-HAL-{variant.id.slice(0, 3).toUpperCase()}</span>
                 <ToggleGroup aria-label="View" size="sm" variant="segmented" value={exploded ? "exploded" : "assembled"} onValueChange={(value) => setExploded(value === "exploded")}>
                   <ToggleGroupItem value="assembled" className="h-8 sm:h-6">Assembled</ToggleGroupItem>
                   <ToggleGroupItem value="exploded" className="h-8 sm:h-6">Exploded</ToggleGroupItem>
                 </ToggleGroup>
               </div>
-              <div className="relative flex-1 px-6 pb-6">
+              <div className="relative flex flex-1 items-center px-2 pb-2 pt-6">
                 <div className="absolute inset-0 bg-[linear-gradient(rgb(255_255_255/0.025)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255/0.025)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_at_center,#000,transparent_75%)]" />
-                <div className="relative mx-auto aspect-[320/440] w-full max-w-[250px] md:max-w-[290px]">
+                <div className="relative mx-auto aspect-[320/440] w-full max-w-[250px] md:max-w-[320px]">
                   <SwitchArt exploded={exploded} />
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col p-6 sm:p-8">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Volt Supply · Switches</p>
-              <h2 id="volt-product-title" className="mt-3 text-[32px] font-semibold leading-none tracking-[-0.035em] text-white">
+            <div className="flex flex-col md:py-1">
+              <h2 id="volt-product-title" className="text-[clamp(2.25rem,4vw,3rem)] font-[620] leading-[0.96] tracking-[-0.045em] text-white [font-stretch:112%]">
                 Halyard switches
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-white/55">
-                Factory-lubed, five-pin, with a north-facing LED window. Seventy per pack, enough for a full-size board and
-                four spares.
+              <p className="mt-4 text-[15.5px] leading-[1.6] text-white/60">
+                <span className="text-white/90">Factory-lubed, five-pin, with a north-facing LED window.</span> Seventy per
+                pack: a full-size board and four spares.
               </p>
 
-              <div className="mt-6 flex items-baseline gap-2">
-                <AnimatedMoney value={variant.price} className="text-[28px] font-semibold tracking-[-0.02em] text-white" />
-                <span className="text-sm text-white/60">/ 70 pack</span>
+              <div className="mt-7 flex items-baseline gap-2">
+                <AnimatedMoney value={variant.price} className="text-[36px] font-[620] leading-none tracking-[-0.04em] text-white [font-stretch:112%]" />
+                <span className="text-sm text-white/60">per 70 pack</span>
               </div>
 
               <fieldset className="mt-6">
                 <legend className="text-sm font-medium text-white/80">
-                  Stem <span className="font-normal text-white/60">· {variant.name}, {variant.force}</span>
+                  Stem <span className="font-normal text-white/60">{variant.name}, {variant.force}</span>
                 </legend>
                 <div className="mt-3 flex gap-2.5">
                   {VARIANTS.map((option) => {
@@ -306,7 +305,7 @@ export default function MarketingProductCard() {
                   ["Pins", "5-pin"],
                 ].map(([label, value]) => (
                   <div key={label}>
-                    <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{label}</dt>
+                    <dt className="text-[12px] text-white/55">{label}</dt>
                     <dd className="mt-1 text-white/85">{value}</dd>
                   </div>
                 ))}
@@ -324,7 +323,7 @@ export default function MarketingProductCard() {
                   containerClassName="w-[120px] shrink-0"
                 />
                 <Button variant="solid" onClick={addToCart} className="flex-1">
-                  <ShoppingBag aria-hidden /> Add · {money(variant.price * count)}
+                  <ShoppingBag aria-hidden /> Add to cart, <span className="tabular-nums">{money(variant.price * count)}</span>
                 </Button>
               </div>
             </div>
@@ -336,7 +335,7 @@ export default function MarketingProductCard() {
             <h3 id="volt-cart-title" tabIndex={-1} className="text-sm font-medium text-white/90 outline-none">
               Cart
             </h3>
-            <span aria-live="polite" className="font-mono text-[11px] text-white/55">
+            <span aria-live="polite" className="text-[13px] tabular-nums text-white/55">
               {items} {items === 1 ? "item" : "items"}
             </span>
           </div>
@@ -404,7 +403,7 @@ export default function MarketingProductCard() {
           {!cart.some((line) => line.id === ADD_ON.id) && (
             <div className="flex items-center gap-3 border-t border-dashed border-white/[0.08] px-5 py-3.5">
               <p className="min-w-0 flex-1 text-[12px] leading-snug text-white/60">
-                <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">Pairs well with</span>
+                <span className="block text-white/55">Pairs well with</span>
                 {ADD_ON.name} · {money(ADD_ON.price)}
               </p>
               <Button variant="ghost" size="sm" onClick={addOn}>
@@ -428,7 +427,7 @@ export default function MarketingProductCard() {
 
             <div className="mt-5 flex items-baseline justify-between">
               <span className="text-sm text-white/55">Subtotal</span>
-              <AnimatedMoney value={subtotal} className="text-xl font-semibold tracking-[-0.02em] text-white" />
+              <AnimatedMoney value={subtotal} className="text-[24px] font-[620] tracking-[-0.035em] text-white [font-stretch:112%]" />
             </div>
             {cart.length > 0 && (
               <Button variant="outline" className="mt-4 w-full" asChild>

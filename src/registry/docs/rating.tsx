@@ -62,6 +62,7 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "With name, a form reset puts back the starting rating.",
     "The icon row is a role=\"slider\" with aria-valuetext such as \"3.5 of 5\", or \"No rating\" at 0.",
     "Right and Up raise the value, Left and Down lower it, Home clears and End sets the maximum. Number keys jump straight to a value.",
     "Without a visible label, pass aria-label.",

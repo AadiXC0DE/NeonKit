@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUp, ArrowUpRight } from "lucide-react";
+import { ArrowUp, ArrowUpRight } from "@/components/ui/icons";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -18,16 +18,17 @@ function prefersReducedMotion() {
 }
 
 /** The id of the heading the reader is in, tracked from scroll position. */
-function useActiveHeading(ids: string[]) {
+export function useActiveHeading(ids: string[], { beforeFirst = false } = {}) {
   const key = ids.join(" ");
-  const [active, setActive] = React.useState(ids[0]);
+  // With `beforeFirst`, it's null until the first heading reaches the reading line.
+  const [active, setActive] = React.useState<string | null>(beforeFirst ? null : ids[0]);
 
   React.useEffect(() => {
     const list = key.split(" ");
     let frame = 0;
     const update = () => {
       frame = 0;
-      let current = list[0];
+      let current: string | null = beforeFirst ? null : list[0];
       for (const id of list) {
         const element = document.getElementById(id);
         if (!element) continue;
@@ -50,7 +51,7 @@ function useActiveHeading(ids: string[]) {
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
     };
-  }, [key]);
+  }, [key, beforeFirst]);
 
   return active;
 }
@@ -84,10 +85,10 @@ export function TableOfContents({ doc }: { doc: Doc }) {
 
   return (
     <nav aria-labelledby={titleId} className="flex min-h-0 flex-1 flex-col">
-      <p id={titleId} className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+      <p id={titleId} className="text-[13px] font-medium text-white/90">
         On this page
       </p>
-      <ScrollArea className="mt-4 min-h-0 shrink" fade={16}>
+      <ScrollArea className="mt-3 min-h-0 shrink" fade={16}>
         <div className="relative">
           <span aria-hidden className="absolute inset-y-0 left-0 w-px bg-white/[0.08]" />
           <span

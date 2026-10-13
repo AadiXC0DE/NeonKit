@@ -40,14 +40,14 @@ export default function CalendarDemo() {
       <div className="flex items-center gap-6 border-b border-white/10 px-5 py-4">
         <dl className="grid flex-1 grid-cols-2 gap-6">
           <div>
-            <dt className="text-[11px] font-medium uppercase tracking-[0.12em] text-white/40">Check-in</dt>
-            <dd className={stay.from ? "mt-1 text-sm text-white/90" : "mt-1 text-sm text-white/30"}>
+            <dt className="text-[13px] text-white/55">Check-in</dt>
+            <dd className={stay.from ? "mt-1 text-sm text-white/90" : "mt-1 text-sm text-white/50"}>
               {stay.from ? formatDay.format(stay.from) : "Add date"}
             </dd>
           </div>
           <div>
-            <dt className="text-[11px] font-medium uppercase tracking-[0.12em] text-white/40">Check-out</dt>
-            <dd className={stay.to ? "mt-1 text-sm text-white/90" : "mt-1 text-sm text-white/30"}>
+            <dt className="text-[13px] text-white/55">Check-out</dt>
+            <dd className={stay.to ? "mt-1 text-sm text-white/90" : "mt-1 text-sm text-white/50"}>
               {stay.to ? formatDay.format(stay.to) : stay.from ? "Pick a day" : "Add date"}
             </dd>
           </div>

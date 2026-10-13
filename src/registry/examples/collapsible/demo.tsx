@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check } from "@/components/ui/icons";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const steps = [
@@ -19,7 +19,7 @@ export default function CollapsibleDemo() {
         <span className="size-2 shrink-0 rounded-full bg-[rgb(52_211_153)] shadow-[0_0_8px_rgb(52_211_153/0.8)]" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-medium text-white/90">acme-web · Production</p>
-          <p className="truncate font-mono text-xs text-white/40">Ready · deployed 4 minutes ago</p>
+          <p className="truncate text-xs text-white/50">Ready · deployed 4 minutes ago</p>
         </div>
         <span className="font-mono text-xs tabular-nums text-white/55">41.0s</span>
       </div>
@@ -38,7 +38,7 @@ export default function CollapsibleDemo() {
                   {step.label}
                   <span className="ml-2 text-white/35">{step.detail}</span>
                 </span>
-                <span className="font-mono text-xs tabular-nums text-white/45">{step.time}</span>
+                <span className="font-mono text-xs tabular-nums text-white/50">{step.time}</span>
               </li>
             ))}
           </ol>

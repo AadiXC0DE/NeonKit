@@ -24,7 +24,6 @@ export function SaasPricing() {
       <Compare billing={billing} />
       <Faq
         id="pricing-faq"
-        eyebrow="Billing"
         title="Money questions, answered plainly."
         intro="If yours isn't here, ask. A person who can actually change your invoice will reply."
         items={pricingFaqs}

@@ -41,7 +41,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         style={neonVars(color, style)}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
-          "group/card relative flex flex-col rounded-2xl border text-white/90",
+          "group/card relative flex flex-col rounded-xl border text-white/90",
           variants[variant],
           interactive && [
             "transition-[transform,border-color,background-color,box-shadow] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]",

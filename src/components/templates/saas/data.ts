@@ -95,9 +95,9 @@ export const managers = {
 export type Manager = keyof typeof managers;
 
 export const cliSpecs = [
-  { label: "Binary", value: "6.1 MB" },
-  { label: "Git", value: "GitHub, GitLab" },
-  { label: "Targets", value: "Vercel, Fly, k8s, ECS" },
+  { label: "Binary", value: "6.1 MB, one file" },
+  { label: "Reads from", value: "GitHub, GitLab" },
+  { label: "Deploys to", value: "Vercel, Fly, Kubernetes, ECS" },
   { label: "License", value: "MIT" },
 ];
 
@@ -295,7 +295,7 @@ export const quotes: Quote[] = [
     name: "Priya Raman",
     role: "Staff engineer",
     company: "Okapi Freight",
-    metric: { label: "After-hours pages", value: "14 / mo → 0" },
+    metric: { label: "After-hours pages a month", value: "14 → 0" },
     quote:
       "We moved every production deploy to 02:00 and stopped staying late on Thursdays. 212 releases since March, three rollbacks, and nobody's phone rang for any of them.",
     featured: true,
@@ -323,7 +323,7 @@ export const quotes: Quote[] = [
     name: "Hannah Lindqvist",
     role: "Infrastructure lead",
     company: "Coldharbour",
-    metric: { label: "Release-night overtime", value: "−31 h / month" },
+    metric: { label: "Release-night overtime a month", value: "−31 h" },
     quote:
       "We ran a release rota: one engineer a week, awake from one to three with a checklist. The rota's gone. The checklist is four lines of nightshift.toml now.",
   },

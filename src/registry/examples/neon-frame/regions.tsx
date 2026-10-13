@@ -26,12 +26,12 @@ export default function NeonFrameRegions() {
               onChange={() => setRegion(r.id)}
               className="peer sr-only"
             />
-            <span className="font-mono text-xs uppercase tracking-[0.14em] text-white/45 peer-checked:text-[rgb(var(--neon))]">
+            <span className="w-9 font-mono text-xs text-white/55 peer-checked:text-[rgb(var(--neon))]">
               {r.id}
             </span>
             <span className="min-w-0 flex-1">
               <span className="block text-sm text-white/90">{r.city}</span>
-              <span className="block text-xs text-white/45">{r.note}</span>
+              <span className="block text-xs text-white/55">{r.note}</span>
             </span>
             <span className="text-sm tabular-nums text-white/70">{r.latency} ms</span>
           </label>

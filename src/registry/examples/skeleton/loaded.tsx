@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -37,7 +37,7 @@ export default function SkeletonLoaded() {
           </>
         ) : (
           <>
-            <p className="text-xs text-white/45">Engineering · 6 min read</p>
+            <p className="text-xs text-white/50">Engineering · 6 min read</p>
             <h3 className="mt-2 text-base font-medium text-white/90">
               How we cut cold starts by 40%
             </h3>

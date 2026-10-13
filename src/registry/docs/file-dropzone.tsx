@@ -53,6 +53,8 @@ export const doc: ComponentDoc = {
         { prop: "maxSize", type: "number", description: "Largest accepted file, in bytes." },
         { prop: "maxFiles", type: "number", description: "Most files accepted per drop or selection. Extra files are rejected." },
         { prop: "disabled", type: "boolean", default: "false", description: "Ignores clicks, drops and paste." },
+        { prop: "name", type: "string", description: "Submits the last accepted files under this name with a surrounding form. Use encType=\"multipart/form-data\"." },
+        { prop: "required", type: "boolean", default: "false", description: "With name, stops the submit until a file is accepted." },
         { prop: "onFilesChange", type: "(files: File[]) => void", description: "Called with the files that passed every check." },
         { prop: "onReject", type: "(rejections: FileRejection[]) => void", description: "Called with each refused file and why." },
         { prop: "label", type: "ReactNode", default: '"Drop files here or browse"', description: "Main line of the default content." },

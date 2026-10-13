@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search } from "@/components/ui/icons";
 import { KbdCombo } from "@/components/ui/kbd";
 
 export default function KbdDemo() {

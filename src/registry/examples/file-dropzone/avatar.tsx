@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { UserRound } from "lucide-react";
+import { UserRound } from "@/components/ui/icons";
 import { FileDropzone } from "@/components/ui/file-dropzone";
 
 export default function FileDropzoneAvatar() {

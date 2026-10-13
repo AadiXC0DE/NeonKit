@@ -1,4 +1,4 @@
-import { ArrowUpRight, Boxes, Package, Palette, Terminal } from "lucide-react";
+import { ArrowUpRight, Boxes, Package, Palette, Terminal } from "@/components/ui/icons";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const links = [
@@ -39,7 +39,7 @@ export default function CardInteractive() {
             </div>
             <CardTitle className="flex items-center justify-between gap-3">
               {/* The link's ::after covers the card, so the whole surface is clickable. */}
-              <a href={href} className="outline-none after:absolute after:inset-0 after:rounded-2xl">
+              <a href={href} className="outline-none after:absolute after:inset-0 after:rounded-xl">
                 {title}
               </a>
               <ArrowUpRight

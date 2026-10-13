@@ -1,4 +1,4 @@
-import { Leaf, Users, Zap } from "lucide-react";
+import { Leaf, Users, Zap } from "@/components/ui/icons";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const plans = [

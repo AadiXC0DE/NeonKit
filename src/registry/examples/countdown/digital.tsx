@@ -8,7 +8,7 @@ export default function CountdownDigital() {
 
   return (
     <div className="flex flex-col items-center gap-5 rounded-2xl border border-white/10 bg-[#07080b] px-5 py-7 lg:px-10">
-      <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/55">Lot 214 · bidding closes in</span>
+      <span className="text-sm text-white/60">Lot 214, bidding closes in</span>
       <Countdown
         to={closes}
         variant="digital"

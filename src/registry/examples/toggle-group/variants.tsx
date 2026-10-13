@@ -1,8 +1,8 @@
-import { Globe, LayoutGrid, List, Lock, SquareKanban, Users } from "lucide-react";
+import { Globe, LayoutGrid, List, Lock, SquareKanban, Users } from "@/components/ui/icons";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const row = "grid gap-2";
-const caption = "text-xs font-medium text-white/45";
+const caption = "text-xs font-medium text-white/50";
 
 export default function ToggleGroupVariants() {
   return (

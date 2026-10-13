@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ListFilter } from "lucide-react";
+import { ListFilter } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -19,7 +19,7 @@ const environments = [
 ];
 
 // Floated so the legend sits inside the fieldset's padding like any other block.
-const legend = "float-left mb-2.5 w-full font-mono text-[11px] uppercase tracking-[0.12em] text-white/40";
+const legend = "float-left mb-2.5 w-full text-xs font-medium text-white/50";
 
 const DEFAULTS = { status: ["ready", "building", "error"], env: ["production", "preview"] };
 

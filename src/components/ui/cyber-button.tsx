@@ -18,6 +18,26 @@ function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }
   return { ...props, asChild: true, children };
 }
 
+// Server Components can hand children over as lazy references, which only resolve
+// on the client. Unwrapping them here keeps server and client HTML the same.
+const reactUse = (React as unknown as Record<string, unknown>)[" use ".trim()] as
+  | (<T>(usable: PromiseLike<T>) => T)
+  | undefined;
+
+function unwrapLazy(node: React.ReactNode): React.ReactNode {
+  const lazy = node as { $$typeof?: symbol; _payload?: { then?: unknown } } | null;
+  if (
+    reactUse &&
+    lazy &&
+    typeof lazy === "object" &&
+    lazy.$$typeof === Symbol.for("react.lazy") &&
+    typeof lazy._payload?.then === "function"
+  ) {
+    return reactUse(lazy._payload as PromiseLike<React.ReactNode>);
+  }
+  return node;
+}
+
 // The chamfer is a clip-path, which also clips box-shadows and rings, so the
 // border, the face and the focus ring are each their own clipped layer and the
 // glow comes from a drop-shadow on their wrapper.
@@ -136,7 +156,8 @@ const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>(
     } = fromRenderProp(raw);
     const s = sizes[size];
     const v = variants[variant];
-    const child = asChild && React.isValidElement<AnyProps>(children) ? children : null;
+    const resolved = asChild ? unwrapLazy(children) : children;
+    const child = asChild && React.isValidElement<AnyProps>(resolved) ? resolved : null;
     const childRef = child ? getElementRef(child) : undefined;
     const composedRef = React.useCallback(
       (node: HTMLButtonElement | null) => {

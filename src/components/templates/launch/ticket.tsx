@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check } from "@/components/ui/icons";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,8 +76,8 @@ function QrPlaceholder({ seed, className }: { seed: string; className?: string }
 function Field({ label, value, className }: { label: string; value: React.ReactNode; className?: string }) {
   return (
     <div className={className}>
-      <dt className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/55">{label}</dt>
-      <dd className="mt-1 truncate text-[14px] font-medium text-white/90">{value}</dd>
+      <dt className="text-[11.5px] text-white/55">{label}</dt>
+      <dd className="mt-0.5 truncate text-[15px] font-medium text-white/90">{value}</dd>
     </div>
   );
 }
@@ -101,10 +101,10 @@ function TicketArt({ tier, holder, admitted }: { tier: Tier; holder: string; adm
             <NeonText buzz className="text-[44px] leading-none tracking-[-0.01em] sm:text-[52px]" style={{ fontFamily: "var(--font-tilt-neon, inherit)" }}>
               low light
             </NeonText>
-            <p className="shrink-0 pt-1 text-right font-mono text-[10px] uppercase leading-relaxed tracking-[0.18em] text-white/60">
-              {event.edition}
+            <p className="shrink-0 pt-1 text-right text-[12px] leading-relaxed text-white/60">
+              Edition {event.edition}
               <br />
-              <span className="text-[rgb(var(--neon))]">Admit one</span>
+              <span className="font-medium [color:color-mix(in_srgb,rgb(var(--neon))_45%,white)]">Admit one</span>
             </p>
           </div>
           <p className="mt-3 max-w-[30ch] text-[13px] leading-relaxed text-white/60">One night on interface craft.</p>
@@ -115,7 +115,7 @@ function TicketArt({ tier, holder, admitted }: { tier: Tier; holder: string; adm
             <Field label="Tier" value={tier.name} />
             <Field label="Seat" value={tier.seat} />
             <Field label="Holder" value={name || (admitted ? "Guest no. 214" : <span className="text-white/40">Your name here</span>)} className="col-span-2" />
-            <Field label="Venue" value={tier.id === "stream" ? "Wherever you are" : `${event.venue}, Rotterdam`} className="col-span-2" />
+            <Field label="Venue" value={tier.id === "stream" ? "Wherever you are" : event.venue} className="col-span-2" />
           </dl>
         </div>
 
@@ -123,12 +123,12 @@ function TicketArt({ tier, holder, admitted }: { tier: Tier; holder: string; adm
 
         <div className="relative flex items-center gap-5 p-6 sm:w-[198px] sm:flex-col sm:items-stretch sm:justify-between sm:gap-4">
           <div className="flex items-baseline justify-between gap-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/55">Gate</p>
+            <p className="text-[11.5px] text-white/55">Gate</p>
             <p className={cn("font-semibold leading-none tracking-[-0.03em] text-white", tier.gate.length > 2 ? "text-[20px]" : "text-[30px]")}>{tier.gate}</p>
           </div>
           <QrPlaceholder seed={number} className="order-first size-[104px] shrink-0 sm:order-none sm:aspect-square sm:h-auto sm:w-full" />
           <div className="min-w-0 flex-1 sm:flex-none">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/55">{tier.price === "Free" ? "Free pass" : tier.price}</p>
+            <p className="text-[11.5px] text-white/55">{tier.price === "Free" ? "Free pass" : tier.price}</p>
             <p className="mt-1 truncate font-mono text-[12px] text-white/80">{number}</p>
           </div>
         </div>
@@ -136,7 +136,7 @@ function TicketArt({ tier, holder, admitted }: { tier: Tier; holder: string; adm
         {admitted && (
           <div
             aria-hidden
-            className="pointer-events-none absolute bottom-[60px] left-5 rotate-[-12deg] rounded-lg border-2 border-[rgb(var(--neon)/0.7)] px-3 py-1.5 font-mono text-[13px] font-semibold uppercase tracking-[0.2em] [color:color-mix(in_srgb,rgb(var(--neon))_70%,white)] bg-[#0b0b12]/90 shadow-[0_0_18px_rgb(var(--neon)/0.35)] backdrop-blur-[2px] sm:bottom-auto sm:left-auto sm:right-4 sm:top-[42%]"
+            className="pointer-events-none absolute bottom-[60px] left-5 rotate-[-12deg] rounded-lg border-2 border-[rgb(var(--neon)/0.7)] px-3 py-1.5 text-[14px] font-bold uppercase tracking-[0.12em] [color:color-mix(in_srgb,rgb(var(--neon))_70%,white)] bg-[#0b0b12]/90 shadow-[0_0_18px_rgb(var(--neon)/0.35)] backdrop-blur-[2px] sm:bottom-auto sm:left-auto sm:right-4 sm:top-[42%]"
           >
             Admitted 18:42
           </div>
@@ -155,8 +155,8 @@ const HEADLINE: Record<Phase, string> = {
 function Picker({ phase, tier, onTier }: { phase: Phase; tier: Tier["id"]; onTier: (id: Tier["id"]) => void }) {
   return (
     <fieldset className="mt-8">
-      <legend className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">Choose a ticket</legend>
-      <div className="mt-3 grid gap-2">
+      <legend className="text-[14px] font-medium text-white/85">Choose a ticket</legend>
+      <div className="mt-3 border-t border-white/[0.08]">
         {tiers.map((item) => {
           const checked = item.id === tier;
           const stock = phase === "live" && item.id === "late" ? "On the door till 22:00" : item.stock;
@@ -164,13 +164,13 @@ function Picker({ phase, tier, onTier }: { phase: Phase; tier: Tier["id"]; onTie
             <label
               key={item.id}
               className={cn(
-                "group relative flex cursor-pointer items-center gap-4 rounded-xl border px-4 py-3.5 transition-[border-color,background-color,box-shadow] duration-200",
+                "group relative flex cursor-pointer items-center gap-4 border-b border-white/[0.07] py-4 pl-5 pr-1 transition-[background-color] duration-200",
                 "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[rgb(var(--neon)/0.6)] has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-[#05060a]",
                 item.soldOut
-                  ? "cursor-not-allowed border-white/[0.06] bg-transparent"
+                  ? "cursor-not-allowed"
                   : checked
-                    ? "border-[rgb(var(--neon)/0.6)] bg-[rgb(var(--neon)/0.06)] shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_24px_-6px_rgb(var(--neon)/0.5)]"
-                    : "border-white/10 bg-white/[0.02] hover:border-white/20",
+                    ? "bg-[linear-gradient(90deg,rgb(var(--neon)/0.08),transparent_70%)]"
+                    : "hover:bg-white/[0.02]",
               )}
             >
               <input
@@ -182,24 +182,27 @@ function Picker({ phase, tier, onTier }: { phase: Phase; tier: Tier["id"]; onTie
                 onChange={() => onTier(item.id)}
                 className="peer sr-only"
               />
+              {/* The selected row is marked by a lit tube down its left edge. */}
               <span
                 aria-hidden
                 className={cn(
-                  "grid size-4 shrink-0 place-items-center rounded-full border transition-colors",
-                  checked ? "border-[rgb(var(--neon))]" : "border-white/25",
+                  "absolute inset-y-2 left-0 w-[3px] rounded-full transition-[background-color,box-shadow] duration-200",
+                  checked
+                    ? "bg-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.7)]"
+                    : item.soldOut
+                      ? "bg-transparent"
+                      : "bg-white/10",
                 )}
-              >
-                {checked && <span className="size-2 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_6px_rgb(var(--neon))]" />}
-              </span>
+              />
               <span className="min-w-0 flex-1">
-                <span className={cn("flex items-baseline gap-2 text-[15px] font-medium", item.soldOut ? "text-white/50 line-through decoration-white/30" : "text-white")}>
+                <span className={cn("flex items-baseline gap-2 text-[17px] font-semibold tracking-[-0.01em]", item.soldOut ? "text-white/50 line-through decoration-white/30" : "text-white")}>
                   {item.name}
                 </span>
-                <span className={cn("mt-0.5 block text-[13px] leading-snug", item.soldOut ? "text-white/45" : "text-white/60")}>{item.detail}</span>
+                <span className={cn("mt-0.5 block text-[13px] leading-snug", item.soldOut ? "text-white/50" : "text-white/60")}>{item.detail}</span>
               </span>
               <span className="shrink-0 text-right">
-                <span className={cn("block text-[15px] font-semibold tabular-nums", item.soldOut ? "text-white/50" : "text-white")}>{item.price}</span>
-                <span className={cn("block font-mono text-[10px] uppercase tracking-[0.14em]", item.soldOut ? "text-white/55" : "text-white/60")}>{stock}</span>
+                <span className={cn("block text-[20px] font-[620] tracking-[-0.02em] [font-stretch:112%]", item.soldOut ? "text-white/50" : "text-white")}>{item.price}</span>
+                <span className={cn("block text-[12.5px]", item.soldOut ? "text-white/55" : "text-white/60")}>{stock}</span>
               </span>
             </label>
           );
@@ -250,12 +253,11 @@ function TicketBody({ phase }: { phase: Phase }) {
         : `Held for 15 minutes. The payment link is on its way to ${email.trim()}.`;
 
   return (
-    <div className="mx-auto grid max-w-[1176px] items-start gap-14 lg:grid-cols-12 lg:gap-10">
+    <div className="mx-auto grid max-w-[1176px] items-center gap-14 lg:grid-cols-12 lg:gap-10">
       <div className="lg:col-span-5">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">Tickets · Low Light {event.edition}</p>
         <h2
           id="tickets-title"
-          className="mt-6 max-w-[11ch] text-balance text-[clamp(2.5rem,5.6vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white"
+          className="max-w-[11ch] text-balance text-[clamp(2.6rem,6vw,5rem)] font-[640] leading-[0.92] tracking-[-0.045em] text-white [font-stretch:112%]"
         >
           {HEADLINE[phase]}
         </h2>
@@ -330,16 +332,16 @@ function TicketBody({ phase }: { phase: Phase }) {
         )}
       </div>
 
-      <div className="lg:col-span-7 lg:pl-6 lg:pt-10">
+      <div className="lg:col-span-7 lg:pl-6">
         <div className="mx-auto max-w-[640px] lg:rotate-[-2.5deg]">
           <TicketArt tier={tier} holder={name} admitted={phase === "after"} />
         </div>
-        <p className="mx-auto mt-8 max-w-[640px] text-center font-mono text-[10.5px] uppercase tracking-[0.16em] text-white/55 lg:mt-12">
+        <p className="mx-auto mt-8 max-w-[640px] text-center text-[13px] text-white/60 lg:mt-12">
           {phase === "after"
-            ? "Keep it. It's the only merch we made"
+            ? "Keep it. It's the only merch we made."
             : tier.id === "stream"
-              ? "The stream link arrives at 18:00 on the night"
-              : `Show the code at Gate ${tier.gate} · Name changes free until 12 Mar`}
+              ? "The stream link arrives at 18:00 on the night."
+              : `Show the code at Gate ${tier.gate}. Name changes are free until 12 March.`}
         </p>
       </div>
     </div>

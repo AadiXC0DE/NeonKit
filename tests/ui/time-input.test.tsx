@@ -227,6 +227,7 @@ describe("TimeInput", () => {
 
   it("applies an explicit color through --neon", () => {
     render(<TimeInput aria-label="Start" color="lime" />);
-    expect(screen.getByRole("group").style.getPropertyValue("--neon")).toBe("163 230 53");
+    // Set on the outer block, so the label's required dot shares the color.
+    expect(screen.getByRole("group").parentElement?.style.getPropertyValue("--neon")).toBe("163 230 53");
   });
 });

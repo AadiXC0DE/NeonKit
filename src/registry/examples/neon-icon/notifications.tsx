@@ -41,7 +41,7 @@ export default function NeonIconNotifications() {
         </button>
         <div className="min-w-0">
           <p className="text-sm text-white/90">{count ? `${count} unread` : "All caught up"}</p>
-          <p className="truncate text-xs text-white/45">{count ? latest : "Nothing new since 9:12"}</p>
+          <p className="truncate text-xs text-white/55">{count ? latest : "Nothing new since 9:12"}</p>
         </div>
       </div>
       <Button

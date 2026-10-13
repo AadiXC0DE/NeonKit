@@ -8,9 +8,9 @@ import { neonVars, type NeonColor } from "@/lib/neon";
 // The dial is drawn in a 100-unit box, so every size shares one geometry.
 // `travel` is how many pixels of vertical drag sweep the whole range.
 const sizes = {
-  sm: { dial: "size-14 text-[10px]", minors: false, tick: 2, travel: 160, label: "text-[10px]", value: "text-[11px]" },
-  md: { dial: "size-20 text-[14px]", minors: true, tick: 1.4, travel: 200, label: "text-[10px]", value: "text-xs" },
-  lg: { dial: "size-28 text-[19px]", minors: true, tick: 1.1, travel: 240, label: "text-[10px]", value: "text-[13px]" },
+  sm: { dial: "size-14 text-[10px]", minors: false, tick: 2, travel: 160, label: "text-[12px]", value: "text-[11px]" },
+  md: { dial: "size-20 text-[14px]", minors: true, tick: 1.4, travel: 200, label: "text-[12px]", value: "text-xs" },
+  lg: { dial: "size-28 text-[19px]", minors: true, tick: 1.1, travel: 240, label: "text-[12px]", value: "text-[13px]" },
 } as const;
 
 const RING = 39;
@@ -454,7 +454,7 @@ const Knob = React.forwardRef<HTMLDivElement, KnobProps>(
             onClick={() => {
               if (!disabled) dialRef.current?.focus();
             }}
-            className={cn("font-medium uppercase leading-none tracking-[0.16em] text-white/55", s.label)}
+            className={cn("font-medium leading-none tracking-[0.01em] text-white/60", s.label)}
           >
             {label}
           </span>

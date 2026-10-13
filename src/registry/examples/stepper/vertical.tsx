@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { RotateCw } from "lucide-react";
+import { RotateCw } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Step, Stepper } from "@/components/ui/stepper";
 
@@ -45,7 +45,7 @@ export default function StepperVertical() {
       <div className="flex items-start justify-between gap-4">
         <div className="grid gap-0.5">
           <h3 className="text-sm font-medium text-white/90">Deployment #1284</h3>
-          <p aria-live="polite" className="text-xs text-white/45">
+          <p aria-live="polite" className="text-xs text-white/50">
             {finished ? "Ready" : running ? "Building" : "Failed after 29.4s"}
           </p>
         </div>

@@ -72,9 +72,31 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
 
     const s = sizes[size];
 
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
+    React.useImperativeHandle(ref, () => buttonRef.current as HTMLButtonElement);
+
+    // A form reset puts the switch back where it started, like a native checkbox.
+    const initialChecked = React.useRef(checked);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialChecked.current;
+        if (initial === checked) return;
+        if (!isControlled) setUncontrolled(initial);
+        onCheckedChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = buttonRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     const control = (
       <button
-        ref={ref}
+        ref={buttonRef}
         type="button"
         role="switch"
         id={id}
@@ -92,6 +114,8 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
           "group/switch relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-white/10 bg-white/[0.06] p-px outline-none",
+          // An invisible 44px target around the track, so even the small switch is easy to hit.
+          "before:absolute before:left-1/2 before:top-1/2 before:h-[max(100%,2.75rem)] before:w-[max(calc(100%+1rem),2.75rem)] before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:content-['']",
           "transition-[background-color,border-color,transform,scale] duration-150 ease-out active:scale-[0.97]",
           "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
           "disabled:cursor-not-allowed",

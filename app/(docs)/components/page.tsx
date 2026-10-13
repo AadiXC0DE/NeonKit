@@ -17,15 +17,16 @@ export default function ComponentsIndexPage() {
       return [item.slug, Demo ? <Demo /> : null];
     }),
   );
+  const groups = categories.filter((category) => registry.some((item) => item.category === category));
 
   return (
-    <article className="max-w-6xl">
-      <PageHeader eyebrow="Directory" title="Components">
-        {registry.length} components across {categories.length} floors, every one live below. Each is a single file you
-        own.
+    <article>
+      <PageHeader title="Components" size="lg" className="mb-10 sm:mb-12">
+        {registry.length} components in {groups.length} groups, each one running below. Every one is a single file
+        that lands in your repo, and all of them take their color from one variable.
       </PageHeader>
       <ComponentGallery
-        categories={categories}
+        categories={groups}
         previews={previews}
         items={registry.map((item) => ({
           slug: item.slug,

@@ -17,16 +17,18 @@ const css = `
 .nk-glitch-text-a { color: rgb(var(--neon)); text-shadow: 0 0 0.12em rgb(var(--neon) / 0.7); }
 .nk-glitch-text-b { color: var(--nk-glitch-alt); text-shadow: 0 0 0.12em var(--nk-glitch-alt); }
 .nk-glitch-text-a, .nk-glitch-text-b { opacity: 0; }
+.nk-glitch-text:is([data-active], [data-burst]) :is(.nk-glitch-text-a, .nk-glitch-text-b),
+.nk-glitch-text[data-trigger="hover"]:hover :is(.nk-glitch-text-a, .nk-glitch-text-b),
+:is(a, button):is(:hover, :focus-visible) .nk-glitch-text[data-trigger="hover"] :is(.nk-glitch-text-a, .nk-glitch-text-b) { opacity: 0.9; }
 .nk-glitch-text:is([data-active], [data-burst]) .nk-glitch-text-a,
-.nk-glitch-text:is([data-active], [data-burst]) .nk-glitch-text-b,
 .nk-glitch-text[data-trigger="hover"]:hover .nk-glitch-text-a,
-.nk-glitch-text[data-trigger="hover"]:hover .nk-glitch-text-b { opacity: 0.9; }
-.nk-glitch-text:is([data-active], [data-burst]) .nk-glitch-text-a,
-.nk-glitch-text[data-trigger="hover"]:hover .nk-glitch-text-a { animation: nk-glitch-text-a var(--nk-glitch-speed) steps(1, end) infinite; }
+:is(a, button):is(:hover, :focus-visible) .nk-glitch-text[data-trigger="hover"] .nk-glitch-text-a { animation: nk-glitch-text-a var(--nk-glitch-speed) steps(1, end) infinite; }
 .nk-glitch-text:is([data-active], [data-burst]) .nk-glitch-text-b,
-.nk-glitch-text[data-trigger="hover"]:hover .nk-glitch-text-b { animation: nk-glitch-text-b calc(var(--nk-glitch-speed) * 1.17) steps(1, end) infinite; }
+.nk-glitch-text[data-trigger="hover"]:hover .nk-glitch-text-b,
+:is(a, button):is(:hover, :focus-visible) .nk-glitch-text[data-trigger="hover"] .nk-glitch-text-b { animation: nk-glitch-text-b calc(var(--nk-glitch-speed) * 1.17) steps(1, end) infinite; }
 .nk-glitch-text:is([data-active], [data-burst]) .nk-glitch-text-base,
-.nk-glitch-text[data-trigger="hover"]:hover .nk-glitch-text-base { animation: nk-glitch-text-base calc(var(--nk-glitch-speed) * 1.31) steps(1, end) infinite; }
+.nk-glitch-text[data-trigger="hover"]:hover .nk-glitch-text-base,
+:is(a, button):is(:hover, :focus-visible) .nk-glitch-text[data-trigger="hover"] .nk-glitch-text-base { animation: nk-glitch-text-base calc(var(--nk-glitch-speed) * 1.31) steps(1, end) infinite; }
 @keyframes nk-glitch-text-a {
   0% { clip-path: inset(6% 0 58% 0); transform: translate(calc(var(--nk-glitch-x) * -1), 0); }
   17% { clip-path: inset(48% 0 20% 0); transform: translate(calc(var(--nk-glitch-x) * 1.5), 0); }
@@ -69,7 +71,7 @@ export interface GlitchTextProps
   extends Omit<React.HTMLAttributes<HTMLElement>, "color"> {
   /** Element to render. */
   as?: "span" | "p" | "div" | "h1" | "h2" | "h3" | "h4";
-  /** When it glitches: on hover, in periodic bursts, once each time it scrolls into view, or while `active`. */
+  /** When it glitches: on hover (its own, or a link or button around it, keyboard focus included), in periodic bursts, once each time it scrolls into view, or while `active`. */
   trigger?: Trigger;
   /** With `trigger="manual"`: glitches while true. */
   active?: boolean;

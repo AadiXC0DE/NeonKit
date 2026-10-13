@@ -25,7 +25,7 @@ export default function NeonSignProfiles() {
               lines={[profile.text]}
               style={{ fontFamily: "var(--font-tilt-neon)" }}
             />
-            <figcaption className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">
+            <figcaption className="text-[13px] text-white/55">
               {profile.note}
             </figcaption>
           </figure>
@@ -37,7 +37,7 @@ export default function NeonSignProfiles() {
           setOn(false);
           setTimeout(() => setOn(true), 450);
         }}
-        className="inline-flex h-9 cursor-pointer items-center rounded-full border border-white/10 bg-white/[0.03] px-4 font-mono text-[11px] uppercase tracking-[0.18em] text-white/60 outline-none transition-colors hover:border-white/20 hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a] active:scale-[0.97]"
+        className="inline-flex h-9 cursor-pointer items-center rounded-full border border-white/10 bg-white/[0.03] px-4 text-[13px] font-medium text-white/70 outline-none transition-[color,border-color,transform] duration-150 hover:border-white/20 hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a] active:scale-[0.97]"
       >
         Strike again
       </button>

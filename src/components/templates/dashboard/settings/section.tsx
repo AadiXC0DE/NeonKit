@@ -17,7 +17,7 @@ export function Section({
   return (
     <section
       aria-labelledby={id}
-      className={cn("grid gap-5 border-t border-white/[0.06] py-8 first:border-t-0 first:pt-2 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12", className)}
+      className={cn("grid gap-5 border-t border-white/[0.06] py-9 first:border-t-0 first:pt-3 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-14", className)}
     >
       <div>
         <h2 id={id} className="text-[15px] font-semibold tracking-[-0.01em] text-white">
@@ -30,6 +30,7 @@ export function Section({
   );
 }
 
+/** The right-hand column of a section. No card: the hairline above the section already groups it. */
 export function Panel({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6", className)}>{children}</div>;
+  return <div className={cn("max-w-[640px]", className)}>{children}</div>;
 }

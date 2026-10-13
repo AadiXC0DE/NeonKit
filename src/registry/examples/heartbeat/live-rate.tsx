@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Heart } from "lucide-react";
+import { Heart } from "@/components/ui/icons";
 import { Heartbeat } from "@/components/ui/heartbeat";
 import { Slider } from "@/components/ui/slider";
 
@@ -29,7 +29,7 @@ export default function HeartbeatLiveRate() {
         </p>
         <p className="font-mono text-2xl tabular-nums text-white/90">
           {bpm}
-          <span className="ml-1 text-xs text-white/45">bpm</span>
+          <span className="ml-1 text-xs text-white/55">bpm</span>
         </p>
       </div>
       <Heartbeat bpm={bpm} height={88} onBeat={thump} />

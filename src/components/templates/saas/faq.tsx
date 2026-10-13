@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Mail } from "lucide-react";
+import { Mail } from "@/components/ui/icons";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Avatar, AvatarGroup } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { contactEmail } from "./config";
 import type { Faq as FaqItem } from "./data";
-import { Eyebrow } from "./primitives";
+import { Headline, focusRing } from "./primitives";
 
 const CREW = ["Leah Oduya", "Marco Ruiz", "Jun Sato"];
 
@@ -18,7 +17,7 @@ function Answer({ text }: { text: string }) {
     <>
       {text.split(/(`[^`]+`)/).map((part, i) =>
         part.startsWith("`") ? (
-          <code key={i} className="rounded-[5px] bg-white/[0.06] px-1.5 py-0.5 font-mono text-[13px] text-white/85">
+          <code key={i} className="rounded-md bg-white/[0.06] px-1.5 py-0.5 font-mono text-[13px] text-white/85">
             {part.slice(1, -1)}
           </code>
         ) : (
@@ -32,71 +31,42 @@ function Answer({ text }: { text: string }) {
 type FaqProps = {
   id: string;
   clock?: string;
-  eyebrow: string;
   title: string;
   intro: string;
   items: FaqItem[];
   updated: string;
 };
 
-export function Faq({ id, clock, eyebrow, title, intro, items, updated }: FaqProps) {
+export function Faq({ id, clock, title, intro, items, updated }: FaqProps) {
   const [open, setOpen] = React.useState(items[0]?.id ?? "");
 
   return (
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className="relative isolate scroll-mt-20 overflow-clip px-5 py-20 sm:px-8 lg:py-28"
+      className="relative isolate scroll-mt-20 overflow-clip px-5 py-24 sm:px-8 lg:py-36"
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-40 top-0 -z-10 h-[560px] w-[720px] rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/0.06),transparent)]"
-      />
-
-      <div className="mx-auto grid max-w-[1120px] gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-[auto_1fr] lg:gap-x-20 lg:gap-y-10">
-        <div className="lg:col-start-1 lg:row-start-1">
-          <Eyebrow clock={clock}>{eyebrow}</Eyebrow>
-          <h2
-            id={`${id}-title`}
-            className="mt-5 max-w-[14ch] text-balance text-[clamp(2.25rem,5vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
-          >
+      <div className="mx-auto grid max-w-[1120px] gap-14 lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-8 lg:gap-y-16">
+        <div className="lg:col-span-5 lg:row-start-1">
+          <Headline id={`${id}-title`} clock={clock} className="max-w-[13ch] text-[clamp(2.25rem,4.6vw,3.75rem)]">
             {title}
-          </h2>
-          <p className="mt-6 max-w-[42ch] text-[15px] leading-relaxed text-white/60">{intro}</p>
+          </Headline>
+          <p className="mt-7 max-w-[42ch] text-pretty text-[16px] leading-[1.6] text-white/60">{intro}</p>
+          <p className="mt-4 text-[13px] text-white/55">Last updated {updated}</p>
         </div>
 
-        <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-          <div className="flex items-baseline justify-between border-b border-white/10 pb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">
-            <span>{String(items.length).padStart(2, "0")} questions</span>
-            <span>Updated {updated}</span>
-          </div>
-          <Accordion type="single" collapsible value={open} onValueChange={setOpen}>
-            {items.map((item, i) => {
+        <div className="lg:col-span-7 lg:col-start-6 lg:row-span-2 lg:row-start-1 lg:pt-2">
+          <Accordion type="single" collapsible value={open} onValueChange={setOpen} className="border-t border-white/10">
+            {items.map((item) => {
               const isOpen = open === item.id;
               return (
-                <AccordionItem
-                  key={item.id}
-                  value={item.id}
-                  className="border-white/[0.07] transition-[background-color] duration-300 data-[state=open]:bg-[radial-gradient(45%_90%_at_0%_45%,rgb(var(--neon)/0.07),transparent)]"
-                >
-                  <AccordionTrigger className="gap-5 py-5 text-[15px] sm:text-base">
-                    <span className="flex min-w-0 items-baseline gap-4 sm:gap-6">
-                      <span
-                        className={cn(
-                          "w-5 shrink-0 font-mono text-[11px] tabular-nums transition-colors duration-200",
-                          isOpen
-                            ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]"
-                            : "text-white/60",
-                        )}
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className={cn("transition-colors duration-200", isOpen ? "text-white" : "text-white/80")}>
-                        {item.q}
-                      </span>
+                <AccordionItem key={item.id} value={item.id} className="border-white/[0.08]">
+                  <AccordionTrigger className="gap-5 py-5 text-[16px] sm:text-[17px]">
+                    <span className={cn("transition-colors duration-200", isOpen ? "text-white" : "text-white/80")}>
+                      {item.q}
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent className="pb-6 pl-[3.25rem] text-[15px] text-white/60 sm:pl-[3.75rem]">
+                  <AccordionContent className="pb-7 pr-8 text-[15px] leading-[1.65] text-white/60">
                     <p className="max-w-[60ch] text-pretty">
                       <Answer text={item.a} />
                     </p>
@@ -107,29 +77,26 @@ export function Faq({ id, clock, eyebrow, title, intro, items, updated }: FaqPro
           </Accordion>
         </div>
 
-        <div className="relative max-w-md self-start overflow-hidden rounded-[18px] border border-white/10 bg-white/[0.03] p-6 lg:sticky lg:top-24 lg:col-start-1 lg:row-start-2">
-          <span
-            aria-hidden
-            className="absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--neon)/0.5),transparent)]"
-          />
-          <div className="flex items-center justify-between gap-4">
-            <AvatarGroup size="md">
-              {CREW.map((name, i) => (
-                <Avatar key={name} alt={name} status={i === CREW.length - 1 ? "online" : undefined} />
-              ))}
-            </AvatarGroup>
-            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/60">Median reply 11 min</span>
-          </div>
-          <h3 className="mt-5 text-lg font-semibold tracking-[-0.02em] text-white">Still have a question?</h3>
-          <p className="mt-2 text-pretty text-sm leading-relaxed text-white/60">
-            Three engineers who have all been paged at 2am, answering in daylight hours. Send your deploy setup and
-            we&apos;ll tell you what a window would look like.
+        <div className="max-w-md self-start lg:sticky lg:top-24 lg:col-span-4 lg:row-start-2">
+          <AvatarGroup size="md">
+            {CREW.map((name, i) => (
+              <Avatar key={name} alt={name} status={i === CREW.length - 1 ? "online" : undefined} />
+            ))}
+          </AvatarGroup>
+          <h3 className="mt-5 text-[17px] font-medium text-white">Still have a question?</h3>
+          <p className="mt-2 text-pretty text-[14px] leading-relaxed text-white/60">
+            Three engineers who have all been paged at 2am answer in daylight hours, usually within 11 minutes. Send
+            your deploy setup and we&apos;ll sketch what a window would look like.
           </p>
-          <Button asChild size="sm" className="mt-5">
-            <a href={`mailto:${contactEmail}`}>
-              <Mail aria-hidden /> {contactEmail}
-            </a>
-          </Button>
+          <a
+            href={`mailto:${contactEmail}`}
+            className={cn(
+              "mt-5 inline-flex items-center gap-2 rounded-md text-[14px] font-medium text-white/90 underline decoration-white/25 underline-offset-[5px] transition-colors hover:text-[rgb(var(--neon))] hover:decoration-[rgb(var(--neon)/0.6)]",
+              focusRing,
+            )}
+          >
+            <Mail aria-hidden className="size-4" /> {contactEmail}
+          </a>
         </div>
       </div>
     </section>

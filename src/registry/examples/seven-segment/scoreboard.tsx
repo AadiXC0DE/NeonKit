@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { SevenSegment } from "@/components/ui/seven-segment";
 
@@ -16,7 +16,7 @@ function Team({
 }) {
   return (
     <div className="flex flex-col items-center gap-3">
-      <span className="font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-white/55">{name}</span>
+      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">{name}</span>
       <SevenSegment
         value={score}
         digits={2}
@@ -51,7 +51,7 @@ export default function SevenSegmentScoreboard() {
           className="[--segment-h:22px] lg:[--segment-h:30px]"
         />
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">Period</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">Period</span>
           <SevenSegment value={3} size={20} color="amber" />
         </div>
       </div>

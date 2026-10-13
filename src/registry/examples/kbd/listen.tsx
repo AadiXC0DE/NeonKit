@@ -18,7 +18,7 @@ export default function KbdListen() {
           </Kbd>
         ))}
       </div>
-      <p className="text-sm text-white/45">
+      <p className="text-sm text-white/50">
         Press <span className="text-white/80">Shift</span>, any modifier or the space bar.
       </p>
     </div>

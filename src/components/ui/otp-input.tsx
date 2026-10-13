@@ -24,6 +24,35 @@ function sanitize(text: string, mode: "numeric" | "alphanumeric") {
   return (text.match(mode === "numeric" ? /\d/g : /[a-z0-9]/gi) ?? []).join("");
 }
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 export interface OTPInputProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "color" | "defaultValue" | "onChange"> {
   /** Number of slots. */
@@ -49,6 +78,8 @@ export interface OTPInputProps
   autoFocus?: boolean;
   /** Submits the code under this name with a surrounding form. */
   name?: string;
+  /** Blocks form submission until every slot is filled. */
+  required?: boolean;
 }
 
 const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
@@ -68,6 +99,7 @@ const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
       invalid = false,
       autoFocus = false,
       name,
+      required = false,
       className,
       style,
       "aria-label": ariaLabel = "One-time code",
@@ -112,6 +144,37 @@ const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
       }
       wasInvalid.current = invalid;
     }, [invalid]);
+
+    // A form reset empties the native slots; empty the code with them.
+    const proxyRef = React.useRef<HTMLInputElement>(null);
+    const rejected = useRejected(proxyRef, code);
+    const red = invalid || rejected;
+    const initialCode = React.useRef(code);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialCode.current;
+        if (initial === codeRef.current) return;
+        codeRef.current = initial;
+        if (value === undefined) setUncontrolled(initial);
+        onValueChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = proxyRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
+    // The browser's own "fill this in" bubble, worded for a code.
+    React.useEffect(() => {
+      const unitName = mode === "numeric" ? "digits" : "characters";
+      proxyRef.current?.setCustomValidity(
+        required && code.length < length ? `Enter all ${length} ${unitName}.` : "",
+      );
+    }, [required, code, length, mode]);
 
     function focusSlot(index: number) {
       const target = Math.max(0, Math.min(index, codeRef.current.length, length - 1));
@@ -193,11 +256,11 @@ const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
         role="group"
         aria-label={ariaLabel}
         aria-disabled={disabled || undefined}
-        data-invalid={invalid || undefined}
-        style={neonVars(invalid ? INVALID : color, style)}
+        data-invalid={red || undefined}
+        style={neonVars(red ? INVALID : color, style)}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
-          "inline-flex items-center",
+          "relative inline-flex items-center",
           s.root,
           className,
         )}
@@ -232,7 +295,7 @@ const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
                   autoFocus={autoFocus && index === cursor}
                   tabIndex={index === cursor ? 0 : -1}
                   aria-label={`${unit} ${index + 1} of ${length}`}
-                  aria-invalid={invalid || undefined}
+                  aria-invalid={red || undefined}
                   onChange={(event) => handleChange(index, event)}
                   onKeyDown={(event) => handleKeyDown(index, event)}
                   onPaste={(event) => {
@@ -289,7 +352,20 @@ const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
             </React.Fragment>
           );
         })}
-        {name && <input type="hidden" name={name} value={code} disabled={disabled} />}
+        {/* Carries the code into forms, under the slots so a validation bubble points at them. */}
+        <input
+          ref={proxyRef}
+          aria-hidden
+          tabIndex={-1}
+          autoComplete="off"
+          name={name}
+          value={code}
+          required={required}
+          disabled={disabled}
+          onChange={() => {}}
+          onFocus={() => focusSlot(codeRef.current.length)}
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px w-full opacity-0"
+        />
       </div>
     );
   },

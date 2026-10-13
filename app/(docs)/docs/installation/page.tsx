@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { CodeBlock } from "@/components/site/code-block";
 import { CommandBlock } from "@/components/site/install-tabs";
-import { H2, InlineCode, P, PageHeader, PagerLinks, Step, Steps } from "@/components/site/prose";
+import { DocArticle } from "@/components/site/doc-article";
+import { Callout, H2, InlineCode, P, PageHeader, PagerLinks, Step, Steps } from "@/components/site/prose";
 import { registryUrl, siteConfig } from "@/config/site";
 import { installCommand, runCommand } from "@/lib/commands";
 import { readSource } from "@/lib/highlight";
@@ -24,9 +25,17 @@ export default async function InstallationPage() {
   ]);
 
   return (
-    <article className="max-w-3xl">
-      <PageHeader eyebrow="Getting started" title="Installation">
-        You need React 18 or newer and Tailwind CSS 3.4 or 4. Any framework works. The examples use Next.js and
+    <DocArticle
+      toc={[
+        { id: "cli", title: "With the shadcn CLI" },
+        { id: "namespace", title: "Short names" },
+        { id: "manual", title: "By hand" },
+        { id: "tailwind-3", title: "Tailwind 3" },
+        { id: "background", title: "Background" },
+      ]}
+    >
+      <PageHeader title="Installation">
+        You need React 18 or newer and Tailwind CSS 3.4 or 4. Any framework works; the examples use Next.js and
         TypeScript.
       </PageHeader>
 
@@ -59,11 +68,11 @@ export default function Page() {
           />
         </Step>
       </Steps>
-      <P className="mt-8">
+      <Callout title="Already have a button?" className="mt-12">
         NeonKit writes to the same <InlineCode>components/ui</InlineCode> folder as shadcn/ui. If a file with the same
         name exists (a fresh <InlineCode>shadcn init</InlineCode> ships a button), the CLI asks first. Add{" "}
         <InlineCode>--overwrite</InlineCode> to replace it without asking.
-      </P>
+      </Callout>
 
       <H2 id="namespace">Short names</H2>
       <P>
@@ -80,18 +89,16 @@ export default function Page() {
   }
 }`}
       />
-      <div className="mt-4">
-        <CommandBlock commands={short} />
-      </div>
+      <CommandBlock commands={short} className="mt-4" />
 
-      <H2 id="manual">Manual</H2>
+      <H2 id="manual">By hand</H2>
       <P>Prefer to see every line? It takes about a minute.</P>
       <Steps>
         <Step title="Install the two class helpers">
           <CommandBlock commands={base} />
           <p>
-            Some components also use <InlineCode>motion</InlineCode>, <InlineCode>lucide-react</InlineCode> or{" "}
-            <InlineCode>@radix-ui/react-slot</InlineCode>. Each component page lists what it needs.
+            Some components also use <InlineCode>motion</InlineCode> or <InlineCode>@radix-ui/react-slot</InlineCode>, and
+            ones with icons need <InlineCode>components/ui/icons.tsx</InlineCode>. Each component page lists what it needs.
           </p>
         </Step>
         <Step title={<>Add <InlineCode>lib/utils.ts</InlineCode></>}>
@@ -118,7 +125,7 @@ export default function Page() {
         </Step>
         <Step title="Copy a component">
           <p>
-            Open any component, choose <span className="text-fg">Manual</span> and paste the source into{" "}
+            Open any component, choose <span className="text-fg">By hand</span> and paste the source into{" "}
             <InlineCode>components/ui</InlineCode>.
           </p>
         </Step>
@@ -149,6 +156,6 @@ export default function Page() {
         prev={{ title: "Introduction", href: "/docs" }}
         next={{ title: "Theming", href: "/docs/theming" }}
       />
-    </article>
+    </DocArticle>
   );
 }

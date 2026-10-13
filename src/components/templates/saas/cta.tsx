@@ -2,13 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { HardwareSwitch } from "@/components/ui/hardware-switch";
 import { NeonSign } from "@/components/ui/neon-sign";
 import { cn } from "@/lib/utils";
 import { basePath, sections } from "./config";
-import { Eyebrow, formatCountdown, useWindowCountdown } from "./primitives";
+import { Headline, formatCountdown, useWindowCountdown } from "./primitives";
 
 const section = sections[5];
 
@@ -141,14 +141,11 @@ export function Cta() {
         </div>
 
         <div>
-          <Eyebrow clock={section.clock}>Deploy</Eyebrow>
-          <h2
-            id="deploy-title"
-            className="mt-5 text-balance text-[clamp(2.4rem,4.6vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
-          >
+          {/* The window's own hour: the one time on the page that lights, once it's armed */}
+          <Headline id="deploy-title" clock={section.clock} lit={on} className="text-[clamp(2.5rem,5vw,4.25rem)]">
             Queue something tonight.
-          </h2>
-          <p className="mt-6 max-w-[44ch] text-pretty text-[15px] leading-relaxed text-white/60">
+          </Headline>
+          <p className="mt-7 max-w-[44ch] text-pretty text-[16px] leading-[1.6] text-white/60">
             Free for one project, and fourteen days of Crew with no card. Set it up before dinner, read the first report
             at breakfast.
           </p>
@@ -162,14 +159,14 @@ export function Cta() {
               <Link href={`${basePath}#install`}>Read the install</Link>
             </Button>
           </div>
-          <p className="mt-10 border-t border-white/[0.08] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/60">
+          <p className="mt-10 border-t border-white/[0.08] pt-5 text-[14px] text-white/55">
             {on ? (
               <>
-                Armed <span className="text-white/30">·</span> window opens in{" "}
-                <span className="tabular-nums text-white/90">{formatCountdown(left)}</span>
+                Armed. The window opens in{" "}
+                <span className="font-mono tabular-nums text-white/90">{formatCountdown(left)}</span>
               </>
             ) : (
-              "Disarmed. Lift the guard."
+              "Disarmed. Lift the guard to arm it."
             )}
           </p>
         </div>

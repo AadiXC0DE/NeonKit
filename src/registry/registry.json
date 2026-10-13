@@ -1,5 +1,6 @@
 {
   "categories": [
+    "Foundations",
     "Forms",
     "Buttons",
     "Data Display",
@@ -7,6 +8,7 @@
     "Overlay",
     "Feedback",
     "Layout",
+    "AI",
     "Text",
     "Instruments",
     "Effects",
@@ -19,10 +21,12 @@
       "category": "Forms",
       "description": "Solid, outline, soft, ghost and link buttons that light up on hover.",
       "dependencies": [
-        "@radix-ui/react-slot",
-        "lucide-react"
+        "@radix-ui/react-slot"
       ],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "input",
@@ -30,7 +34,8 @@
       "category": "Forms",
       "description": "Text field with an animated neon focus ring, icons, labels and error states.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "textarea",
@@ -38,7 +43,8 @@
       "category": "Forms",
       "description": "Multi-line field that grows with its content and counts characters.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "select",
@@ -47,10 +53,12 @@
       "description": "Keyboard-friendly listbox with a glowing popover and typeahead.",
       "dependencies": [
         "@floating-ui/react-dom",
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "checkbox",
@@ -58,7 +66,8 @@
       "category": "Forms",
       "description": "Checkbox with a drawn-on checkmark and indeterminate state.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "radio-group",
@@ -66,7 +75,8 @@
       "category": "Forms",
       "description": "Single choice from a set, with arrow-key navigation and card layouts.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "switch",
@@ -74,7 +84,8 @@
       "category": "Forms",
       "description": "A toggle that powers on like a neon tube.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "slider",
@@ -82,7 +93,8 @@
       "category": "Forms",
       "description": "Pointer and keyboard slider with a glowing track and optional range.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "otp-input",
@@ -90,7 +102,8 @@
       "category": "Forms",
       "description": "One-time code input with auto-advance, paste and backspace handling.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "toggle-group",
@@ -100,7 +113,8 @@
       "dependencies": [
         "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "combobox",
@@ -109,50 +123,56 @@
       "description": "Searchable select with filtering, keyboard nav and an async-friendly API.",
       "dependencies": [
         "@floating-ui/react-dom",
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "tag-input",
       "name": "Tag Input",
       "category": "Forms",
       "description": "Type, paste or backspace your way through a row of glowing chips.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.1"
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "number-input",
       "name": "Number Input",
       "category": "Forms",
       "description": "Steppers, drag-to-scrub, min, max, step and locale formatting.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.1"
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "file-dropzone",
       "name": "File Dropzone",
       "category": "Forms",
       "description": "Drag files in and the dashed tube border powers up. Lists files with progress.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.1"
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "rating",
       "name": "Rating",
       "category": "Forms",
       "description": "Stars or bolts that flicker on as you hover, with half steps.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.1"
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "color-picker",
@@ -160,28 +180,29 @@
       "category": "Forms",
       "description": "Neon gel swatches, a hue knob and a hex field in one control.",
       "dependencies": [],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "calendar",
       "name": "Calendar",
       "category": "Forms",
       "description": "Single, range and multiple selection with full keyboard grid navigation.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.1"
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "date-picker",
       "name": "Date Picker",
       "category": "Forms",
       "description": "A field that opens a calendar, with presets and range support.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "calendar",
+        "icons",
         "popover"
       ],
       "addedIn": "1.1"
@@ -192,7 +213,8 @@
       "category": "Forms",
       "description": "Segmented hours and minutes you can type, arrow or scrub.",
       "dependencies": [],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "field",
@@ -200,7 +222,8 @@
       "category": "Forms",
       "description": "Label, description and error wiring for any control, plus a standalone Label.",
       "dependencies": [],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "shimmer-button",
@@ -208,7 +231,8 @@
       "category": "Buttons",
       "description": "A light sweeps across the face while a beam runs the border.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "pulse-button",
@@ -216,7 +240,8 @@
       "category": "Buttons",
       "description": "A ring pulses outward to call attention.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "magnetic-button",
@@ -224,7 +249,8 @@
       "category": "Buttons",
       "description": "Pulled toward the cursor, with a label that leads.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "power-button",
@@ -232,7 +258,8 @@
       "category": "Buttons",
       "description": "A round power key that ignites with a flickering ring.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "cyber-button",
@@ -240,7 +267,8 @@
       "category": "Buttons",
       "description": "Cut corners, a corner tick and a glitch on hover.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "hold-button",
@@ -248,7 +276,8 @@
       "category": "Buttons",
       "description": "Hold to confirm: a tube fills, release drains it.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "copy-button",
@@ -256,17 +285,19 @@
       "category": "Buttons",
       "description": "Copy to clipboard with a drawn-on check.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "badge",
       "name": "Badge",
       "category": "Data Display",
       "description": "Status labels with optional live dot and remove button.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.0"
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "avatar",
@@ -274,7 +305,8 @@
       "category": "Data Display",
       "description": "Profile image with initials fallback, status light and stacked groups.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "card",
@@ -282,7 +314,8 @@
       "category": "Data Display",
       "description": "Surface with header, content and footer slots and a lit edge.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "kbd",
@@ -290,7 +323,8 @@
       "category": "Data Display",
       "description": "Keyboard keys and shortcuts that glow when pressed.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "tabs",
@@ -300,7 +334,8 @@
       "dependencies": [
         "motion"
       ],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "accordion",
@@ -308,20 +343,23 @@
       "category": "Data Display",
       "description": "Collapsible sections with smooth height animation.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "table",
       "name": "Table",
       "category": "Data Display",
       "description": "Sortable, selectable table with a sticky header and a row hover beam.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.1"
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "timeline",
@@ -329,7 +367,8 @@
       "category": "Data Display",
       "description": "Events on a tube that is lit up to now.",
       "dependencies": [],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "glow-chart",
@@ -337,17 +376,19 @@
       "category": "Data Display",
       "description": "Line, area and bar charts with glow, crosshair tooltips and a Sparkline.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "breadcrumb",
       "name": "Breadcrumb",
       "category": "Navigation",
       "description": "Path navigation with separators and overflow collapse.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.1"
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "pagination",
@@ -355,20 +396,23 @@
       "category": "Navigation",
       "description": "Page controls with a sliding active indicator and a compact mode.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "stepper",
       "name": "Stepper",
       "category": "Navigation",
       "description": "Steps joined by a tube that fills as you progress.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.1"
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "navigation-menu",
@@ -377,10 +421,12 @@
       "description": "Top navigation with mega-menu panels and a moving light indicator.",
       "dependencies": [
         "@floating-ui/react-dom",
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "sidebar",
@@ -388,10 +434,12 @@
       "category": "Navigation",
       "description": "App sidebar with groups, collapse-to-rail and an active tube marker.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "dialog",
@@ -399,10 +447,12 @@
       "category": "Overlay",
       "description": "Accessible modal built on the native dialog element.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "tooltip",
@@ -413,7 +463,8 @@
         "@floating-ui/react-dom",
         "motion"
       ],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "dropdown-menu",
@@ -422,10 +473,12 @@
       "description": "Menus with groups, checkable items, submenus and a gliding highlight.",
       "dependencies": [
         "@floating-ui/react-dom",
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "context-menu",
@@ -447,7 +500,8 @@
         "@floating-ui/react-dom",
         "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "hover-card",
@@ -458,7 +512,8 @@
         "@floating-ui/react-dom",
         "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "command",
@@ -466,10 +521,12 @@
       "category": "Overlay",
       "description": "A ⌘K palette with groups, fuzzy search and keyboard navigation.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "sheet",
@@ -477,10 +534,12 @@
       "category": "Overlay",
       "description": "Side panel on the native dialog with a lit leading edge.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "progress",
@@ -488,7 +547,8 @@
       "category": "Feedback",
       "description": "Linear and circular progress with a moving highlight.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "spinner",
@@ -496,7 +556,8 @@
       "category": "Feedback",
       "description": "Ring, dots and bars loaders in any neon color.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "skeleton",
@@ -504,17 +565,19 @@
       "category": "Feedback",
       "description": "Loading placeholders with a scanning shimmer.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "alert",
       "name": "Alert",
       "category": "Feedback",
       "description": "Inline messages for info, success, warning and errors.",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "addedIn": "1.0"
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "toast",
@@ -522,10 +585,12 @@
       "category": "Feedback",
       "description": "Stacked notifications with a tiny toast() API. No provider needed.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "separator",
@@ -533,7 +598,8 @@
       "category": "Layout",
       "description": "Hairlines and tube dividers, with optional labels.",
       "dependencies": [],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "scroll-area",
@@ -541,7 +607,8 @@
       "category": "Layout",
       "description": "Thin neon scrollbar with edge fades that appear only when needed.",
       "dependencies": [],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "collapsible",
@@ -551,7 +618,8 @@
       "dependencies": [
         "motion"
       ],
-      "addedIn": "1.1"
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "neon-text",
@@ -561,7 +629,8 @@
       "dependencies": [
         "motion"
       ],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "neon-sign",
@@ -569,7 +638,8 @@
       "category": "Text",
       "description": "A full sign: acrylic backplate, standoffs, frame tube, cable and a power switch with flicker profiles.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "glitch-text",
@@ -577,7 +647,8 @@
       "category": "Text",
       "description": "RGB-split text with slice jitter, in bursts or on hover.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "scramble-text",
@@ -585,7 +656,8 @@
       "category": "Text",
       "description": "Text that decodes into place from random glyphs.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "terminal",
@@ -593,7 +665,8 @@
       "category": "Text",
       "description": "A typing terminal and an inline typewriter for rotating headlines.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "split-flap",
@@ -601,7 +674,8 @@
       "category": "Text",
       "description": "Departure-board characters that flip mechanically into place.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "seven-segment",
@@ -609,7 +683,8 @@
       "category": "Text",
       "description": "Numbers and clocks on segments you can see even when they're off.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "led-matrix",
@@ -617,7 +692,8 @@
       "category": "Text",
       "description": "Dot-matrix marquee with a built-in 5×7 font.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "knob",
@@ -625,7 +701,8 @@
       "category": "Instruments",
       "description": "A machined rotary control with a lit value arc and detents.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "fader",
@@ -633,7 +710,8 @@
       "category": "Instruments",
       "description": "A mixing-desk channel fader with a scale and an LED meter.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "hardware-switch",
@@ -641,7 +719,8 @@
       "category": "Instruments",
       "description": "Rocker, safety-cover flip and key switches you can almost feel.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "gauge",
@@ -651,7 +730,8 @@
       "dependencies": [
         "motion"
       ],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "meter",
@@ -659,7 +739,8 @@
       "category": "Instruments",
       "description": "LED VU meter with zones and peak hold.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "equalizer",
@@ -667,7 +748,8 @@
       "category": "Instruments",
       "description": "Animated spectrum bars, optionally driven by real audio.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "oscilloscope",
@@ -675,7 +757,8 @@
       "category": "Instruments",
       "description": "A phosphor trace on a CRT grid, from waveforms or live audio.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "radar",
@@ -683,7 +766,8 @@
       "category": "Instruments",
       "description": "A sweeping radar where blips flare as the beam passes.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "heartbeat",
@@ -691,7 +775,8 @@
       "category": "Instruments",
       "description": "A looping ECG trace with a bright leading edge.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "countdown",
@@ -699,7 +784,8 @@
       "category": "Instruments",
       "description": "Launch timers in split-flap, digital or neon-tube digits.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "neon-clock",
@@ -707,7 +793,8 @@
       "category": "Instruments",
       "description": "Analog and digital clocks with tube hands and a blinking colon.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "border-beam",
@@ -715,7 +802,8 @@
       "category": "Effects",
       "description": "A beam of light that travels around any element's border.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "spotlight-card",
@@ -723,7 +811,8 @@
       "category": "Effects",
       "description": "Card whose border and surface light up under the cursor.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "hologram-card",
@@ -733,7 +822,8 @@
       "dependencies": [
         "motion"
       ],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "neon-frame",
@@ -741,7 +831,8 @@
       "category": "Effects",
       "description": "A HUD frame with corner brackets that draw in and label tabs.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "tube-divider",
@@ -749,7 +840,8 @@
       "category": "Effects",
       "description": "Bent neon tube separators with mounting clips.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "crt-overlay",
@@ -757,7 +849,8 @@
       "category": "Effects",
       "description": "Scanlines, vignette, flicker and a power-on animation over anything.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "cursor-glow",
@@ -765,7 +858,8 @@
       "category": "Effects",
       "description": "A pointer light with an optional comet trail.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "marquee",
@@ -773,7 +867,8 @@
       "category": "Effects",
       "description": "Infinite scrolling rows with edge fades and pause on hover.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "neon-icon",
@@ -781,7 +876,8 @@
       "category": "Effects",
       "description": "Status icons whose bars and segments light up in sequence.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "retro-grid",
@@ -789,7 +885,8 @@
       "category": "Backgrounds",
       "description": "Synthwave perspective grid that scrolls toward the horizon.",
       "dependencies": [],
-      "addedIn": "1.0"
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "aurora",
@@ -797,7 +894,8 @@
       "category": "Backgrounds",
       "description": "Slow curtains of light drifting behind your content.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "starfield",
@@ -805,7 +903,8 @@
       "category": "Backgrounds",
       "description": "Parallax stars with a hyperspace warp.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "light-rays",
@@ -813,7 +912,8 @@
       "category": "Backgrounds",
       "description": "Volumetric beams with drifting dust.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "cityscape",
@@ -821,7 +921,8 @@
       "category": "Backgrounds",
       "description": "A night skyline with flickering windows and rooftop signs.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "rain-glass",
@@ -829,7 +930,8 @@
       "category": "Backgrounds",
       "description": "Droplets sliding down glass over neon bokeh.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "particles",
@@ -837,7 +939,265 @@
       "category": "Backgrounds",
       "description": "Drifting dust that reacts to the cursor.",
       "dependencies": [],
-      "addedIn": "1.2"
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "alert-dialog",
+      "name": "Alert Dialog",
+      "category": "Overlay",
+      "description": "Confirm dialog on the native dialog element. Cancel takes focus; type-to-confirm lights the action up.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "drawer",
+      "name": "Drawer",
+      "category": "Overlay",
+      "description": "Bottom drawer with drag to dismiss, snap points, velocity-aware flicks, nesting and a scaled background.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "menubar",
+      "name": "Menubar",
+      "category": "Navigation",
+      "description": "Application menubar with the APG keyboard model, hover switching, submenus, checkbox and radio items.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "dropdown-menu"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "button-group",
+      "name": "Button Group",
+      "category": "Buttons",
+      "description": "Attached buttons, inputs and text segments with single-pixel seams, split buttons and vertical stacks.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "input-group",
+      "name": "Input Group",
+      "category": "Forms",
+      "description": "Input or Textarea with icon, text, button and toolbar addons inside one field box that glows as a whole.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "input",
+        "textarea"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "item",
+      "name": "Item",
+      "category": "Layout",
+      "description": "List row with media, title, description and actions, for settings, people, files and notifications.",
+      "dependencies": [
+        "@radix-ui/react-slot"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "empty",
+      "name": "Empty",
+      "category": "Feedback",
+      "description": "Empty state whose icon is an unlit neon tube that flickers on once there's an action to take.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "code-block",
+      "name": "Code Block",
+      "category": "Data Display",
+      "description": "Highlighted code with file tabs, line numbers, lit lines, diffs, wrap and copy. Built-in tokenizer, no dependencies.",
+      "dependencies": [],
+      "registryDependencies": [
+        "copy-button",
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "chat-message",
+      "name": "Chat Message",
+      "category": "AI",
+      "description": "A message row with streamed markdown, reasoning, tool calls, attachments, inline edit and hover actions.",
+      "dependencies": [],
+      "registryDependencies": [
+        "code-block",
+        "copy-button",
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "prompt-input",
+      "name": "Prompt Input",
+      "category": "AI",
+      "description": "An auto-growing composer with attachments by click, paste or drop, a token counter and a send button that becomes Stop.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "conversation",
+      "name": "Conversation",
+      "category": "AI",
+      "description": "A transcript that follows streaming text, stops when you scroll up and offers Jump to latest with an unread count.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "icons",
+      "name": "Icons",
+      "category": "Foundations",
+      "description": "310 icons drawn as bent neon tube, with lucide-compatible names and props. Blockout gaps where one tube passes behind another.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "data-table",
+      "name": "Data Table",
+      "category": "Data Display",
+      "description": "Sorting with Shift multi-sort, search, faceted filters, range selection, pages or load more. No table library.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "icons",
+        "input",
+        "pagination",
+        "skeleton",
+        "table"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "tree-view",
+      "name": "Tree View",
+      "category": "Navigation",
+      "description": "File tree with the APG keyboard model, typeahead, multi-select, lazy folders and a lit guide down the open branch.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "resizable",
+      "name": "Resizable",
+      "category": "Layout",
+      "description": "Resizable panel groups: nested, collapsible, keyboard-driven, saved to localStorage. Grips light up as tubes.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "carousel",
+      "name": "Carousel",
+      "category": "Layout",
+      "description": "Scroll-snap carousel with mouse drag, loop, autoplay that pauses itself, and dots that fill with the timer.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "stat",
+      "name": "Stat",
+      "category": "Data Display",
+      "description": "KPI with a count-up value, a delta colored by which way is good, a sparkline and a live heartbeat.",
+      "dependencies": [],
+      "registryDependencies": [
+        "glow-chart",
+        "icons",
+        "skeleton"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "donut-chart",
+      "name": "Donut Chart",
+      "category": "Data Display",
+      "description": "Donut and pie charts bent from neon tube, with a lit hover, keyboard reading and an unlit remainder for max.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "odometer",
+      "name": "Odometer",
+      "category": "Text",
+      "description": "Rolling-drum counter that carries like real gearing. Lit, backlit and cream drums, locale-aware separators.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "status-light",
+      "name": "Status Light",
+      "category": "Feedback",
+      "description": "Indicator lamp with six states: a bezelled panel LED, a dot or a live pulse, plus a group for service lists.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "dock",
+      "name": "Dock",
+      "category": "Navigation",
+      "description": "Magnifying dock on springs, with tooltips, running tubes, badges, separators and a one-stop keyboard toolbar.",
+      "dependencies": [
+        "@radix-ui/react-slot",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "image-compare",
+      "name": "Image Compare",
+      "category": "Data Display",
+      "description": "Before and after slider split by a lit tube. Drag, press, keys or hover to scrub; horizontal or vertical.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "banner",
+      "name": "Banner",
+      "category": "Feedback",
+      "description": "Announcement bar with a tube along its bottom edge that strikes on at mount. Remembers dismissal, can scroll.",
+      "dependencies": [
+        "@radix-ui/react-slot"
+      ],
+      "registryDependencies": [
+        "icons",
+        "marquee"
+      ],
+      "addedIn": "1.5"
     }
   ],
   "blockCategories": [
@@ -860,11 +1220,10 @@
       "name": "Sign Hero",
       "category": "Heroes",
       "description": "A neon sign headline on a lit wall, with a working power switch.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "neon-text",
         "switch"
       ],
@@ -876,11 +1235,10 @@
       "name": "Minimal Navbar",
       "category": "Navigation",
       "description": "Quiet navbar with a lit tube under the active link and a large-type mobile sheet.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "sheet"
       ],
       "addedIn": "1.3",
@@ -891,12 +1249,11 @@
       "name": "Mega Menu Navbar",
       "category": "Navigation",
       "description": "Mega menu with a live CI pipeline readout and a collapsible mobile sheet.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "collapsible",
+        "icons",
         "navigation-menu",
         "sheet"
       ],
@@ -908,11 +1265,10 @@
       "name": "Floating Navbar",
       "category": "Navigation",
       "description": "Floating pill nav that tightens on scroll and grows a glowing reading-progress hairline.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
-        "button"
+        "button",
+        "icons"
       ],
       "addedIn": "1.3",
       "height": 640
@@ -922,95 +1278,89 @@
       "name": "Grid Hero",
       "category": "Heroes",
       "description": "Retro-grid hero with a working email capture and a live webhook delivery log.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
         "button",
+        "icons",
         "input",
         "retro-grid"
       ],
       "addedIn": "1.3",
-      "height": 948
+      "height": 1038
     },
     {
       "slug": "hero-terminal",
       "name": "Terminal Hero",
       "category": "Heroes",
       "description": "Split hero where a typing terminal deploys, then 38 region bars light up on success.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "copy-button",
+        "icons",
         "terminal"
       ],
       "addedIn": "1.3",
-      "height": 802
+      "height": 1020
     },
     {
       "slug": "hero-city",
       "name": "City Hero",
       "category": "Heroes",
       "description": "Night-skyline launch hero with a neon-tube countdown and a notify-me form.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "cityscape",
         "countdown",
+        "icons",
         "input"
       ],
       "addedIn": "1.3",
-      "height": 1049
+      "height": 941
     },
     {
       "slug": "hero-product",
       "name": "Product Hero",
       "category": "Heroes",
       "description": "Centered hero over a tilted, interactive analytics dashboard with light pooling beneath.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "badge",
         "button",
-        "glow-chart"
+        "glow-chart",
+        "icons"
       ],
       "addedIn": "1.3",
-      "height": 1224
+      "height": 1097
     },
     {
       "slug": "hero-split-form",
       "name": "Split Form Hero",
       "category": "Heroes",
       "description": "Split hero with a working email, OTP and vault-created sign-up flow.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "input",
         "otp-input"
       ],
       "addedIn": "1.3",
-      "height": 875
+      "height": 775
     },
     {
       "slug": "features-bento",
       "name": "Bento Features",
       "category": "Features",
       "description": "Live bento of meters, a threshold knob, latency readout, ECG watchdog and terminal.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "badge",
         "button",
         "heartbeat",
+        "icons",
         "knob",
         "meter",
         "seven-segment",
@@ -1025,29 +1375,27 @@
       "name": "Alternating Features",
       "category": "Features",
       "description": "Three alternating rows of live UI: invoice search, due-date calendar, bank reconcile.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "badge",
         "button",
         "calendar",
         "checkbox",
         "command",
+        "icons",
         "table"
       ],
       "addedIn": "1.3",
-      "height": 1945
+      "height": 2232
     },
     {
       "slug": "features-spotlight",
       "name": "Spotlight Features",
       "category": "Features",
       "description": "Spotlight cards where the number is the hero and lights up like a tube on hover.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
+        "icons",
         "spotlight-card"
       ],
       "addedIn": "1.3",
@@ -1058,26 +1406,24 @@
       "name": "Before and After",
       "category": "Features",
       "description": "Before and after columns; a rocker switch powers the lit column's checks in sequence.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
-        "hardware-switch"
+        "hardware-switch",
+        "icons"
       ],
       "addedIn": "1.3",
-      "height": 937
+      "height": 1070
     },
     {
       "slug": "features-steps",
       "name": "Feature Steps",
       "category": "Features",
       "description": "Three working steps joined by a Stepper tube that fills as each one completes.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "badge",
         "button",
+        "icons",
         "stepper"
       ],
       "addedIn": "1.3",
@@ -1088,22 +1434,21 @@
       "name": "Logo Grid",
       "category": "Social proof",
       "description": "A hairline grid of twelve type-drawn wordmarks that flicker on like signs when hovered.",
-      "dependencies": [
-        "lucide-react"
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
       ],
-      "registryDependencies": [],
       "addedIn": "1.3",
-      "height": 838
+      "height": 932
     },
     {
       "slug": "logos-marquee",
       "name": "Logo Marquee",
       "category": "Social proof",
       "description": "A logo marquee under a strip lamp: each wordmark lights up as it passes the middle.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
+        "icons",
         "marquee"
       ],
       "addedIn": "1.3",
@@ -1126,41 +1471,38 @@
       "name": "Stats with Chart",
       "category": "Social proof",
       "description": "Uptime KPIs and a glowing p95 chart with an SLO line and a 7/30/90-day range switch.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "glow-chart",
+        "icons",
         "toggle-group"
       ],
       "addedIn": "1.3",
-      "height": 1049
+      "height": 1228
     },
     {
       "slug": "testimonials-wall",
       "name": "Testimonial Wall",
       "category": "Testimonials",
       "description": "A masonry wall of twelve quotes with one lit featured card and a show-all toggle.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
-        "button"
+        "button",
+        "icons"
       ],
       "addedIn": "1.3",
-      "height": 1097
+      "height": 1569
     },
     {
       "slug": "testimonials-marquee",
       "name": "Testimonial Marquee",
       "category": "Testimonials",
       "description": "Two opposing quote marquees; hovering a card pauses it and lights its highlighted line.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
+        "icons",
         "marquee"
       ],
       "addedIn": "1.3",
@@ -1171,10 +1513,9 @@
       "name": "Big Quote",
       "category": "Testimonials",
       "description": "An editorial big quote signed with a neon name sign that re-strikes per story.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
+        "icons",
         "neon-sign"
       ],
       "addedIn": "1.3",
@@ -1185,28 +1526,26 @@
       "name": "Pricing Tiers",
       "category": "Pricing",
       "description": "Three plans with an odometer price roll on billing switch and a beamed featured tier.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "badge",
         "border-beam",
         "button",
+        "icons",
         "toggle-group"
       ],
       "addedIn": "1.3",
-      "height": 1044
+      "height": 1284
     },
     {
       "slug": "pricing-single",
       "name": "Single Plan",
       "category": "Pricing",
       "description": "One plan with a lit price driven by a pageview slider and an honest not-included list.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "slider"
       ],
       "addedIn": "1.3",
@@ -1217,29 +1556,27 @@
       "name": "Plan Comparison",
       "category": "Pricing",
       "description": "Full plan comparison table with tooltips, grouped rows and a sticky lit plan header.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "table",
         "tooltip"
       ],
       "addedIn": "1.3",
-      "height": 1430
+      "height": 1672
     },
     {
       "slug": "faq-accordion",
       "name": "FAQ Accordion",
       "category": "FAQ",
       "description": "Two-column FAQ: an Accordion whose open answer lights a tube, plus a support card.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "accordion",
         "avatar",
-        "button"
+        "button",
+        "icons"
       ],
       "addedIn": "1.3",
       "height": 980
@@ -1249,11 +1586,10 @@
       "name": "Searchable FAQ",
       "category": "FAQ",
       "description": "Command-powered FAQ search with grouped topics and a lit answer panel.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "command",
+        "icons",
         "kbd"
       ],
       "addedIn": "1.3",
@@ -1264,11 +1600,10 @@
       "name": "CTA Band",
       "category": "Calls to action",
       "description": "Full-width call to action between two neon tubes that strike as it scrolls in.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "tube-divider"
       ],
       "addedIn": "1.3",
@@ -1279,12 +1614,11 @@
       "name": "Open Sign CTA",
       "category": "Calls to action",
       "description": "An OPEN neon sign on a brick wall; flip the switch and the CTA lights up.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "hardware-switch",
+        "icons",
         "neon-sign"
       ],
       "addedIn": "1.3",
@@ -1295,11 +1629,10 @@
       "name": "Install Command CTA",
       "category": "Calls to action",
       "description": "Big headline over a glowing install prompt with a package-manager switch.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "copy-button",
+        "icons",
         "toggle-group"
       ],
       "addedIn": "1.3",
@@ -1310,25 +1643,23 @@
       "name": "Big Footer",
       "category": "Footers",
       "description": "Link columns, newsletter and status, over a giant outlined name that lights up.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "input"
       ],
       "addedIn": "1.3",
-      "height": 982
+      "height": 1037
     },
     {
       "slug": "footer-minimal",
       "name": "Minimal Footer",
       "category": "Footers",
       "description": "One calm row under a thin neon tube with electrode caps.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
+        "icons",
         "tube-divider"
       ],
       "addedIn": "1.3",
@@ -1339,11 +1670,10 @@
       "name": "Sign Footer",
       "category": "Footers",
       "description": "A neon sign signature over a city skyline, with address and live opening hours.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "cityscape",
+        "icons",
         "neon-sign"
       ],
       "addedIn": "1.3",
@@ -1354,12 +1684,11 @@
       "name": "Sign In",
       "category": "Auth",
       "description": "Split sign-in with an orbiting satellite over a lit planet limb and a working form.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "checkbox",
+        "icons",
         "input",
         "starfield"
       ],
@@ -1371,12 +1700,11 @@
       "name": "Sign Up",
       "category": "Auth",
       "description": "Sign-up form whose LED strength meter and rule tubes light as the password improves.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "checkbox",
+        "icons",
         "input",
         "meter"
       ],
@@ -1388,12 +1716,11 @@
       "name": "Two-Factor Verify",
       "category": "Auth",
       "description": "OTP check with a resend timer and a neon keystone that lights on success, red on failure.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "checkbox",
+        "icons",
         "otp-input"
       ],
       "addedIn": "1.3",
@@ -1404,15 +1731,14 @@
       "name": "Dashboard",
       "category": "App",
       "description": "Metrics dashboard with a rail sidebar, a glowing MRR chart and a sortable accounts table.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
         "badge",
         "button",
         "dropdown-menu",
         "glow-chart",
+        "icons",
         "input",
         "sidebar",
         "table",
@@ -1426,14 +1752,13 @@
       "name": "Settings",
       "category": "App",
       "description": "Tabbed settings with a save bar that lights on changes and a hold-to-delete danger zone.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
         "button",
         "field",
         "hold-button",
+        "icons",
         "input",
         "radio-group",
         "select",
@@ -1441,20 +1766,19 @@
         "tabs"
       ],
       "addedIn": "1.3",
-      "height": 1213
+      "height": 1065
     },
     {
       "slug": "app-inbox",
       "name": "Inbox",
       "category": "App",
       "description": "Three-pane mail client with glowing unread dots, labels, archive, reply and compose.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
         "badge",
         "button",
+        "icons",
         "input",
         "sheet",
         "textarea",
@@ -1470,12 +1794,12 @@
       "category": "App",
       "description": "Production board where cards fly between columns and WIP limits buzz red when exceeded.",
       "dependencies": [
-        "lucide-react",
         "motion"
       ],
       "registryDependencies": [
         "avatar",
         "button",
+        "icons",
         "input",
         "kbd",
         "toggle-group"
@@ -1488,12 +1812,11 @@
       "name": "Team Chat",
       "category": "App",
       "description": "Team chat with grouped messages, a working composer, glowing typing dots and replies.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
         "button",
+        "icons",
         "input",
         "sheet",
         "textarea"
@@ -1506,14 +1829,13 @@
       "name": "Notification Center",
       "category": "App",
       "description": "Incident notification center with filters, day groups and a lit firing-alert detail pane.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
         "badge",
         "button",
         "glow-chart",
+        "icons",
         "input",
         "switch",
         "toggle-group"
@@ -1526,12 +1848,11 @@
       "name": "Music Player",
       "category": "App",
       "description": "Now-playing radio screen with SVG tube cover art, a live Equalizer, fader volume and queue.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "equalizer",
         "fader",
+        "icons",
         "slider"
       ],
       "addedIn": "1.3",
@@ -1552,20 +1873,19 @@
         "toggle-group"
       ],
       "addedIn": "1.3",
-      "height": 1231
+      "height": 1450
     },
     {
       "slug": "app-onboarding",
       "name": "Onboarding",
       "category": "App",
       "description": "Three-step workspace setup with a Stepper and a live preview that retints to the chosen accent.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
         "button",
         "color-picker",
+        "icons",
         "input",
         "stepper",
         "tag-input",
@@ -1579,27 +1899,25 @@
       "name": "Empty States",
       "category": "App",
       "description": "Four empty states with unlit glass tube illustrations that light on hover or success.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "input",
         "switch"
       ],
       "addedIn": "1.3",
-      "height": 1129
+      "height": 984
     },
     {
       "slug": "marketing-404",
       "name": "404 No Vacancy",
       "category": "Marketing",
       "description": "Full-page 404 under a motel sign whose 0 is dying, with key-fob links to popular pages.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "neon-sign"
       ],
       "addedIn": "1.3",
@@ -1610,12 +1928,11 @@
       "name": "500 Power Outage",
       "category": "Marketing",
       "description": "Browned-out 500 page; flip the breaker panel's main switch to bring the lights back.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "hardware-switch",
+        "icons",
         "neon-text"
       ],
       "addedIn": "1.3",
@@ -1626,59 +1943,55 @@
       "name": "Newsletter",
       "category": "Marketing",
       "description": "Newsletter capture card lit by a desk-lamp tube, with an expandable issue archive.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "input"
       ],
       "addedIn": "1.3",
-      "height": 724
+      "height": 835
     },
     {
       "slug": "marketing-waitlist",
       "name": "Waitlist",
       "category": "Marketing",
       "description": "Waitlist that hands you a split-flap ticket number and a referral link to copy.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "copy-button",
+        "icons",
         "input",
         "split-flap"
       ],
       "addedIn": "1.3",
-      "height": 724
+      "height": 927
     },
     {
       "slug": "marketing-team",
       "name": "Team Grid",
       "category": "Marketing",
       "description": "Team grid of hologram ID cards, each with a lit tide line, plus filters and open roles.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "badge",
         "hologram-card",
+        "icons",
         "toggle-group"
       ],
       "addedIn": "1.3",
-      "height": 1660
+      "height": 1834
     },
     {
       "slug": "marketing-contact",
       "name": "Contact",
       "category": "Marketing",
       "description": "Contact form with validation and studio hours on a live seven-segment clock.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "input",
         "select",
         "seven-segment",
@@ -1693,12 +2006,11 @@
       "name": "Changelog",
       "category": "Marketing",
       "description": "Release notes on a tube timeline lit from the newest version, with tag filters.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "badge",
         "button",
+        "icons",
         "toggle-group"
       ],
       "addedIn": "1.3",
@@ -1709,11 +2021,10 @@
       "name": "Blog Grid",
       "category": "Marketing",
       "description": "Featured post and filterable card grid with blueprint covers, each with one lit stroke.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
+        "icons",
         "toggle-group"
       ],
       "addedIn": "1.3",
@@ -1724,27 +2035,25 @@
       "name": "Event Ticket",
       "category": "Marketing",
       "description": "Notched event ticket with a neon wordmark, seeded QR stub, countdown and wallet button.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "countdown",
+        "icons",
         "neon-text"
       ],
       "addedIn": "1.3",
-      "height": 780
+      "height": 862
     },
     {
       "slug": "marketing-product-card",
       "name": "Product Card",
       "category": "Marketing",
       "description": "Product card with an exploding isometric switch lit in its stem color, plus a live cart.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "button",
+        "icons",
         "number-input",
         "progress",
         "toggle-group"
@@ -1757,19 +2066,17 @@
     {
       "slug": "saas",
       "name": "SaaS landing",
-      "description": "Nightshift, a deploy scheduler: neon sign hero, a live night-run bento, pricing and a plan comparison page.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "description": "Nightshift, a deploy scheduler: a lit 2am headline, a live night-run panel, pricing and a plan comparison page.",
+      "dependencies": [],
       "registryDependencies": [
         "accordion",
         "avatar",
         "badge",
-        "border-beam",
         "button",
         "copy-button",
         "hardware-switch",
         "heartbeat",
+        "icons",
         "input",
         "marquee",
         "neon-sign",
@@ -1790,9 +2097,7 @@
       "slug": "dashboard",
       "name": "Dashboard",
       "description": "Switchback, a deploy platform console: live overview, filterable projects and tabbed team settings.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "avatar",
         "badge",
@@ -1805,6 +2110,7 @@
         "glow-chart",
         "heartbeat",
         "hold-button",
+        "icons",
         "input",
         "kbd",
         "meter",
@@ -1829,18 +2135,15 @@
     {
       "slug": "portfolio",
       "name": "Portfolio",
-      "description": "Juno Park, a design engineer: one page with a neon name sign and a switch that turns every light off.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "description": "Juno Park, a design engineer: one page under a pendant lamp whose pull cord turns every light off.",
+      "dependencies": [],
       "registryDependencies": [
         "button",
         "copy-button",
         "crt-overlay",
         "cursor-glow",
         "dialog",
-        "hardware-switch",
-        "hologram-card",
+        "icons",
         "input",
         "kbd",
         "neon-sign",
@@ -1859,16 +2162,14 @@
       "slug": "launch",
       "name": "Launch event",
       "description": "Low Light, a one-night conference: a split-flap countdown that flips to live, then to the replay.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "accordion",
-        "avatar",
         "badge",
         "button",
         "cityscape",
         "copy-button",
+        "icons",
         "input",
         "neon-text",
         "sheet",
@@ -1885,14 +2186,12 @@
       "slug": "docs",
       "name": "Docs",
       "description": "Gantry, a container CLI: sidebar nav, ⌘K search, an outline that tracks your reading and MDX-ready blocks.",
-      "dependencies": [
-        "lucide-react"
-      ],
+      "dependencies": [],
       "registryDependencies": [
         "alert",
-        "badge",
         "command",
         "copy-button",
+        "icons",
         "kbd",
         "scroll-area",
         "sheet",

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { AlignCenter, AlignLeft, AlignRight, Bold, Code, Italic, Strikethrough, Underline } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, Bold, Code, Italic, Strikethrough, Underline } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
@@ -27,11 +27,11 @@ export default function ToggleGroupDemo() {
     <div className="grid w-full max-w-md gap-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="grid gap-0.5">
-          <p className="text-xs text-white/45">{stats.period}</p>
+          <p className="text-xs text-white/50">{stats.period}</p>
           <p className="text-2xl font-semibold tabular-nums tracking-[-0.01em] text-white/90">
-            {stats.deploys} <span className="text-sm font-normal text-white/45">deploys</span>
+            {stats.deploys} <span className="text-sm font-normal text-white/50">deploys</span>
           </p>
-          <p className="text-xs text-white/45">{stats.change}</p>
+          <p className="text-xs text-white/50">{stats.change}</p>
         </div>
         <ToggleGroup aria-label="Range" value={range} onValueChange={(value) => setRange(value as Range)}>
           <ToggleGroupItem value="day">Day</ToggleGroupItem>

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Copy, Hash } from "lucide-react";
+import { Copy, Hash } from "@/components/ui/icons";
 
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Kbd } from "@/components/ui/kbd";
@@ -80,21 +80,17 @@ export function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChan
           <CommandGroup key={group} heading={<GroupHeading>{group}</GroupHeading>}>
             {docs
               .filter((doc) => doc.group === group)
-              .map((doc) => {
-                const Icon = doc.icon;
-                return (
-                  <CommandItem
-                    key={doc.slug}
-                    value={doc.title}
-                    keywords={[doc.group, doc.slug.replace("/", " ")]}
-                    icon={<Icon />}
-                    onSelect={() => go(docHref(doc.slug))}
-                    className={doc.mono ? "font-mono text-[13px]" : undefined}
-                  >
-                    {doc.title}
-                  </CommandItem>
-                );
-              })}
+              .map((doc) => (
+                <CommandItem
+                  key={doc.slug}
+                  value={doc.title}
+                  keywords={[doc.group, doc.slug.replace("/", " "), ...(doc.headline ? [doc.headline] : [])]}
+                  onSelect={() => go(docHref(doc.slug))}
+                  className={doc.mono ? "font-mono text-[13px]" : undefined}
+                >
+                  {doc.title}
+                </CommandItem>
+              ))}
           </CommandGroup>
         ))}
 

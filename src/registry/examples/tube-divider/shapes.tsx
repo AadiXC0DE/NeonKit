@@ -14,7 +14,7 @@ export default function TubeDividerShapes() {
         <div key={shape} className="grid gap-3">
           <div className="flex items-baseline justify-between gap-4">
             <span className="font-mono text-xs text-white/70">{shape}</span>
-            <span className="text-xs text-white/40">{note}</span>
+            <span className="text-xs text-white/55">{note}</span>
           </div>
           <TubeDivider shape={shape} />
         </div>

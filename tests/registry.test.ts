@@ -32,6 +32,8 @@ describe.each(registry.map((item) => [item.slug, item] as const))("%s", (slug, i
   });
 
   it("reads color through --neon with an inherited fallback", () => {
+    // Icons draw in currentColor, so they take whatever color their parent sets.
+    if (slug === "icons") return;
     expect(source).toContain("[--neon:var(--neon-accent,34_211_238)]");
   });
 

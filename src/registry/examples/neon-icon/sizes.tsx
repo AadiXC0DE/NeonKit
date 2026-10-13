@@ -8,12 +8,12 @@ export default function NeonIconSizes() {
         {(["sm", "md", "lg"] as const).map((size) => (
           <div key={size} className="flex flex-col items-center gap-2">
             <NeonIcon icon="wifi" size={size} value={0.7} />
-            <span className="font-mono text-[11px] text-white/45">{size}</span>
+            <span className="font-mono text-[11px] text-white/55">{size}</span>
           </div>
         ))}
         <div className="flex flex-col items-center gap-2">
           <NeonIcon icon="wifi" size={48} value={0.7} />
-          <span className="font-mono text-[11px] text-white/45">48</span>
+          <span className="font-mono text-[11px] text-white/55">48</span>
         </div>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-3">

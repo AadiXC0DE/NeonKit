@@ -1,4 +1,4 @@
-import { Bold, Code, Italic, Link, Strikethrough, Underline } from "lucide-react";
+import { Bold, Code, Italic, Link, Strikethrough, Underline } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/tooltip";
 
@@ -31,7 +31,7 @@ export default function TooltipDemo() {
               content={
                 <span className="flex items-center gap-2">
                   {label}
-                  <kbd className="font-sans text-[11px] tracking-wide text-white/45">{shortcut}</kbd>
+                  <kbd className="font-sans text-[11px] tracking-wide text-white/50">{shortcut}</kbd>
                 </span>
               }
             >

@@ -12,7 +12,7 @@ export default function BadgeRemovable() {
   return (
     <div className="grid w-full max-w-md gap-3">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium text-white/45">
+        <p className="text-xs font-medium text-white/50">
           {filters.length} {filters.length === 1 ? "filter" : "filters"} applied
         </p>
         <Button

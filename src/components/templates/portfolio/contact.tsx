@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight, CornerDownLeft } from "lucide-react";
+import { ArrowUpRight, CornerDownLeft } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/ui/copy-button";
 import { CrtOverlay } from "@/components/ui/crt-overlay";
@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { color, email, socials } from "./config";
 import { useLights } from "./lights";
-import { Eyebrow } from "./section-heading";
+import { SectionHeading, display } from "./section-heading";
 
 type Values = { name: string; email: string; when: string; message: string };
 type Errors = Partial<Record<"name" | "email" | "message", string>>;
@@ -31,9 +31,7 @@ function validate(values: Values): Errors {
   return errors;
 }
 
-const label = (text: string) => (
-  <span className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/70">{text}</span>
-);
+const label = (text: string) => <span className="text-[13px] font-normal text-white/70">{text}</span>;
 
 function MessageForm() {
   const [values, setValues] = React.useState<Values>(empty);
@@ -74,7 +72,7 @@ function MessageForm() {
         role="status"
         className="flex min-h-[500px] flex-col justify-center px-6 py-12 font-mono outline-none sm:px-10"
       >
-        <p className="text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">&gt; Message queued</p>
+        <p className="text-[13px] text-[rgb(var(--neon))]">&gt; message queued</p>
         <p className="mt-6 max-w-[34ch] text-[clamp(22px,3vw,30px)] leading-[1.25] tracking-[-0.02em] text-white">
           Thanks, {values.name.trim().split(" ")[0]}. It&apos;s on my desk.
         </p>
@@ -99,8 +97,8 @@ function MessageForm() {
 
   return (
     <form noValidate onSubmit={submit} aria-label="Message Juno" className="flex h-full flex-col gap-5 p-5 sm:p-8">
-      <p className="truncate font-mono text-[11px] uppercase tracking-[0.16em] text-white/70">
-        &gt; New message to <span className="normal-case tracking-normal text-[rgb(var(--neon))]">{email}</span>
+      <p className="truncate font-mono text-[13px] text-white/70">
+        &gt; new message to <span className="text-[rgb(var(--neon))]">{email}</span>
       </p>
       <div className="grid gap-5 sm:grid-cols-2">
         <Input
@@ -185,7 +183,7 @@ function Monitor() {
       {!on && (
         <div className="absolute inset-2.5 grid place-items-center p-8 text-center sm:inset-4">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">Screen off</p>
+            <p className="text-[15px] font-medium text-white/85">Screen off</p>
             <p className="mx-auto mt-3 max-w-[30ch] text-[15px] leading-relaxed text-white/70">
               The lights are out. Flip them back on to write, or email {email}.
             </p>
@@ -197,9 +195,9 @@ function Monitor() {
       )}
 
       <div className="flex items-center justify-between px-3 pb-1 pt-3.5 sm:px-4">
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">JP-87 · Mail terminal</span>
-        <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/55">
-          Pwr
+        <span className="text-[12px] text-white/55">JP-87 mail terminal</span>
+        <span className="flex items-center gap-2 text-[12px] text-white/55">
+          Power
           <span
             aria-hidden
             className={cn(
@@ -214,61 +212,73 @@ function Monitor() {
 }
 
 export function Contact() {
-  return (
-    <section id="contact" aria-labelledby="contact-title" className="scroll-mt-16 border-t border-white/[0.06]">
-      <div className="mx-auto grid max-w-[1200px] gap-12 px-5 py-24 sm:px-10 sm:py-32 lg:grid-cols-12 lg:gap-8">
-        <div className="lg:col-span-5 lg:pt-2">
-          <Eyebrow index={5}>Contact</Eyebrow>
-          <h2
-            id="contact-title"
-            className="mt-5 text-balance text-[clamp(32px,4.6vw,56px)] font-medium leading-[1.02] tracking-[-0.04em] text-white"
-          >
-            Got something that has to feel right?
-          </h2>
-          <p className="mt-6 max-w-md text-[15px] leading-relaxed text-white/60">
-            Tell me what you&apos;re making and where it hurts. A few honest sentences beat a polished brief.
-          </p>
+  const { on } = useLights();
 
-          <div className="mt-10 flex max-w-md items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] py-2 pl-4 pr-2">
-            <a
-              href={`mailto:${email}`}
-              className="min-w-0 truncate rounded-md text-[15px] text-white/90 outline-none underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
-            >
-              {email}
-            </a>
-            <CopyButton value={email} size="sm" aria-label="Copy email address" copiedLabel="Address copied" />
+  return (
+    <section id="contact" aria-labelledby="contact-title" className="relative scroll-mt-16 overflow-hidden">
+      <div className="mx-auto max-w-[1200px] px-5 pb-20 pt-12 sm:px-10 sm:pb-28">
+        <div className="grid gap-14 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-5 lg:pt-4">
+            <SectionHeading
+              id="contact-title"
+              size="md"
+              title="Got something that has to feel right?"
+              lede="Tell me what you're making and where it hurts. A few honest sentences beat a polished brief."
+            />
+
+            <dl className="mt-12 max-w-md space-y-5 text-[15px] leading-relaxed">
+              <div>
+                <dt className="text-[13px] text-white/55">Replies</dt>
+                <dd className="mt-0.5 text-white/85">Within two working days, from me, not a form.</dd>
+              </div>
+              <div>
+                <dt className="text-[13px] text-white/55">Based</dt>
+                <dd className="mt-0.5 text-white/85">Rotterdam, on CET. Calls on Tuesdays and Thursdays.</dd>
+              </div>
+              <div>
+                <dt className="text-[13px] text-white/55">Elsewhere</dt>
+                <dd className="mt-0.5 flex flex-wrap gap-x-5 gap-y-1">
+                  {socials.map((social) => (
+                    <a
+                      key={social.label}
+                      href={social.href}
+                      className="group flex items-center gap-0.5 rounded-md text-white/85 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                    >
+                      {social.label}
+                      <ArrowUpRight aria-hidden className="size-3.5 opacity-60" />
+                    </a>
+                  ))}
+                </dd>
+              </div>
+            </dl>
           </div>
 
-          <dl className="mt-10 grid max-w-md gap-4 text-sm">
-            {[
-              ["Replies", "Within two working days"],
-              ["Based", "Rotterdam, CET. Calls Tue and Thu"],
-            ].map(([term, detail]) => (
-              <div key={term} className="grid grid-cols-[96px_1fr] gap-4 border-t border-white/[0.07] pt-4">
-                <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">{term}</dt>
-                <dd className="text-white/80">{detail}</dd>
-              </div>
-            ))}
-            <div className="grid grid-cols-[96px_1fr] gap-4 border-t border-white/[0.07] pt-4">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Elsewhere</dt>
-              <dd className="flex flex-wrap gap-x-5 gap-y-1">
-                {socials.map((social) => (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    className="group flex items-center gap-0.5 rounded-md text-white/80 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
-                  >
-                    {social.label}
-                    <ArrowUpRight aria-hidden className="size-3.5 opacity-60" />
-                  </a>
-                ))}
-              </dd>
-            </div>
-          </dl>
+          <div className="lg:col-span-7">
+            <Monitor />
+          </div>
         </div>
 
-        <div className="lg:col-span-7">
-          <Monitor />
+        {/* The address, set big enough to read from across the room. It lights when you reach for it. */}
+        <div className="mt-24 border-t border-white/[0.08] pt-10 sm:mt-32 sm:pt-14">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-[15px] text-white/55">Or skip the form and write to</p>
+            <CopyButton value={email} aria-label="Copy email address" copiedLabel="Address copied" />
+          </div>
+          <div className="mt-3">
+            <a
+              href={`mailto:${email}`}
+              className={cn(
+                display,
+                "group -ml-[0.03em] rounded-lg text-[clamp(34px,9.4vw,104px)] sm:text-[clamp(34px,7.4vw,104px)] leading-[1.02] text-white outline-none transition-[color,text-shadow] duration-300",
+                "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#05060a]",
+                on &&
+                  "hover:text-[color-mix(in_srgb,rgb(var(--neon))_45%,white)] hover:[text-shadow:0_0_2px_rgb(var(--neon)/0.9),0_0_28px_rgb(var(--neon)/0.5)] focus-visible:text-[color-mix(in_srgb,rgb(var(--neon))_45%,white)]",
+              )}
+            >
+              {email.split("@")[0]}@<wbr />
+              {email.split("@")[1]}
+            </a>
+          </div>
         </div>
       </div>
     </section>

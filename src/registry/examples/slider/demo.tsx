@@ -1,6 +1,6 @@
 "use client";
 
-import { Volume, Volume2 } from "lucide-react";
+import { Volume, Volume2 } from "@/components/ui/icons";
 import { Slider } from "@/components/ui/slider";
 
 export default function SliderDemo() {

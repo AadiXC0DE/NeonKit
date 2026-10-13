@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { BlocksStrip } from "@/components/landing/blocks-strip";
+import { Anatomy } from "@/components/landing/anatomy";
 import { Closing } from "@/components/landing/closing";
-import { Directory } from "@/components/landing/directory";
 import { Hero } from "@/components/landing/hero";
-import { InstallFlow } from "@/components/landing/install-flow";
-import { Principles } from "@/components/landing/principles";
-import { Showcase } from "@/components/landing/showcase";
+import { Install } from "@/components/landing/install";
+import { Library } from "@/components/landing/library";
+import { Lights } from "@/components/landing/lights";
+import { Rack } from "@/components/landing/rack";
+import "@/components/landing/landing.css";
 import { JsonLd } from "@/components/site/json-ld";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { siteConfig } from "@/config/site";
-import { blocks, registry, templates } from "@/registry";
+import { blocks, currentVersion, registry, templates } from "@/registry";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -67,13 +68,18 @@ export default function HomePage() {
     <>
       <JsonLd data={structuredData} />
       <SiteHeader />
-      <main>
-        <Hero componentCount={registry.length} blockCount={blocks.length} templateCount={templates.length} />
-        <Showcase />
-        <InstallFlow />
-        <Directory />
-        <BlocksStrip />
-        <Principles />
+      <main id="content">
+        <Hero
+          componentCount={registry.length}
+          blockCount={blocks.length}
+          templateCount={templates.length}
+          version={currentVersion}
+        />
+        <Lights />
+        <Rack instrumentCount={registry.filter((item) => item.category === "Instruments").length} />
+        <Anatomy />
+        <Library />
+        <Install />
         <Closing />
       </main>
       <SiteFooter />

@@ -49,12 +49,26 @@ describe("Terminal", () => {
   it("starts over from Replay", () => {
     const { container } = render(<Terminal lines={session} startOnView={false} />);
     advance(5000);
-    fireEvent.click(screen.getByRole("button", { name: "Replay" }));
+    const replay = screen.getByRole("button", { name: "Replay" });
+    act(() => replay.focus());
+    fireEvent.click(replay);
     const root = container.firstElementChild as HTMLElement;
     expect(root).not.toHaveAttribute("data-state", "done");
-    expect(screen.queryByRole("button", { name: "Replay" })).toBeNull();
+    // It stays mounted (out of the tab order) so focus isn't dropped onto the page.
+    expect(replay).toBeInTheDocument();
+    expect(replay).toHaveFocus();
+    expect(replay).toHaveAttribute("tabindex", "-1");
     advance(5000);
     expect(root).toHaveAttribute("data-state", "done");
+    expect(replay).toHaveAttribute("tabindex", "0");
+  });
+
+  it("keeps the title in its own case and comments readable", () => {
+    render(<Terminal title="~/code/nightshift" lines={session} startOnView={false} />);
+    const title = screen.getByText("~/code/nightshift");
+    expect(title.className).not.toContain("uppercase");
+    const comment = screen.getAllByText("# ship it").find((el) => el.tagName === "DIV");
+    expect(comment?.className).toContain("text-white/50");
   });
 
   it("loops without a Replay button", () => {

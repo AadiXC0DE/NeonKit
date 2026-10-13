@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 
 export default function ShimmerButtonAsLink() {

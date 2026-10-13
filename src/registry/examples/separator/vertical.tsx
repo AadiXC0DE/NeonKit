@@ -24,7 +24,7 @@ export default function SeparatorVertical() {
           <div key={stat.label} className="flex flex-1 items-stretch">
             {index > 0 && <Separator orientation="vertical" variant="tube" />}
             <div className="grid flex-1 gap-1 px-5">
-              <span className="text-xs text-white/45">{stat.label}</span>
+              <span className="text-xs text-white/50">{stat.label}</span>
               <span className="text-lg font-semibold tabular-nums text-white/90">{stat.value}</span>
             </div>
           </div>

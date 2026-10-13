@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CircleArrowUp, Copy, Ellipsis, ExternalLink, RefreshCw, Trash2 } from "lucide-react";
+import { CircleArrowUp, Copy, Ellipsis, ExternalLink, RefreshCw, Trash2 } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -49,7 +49,7 @@ export default function SheetBottom() {
                       (action.danger ? "text-[#ff4d5e]" : "text-white/85")
                     }
                   >
-                    <action.icon aria-hidden className={action.danger ? "size-4" : "size-4 text-white/45"} />
+                    <action.icon aria-hidden className={action.danger ? "size-4" : "size-4 text-white/50"} />
                     <span className="flex-1">{action.label}</span>
                     {action.hint && <span className="truncate text-xs text-white/35">{action.hint}</span>}
                   </button>

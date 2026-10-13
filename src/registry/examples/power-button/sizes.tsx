@@ -8,7 +8,7 @@ export default function PowerButtonSizes() {
       {sizes.map((size) => (
         <div key={size} className="flex flex-col items-center gap-3">
           <PowerButton size={size} defaultPressed aria-label={`Power, ${size}`} />
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">{size}</span>
+          <span className="text-xs text-white/55">{size}</span>
         </div>
       ))}
     </div>

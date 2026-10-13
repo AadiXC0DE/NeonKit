@@ -1,4 +1,4 @@
-import { CalendarDays, GitPullRequest, MapPin } from "lucide-react";
+import { CalendarDays, GitPullRequest, MapPin } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
@@ -30,7 +30,7 @@ function Mention({ handle }: { handle: keyof typeof people }) {
           <Avatar alt={person.name} size="lg" status="online" />
           <div className="min-w-0 flex-1 pt-0.5">
             <p className="truncate text-sm font-medium text-white/90">{person.name}</p>
-            <p className="truncate text-xs leading-5 text-white/45">
+            <p className="truncate text-xs leading-5 text-white/50">
               @{handle} · {person.role}
             </p>
           </div>
@@ -39,7 +39,7 @@ function Mention({ handle }: { handle: keyof typeof people }) {
           </Button>
         </div>
         <p className="mt-3 text-sm leading-6 text-white/65">{person.bio}</p>
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-white/45">
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-white/50">
           <span className="flex items-center gap-1.5">
             <MapPin aria-hidden className="size-3.5" /> {person.place}
           </span>

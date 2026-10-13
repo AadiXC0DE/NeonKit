@@ -57,7 +57,8 @@ export const doc: ComponentDoc = {
         { prop: "invalid", type: "boolean", default: "false", description: "Red state. Shakes the row when it switches on." },
         { prop: "disabled", type: "boolean", default: "false", description: "Disables every slot." },
         { prop: "autoFocus", type: "boolean", default: "false", description: "Focuses the first empty slot on mount." },
-        { prop: "name", type: "string", description: "Submits the code with a surrounding form." },
+        { prop: "name", type: "string", description: "Submits the code with a surrounding form. A form reset empties the slots." },
+        { prop: "required", type: "boolean", default: "false", description: "Stops the submit until every slot is filled, with a message that says how many are needed." },
         { prop: "aria-label", type: "string", default: '"One-time code"', description: "Names the group of slots." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex. Falls back to --neon-accent, then cyan." },
         { prop: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Slot size and text size." },
@@ -65,6 +66,7 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "When the browser rejects the field on submit (required, type, pattern), it turns red until it's edited or the form resets. The browser shows its own message.",
     'Each slot is a native input labelled "Digit 2 of 6" inside a named group.',
     "The first slot uses autocomplete=\"one-time-code\", so codes from SMS can fill every slot in one tap.",
     "Pasting fills from the focused slot. A full-length code always fills from the start, and spaces or dashes are dropped.",

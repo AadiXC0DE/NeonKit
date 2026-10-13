@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CalendarPlus, Check, Wallet } from "lucide-react";
+import { CalendarPlus, Check, Wallet } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Countdown } from "@/components/ui/countdown";
 import { NeonText } from "@/components/ui/neon-text";
@@ -105,8 +105,8 @@ function QrPlaceholder({ seed, className }: { seed: string; className?: string }
 function Field({ label, value, className }: { label: string; value: React.ReactNode; className?: string }) {
   return (
     <div className={className}>
-      <dt className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/55">{label}</dt>
-      <dd className="mt-1 text-[14px] font-medium text-white/90">{value}</dd>
+      <dt className="text-[12px] text-white/50">{label}</dt>
+      <dd className="mt-0.5 text-[15px] font-medium text-white/90">{value}</dd>
     </div>
   );
 }
@@ -131,7 +131,7 @@ function Ticket() {
             >
               nightline
             </NeonText>
-            <p className="pt-1 text-right font-mono text-[10px] uppercase leading-relaxed tracking-[0.18em] text-white/55">
+            <p className="pt-1 text-right text-[12px] leading-relaxed text-white/55">
               {EVENT.edition}
               <br />
               <span className="text-[rgb(var(--neon))]">Admit one</span>
@@ -154,12 +154,12 @@ function Ticket() {
 
         <div className="relative flex items-center gap-5 p-6 sm:w-[198px] sm:flex-col sm:items-stretch sm:justify-between sm:gap-4 sm:p-6">
           <div className="flex items-baseline justify-between gap-3 sm:order-none">
-            <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/55">Gate</p>
-            <p className="text-[34px] font-semibold leading-none tracking-[-0.03em] text-white">{EVENT.gate}</p>
+            <p className="text-[12px] text-white/50">Gate</p>
+            <p className="text-[38px] font-[620] leading-none tracking-[-0.04em] text-white [font-stretch:112%]">{EVENT.gate}</p>
           </div>
           <QrPlaceholder seed={EVENT.number} className="order-first size-[104px] shrink-0 sm:order-none sm:aspect-square sm:h-auto sm:w-full" />
           <div className="min-w-0 flex-1 sm:flex-none">
-            <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-white/55">{EVENT.tier}</p>
+            <p className="text-[12px] text-white/50">{EVENT.tier}</p>
             <p className="mt-1 truncate font-mono text-[12px] text-white/80">{EVENT.number}</p>
           </div>
         </div>
@@ -196,18 +196,21 @@ export default function MarketingEventTicket() {
       <style>{css}</style>
       <div className="mx-auto grid max-w-[1200px] items-center gap-14 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-5">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Nightline Conf 2027 · Your ticket</p>
           <h2
             id="nightline-ticket-title"
-            className="mt-5 text-[clamp(2.4rem,5.4vw,4rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
+            className="text-[clamp(2.75rem,6vw,5.25rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
           >
             See you
             <br />
             after dark.
           </h2>
 
+          <p className="mt-6 max-w-[34ch] text-[17px] leading-[1.6] text-white/60">
+            Your seat for {EVENT.name} {EVENT.edition}, two nights at {EVENT.venue}.
+          </p>
+
           <div className="mt-9">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Doors open in</p>
+            <p className="text-[13px] text-white/55">Doors open in</p>
             <Countdown to={EVENT.doors} size="sm" className="mt-3 sm:[--countdown-h:52px]" />
           </div>
 
@@ -225,9 +228,9 @@ export default function MarketingEventTicket() {
 
           <ol className="mt-10 border-t border-white/[0.08]">
             {SCHEDULE.map(([time, text]) => (
-              <li key={time} className="flex gap-5 border-b border-white/[0.06] py-3 text-[13px]">
-                <span className="w-11 shrink-0 font-mono text-white/55">{time}</span>
-                <span className="text-white/70">{text}</span>
+              <li key={time} className="flex gap-5 border-b border-white/[0.06] py-3 text-[14px]">
+                <span className="w-11 shrink-0 font-mono tabular-nums text-white/55">{time}</span>
+                <span className="text-white/75">{text}</span>
               </li>
             ))}
           </ol>
@@ -237,8 +240,8 @@ export default function MarketingEventTicket() {
           <div className="mx-auto max-w-[640px] lg:rotate-[-2.5deg]">
             <Ticket />
           </div>
-          <p className="mx-auto mt-8 max-w-[640px] text-center font-mono text-[10px] uppercase tracking-[0.16em] text-white/55 lg:mt-12">
-            Non-transferable after Mar 12 · Show the code at Gate {EVENT.gate}
+          <p className="mx-auto mt-8 max-w-[640px] text-center text-[13px] text-white/50 lg:mt-12">
+            Non-transferable after 12 March. Show the code at Gate {EVENT.gate}.
           </p>
         </div>
       </div>

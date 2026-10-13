@@ -21,21 +21,21 @@ const stats = [
     ],
   },
   {
-    label: "TTFB · global p50",
+    label: "Time to first byte, p50",
     value: 11.4,
     decimals: 1,
     unit: "ms",
     context: "Median time to first byte, from 2,600 probes on real ISPs.",
   },
   {
-    label: "Availability · 90 days",
+    label: "Availability, 90 days",
     value: 99.997,
     decimals: 3,
     unit: "%",
     context: "1 min 18 s of partial degradation, all of it in Jakarta.",
   },
   {
-    label: "Global purge · p95",
+    label: "Global purge, p95",
     value: 148,
     decimals: 0,
     unit: "ms",
@@ -117,7 +117,7 @@ function Display({ children, className }: { children: React.ReactNode; className
 }
 
 function LiveCounter() {
-  const ref = React.useRef<HTMLLIElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
   const visible = useInView(ref, false);
   const [seconds, setSeconds] = React.useState(0);
   const counted = React.useRef(0);
@@ -139,42 +139,40 @@ function LiveCounter() {
   const millions = (served / 1e6).toFixed(1);
 
   return (
-    <li
+    <div
       ref={ref}
-      className="relative flex flex-col justify-between gap-8 overflow-hidden rounded-[20px] border border-[rgb(var(--neon)/0.22)] bg-white/[0.025] p-5 shadow-[0_0_0_1px_rgb(var(--neon)/0.04),0_30px_80px_-40px_rgb(var(--neon)/0.45)] sm:p-7 md:col-span-2"
+      className="relative grid gap-8 overflow-hidden rounded-[14px] border border-[rgb(var(--neon)/0.22)] bg-white/[0.02] p-5 shadow-[0_0_0_1px_rgb(var(--neon)/0.04),0_40px_90px_-50px_rgb(var(--neon)/0.5)] sm:p-8 lg:grid-cols-12 lg:items-end lg:gap-10"
     >
       <span
         aria-hidden
         className="pointer-events-none absolute -bottom-24 left-1/4 h-48 w-2/3 rounded-[50%] bg-[rgb(var(--neon)/0.12)] blur-[70px]"
       />
-      <div className="relative flex items-center justify-between gap-4">
-        <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-          <span aria-hidden className="relative flex size-2">
-            <span className="absolute inset-0 animate-ping rounded-full bg-[rgb(var(--neon))] opacity-60 [animation-duration:1.8s] motion-reduce:hidden" />
-            <span className="relative size-2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]" />
-          </span>
-          Live · since you opened this page
-        </p>
-        <p className="hidden font-mono text-[11px] tabular-nums tracking-[0.06em] text-white/55 sm:block">
-          {(rate / 1e6).toFixed(2)}M req/s
-        </p>
+      <div className="relative lg:col-span-8">
+        <div className="mb-4 flex items-center justify-between gap-4 text-[13px]">
+          <p className="flex items-center gap-2.5 text-white/70">
+            <span aria-hidden className="relative flex size-2">
+              <span className="absolute inset-0 animate-ping rounded-full bg-[rgb(var(--neon))] opacity-60 [animation-duration:1.8s] motion-reduce:hidden" />
+              <span className="relative size-2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]" />
+            </span>
+            Live, since you opened this page
+          </p>
+          <p className="hidden font-mono text-[12px] tabular-nums text-white/55 sm:block">{(rate / 1e6).toFixed(2)}M req/s</p>
+        </div>
+        <Display className="py-6 sm:px-6 sm:py-8">
+          <SevenSegment
+            value={millions}
+            digits={6}
+            aria-label={`${millions} million requests`}
+            className="relative [--segment-h:44px] sm:[--segment-h:64px] lg:[--segment-h:88px]"
+          />
+          <span className="relative pb-1 text-[13px] text-white/60 sm:text-[15px]">million requests</span>
+        </Display>
       </div>
-      <Display className="py-6 sm:px-6 sm:py-8">
-        <SevenSegment
-          value={millions}
-          digits={6}
-          aria-label={`${millions} million requests`}
-          className="relative [--segment-h:44px] sm:[--segment-h:64px] lg:[--segment-h:96px]"
-        />
-        <span className="relative pb-1 font-mono text-xs uppercase tracking-[0.14em] text-white/60 sm:text-sm">
-          M req
-        </span>
-      </Display>
-      <p className="relative max-w-md text-sm leading-relaxed text-white/55">
-        Every request that hit a Tachyon edge while you read this, at our trailing seven-day average. Capacity: 84
-        Tbps, with 3.1× headroom over peak.
+      <p className="relative max-w-[40ch] text-[15px] leading-[1.6] text-white/60 lg:col-span-4 lg:pb-2">
+        <span className="text-white/90">Every request that hit a Tachyon edge while you read this,</span> at our trailing
+        seven-day average. Capacity is 84 Tbps, with 3.1× headroom over peak.
       </p>
-    </li>
+    </div>
   );
 }
 
@@ -194,60 +192,50 @@ export default function StatsCounters() {
       className="relative overflow-hidden bg-[#05060a] px-5 py-20 text-white/90 sm:px-10 sm:py-28"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-16">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-              Tachyon network · trailing 30 days
-            </p>
-            <h2
-              id={titleId}
-              className="mt-5 max-w-[14ch] text-balance text-[clamp(2.2rem,5vw,3.6rem)] font-semibold leading-[0.98] tracking-[-0.045em]"
-            >
-              Fast is a number. Here are ours.
-            </h2>
-          </div>
-          <p className="max-w-md text-pretty text-[15px] leading-relaxed text-white/55 lg:justify-self-end">
-            Read from the same telemetry that feeds our status page, refreshed every 60 seconds. Nothing rounded up,
-            nothing measured from inside our own racks.
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+          <h2
+            id={titleId}
+            className="max-w-[14ch] text-[clamp(2.4rem,5.6vw,4.5rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%] lg:col-span-7"
+          >
+            Fast is a number. Here are ours.
+          </h2>
+          <p className="max-w-[40ch] text-pretty text-[16px] leading-[1.6] text-white/60 lg:col-span-4 lg:col-start-9 lg:pb-2">
+            The Tachyon network over the last 30 days, read from the telemetry behind our status page. Nothing rounded
+            up, nothing measured from inside our own racks.
           </p>
         </div>
 
-        <ul ref={gridRef} className="mt-14 grid gap-4 sm:mt-16 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 sm:mt-20">
           <LiveCounter />
+        </div>
+
+        {/* The other four are reference readings: calm white digits, so only the live one burns. */}
+        <ul ref={gridRef} className="mt-14 grid gap-x-10 gap-y-12 sm:mt-16 md:grid-cols-2 lg:grid-cols-4 lg:gap-x-8">
           {stats.map((stat, i) => {
             const final = stat.value.toFixed(stat.decimals);
             const t = reduce ? 1 : Math.min(1, Math.max(0, (elapsed - i * STAGGER_MS) / COUNT_MS));
             const eased = 1 - Math.pow(1 - t, 4);
             const shown = t >= 1 ? final : (stat.value * eased).toFixed(stat.decimals);
             return (
-              <li
-                key={stat.label}
-                className="flex flex-col gap-5 rounded-[20px] border border-white/[0.07] bg-white/[0.02] p-5 sm:p-6"
-              >
-                <p className="flex items-center justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-                  {stat.label}
-                  <span aria-hidden className="tabular-nums text-white/25">
-                    0{i + 2}
-                  </span>
-                </p>
-                <Display>
+              <li key={stat.label} className="flex flex-col border-t border-white/[0.08] pt-5">
+                <p className="text-[14px] text-white/60">{stat.label}</p>
+                <div className="mt-5 flex items-end gap-2.5">
                   <SevenSegment
                     value={shown}
+                    color="white"
                     digits={digitCount(final)}
                     aria-label={`${final} ${stat.unit}`}
-                    className="relative [--segment-h:40px] sm:[--segment-h:48px]"
+                    className="[--segment-h:40px] sm:[--segment-h:46px]"
                   />
-                  <span className="relative pb-0.5 font-mono text-xs uppercase tracking-[0.14em] text-white/60">
-                    {stat.unit}
-                  </span>
-                </Display>
-                <p className="text-sm leading-relaxed text-white/55">{stat.context}</p>
+                  <span className="pb-0.5 text-[14px] text-white/55">{stat.unit}</span>
+                </div>
+                <p className="mt-5 text-[14px] leading-[1.55] text-white/55">{stat.context}</p>
                 {"regions" in stat && stat.regions && (
-                  <dl className="mt-auto hidden grid-cols-5 border-t border-white/[0.06] pt-4 lg:grid">
+                  <dl className="mt-5 grid grid-cols-5 gap-1">
                     {stat.regions.map(([region, count]) => (
-                      <div key={region} className="grid gap-1">
-                        <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{region}</dt>
-                        <dd className="font-mono text-sm tabular-nums text-white/75">{count}</dd>
+                      <div key={region} className="flex flex-col-reverse gap-0.5">
+                        <dt className="text-[12px] text-white/50">{region}</dt>
+                        <dd className="font-mono text-[13px] tabular-nums text-white/80">{count}</dd>
                       </div>
                     ))}
                   </dl>

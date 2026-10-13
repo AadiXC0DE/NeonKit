@@ -64,10 +64,10 @@ export function Footer() {
             low light
           </NeonText>
           <div className="lg:pb-6 lg:text-right">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">
-              {event.city} · 19.03.2027
+            <p className="text-[clamp(1.5rem,2.6vw,2.25rem)] font-[620] leading-[1.05] tracking-[-0.03em] text-white [font-stretch:112%]">
+              See you after dark.
             </p>
-            <p className="mt-2 text-[15px] text-white/75">See you after dark.</p>
+            <p className="mt-2 text-[15px] text-white/60">{event.dateLabel}, {event.city}</p>
           </div>
         </div>
 
@@ -77,7 +77,7 @@ export function Footer() {
             the bar pays for the stream.
           </p>
           <nav aria-label="Footer">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">The night</p>
+            <p className="text-[13px] text-white/50">The night</p>
             <ul className="mt-4 grid gap-2.5">
               {sections.map((section) => (
                 <li key={section.id}>
@@ -89,7 +89,7 @@ export function Footer() {
             </ul>
           </nav>
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">Write to us</p>
+            <p className="text-[13px] text-white/50">Write to us</p>
             <ul className="mt-4 grid gap-2.5">
               <li>
                 <a href={`mailto:${contact.email}`} className={link}>
@@ -104,7 +104,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">On the night</p>
+            <p className="text-[13px] text-white/50">Where</p>
             <address className="mt-4 text-[14px] not-italic leading-relaxed text-white/70">
               {event.venue}
               <br />
@@ -116,8 +116,8 @@ export function Footer() {
         <div className="mt-14 flex flex-col gap-4 border-t border-white/[0.07] pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[13px] text-white/60">© 2026 Low Light. The code of conduct applies in the hall and on the stream.</p>
           {/* Lets you see the page in each state. Remove it before you ship. */}
-          <nav aria-label="Preview page state" className="flex flex-wrap items-center gap-x-1 gap-y-2 font-mono text-[11px] uppercase tracking-[0.14em]">
-            <span className="mr-2 text-white/55">Preview</span>
+          <nav aria-label="Preview page state" className="flex flex-wrap items-center gap-x-1 gap-y-2 text-[13px]">
+            <span className="mr-2 text-white/60">Preview the page</span>
             {STATES.map((state) => {
               const current = ready && phase === state.phase;
               return (
@@ -126,7 +126,7 @@ export function Footer() {
                   href={`${basePath}?state=${state.phase}`}
                   aria-current={current ? "page" : undefined}
                   className={cn(
-                    "rounded-full border px-2.5 py-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
+                    "rounded-full border px-3 py-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
                     current
                       ? "border-[rgb(var(--neon)/0.5)] bg-[rgb(var(--neon)/0.08)] text-[color:color-mix(in_srgb,rgb(var(--neon))_45%,white)]"
                       : "border-white/10 text-white/60 hover:border-white/20 hover:text-white/85",

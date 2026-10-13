@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { KeyRound, Plus, Trash2 } from "lucide-react";
+import { KeyRound, Plus, Trash2 } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -60,7 +60,7 @@ export default function SheetDemo() {
           </SheetHeader>
 
           <div className="mt-6 grid gap-2">
-            <div className="grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_32px] gap-2 px-0.5 font-mono text-[11px] uppercase tracking-[0.12em] text-white/35">
+            <div className="grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_32px] gap-2 px-0.5 text-xs font-medium text-white/50">
               <span>Key</span>
               <span>Value</span>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { FolderGit2, LayoutGrid, Settings } from "lucide-react";
+import { FolderGit2, LayoutGrid, Settings } from "@/components/ui/icons";
 import { basePath, nav } from "../config";
 import { PROJECTS } from "../data";
 
@@ -19,28 +19,31 @@ export function useActivePage() {
   return NAV_ITEMS.find((item) => item.url === pathname) ?? NAV_ITEMS[0];
 }
 
-/** A small status lamp: lit in the brand color, red when failing, unlit when paused. */
+/** A small status lamp. Healthy is an unlit grey bulb; it only lights for work in flight or a failure. */
 export function StatusLamp({ status, className = "" }: { status: string; className?: string }) {
   const tone =
     status === "failed"
-      ? "bg-[rgb(255_77_94)] shadow-[0_0_6px_rgb(255_77_94/0.8)]"
-      : status === "paused"
-        ? "bg-white/25"
-        : "bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/0.8)]";
+      ? "bg-[rgb(255_77_94)] shadow-[0_0_0_1px_rgb(255_77_94/0.4),0_0_8px_rgb(255_77_94/0.8)]"
+      : status === "building"
+        ? "bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/0.9)]"
+        : status === "paused"
+          ? "shadow-[inset_0_0_0_1px_rgb(255_255_255/0.3)]"
+          : "bg-white/35";
   return <span aria-hidden className={`size-1.5 shrink-0 rounded-full ${tone} ${className}`} />;
 }
 
+/** Build minutes for the cycle: a hairline gauge, no card around it. */
 export function UsageCard({ className = "" }: { className?: string }) {
   return (
-    <div className={`grid gap-2.5 rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 ${className}`}>
-      <div className="flex items-baseline justify-between gap-2 text-xs">
+    <div className={`grid gap-2 border-t border-white/[0.06] px-2 pt-4 ${className}`}>
+      <div className="flex items-baseline justify-between gap-2 text-[13px]">
         <span className="text-white/75">Build minutes</span>
-        <span className="font-mono tabular-nums text-white/60">1,842 / 3k</span>
+        <span className="font-mono text-xs tabular-nums text-white/60">1,842 / 3,000</span>
       </div>
-      <div className="h-1 overflow-hidden rounded-full bg-white/[0.07]">
-        <div className="h-full w-[61%] rounded-full bg-[rgb(var(--neon)/0.75)] shadow-[0_0_8px_rgb(var(--neon)/0.6)]" />
+      <div className="h-[3px] overflow-hidden rounded-full bg-white/[0.07]">
+        <div className="h-full w-[61%] rounded-full bg-white/50" />
       </div>
-      <p className="text-[11px] leading-4 text-white/60">Pro plan · resets in 18 days</p>
+      <p className="text-xs leading-4 text-white/55">Resets in 18 days</p>
     </div>
   );
 }

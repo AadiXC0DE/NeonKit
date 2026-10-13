@@ -1,6 +1,6 @@
 "use client";
 
-import { Download } from "lucide-react";
+import { Download } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
@@ -8,6 +8,8 @@ import { toast } from "@/components/ui/toast";
 import { INVOICES, USAGE } from "../data";
 import type { SettingsErrors, SettingsState } from "./model";
 import { Panel, Section } from "./section";
+import { cn } from "@/lib/utils";
+import { display } from "../parts/page-header";
 
 export function BillingTab({
   draft,
@@ -23,13 +25,13 @@ export function BillingTab({
   return (
     <>
       <Section id="s-plan" title="Plan" description="Billed monthly on the 1st. Seats are prorated to the day.">
-        <Panel className="relative overflow-hidden">
-          <div aria-hidden className="pointer-events-none absolute -right-16 -top-20 size-56 rounded-full bg-[rgb(var(--neon)/0.08)] blur-[60px]" />
-          <div className="relative flex flex-wrap items-end justify-between gap-6">
+        <Panel>
+          <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">Pro</p>
-              <p className="mt-2 text-[34px] font-semibold leading-none tracking-[-0.04em] text-white">
-                $20<span className="text-sm font-normal tracking-normal text-white/60"> / seat / month</span>
+              <p className="text-sm text-white/75">Pro plan</p>
+              <p className="mt-2 text-white">
+                <span className={cn(display, "text-[40px] tabular-nums")}>$20</span>
+                <span className="ml-2 text-sm text-white/60">per seat, per month</span>
               </p>
               <p className="mt-2 text-[13px] text-white/60">
                 {seats} seats · ${seats * 20} a month before usage
@@ -56,7 +58,7 @@ export function BillingTab({
                 max={u.limit}
                 size="sm"
                 showValue
-                color={share > 0.85 ? "amber" : undefined}
+                color={share > 0.85 ? "amber" : "#6b7385"}
                 label={
                   <>
                     {u.label}
@@ -84,9 +86,9 @@ export function BillingTab({
       </Section>
 
       <Section id="s-invoices" title="Invoices" description="Paid by card ending 4417. Copies go to billing@marlow.dev.">
-        <ul className="divide-y divide-white/[0.06] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+        <ul className="-mt-2.5 max-w-[640px] divide-y divide-white/[0.06]">
           {INVOICES.map((inv) => (
-            <li key={inv.id} className="flex items-center gap-4 px-4 py-3 text-[13px] sm:px-5">
+            <li key={inv.id} className="flex items-center gap-4 py-2.5 text-[13px]">
               <span className="w-28 shrink-0 text-white/85">{inv.date}</span>
               <span className="hidden flex-1 font-mono text-xs text-white/55 sm:block">{inv.id}</span>
               <span className="ml-auto font-mono text-white/85 sm:ml-0">${inv.amount.toFixed(2)}</span>

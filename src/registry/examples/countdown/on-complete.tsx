@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Play, RotateCcw } from "lucide-react";
+import { Play, RotateCcw } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Countdown } from "@/components/ui/countdown";
 

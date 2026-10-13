@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, Check, Rss } from "lucide-react";
+import { ArrowRight, Check, Rss } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -153,7 +153,7 @@ export function Footer() {
                   <span className="relative size-2 rounded-full bg-[rgb(52_211_153)] shadow-[0_0_8px_rgb(52_211_153/0.8)]" />
                 </span>
                 Every window on schedule
-                <span className="font-mono text-[11px] text-white/60">99.98% · 90d</span>
+                <span className="font-mono text-[11px] tabular-nums text-white/55">99.98% over 90 days</span>
               </a>
             </div>
 
@@ -172,7 +172,7 @@ export function Footer() {
           <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-10 py-14 sm:grid-cols-4">
             {COLUMNS.map((column) => (
               <div key={column.title}>
-                <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">{column.title}</h2>
+                <h2 className="text-[13px] text-white/55">{column.title}</h2>
                 <ul className="mt-5 space-y-3">
                   {column.links.map((link) => (
                     <li key={link.label}>
@@ -185,9 +185,7 @@ export function Footer() {
                       >
                         {link.label}
                         {link.label === "Careers" && (
-                          <span className="rounded-full border border-[rgb(var(--neon)/0.35)] px-1.5 font-mono text-[10px] leading-4 text-[rgb(var(--neon))]">
-                            2 open
-                          </span>
+                          <span className="text-[12px] text-white/50">2 open</span>
                         )}
                       </Link>
                     </li>

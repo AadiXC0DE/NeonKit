@@ -60,7 +60,8 @@ const [date, setDate] = React.useState<Date>()
         { prop: "isDateDisabled", type: "(date: Date) => boolean", description: "Return true for days that can't be picked. A range can't run across one." },
         { prop: "weekStartsOn", type: "0 | 1 | 2 | 3 | 4 | 5 | 6", default: "from locale", description: "First column of the calendar, 0 for Sunday." },
         { prop: "numberOfMonths", type: "number", default: "2 for ranges on sm+, else 1", description: "Months in the calendar." },
-        { prop: "name", type: "string", description: "Submits yyyy-mm-dd, or yyyy-mm-dd/yyyy-mm-dd for a range, with a surrounding form." },
+        { prop: "name", type: "string", description: "Submits yyyy-mm-dd, or yyyy-mm-dd/yyyy-mm-dd for a range, with a surrounding form. A form reset puts back the starting date." },
+        { prop: "required", type: "boolean", default: "false", description: "Stops an empty submit with the browser's own message and turns the field red until a date is picked." },
         { prop: "label", type: "ReactNode", description: "Visible label. Names the trigger together with the value." },
         { prop: "description", type: "ReactNode", description: "Helper text under the field." },
         {
@@ -76,6 +77,7 @@ const [date, setDate] = React.useState<Date>()
     },
   ],
   notes: [
+    "When the browser rejects the field on submit (required, type, pattern), it turns red until it's edited or the form resets. The browser shows its own message.",
     "The trigger is a button with aria-haspopup=\"dialog\" and aria-expanded, named by the label plus the current value, so a screen reader hears \"Departure, Oct 14, 2026\".",
     "Click, Enter, Space or Arrow Down opens the calendar with focus on the picked day. Escape or a click outside closes it and focus returns to the trigger.",
     "Inside, the calendar keeps its full keyboard grid. Tab moves between the presets, the month buttons and the active day, and tabbing past the end closes the panel.",

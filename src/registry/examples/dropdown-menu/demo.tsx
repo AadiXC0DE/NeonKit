@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Copy, Ellipsis, FolderInput, GitBranch, Pin, Plus, RotateCw, SquareArrowOutUpRight, Trash2 } from "lucide-react";
+import { Copy, Ellipsis, FolderInput, GitBranch, Pin, Plus, RotateCw, SquareArrowOutUpRight, Trash2 } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -64,7 +64,7 @@ export default function DropdownMenuDemo() {
             <span className="text-white/40">{teams[team]} /</span> northlight-web
             {pinned && <Pin aria-label="Pinned" className="size-3 shrink-0 text-white/40" />}
           </p>
-          <p className="truncate text-xs leading-5 text-white/45">{copied ? "Copied to clipboard" : "northlight.dev"}</p>
+          <p className="truncate text-xs leading-5 text-white/50">{copied ? "Copied to clipboard" : "northlight.dev"}</p>
         </div>
 
         <DropdownMenu>
@@ -125,7 +125,7 @@ export default function DropdownMenuDemo() {
         </DropdownMenu>
       </div>
 
-      <div className="mt-4 flex items-center gap-2 border-t border-white/[0.06] pt-3 text-xs text-white/45">
+      <div className="mt-4 flex items-center gap-2 border-t border-white/[0.06] pt-3 text-xs text-white/50">
         <span
           aria-hidden
           className={

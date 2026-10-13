@@ -73,4 +73,14 @@ describe("Radar", () => {
     render(<Radar color="green" />);
     expect(screen.getByRole("img").style.getPropertyValue("--neon")).toBe("52 211 153");
   });
+  it("rounds every trig-derived coordinate so server and browser markup match", () => {
+    const { container } = render(<Radar blips={[{ angle: 47, distance: 0.63, label: "AB12" }]} />);
+    const attrs = Array.from(container.querySelectorAll("line, text")).flatMap((node) =>
+      ["x", "y", "x1", "y1", "x2", "y2"].map((name) => node.getAttribute(name)).filter(Boolean),
+    );
+    expect(attrs.length).toBeGreaterThan(0);
+    for (const value of attrs) expect(value).toMatch(/^-?\d+(\.\d{1,3})?$/);
+    const blip = container.querySelector<HTMLElement>("[data-radar-blip]");
+    expect(blip?.style.left).toMatch(/^\d+(\.\d{1,3})?%$/);
+  });
 });

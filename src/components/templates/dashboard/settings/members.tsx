@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Send, X } from "lucide-react";
+import { Send, X } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -82,9 +82,9 @@ export function MembersTab({
       </Section>
 
       <Section id="s-members" title="Members" description="Role changes apply when you save. Only the owner can transfer ownership.">
-        <ul className="divide-y divide-white/[0.06] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+        <ul className="-mt-3.5 max-w-[640px] divide-y divide-white/[0.06]">
           {members.map((m) => (
-            <li key={m.id} className="flex flex-wrap items-center gap-x-4 gap-y-3 px-4 py-3.5 sm:flex-nowrap sm:px-5">
+            <li key={m.id} className="flex flex-wrap items-center gap-x-4 gap-y-3 py-3.5 sm:flex-nowrap">
               <Avatar alt="" fallback={initials(m.name)} size="md" status={m.lastActive === "Now" ? "online" : undefined} />
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-2 text-sm text-white/90">

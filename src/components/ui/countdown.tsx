@@ -229,9 +229,9 @@ function TubeDigit({ digit, lit }: { digit: string; lit: boolean }) {
 }
 
 const sizes = {
-  sm: { height: "[--countdown-h:40px]", label: "text-[9px]" },
-  md: { height: "[--countdown-h:56px]", label: "text-[10px]" },
-  lg: { height: "[--countdown-h:80px]", label: "text-[11px]" },
+  sm: { height: "[--countdown-h:40px]", label: "text-[11px]" },
+  md: { height: "[--countdown-h:56px]", label: "text-[12px]" },
+  lg: { height: "[--countdown-h:80px]", label: "text-[13px]" },
 } as const;
 
 export interface CountdownProps
@@ -369,7 +369,7 @@ const Countdown = React.forwardRef<HTMLDivElement, CountdownProps>(
                 })}
               </div>
               {labels !== false && (
-                <span className={cn("font-mono font-medium uppercase tracking-[0.2em] text-white/55", s.label)}>
+                <span className={cn("font-medium leading-none tracking-[0.01em] text-white/55", s.label)}>
                   {names[unit]}
                 </span>
               )}

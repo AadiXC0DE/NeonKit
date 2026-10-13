@@ -7,30 +7,51 @@ import { windowHour } from "./config";
 export const focusRing =
   "outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]";
 
-/** Mono label above a heading. `clock` is the time of night the section stands for. */
-export function Eyebrow({
+/**
+ * Display type: Mona Sans stretched to 112% for a signage feel. Falls back to normal width in other fonts.
+ * Leading is separate: `cn` drops a line-height that comes before a font size, so it goes last.
+ */
+export const display = "font-[620] [font-stretch:112%] tracking-[-0.038em]";
+
+/**
+ * A section headline. The page reads as one night, so a section can open with
+ * the time it stands for, set like a log entry before the sentence. `lit`
+ * puts the time in the tube: only the deploy window itself gets that.
+ */
+export function Headline({
+  as: Tag = "h2",
+  id,
   clock,
-  children,
+  lit,
+  leading = "leading-[0.98]",
   className,
+  children,
 }: {
+  as?: "h1" | "h2" | "h3";
+  id?: string;
   clock?: string;
-  children: React.ReactNode;
+  lit?: boolean;
+  leading?: string;
   className?: string;
+  children: React.ReactNode;
 }) {
   return (
-    <p className={cn("font-mono text-[11px] uppercase tracking-[0.16em] text-white/60", className)}>
+    <Tag id={id} className={cn("text-balance text-white", display, className, leading)}>
       {clock && (
-        <>
-          <span className="tabular-nums text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.55)]">
-            {clock}
-          </span>
-          <span aria-hidden className="mx-2 text-white/30">
-            /
-          </span>
-        </>
+        <span
+          aria-hidden
+          className={cn(
+            "mr-[0.3em] font-[380] tracking-[-0.02em] transition-[color,text-shadow] duration-500",
+            lit
+              ? "[color:color-mix(in_srgb,rgb(var(--neon))_35%,white)] [text-shadow:0_0_2px_rgb(var(--neon)),0_0_0.18em_rgb(var(--neon)/0.8),0_0_0.6em_rgb(var(--neon)/0.35)]"
+              : "text-white/40",
+          )}
+        >
+          {clock}
+        </span>
       )}
       {children}
-    </p>
+    </Tag>
   );
 }
 

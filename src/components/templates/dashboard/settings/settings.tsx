@@ -93,11 +93,11 @@ export function Settings() {
   return (
     <div className="mx-auto max-w-[1080px]">
       <SearchParams onChange={onParams} />
-      <PageHeader eyebrow={`${team.name} · team settings`} title="Settings">
-        Changes here apply to every project on the team.
+      <PageHeader title="Team settings">
+        {team.name}&apos;s name, people, alerts and bill. Changes apply to every project on the team once you save.
       </PageHeader>
 
-      <form onSubmit={save} noValidate className="mt-8">
+      <form onSubmit={save} noValidate className="mt-10">
         <Tabs value={tab} onValueChange={setTab} variant="underline" className="gap-6">
           <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0">
             <TabsList className="min-w-max">

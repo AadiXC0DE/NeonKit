@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { neonVars } from "@/lib/neon";
 
 type Customer = { name: string; meta: string; mark: React.ReactNode };
@@ -181,7 +181,7 @@ function Cell({ customer }: { customer: Customer }) {
         </span>
         <span
           aria-hidden
-          className="absolute bottom-3 left-4 hidden whitespace-nowrap font-mono text-[10px] tracking-[0.02em] text-white/0 transition-colors duration-300 group-hover:text-white/55 group-focus-visible:text-white/55 sm:block"
+          className="absolute bottom-3 left-4 hidden whitespace-nowrap text-[12px] text-white/0 transition-colors duration-300 group-hover:text-white/55 group-focus-visible:text-white/55 sm:block"
         >
           {customer.meta}
         </span>
@@ -206,32 +206,35 @@ export default function LogosGrid() {
     >
       <style>{css}</style>
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:items-end lg:gap-16">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Customers</p>
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-8">
+          <div className="lg:col-span-8">
             <h2
               id={titleId}
-              className="mt-5 max-w-[16ch] text-balance text-[clamp(2.1rem,5vw,3.5rem)] font-semibold leading-[1] tracking-[-0.04em]"
+              className="text-[clamp(2.4rem,4.9vw,3.9rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
             >
               Trusted by teams whose pager actually goes off.
             </h2>
-          </div>
-          <div className="max-w-md lg:justify-self-end">
-            <p className="text-pretty text-[15px] leading-relaxed text-white/55">
+            <p className="mt-6 max-w-[50ch] text-pretty text-[17px] leading-[1.6] text-white/60">
               1,412 engineering teams run production on us, from four-person studios to a national rail operator.
               Twelve of them let us put their name here.
             </p>
             <a
               href="#"
-              className="group mt-3 inline-flex items-center gap-1.5 rounded-md py-2 text-sm font-medium text-white/80 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
+              className="group mt-4 inline-flex items-center gap-1.5 rounded-md py-2 text-[15px] font-medium text-white/85 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
             >
               Read their stories
               <ArrowUpRight aria-hidden className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </a>
           </div>
+          <p className="border-t border-white/[0.08] pt-5 lg:col-span-3 lg:col-start-10 lg:mb-2">
+            <span className="block text-[clamp(3.5rem,6vw,5rem)] font-[620] leading-none tracking-[-0.045em] text-white [font-stretch:112%]">
+              3.4<span className="ml-2 text-[0.4em] font-medium tracking-[-0.02em] text-white/55">years</span>
+            </span>
+            <span className="mt-3 block text-[14px] leading-[1.5] text-white/55">Median contract. Most renew without a sales call.</span>
+          </p>
         </div>
 
-        <div className="relative mt-14 sm:mt-20">
+        <div className="relative mt-16 sm:mt-24">
           <Tick className="-left-[5px] -top-[5px]" />
           <Tick className="-right-[5px] -top-[5px]" />
           <Tick className="-bottom-[5px] -left-[5px]" />
@@ -245,10 +248,7 @@ export default function LogosGrid() {
           </div>
         </div>
 
-        <p className="mt-6 flex flex-wrap justify-between gap-x-6 gap-y-1 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
-          <span>12 of 1,412 · shown with permission</span>
-          <span>Median contract: 3.4 years</span>
-        </p>
+        <p className="mt-6 text-[13px] text-white/50">12 of 1,412, shown with permission. Each links to its story.</p>
       </div>
     </section>
   );

@@ -157,3 +157,50 @@ describe("Sheet", () => {
     expect(sheet().style.getPropertyValue("--neon")).toBe("163 230 53");
   });
 });
+
+describe("Sheet stacking and placement", () => {
+  it("closes only the topmost sheet on Escape", () => {
+    const outer = vi.fn();
+    const inner = vi.fn();
+    render(
+      <Sheet open onOpenChange={outer}>
+        <SheetContent>
+          <SheetTitle>Project</SheetTitle>
+          <Sheet open onOpenChange={inner}>
+            <SheetContent side="bottom">
+              <SheetTitle>Deployment</SheetTitle>
+            </SheetContent>
+          </Sheet>
+        </SheetContent>
+      </Sheet>,
+    );
+    const top = screen.getByText("Deployment").closest("dialog")!;
+    // The browser sends cancel to the topmost modal only; React used to pass it up to the parent too.
+    fireEvent(top, new Event("cancel", { cancelable: true }));
+    expect(inner).toHaveBeenCalledWith(false);
+    expect(outer).not.toHaveBeenCalled();
+  });
+
+  it("undoes a scroll the browser makes while focusing into the offscreen panel", () => {
+    const showModal = HTMLDialogElement.prototype.showModal;
+    HTMLDialogElement.prototype.showModal = function scrolled(this: HTMLDialogElement) {
+      this.setAttribute("open", "");
+      // What Chrome does when it focuses a control that is still translated off the bottom.
+      let top = 405;
+      Object.defineProperty(this, "scrollTop", { configurable: true, get: () => top, set: (value) => (top = value) });
+    };
+    try {
+      render(
+        <Sheet open>
+          <SheetContent side="bottom">
+            <SheetTitle>Deployment</SheetTitle>
+          </SheetContent>
+        </Sheet>,
+      );
+      expect(screen.getByText("Deployment").closest("dialog")!.scrollTop).toBe(0);
+    } finally {
+      HTMLDialogElement.prototype.showModal = showModal;
+    }
+  });
+});
+

@@ -40,7 +40,7 @@ export default function EqualizerTrackList() {
               {active ? (
                 <Equalizer bars={4} height={14} gap={2} peaks={false} playing={playing} className="w-4" />
               ) : (
-                <span className="text-center font-mono text-xs tabular-nums text-white/40">{i + 1}</span>
+                <span className="text-center text-xs tabular-nums text-white/50">{i + 1}</span>
               )}
               <span className="min-w-0">
                 <span
@@ -53,9 +53,9 @@ export default function EqualizerTrackList() {
                 >
                   {track.title}
                 </span>
-                <span className="block truncate text-xs text-white/45">{track.artist}</span>
+                <span className="block truncate text-xs text-white/55">{track.artist}</span>
               </span>
-              <span className="font-mono text-xs tabular-nums text-white/40">{track.length}</span>
+              <span className="text-xs tabular-nums text-white/55">{track.length}</span>
             </button>
           </li>
         );

@@ -24,7 +24,7 @@ export default function ColorPickerDemo() {
             <NeonText as="p" color={brand} className="text-5xl font-semibold tracking-[-0.03em]">
               nightjar
             </NeonText>
-            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/45">
+            <p className="text-[13px] text-white/55">
               Records · Coffee · Open late
             </p>
           </div>

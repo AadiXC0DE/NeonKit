@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp } from "@/components/ui/icons";
 import { Kbd } from "@/components/ui/kbd";
 import { brand, city } from "./config";
 import { useLights } from "./lights";

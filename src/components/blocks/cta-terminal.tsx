@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { CopyButton } from "@/components/ui/copy-button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { neonVars } from "@/lib/neon";
@@ -62,8 +62,11 @@ export default function CtaTerminal() {
       `}</style>
 
       <div className="mx-auto max-w-[1180px]">
-        <div className="flex items-center justify-between gap-6 border-b border-white/[0.07] pb-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-          <span>Gantry · v2.8.1</span>
+        <div className="flex items-center justify-between gap-6 border-b border-white/[0.07] pb-5 text-[14px] text-white/60">
+          <span>
+            <span className="font-medium text-white/90">Gantry</span>{" "}
+            <span className="ml-1 font-mono text-[13px] text-white/50">v2.8.1</span>
+          </span>
           <a
             href="#"
             className="group -my-2.5 inline-flex items-center gap-1.5 rounded-md py-2.5 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
@@ -75,12 +78,12 @@ export default function CtaTerminal() {
 
         <h2
           id="cta-terminal-title"
-          className="mt-14 max-w-[16ch] text-balance text-[clamp(2.6rem,7vw,6rem)] font-semibold leading-[0.93] tracking-[-0.045em] text-white lg:mt-20"
+          className="mt-14 max-w-[17ch] text-balance text-[clamp(2.6rem,7vw,6.25rem)] font-[620] leading-[0.93] tracking-[-0.045em] text-white [font-stretch:112%] lg:mt-20"
         >
           Containers up before you let go of Enter.
         </h2>
 
-        <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)] lg:items-start lg:gap-20">
+        <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] lg:items-start lg:gap-14">
           <div className="min-w-0">
             <ToggleGroup
               aria-label="Package manager"
@@ -96,23 +99,23 @@ export default function CtaTerminal() {
             </ToggleGroup>
 
             {/* Light from the prompt, pooling on the surface under it */}
-            <div className="relative mt-4 max-w-[640px]">
+            <div className="relative mt-4 max-w-[760px]">
               <div
                 aria-hidden
                 className="pointer-events-none absolute -inset-x-16 -bottom-24 top-1/2 -z-10 bg-[radial-gradient(50%_50%_at_50%_40%,rgb(var(--neon)/0.09),transparent)]"
               />
-              <div className="relative flex h-16 items-center gap-3 rounded-2xl border border-[rgb(var(--neon)/0.22)] bg-[#0a0b11] pl-5 pr-2 shadow-[0_0_0_1px_rgb(0_0_0/0.4),0_24px_60px_-24px_rgb(var(--neon)/0.35),inset_0_1px_0_rgb(255_255_255/0.05)] sm:h-[72px] sm:pl-6">
+              <div className="relative flex h-16 items-center gap-3 rounded-2xl border border-[rgb(var(--neon)/0.22)] bg-[#0a0b11] pl-5 pr-2 sm:h-[92px] sm:gap-4 sm:pl-8 sm:pr-4 shadow-[0_0_0_1px_rgb(0_0_0/0.4),0_24px_60px_-24px_rgb(var(--neon)/0.35),inset_0_1px_0_rgb(255_255_255/0.05)]">
                 <span
                   aria-hidden
                   className="absolute inset-x-8 -top-px h-px bg-[linear-gradient(90deg,transparent,rgb(var(--neon)/0.8),transparent)]"
                 />
                 <span
                   aria-hidden
-                  className="font-mono text-base text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.7)] sm:text-lg"
+                  className="font-mono text-base text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.7)] sm:text-[26px]"
                 >
                   $
                 </span>
-                <code className="flex min-w-0 flex-1 items-center overflow-hidden font-mono text-[13px] text-white/90 sm:text-[17px]">
+                <code className="flex min-w-0 flex-1 items-center overflow-hidden font-mono text-[13px] tracking-[-0.01em] text-white/90 sm:text-[clamp(18px,2.2vw,26px)]">
                   <span className="sr-only">{command}</span>
                   <span aria-hidden className="truncate whitespace-pre">
                     {shown === null ? command : command.slice(0, shown)}
@@ -131,11 +134,11 @@ export default function CtaTerminal() {
               </div>
             </div>
 
-            <p className="mt-4 min-h-5 font-mono text-[12px] text-white/55">
+            <p className="mt-4 min-h-5 text-[14px] text-white/55">
               {copied ? (
                 <span className="nk-cta-terminal-in inline-block">
-                  Next: <span className="text-white/80">cd</span> into any project and run{" "}
-                  <span className="text-[rgb(var(--neon))]">gantry up</span>
+                  Next: <code className="font-mono text-[13px] text-white/85">cd</code> into any project and run{" "}
+                  <code className="font-mono text-[13px] text-[rgb(var(--neon))]">gantry up</code>
                 </span>
               ) : (
                 "No daemon, no root. One binary on your PATH."
@@ -143,16 +146,16 @@ export default function CtaTerminal() {
             </p>
           </div>
 
-          <div className="lg:pt-12">
-            <p className="max-w-[40ch] text-pretty text-[15px] leading-relaxed text-white/60">
+          <div className="lg:pt-14">
+            <p className="max-w-[40ch] text-pretty text-[16px] leading-[1.6] text-white/60">
               Gantry builds from your lockfile, keeps layers on local disk and starts containers without a background
               service. Your existing Dockerfiles work as they are.
             </p>
             <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-white/[0.07] pt-6">
               {SPECS.map((spec) => (
                 <div key={spec.label} className="flex flex-col-reverse justify-end gap-1">
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{spec.label}</dt>
-                  <dd className="text-[15px] font-medium tabular-nums text-white/85">{spec.value}</dd>
+                  <dt className="text-[13px] text-white/55">{spec.label}</dt>
+                  <dd className="text-[17px] font-medium text-white/90">{spec.value}</dd>
                 </div>
               ))}
             </dl>

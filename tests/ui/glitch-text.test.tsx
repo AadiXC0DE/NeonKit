@@ -102,4 +102,13 @@ describe("GlitchText", () => {
     );
     expect(ref.current?.tagName).toBe("P");
   });
+  it("lets a hover-triggered glitch follow the link or button around it, keyboard focus included", () => {
+    const { container } = render(
+      <a href="#lab">
+        <GlitchText trigger="hover">Lab</GlitchText>
+      </a>,
+    );
+    const css = container.querySelector("style")?.textContent ?? "";
+    expect(css).toContain(':is(a, button):is(:hover, :focus-visible) .nk-glitch-text[data-trigger="hover"]');
+  });
 });

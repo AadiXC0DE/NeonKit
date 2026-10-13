@@ -7,7 +7,7 @@ export default function TimelineDemo() {
       <div className="mb-6 flex items-start justify-between gap-4">
         <div className="grid gap-1">
           <h3 className="text-base font-semibold text-white/90">Elevated error rates on the EU API</h3>
-          <p className="text-xs text-white/45">Affects api.eu · fra1, lhr1</p>
+          <p className="text-xs text-white/50">Affects api.eu · fra1, lhr1</p>
         </div>
         <Badge dot pulse>
           Monitoring

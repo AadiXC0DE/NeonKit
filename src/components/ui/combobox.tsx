@@ -11,7 +11,7 @@ import {
   size as fitToViewport,
   useFloating,
 } from "@floating-ui/react-dom";
-import { Check, ChevronDown, LoaderCircle, Plus, X } from "lucide-react";
+import { Check, ChevronDown, LoaderCircle, Plus, X } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -46,7 +46,7 @@ const sizes = {
     button: "size-5 rounded-[5px] [&_svg]:size-3.5",
     panel: "rounded-lg",
     option: "gap-2 rounded-md px-2 py-1.5 text-xs [&_svg]:size-3.5",
-    heading: "px-2 pb-1 pt-2 text-[10px]",
+    heading: "px-2 pb-1 pt-2 text-[11px]",
     hint: "text-[11px]",
     empty: "px-2 py-4 text-xs [&_svg]:size-3.5",
     label: "text-xs",
@@ -66,7 +66,7 @@ const sizes = {
     button: "size-6 rounded-md [&_svg]:size-4",
     panel: "rounded-xl",
     option: "gap-2.5 rounded-lg px-2.5 py-2 text-sm [&_svg]:size-4",
-    heading: "px-2.5 pb-1 pt-2.5 text-[11px]",
+    heading: "px-2.5 pb-1 pt-2.5 text-xs",
     hint: "text-xs",
     empty: "px-3 py-5 text-sm [&_svg]:size-4",
     label: "text-sm",
@@ -86,7 +86,7 @@ const sizes = {
     button: "size-7 rounded-lg [&_svg]:size-[18px]",
     panel: "rounded-xl",
     option: "gap-3 rounded-lg px-3 py-2.5 text-base [&_svg]:size-[18px]",
-    heading: "px-3 pb-1 pt-3 text-xs",
+    heading: "px-3 pb-1 pt-3 text-[13px]",
     hint: "text-sm",
     empty: "px-3 py-6 text-sm [&_svg]:size-4",
     label: "text-sm",
@@ -243,6 +243,35 @@ function Highlight({ text, range }: { text: string; range?: Range }) {
 const toList = (value: string | string[] | undefined) =>
   value === undefined ? undefined : Array.isArray(value) ? value : value ? [value] : [];
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) => {
   const {
     options,
@@ -264,6 +293,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
     description,
     error,
     disabled,
+    required,
     id: idProp,
     className,
     containerClassName,
@@ -290,15 +320,17 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
   const createId = `${id}-create`;
   const optionId = (index: number) => `${id}-option-${index}`;
 
-  const invalid = Boolean(error);
-  const message = invalid ? (error === true ? null : error) : description;
-  const messageId = message ? `${id}-${invalid ? "error" : "description"}` : undefined;
+  const errored = Boolean(error);
+  const message = errored ? (error === true ? null : error) : description;
+  const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
   const s = sizes[size];
   const reduceMotion = useReducedMotion() ?? false;
   const isClient = React.useSyncExternalStore(subscribeNoop, () => true, () => false);
 
   const [uncontrolled, setUncontrolled] = React.useState<string[]>(() => toList(defaultValue) ?? []);
   const selected = toList(valueProp) ?? uncontrolled;
+  const rejected = useRejected(inputRef, selected.join("\n"));
+  const invalid = errored || rejected;
   // Remembers picked options, so a value keeps its label after async results move on.
   const [known, setKnown] = React.useState<Record<string, ComboboxOption>>({});
   const findOption = (value: string) => options.find((option) => option.value === value) ?? known[value];
@@ -399,6 +431,33 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
     if (top < list.scrollTop) list.scrollTop = top;
     else if (bottom > list.scrollTop + list.clientHeight) list.scrollTop = bottom - list.clientHeight;
   }, [isOpen, activeId]);
+
+  // A form reset clears the text box natively; put the starting selection back with it.
+  const initialSelected = React.useRef(selected);
+  const resetRef = React.useRef<() => void>(() => {});
+  React.useEffect(() => {
+    resetRef.current = () => {
+      const initial = initialSelected.current;
+      setOpen(false);
+      setActiveKey(null);
+      updateSearch(null);
+      if (initial.length === selected.length && initial.every((value, i) => value === selected[i])) return;
+      commitValues(initial);
+    };
+  });
+  React.useEffect(() => {
+    const form = inputRef.current?.form;
+    if (!form) return;
+    const onReset = () => resetRef.current();
+    form.addEventListener("reset", onReset);
+    return () => form.removeEventListener("reset", onReset);
+  }, []);
+
+  // Typed text that was never picked shouldn't pass for a value.
+  const unpicked = Boolean(required) && selected.length === 0 && (search ?? "").trim() !== "";
+  React.useEffect(() => {
+    inputRef.current?.setCustomValidity(unpicked ? "Pick one of the options." : "");
+  }, [unpicked]);
 
   function commitValues(next: string[]) {
     if (valueProp === undefined) setUncontrolled(next);
@@ -625,7 +684,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
           <span
             className={cn(
               "relative flex shrink-0 items-center transition-colors duration-100",
-              isSelected || active ? "text-[rgb(var(--neon))]" : "text-white/45",
+              isSelected || active ? "text-[rgb(var(--neon))]" : "text-white/50",
             )}
           >
             {option.icon}
@@ -636,7 +695,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
             <Highlight text={option.label} range={item.labelMatch} />
           </span>
           {option.description && (
-            <span className={cn("truncate", s.hint, active ? "text-white/55" : "text-white/40")}>
+            <span className={cn("truncate", s.hint, active ? "text-white/60" : "text-white/50")}>
               <Highlight text={option.description} range={item.descriptionMatch} />
             </span>
           )}
@@ -673,6 +732,9 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
       aria-labelledby={ariaLabelledBy}
       aria-describedby={[ariaDescribedBy, messageId].filter(Boolean).join(" ") || undefined}
       aria-invalid={invalid || undefined}
+      aria-required={required || undefined}
+      // The picked value satisfies it, not the text: chips leave the box empty, and typed text isn't a pick.
+      required={required && selected.length === 0}
       disabled={disabled}
       placeholder={multiple && selected.length ? undefined : placeholder}
       value={inputValue}
@@ -687,7 +749,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
         if (!multiple && search === null) event.currentTarget.select();
       }}
       className={cn(
-        "min-w-0 flex-1 bg-transparent text-inherit outline-none placeholder:text-white/30 disabled:cursor-not-allowed",
+        "min-w-0 flex-1 bg-transparent text-inherit outline-none placeholder:text-white/50 disabled:cursor-not-allowed",
         multiple ? cn("basis-16", s.multiInput) : cn("h-full", s.input, leadingIcon && s.afterIcon),
       )}
     />
@@ -702,6 +764,13 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
       {label && (
         <label id={labelId} htmlFor={id} className={cn("w-fit font-medium text-white/80", s.label)}>
           {label}
+          {required && (
+            <span
+              aria-hidden
+              title="Required"
+              className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+            />
+          )}
         </label>
       )}
       <div
@@ -754,7 +823,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
                           inputRef.current?.focus();
                         }}
                         className={cn(
-                          "grid shrink-0 cursor-pointer place-items-center text-white/45 outline-none transition-colors duration-150",
+                          "grid shrink-0 cursor-pointer place-items-center text-white/50 outline-none transition-colors duration-150",
                           "hover:bg-[rgb(var(--neon)/0.16)] hover:text-white",
                           s.chipRemove,
                         )}
@@ -859,7 +928,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
           <input type="hidden" name={name} value={selected[0] ?? ""} disabled={disabled} />
         ))}
       {message && (
-        <p id={messageId} className={cn("text-xs leading-5", invalid ? "text-[#ff4d5e]" : "text-white/55")}>
+        <p id={messageId} className={cn("text-xs leading-5", errored ? "text-[#ff4d5e]" : "text-white/55")}>
           {message}
         </p>
       )}
@@ -923,7 +992,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
                           <div
                             id={`${id}-group-${groupIndex}`}
                             role="presentation"
-                            className={cn("select-none font-medium uppercase tracking-[0.08em] text-white/35", s.heading)}
+                            className={cn("select-none font-medium text-white/50", s.heading)}
                           >
                             {group.label}
                           </div>
@@ -962,7 +1031,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
                     {!keys.length && (
                       <div
                         role="presentation"
-                        className={cn("flex select-none items-center justify-center gap-2 text-white/45", s.empty)}
+                        className={cn("flex select-none items-center justify-center gap-2 text-white/50", s.empty)}
                       >
                         {loading ? (
                           <>

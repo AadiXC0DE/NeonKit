@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -123,20 +123,20 @@ export default function AuthSignUp() {
       className="relative isolate overflow-hidden bg-[#05060a] px-5 py-14 text-white/90 sm:px-10 lg:py-24"
     >
       <div className="mx-auto grid max-w-[1160px] gap-12 lg:grid-cols-[1fr_440px] lg:items-start lg:gap-20">
-        <div className="max-w-[560px] lg:pt-16">
-          <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-            <svg aria-hidden viewBox="0 0 16 16" className="size-3.5 text-[rgb(var(--neon))]" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <div className="max-w-[580px] lg:pt-2">
+          <p className="flex items-center gap-2 text-[17px] font-semibold tracking-[-0.02em] text-white/90">
+            <svg aria-hidden viewBox="0 0 16 16" className="size-4 text-[rgb(var(--neon))]" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M8 14V7" strokeLinecap="round" />
               <path d="M8 8.5C8 5.5 6 3.5 3 3.5c0 3 2 5 5 5ZM8 7c0-2.5 1.7-4.5 5-4.5 0 2.8-1.9 4.5-5 4.5Z" />
             </svg>
-            Seedbank · open research data
+            Seedbank
           </p>
-          <h1 className="mt-6 text-[clamp(2.75rem,6.4vw,4.75rem)] font-semibold leading-[0.95] tracking-[-0.045em]">
+          <h1 className="mt-14 text-[clamp(2.75rem,6.4vw,5rem)] font-[620] leading-[0.96] tracking-[-0.04em] [font-stretch:112%] lg:mt-20">
             Deposit once.
             <br />
-            <span className="text-white/45">Cite it forever.</span>
+            <span className="text-white/50">Cite it forever.</span>
           </h1>
-          <p className="mt-6 max-w-[46ch] text-[17px] leading-relaxed text-white/55">
+          <p className="mt-7 max-w-[46ch] text-[17px] leading-[1.6] text-white/60">
             Every dataset gets a DOI the moment it lands, a checksum on every file and a mirror on two continents. Free
             up to 50 GB per researcher.
           </p>
@@ -145,14 +145,14 @@ export default function AuthSignUp() {
             {STATS.map((s, i) => (
               <div key={s.label} className={cn("py-5", i > 0 && "border-l border-white/[0.08] pl-4 sm:pl-6")}>
                 <dt className="sr-only">{s.label}</dt>
-                <dd className="text-[clamp(1.375rem,3vw,1.875rem)] font-semibold tracking-[-0.03em] tabular-nums">{s.value}</dd>
-                <dd className="mt-1 font-mono text-[11px] uppercase tracking-[0.08em] text-white/55 sm:tracking-[0.12em]">{s.label}</dd>
+                <dd className="text-[clamp(1.5rem,3vw,2.25rem)] font-[620] leading-none tracking-[-0.04em] tabular-nums [font-stretch:112%]">{s.value}</dd>
+                <dd className="mt-2 text-[13px] text-white/55">{s.label}</dd>
               </div>
             ))}
           </dl>
 
           <figure className="mt-8 hidden gap-2 sm:grid">
-            <figcaption className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Deposited this morning</figcaption>
+            <figcaption className="text-[13px] text-white/55">Deposited this morning</figcaption>
             <div className="flex items-baseline justify-between gap-6 text-sm">
               <span className="text-white/80">{RECENT.title}</span>
               <span className="shrink-0 font-mono text-xs text-white/55">{RECENT.size}</span>
@@ -174,8 +174,7 @@ export default function AuthSignUp() {
           <div className="rounded-[20px] border border-white/10 bg-[#0a0b11] p-6 shadow-[0_30px_80px_-30px_rgb(0_0_0/0.9)] sm:p-8">
             {status === "done" ? (
               <div aria-live="polite" className="grid gap-5 py-4">
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">Account created</p>
-                <h2 ref={doneRef} tabIndex={-1} className="text-[30px] font-semibold leading-[1.05] tracking-[-0.035em] outline-none">
+                <h2 ref={doneRef} tabIndex={-1} className="text-[32px] font-[620] leading-[1] tracking-[-0.04em] outline-none [font-stretch:112%]">
                   Check your inbox, {name.trim().split(/\s+/)[0]}.
                 </h2>
                 <p className="text-[15px] leading-relaxed text-white/55">
@@ -197,10 +196,10 @@ export default function AuthSignUp() {
             ) : (
               <form ref={formRef} noValidate onSubmit={handleSubmit} className="grid gap-5">
                 <div className="mb-1 flex items-baseline justify-between gap-4">
-                  <h2 className="text-xl font-semibold tracking-[-0.02em]">Create an account</h2>
+                  <h2 className="text-[20px] font-[620] tracking-[-0.03em] sm:text-[22px] sm:[font-stretch:112%]">Create an account</h2>
                   <a
                     href="#sign-in"
-                    className="-my-2 rounded-md py-2 text-[13px] text-white/60 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                    className="-my-2 whitespace-nowrap rounded-md py-2 text-[13px] text-white/60 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                   >
                     Sign in instead
                   </a>
@@ -250,14 +249,14 @@ export default function AuthSignUp() {
                         aria-label={reveal ? "Hide password" : "Show password"}
                         aria-pressed={reveal}
                         onClick={() => setReveal((r) => !r)}
-                        className="-mr-2.5 grid size-9 place-items-center rounded-md text-white/45 outline-none transition-colors hover:text-white/90 focus-visible:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                        className="-mr-2.5 grid size-9 place-items-center rounded-md text-white/50 outline-none transition-colors hover:text-white/90 focus-visible:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
                         {reveal ? <EyeOff /> : <Eye />}
                       </button>
                     }
                   />
                   <div className="grid gap-2">
-                    <div className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.14em]">
+                    <div className="flex items-baseline justify-between text-[13px]">
                       <span className="text-white/55">Strength</span>
                       <span aria-live="polite" className={score >= 0.8 ? "text-[rgb(var(--neon))]" : "text-white/70"}>
                         {level}

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUp, Check, Eye, FileText, Hash, Lock, Menu, Search, ThumbsUp } from "lucide-react";
+import { ArrowUp, Check, Eye, FileText, Hash, Lock, Menu, Search, ThumbsUp } from "@/components/ui/icons";
 import { Avatar, AvatarGroup } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -178,7 +178,7 @@ export default function AppChat() {
   const channelList = (
     <nav aria-label="Channels" className="grid gap-6">
       <div>
-        <h2 className="px-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Channels</h2>
+        <h2 className="px-2 text-xs font-medium text-white/55">Channels</h2>
         <ul className="mt-2 grid gap-0.5">
           {CHANNELS.map((c) => {
             const active = c.id === channel;
@@ -209,13 +209,13 @@ export default function AppChat() {
         </ul>
       </div>
       <div>
-        <h2 className="px-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">People</h2>
+        <h2 className="px-2 text-xs font-medium text-white/55">People</h2>
         <ul className="mt-2 grid gap-1">
           {Object.entries(PEOPLE).filter(([n]) => n !== ME).map(([name, p]) => (
             <li key={name} className="flex h-8 items-center gap-2.5 px-2 text-sm text-white/60">
               <Avatar alt={name} size="sm" status={p.status} className="size-6 text-[9px]" />
               <span className="truncate">{name}</span>
-              <span className="ml-auto text-[11px] text-white/60">{p.role}</span>
+              <span className="ml-auto text-xs text-white/55">{p.role}</span>
             </li>
           ))}
         </ul>
@@ -242,8 +242,8 @@ export default function AppChat() {
             <circle cx="15" cy="15" r="2.2" fill="none" stroke="currentColor" strokeWidth="1.6" />
             <path d="M7 6.5c4 0 2 7 6 7" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" style={{ filter: "drop-shadow(0 0 3px rgb(var(--neon)))" }} />
           </svg>
-          <span className="text-[15px] font-semibold tracking-[-0.02em]">Switchboard</span>
-          <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">Northbound</span>
+          <span className="text-[15px] font-[620] tracking-[-0.02em] [font-stretch:112%]">Switchboard</span>
+          <span className="ml-auto text-xs text-white/55">Northbound</span>
         </div>
         {channelList}
         <div className="mt-auto flex items-center gap-2.5 border-t border-white/[0.06] px-2 pt-3">
@@ -268,7 +268,7 @@ export default function AppChat() {
             <Menu />
           </Button>
           <div className="min-w-0">
-            <h1 className="flex items-center gap-1 text-[15px] font-semibold tracking-[-0.01em]">
+            <h1 className="flex items-center gap-1 text-[17px] font-[620] tracking-[-0.02em] [font-stretch:112%]">
               <Hash aria-hidden className="size-4 text-white/40" />
               {current.name}
             </h1>
@@ -306,8 +306,8 @@ export default function AppChat() {
 
         <div ref={scrollRef} role="log" aria-label={`Messages in ${current.name}`} className="min-h-0 flex-1 overflow-y-auto [scrollbar-color:rgb(255_255_255/0.1)_transparent] [scrollbar-width:thin]">
           <div className="mx-auto flex min-h-full w-full max-w-[820px] flex-col justify-end px-3 pb-4 pt-10 sm:px-5">
-            <div className="mb-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
-              <span aria-hidden className="h-px flex-1 bg-white/[0.06]" /> Today · Oct 13 <span aria-hidden className="h-px flex-1 bg-white/[0.06]" />
+            <div className="mb-6 flex items-center gap-3 text-xs text-white/55">
+              <span aria-hidden className="h-px flex-1 bg-white/[0.06]" /> Today, 13 October <span aria-hidden className="h-px flex-1 bg-white/[0.06]" />
             </div>
             {q && (
               <p className="mb-4 px-2 text-xs text-white/60">
@@ -332,13 +332,13 @@ export default function AppChat() {
                       {!grouped && (
                         <p className="flex items-baseline gap-2">
                           <span className={cn("text-sm font-semibold", mine ? "text-[rgb(var(--neon))]" : "text-white/90")}>{mine ? "You" : m.author}</span>
-                          <span className="text-[11px] text-white/60">{PEOPLE[m.author]?.role}</span>
-                          <span className="font-mono text-[11px] text-white/55">{clock(m.time)}</span>
+                          <span className="text-xs text-white/55">{PEOPLE[m.author]?.role}</span>
+                          <span className="font-mono text-[11px] tabular-nums text-white/50">{clock(m.time)}</span>
                         </p>
                       )}
-                      {m.text && <p className="whitespace-pre-wrap break-words text-[14px] leading-6 text-white/75">{m.text}</p>}
+                      {m.text && <p className="whitespace-pre-wrap break-words text-[14.5px] leading-6 text-white/80">{m.text}</p>}
                       {m.code && (
-                        <pre className="mt-1.5 overflow-x-auto rounded-lg border border-white/[0.08] bg-[#0a0b11] px-3.5 py-3 font-mono text-[12.5px] leading-5 text-white/75"><code>{m.code}</code></pre>
+                        <pre className="mt-1.5 overflow-x-auto rounded-lg border border-white/[0.08] bg-[#0a0b11] px-3.5 py-3 font-mono text-[12.5px] leading-5 text-white/80 [font-variant-ligatures:none]"><code>{m.code}</code></pre>
                       )}
                       {m.file && (
                         <a href="#file" onClick={(e) => e.preventDefault()} className="mt-2 flex w-fit max-w-full items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] py-2 pl-2.5 pr-4 outline-none transition-colors hover:border-[rgb(var(--neon)/0.4)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
@@ -398,7 +398,7 @@ export default function AppChat() {
                 <ArrowUp />
               </Button>
             </div>
-            <p className="mt-2 hidden text-[11px] text-white/55 sm:block">Enter to send · Shift Enter for a new line</p>
+            <p className="mt-2 hidden text-xs text-white/50 sm:block">Enter to send, Shift Enter for a new line</p>
           </div>
         </form>
       </main>

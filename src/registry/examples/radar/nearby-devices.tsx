@@ -1,4 +1,4 @@
-import { Headphones, Monitor, Smartphone, Watch } from "lucide-react";
+import { Headphones, Monitor, Smartphone, Watch } from "@/components/ui/icons";
 import { Radar } from "@/components/ui/radar";
 
 // Signal strength stands in for distance: a weaker signal plots further out.
@@ -17,13 +17,13 @@ export default function RadarNearbyDevices() {
       <Radar size="sm" speed={2.5} rings={3} label="Nearby devices" blips={devices.map((d) => ({ angle: d.angle, distance: distance(d.rssi) }))} />
       <div>
         <p className="text-sm font-medium text-white/90">Scanning for devices</p>
-        <p className="mt-0.5 text-xs text-white/45">Keep your phone close to the one you want to pair.</p>
+        <p className="mt-0.5 text-xs text-white/55">Keep your phone close to the one you want to pair.</p>
         <ul className="mt-3 grid gap-1">
           {devices.map((device) => (
             <li key={device.name} className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-white/80 hover:bg-white/[0.04]">
-              <device.icon aria-hidden className="size-4 text-white/45" />
+              <device.icon aria-hidden className="size-4 text-white/50" />
               <span className="min-w-0 flex-1 truncate">{device.name}</span>
-              <span className="font-mono text-[11px] tabular-nums text-white/40">{device.rssi} dBm</span>
+              <span className="font-mono text-[11px] tabular-nums text-white/55">{device.rssi} dBm</span>
             </li>
           ))}
         </ul>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FileCode, Folder } from "lucide-react";
+import { FileCode, Folder } from "@/components/ui/icons";
 import {
   Breadcrumb,
   BreadcrumbItem,

@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { componentCategoryId } from "@/components/site/category-id";
 import { CodeBlock } from "@/components/site/code-block";
 import { CopyPage } from "@/components/site/copy-page";
 import { JsonLd } from "@/components/site/json-ld";
 import { ComponentPreview } from "@/components/site/component-preview";
 import { CommandBlock, InstallTabs } from "@/components/site/install-tabs";
-import { H2, H3, InlineCode, P, PagerLinks, Step, Steps } from "@/components/site/prose";
+import { H2, H3, InlineCode, P, PageHeader, PagerLinks, Step, Steps, Trail, series, textLink } from "@/components/site/prose";
 import { PropsTable } from "@/components/site/props-table";
 import { Toc, type TocItem } from "@/components/site/toc";
 import { registryUrl, siteConfig } from "@/config/site";
 import { installCommand, runCommand } from "@/lib/commands";
 import { highlight, readSource } from "@/lib/highlight";
-import { componentPath, examplePath, getItem, getNeighbours, registry } from "@/registry";
+import { cn } from "@/lib/utils";
+import { componentPath, examplePath, getItem, getNeighbours, isNew, registry } from "@/registry";
 import { docs } from "@/registry/docs";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -113,50 +115,69 @@ export default async function ComponentPage({ params }: Props) {
   ];
 
   return (
-    <div className="flex gap-14">
+    <div className="flex gap-12 xl:gap-16">
       <JsonLd data={structuredData} />
-      <article className="min-w-0 max-w-3xl flex-1">
-        <header className="mb-8">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
-            <Link href="/components" className="transition-colors hover:text-muted">
-              Components
-            </Link>
-            <span className="mx-2 text-white/15">/</span>
-            {item.category}
-          </p>
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h1 className="text-[2.5rem] font-semibold leading-[1.05] tracking-[-0.035em] text-fg">{item.name}</h1>
-            <CopyPage href={`/components/${slug}.md`} />
-          </div>
-          <p className="mt-3 max-w-2xl text-[17px] leading-relaxed text-muted">{item.description}</p>
-          {(item.dependencies.length > 0 || requires.length > 0) && (
-            <div className="mt-5 flex flex-wrap items-center gap-2 font-mono text-[11px] text-dim">
-              <span className="uppercase tracking-[0.14em]">Uses</span>
-              {requires.map((dep) => (
-                <Link
-                  key={dep.slug}
-                  href={`/components/${dep.slug}`}
-                  className="rounded-md border border-[rgb(var(--neon-accent)/0.3)] px-2 py-0.5 text-[rgb(var(--neon-accent))] transition-colors hover:border-[rgb(var(--neon-accent)/0.6)]"
-                >
-                  {dep.name}
-                </Link>
-              ))}
-              {item.dependencies.map((dep) => (
-                <a
-                  key={dep}
-                  href={`https://www.npmjs.com/package/${dep}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-md border border-line px-2 py-0.5 text-muted transition-colors hover:border-line-strong hover:text-fg"
-                >
-                  {dep}
-                </a>
-              ))}
-            </div>
+      <article className="min-w-0 max-w-[50rem] flex-1">
+        <PageHeader
+          meta={
+            <Trail
+              items={[
+                { title: "Components", href: "/components" },
+                { title: item.category, href: `/components#${componentCategoryId(item.category)}` },
+              ]}
+            />
+          }
+          title={item.name}
+          action={<CopyPage href={`/components/${slug}.md`} />}
+          className="mb-12 sm:mb-14"
+        >
+          <p>{item.description}</p>
+          {(requires.length > 0 || item.dependencies.length > 0 || isNew(item)) && (
+            <p className="mt-4 text-[14.5px] leading-[1.6]">
+              {isNew(item) && <span className="mr-2 text-[rgb(var(--neon-accent))]">New in {item.addedIn}.</span>}
+              {requires.length > 0 && (
+                <>
+                  Built on{" "}
+                  {series(
+                    requires.map((dep) => (
+                      <Link key={dep.slug} href={`/components/${dep.slug}`} className={textLink}>
+                        {dep.name}
+                      </Link>
+                    )),
+                  )}
+                  .{" "}
+                </>
+              )}
+              {item.dependencies.length > 0 && (
+                <>
+                  Installs{" "}
+                  {series(
+                    item.dependencies.map((dep) => (
+                      <a
+                        key={dep}
+                        href={`https://www.npmjs.com/package/${dep}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={cn(textLink, "font-mono text-[0.9em]")}
+                      >
+                        {dep}
+                      </a>
+                    )),
+                  )}
+                  .
+                </>
+              )}
+            </p>
           )}
-        </header>
+        </PageHeader>
 
-        <ComponentPreview html={hero.html} code={hero.code} title={hero.title}>
+        <ComponentPreview
+          html={hero.html}
+          code={hero.code}
+          title={hero.title}
+          filename={`${slug}-${hero.name}.tsx`}
+          size="lg"
+        >
           <hero.component />
         </ComponentPreview>
 
@@ -173,14 +194,13 @@ export default async function ComponentPage({ params }: Props) {
               {requires.length > 0 && (
                 <Step title="Add the components it builds on">
                   <p>
-                    {requires.map((dep, i) => (
-                      <span key={dep.slug}>
-                        {i > 0 && (i === requires.length - 1 ? " and " : ", ")}
-                        <Link href={`/components/${dep.slug}`} className="text-fg underline decoration-white/20 underline-offset-4">
+                    {series(
+                      requires.map((dep) => (
+                        <Link key={dep.slug} href={`/components/${dep.slug}`} className={textLink}>
                           {dep.name}
                         </Link>
-                      </span>
-                    ))}
+                      )),
+                    )}
                     . The CLI adds them for you.
                   </p>
                 </Step>
@@ -189,14 +209,14 @@ export default async function ComponentPage({ params }: Props) {
                 <p>
                   Every component imports <InlineCode>cn</InlineCode> and <InlineCode>neonVars</InlineCode>. Copy{" "}
                   <InlineCode>lib/utils.ts</InlineCode> and <InlineCode>lib/neon.ts</InlineCode> from the{" "}
-                  <Link href="/docs/installation#manual" className="text-fg underline decoration-white/20 underline-offset-4">
+                  <Link href="/docs/installation#manual" className={textLink}>
                     installation guide
                   </Link>{" "}
-                  if you have not already.
+                  if you haven&apos;t already.
                 </p>
               </Step>
               <Step title={<>Paste the component into <InlineCode>components/ui/{slug}.tsx</InlineCode></>}>
-                <CodeBlock code={source} title={`components/ui/${slug}.tsx`} maxHeight={440} />
+                <CodeBlock code={source} title={`components/ui/${slug}.tsx`} maxHeight={460} />
               </Step>
             </Steps>
           }
@@ -208,24 +228,39 @@ export default async function ComponentPage({ params }: Props) {
         {rest.length > 0 && (
           <>
             <H2 id="examples">Examples</H2>
-            {rest.map((example) => (
-              <section key={example.name}>
-                <H3 id={`example-${example.name}`}>{example.title}</H3>
-                {example.description && <P>{example.description}</P>}
-                <ComponentPreview html={example.html} code={example.code} title={example.title} className="mt-4">
-                  <example.component />
-                </ComponentPreview>
-              </section>
-            ))}
+            <div className="space-y-20">
+              {rest.map((example) => (
+                <section key={example.name} aria-labelledby={`example-${example.name}`}>
+                  <H3 id={`example-${example.name}`} className="mt-0">
+                    {example.title}
+                  </H3>
+                  {example.description && <P className="mb-4">{example.description}</P>}
+                  <ComponentPreview
+                    html={example.html}
+                    code={example.code}
+                    title={example.title}
+                    filename={`${slug}-${example.name}.tsx`}
+                  >
+                    <example.component />
+                  </ComponentPreview>
+                </section>
+              ))}
+            </div>
           </>
         )}
 
         <H2 id="api">API reference</H2>
-        <div className="space-y-10">
+        <div className="space-y-16">
           {doc.api.map((part) => (
-            <section key={part.name}>
-              <h3 className="mb-1 font-mono text-[15px] text-fg">{part.name}</h3>
-              {part.description && <p className="mb-4 text-[14px] text-muted">{part.description}</p>}
+            <section key={part.name} aria-label={part.name}>
+              {(doc.api.length > 1 || part.description) && (
+                <div className="mb-5">
+                  {doc.api.length > 1 && <h3 className="font-mono text-[15px] text-fg">{part.name}</h3>}
+                  {part.description && (
+                    <p className="mt-1.5 max-w-[40rem] text-[15px] leading-[1.6] text-muted">{part.description}</p>
+                  )}
+                </div>
+              )}
               <PropsTable rows={part.props} />
             </section>
           ))}
@@ -234,10 +269,9 @@ export default async function ComponentPage({ params }: Props) {
         {doc.notes?.length ? (
           <>
             <H2 id="accessibility">Accessibility</H2>
-            <ul className="max-w-2xl space-y-3 text-[15px] leading-relaxed text-muted">
+            <ul className="max-w-[40rem] divide-y divide-white/[0.06] border-y border-white/[0.06] text-[15.5px] leading-[1.65] text-muted">
               {doc.notes.map((note) => (
-                <li key={note} className="flex gap-3">
-                  <span className="mt-[11px] h-px w-3 shrink-0 bg-[rgb(var(--neon-accent))]" />
+                <li key={note} className="py-3.5">
                   {note}
                 </li>
               ))}
@@ -251,7 +285,7 @@ export default async function ComponentPage({ params }: Props) {
         />
       </article>
 
-      <aside className="sticky top-24 hidden h-fit w-48 shrink-0 xl:block">
+      <aside className="sticky top-14 hidden h-fit max-h-[calc(100dvh-3.5rem)] w-48 shrink-0 overflow-y-auto pt-[7.5rem] xl:block">
         <Toc items={toc} />
       </aside>
     </div>

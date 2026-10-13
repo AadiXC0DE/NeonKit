@@ -3,6 +3,7 @@ import TabsDemo from "../examples/tabs/demo";
 import TabsInstall from "../examples/tabs/install";
 import TabsColors from "../examples/tabs/colors";
 import TabsManual from "../examples/tabs/manual";
+import TabsVertical from "../examples/tabs/vertical";
 
 export const doc: ComponentDoc = {
   usage: `import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -35,6 +36,12 @@ export const doc: ComponentDoc = {
       component: TabsColors,
     },
     {
+      name: "vertical",
+      title: "Vertical",
+      description: "orientation=\"vertical\" stacks the list beside the panels. Up and Down move between tabs.",
+      component: TabsVertical,
+    },
+    {
       name: "manual",
       title: "Manual activation",
       description: "Arrow keys move focus; Enter or Space selects. Disabled tabs are skipped.",
@@ -50,6 +57,7 @@ export const doc: ComponentDoc = {
         { prop: "value", type: "string", description: "Selected tab when controlled." },
         { prop: "onValueChange", type: "(value: string) => void", description: "Called when the selection changes." },
         { prop: "variant", type: '"pill" | "underline"', default: '"pill"', description: "Indicator style." },
+        { prop: "orientation", type: '"horizontal" | "vertical"', default: '"horizontal"', description: "Direction of the list. Vertical puts it beside the panels and switches the arrow keys to Up and Down." },
         { prop: "activationMode", type: '"automatic" | "manual"', default: '"automatic"', description: "Select on focus, or wait for Enter and Space." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex. Falls back to --neon-accent, then cyan." },
       ],
@@ -73,7 +81,7 @@ export const doc: ComponentDoc = {
   ],
   notes: [
     "Follows the WAI-ARIA tabs pattern: tablist, tab and tabpanel roles, with aria-selected and aria-controls wired up.",
-    "Only the selected tab is in the Tab order. Left and Right arrows move between tabs, Home and End jump to the ends.",
+    "Only the selected tab is in the Tab order. Left and Right arrows (Up and Down when vertical) move between tabs, Home and End jump to the ends.",
     "Panels are focusable so keyboard users can reach content without interactive elements.",
     "The indicator jumps instead of sliding when the user prefers reduced motion.",
   ],

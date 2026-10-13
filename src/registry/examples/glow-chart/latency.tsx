@@ -17,9 +17,9 @@ export default function GlowChartLatency() {
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <div>
           <p className="text-sm font-medium text-white/90">api.halcyon.dev · response time</p>
-          <p className="mt-0.5 text-xs text-white/45">Oct 10, UTC · 2.41M requests</p>
+          <p className="mt-0.5 text-xs text-white/50">Oct 10, UTC · 2.41M requests</p>
         </div>
-        <p className="text-xs text-white/45">1 SLO breach · 14:00–15:20</p>
+        <p className="text-xs text-white/50">1 SLO breach · 14:00–15:20</p>
       </div>
       <GlowChart
         className="mt-5"

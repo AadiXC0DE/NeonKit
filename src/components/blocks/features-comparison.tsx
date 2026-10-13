@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, X } from "lucide-react";
+import { Check, X } from "@/components/ui/icons";
 import { HardwareSwitch } from "@/components/ui/hardware-switch";
 import { neonVars } from "@/lib/neon";
 import { cn } from "@/lib/utils";
@@ -79,38 +79,34 @@ export default function FeaturesComparison() {
     >
       <style>{css}</style>
       <div className="mx-auto max-w-[1200px]">
-        <header className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Switchyard · Feature flags</p>
+        <header className="grid gap-10 md:grid-cols-12 md:items-end">
+          <div className="md:col-span-9">
             <h2
               id="features-comparison-title"
-              className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
+              className="max-w-[17ch] text-[clamp(2.4rem,5.6vw,4.5rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
             >
               Deploying and releasing are two different buttons.
             </h2>
+            <p className="mt-6 max-w-[48ch] text-[17px] leading-[1.6] text-white/90">
+              Switchyard puts every release behind a flag.{" "}
+              <span className="text-white/50">Ship the code on Monday, turn it on for customers when you mean it.</span>
+            </p>
           </div>
-          <div className="flex items-center justify-between gap-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] py-3 pl-5 pr-4 md:justify-start">
-            <div className="md:text-right">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Try it</p>
-              <p aria-live="polite" className="mt-1 whitespace-nowrap text-sm text-white/75">
-                Switchyard is {on ? "on" : "off"}
-              </p>
-            </div>
-            <HardwareSwitch checked={on} onCheckedChange={flip} aria-label="Switchyard" />
+          {/* The one control on the page. It drives the lit column below. */}
+          <div className="flex items-center gap-5 md:col-span-3 md:flex-col md:items-end md:gap-4 md:pb-2">
+            <HardwareSwitch size="lg" checked={on} onCheckedChange={flip} aria-label="Switchyard" />
+            <p aria-live="polite" className="text-[14px] text-white/60 md:text-right">
+              Switchyard is <span className="text-white/90">{on ? "on" : "off"}</span>
+            </p>
           </div>
         </header>
 
-        <div ref={ref} className="relative mt-14 grid gap-4 md:grid-cols-2 md:gap-x-4 md:gap-y-0 lg:grid-cols-[11rem_1fr_1fr]">
-          {/* Column cards on md and up: each column's cells sit on one continuous surface */}
-          <div
-            aria-hidden
-            className="hidden rounded-[18px] border border-white/[0.06] bg-white/[0.015] md:block md:[grid-column:1] lg:[grid-column:2]"
-            style={{ gridRow: `1 / span ${ROWS.length + 2}` }}
-          />
+        <div ref={ref} className="relative mt-16 grid gap-4 md:mt-20 md:grid-cols-2 md:gap-x-4 md:gap-y-0 lg:grid-cols-[11rem_1fr_1fr]">
+          {/* Only the lit column gets a surface: it's the state the switch is showing. */}
           <div
             aria-hidden
             className={cn(
-              "hidden rounded-[18px] border transition-[border-color,background-color,box-shadow] duration-500 md:block md:[grid-column:2] lg:[grid-column:3]",
+              "hidden rounded-[14px] border transition-[border-color,background-color,box-shadow] duration-500 md:block md:[grid-column:2] lg:[grid-column:3]",
               lit
                 ? "border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.04)] shadow-[0_0_0_1px_rgb(var(--neon)/0.08),0_0_60px_-20px_rgb(var(--neon)/0.5),inset_0_0_40px_-20px_rgb(var(--neon)/0.25)]"
                 : "border-white/[0.08] bg-white/[0.015]",
@@ -132,33 +128,33 @@ export default function FeaturesComparison() {
             {ROWS.map((row, i) => (
               <span
                 key={row.topic}
-                className="border-t border-white/[0.06] py-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 lg:[grid-column:1]"
+                className="border-t border-white/[0.07] py-5 text-[14px] leading-snug text-white/55 lg:[grid-column:1]"
                 style={{ gridRow: i + 2 }}
               >
                 {row.topic}
               </span>
             ))}
-            <span className="border-t border-white/[0.06] py-6 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 lg:[grid-column:1]" style={{ gridRow: ROWS.length + 2 }}>
+            <span className="border-t border-white/[0.07] py-8 text-[14px] text-white/55 lg:[grid-column:1]" style={{ gridRow: ROWS.length + 2 }}>
               Median rollback
             </span>
           </div>
 
-          <div className="rounded-[18px] border border-white/[0.06] bg-white/[0.015] px-5 md:contents">
-            <h3 className="py-5 text-sm font-medium text-white/55 md:px-6 md:[grid-column:1] lg:[grid-column:2] md:[grid-row:1]">Before</h3>
+          <div className="border-t border-white/[0.07] md:contents md:border-t-0">
+            <h3 className="py-5 text-[15px] font-medium text-white/60 md:pr-6 md:[grid-column:1] lg:[grid-column:2] md:[grid-row:1]">Before</h3>
             <ul className="md:contents">
               {ROWS.map((row, i) => (
                 <li
                   key={row.topic}
-                  className="flex gap-3 border-t border-white/[0.06] py-4 md:mx-6 md:py-5 md:[grid-column:1] lg:[grid-column:2]"
+                  className="flex gap-3 border-t border-white/[0.07] py-4 md:mr-6 md:py-5 md:[grid-column:1] lg:[grid-column:2]"
                   style={{ gridRow: i + 2 }}
                 >
                   <X aria-hidden strokeWidth={2} className="mt-[3px] size-4 shrink-0 text-white/25" />
                   <div>
-                    <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.16em] text-white/55 lg:hidden">{row.topic}</span>
+                    <span className="mb-1 block text-[13px] text-white/50 lg:hidden">{row.topic}</span>
                     <span
                       className={cn(
                         "text-[15px] leading-snug transition-colors duration-300",
-                        on ? "text-white/35 line-through decoration-white/25" : "text-white/80",
+                        on ? "text-white/50 line-through decoration-white/30" : "text-white/80",
                       )}
                     >
                       {row.before}
@@ -167,25 +163,25 @@ export default function FeaturesComparison() {
                 </li>
               ))}
             </ul>
-            <p className="flex items-baseline gap-2 border-t border-white/[0.06] py-6 md:mx-6 md:[grid-column:1] lg:[grid-column:2]" style={{ gridRow: ROWS.length + 2 }}>
-              <span className={cn("whitespace-nowrap text-4xl font-semibold tracking-[-0.04em] tabular-nums transition-colors", on ? "text-white/30 line-through decoration-white/20" : "text-white/85")}>
+            <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-white/[0.07] py-8 md:mr-6 md:[grid-column:1] lg:[grid-column:2]" style={{ gridRow: ROWS.length + 2 }}>
+              <span className={cn("whitespace-nowrap text-[clamp(2.75rem,5vw,4rem)] font-[620] leading-none tracking-[-0.04em] [font-stretch:112%] transition-colors", on ? "text-white/40 line-through decoration-white/20 decoration-2" : "text-white/85")}>
                 38 min
               </span>
-              <span className="text-sm text-white/35 lg:hidden">median rollback</span>
-              <span className="hidden text-sm text-white/35 lg:inline">revert, rebuild, redeploy</span>
+              <span className="text-[14px] text-white/50 lg:hidden">median rollback</span>
+              <span className="hidden text-[14px] text-white/50 lg:inline">revert, rebuild, redeploy</span>
             </p>
           </div>
 
           <div
             className={cn(
-              "rounded-[18px] border px-5 transition-[border-color,background-color] duration-500 md:contents",
+              "rounded-[14px] border px-5 transition-[border-color,background-color] duration-500 md:contents",
               lit ? "border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.04)]" : "border-white/[0.08] bg-white/[0.015]",
             )}
           >
             <h3
               className={cn(
-                "py-5 text-sm font-medium transition-colors md:px-6 md:[grid-column:2] lg:[grid-column:3] md:[grid-row:1]",
-                lit ? "text-[rgb(var(--neon))] [text-shadow:0_0_12px_rgb(var(--neon)/0.6)]" : "text-white/45",
+                "py-5 text-[15px] font-medium transition-colors md:px-6 md:[grid-column:2] lg:[grid-column:3] md:[grid-row:1]",
+                lit ? "text-[rgb(var(--neon))] [text-shadow:0_0_12px_rgb(var(--neon)/0.6)]" : "text-white/55",
               )}
             >
               With Switchyard
@@ -202,8 +198,8 @@ export default function FeaturesComparison() {
                 >
                   <TubeCheck lit={lit} delay={180 + i * 140} />
                   <div>
-                    <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.16em] text-white/55 lg:hidden">{row.topic}</span>
-                    <span className={cn("text-[15px] leading-snug transition-colors duration-300", lit ? "text-white/90" : "text-white/40")}>
+                    <span className="mb-1 block text-[13px] text-white/50 lg:hidden">{row.topic}</span>
+                    <span className={cn("text-[15px] leading-snug transition-colors duration-300", lit ? "text-white/90" : "text-white/50")}>
                       {row.after}
                     </span>
                   </div>
@@ -212,22 +208,22 @@ export default function FeaturesComparison() {
             </ul>
             <p
               key={`total-${run}`}
-              className={cn("flex items-baseline gap-2 border-t py-6 md:mx-6 md:[grid-column:2] lg:[grid-column:3]", lit ? "border-[rgb(var(--neon)/0.12)]" : "border-white/[0.06]")}
+              className={cn("flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t py-8 md:mx-6 md:[grid-column:2] lg:[grid-column:3]", lit ? "border-[rgb(var(--neon)/0.12)]" : "border-white/[0.06]")}
               style={{ gridRow: ROWS.length + 2 }}
             >
               <span
                 className={cn(
-                  "whitespace-nowrap text-4xl font-semibold tracking-[-0.04em] tabular-nums transition-[color,text-shadow] duration-300",
+                  "whitespace-nowrap text-[clamp(2.75rem,5vw,4rem)] font-[620] leading-none tracking-[-0.04em] [font-stretch:112%] transition-[color,text-shadow] duration-300",
                   lit
                     ? "nk-features-comparison-ignite [color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] [text-shadow:0_0_2px_rgb(255_255_255/0.5),0_0_14px_rgb(var(--neon)/0.9),0_0_40px_rgb(var(--neon)/0.5)]"
-                    : "text-white/40",
+                    : "text-white/50",
                 )}
                 style={lit ? { animationDelay: `${180 + ROWS.length * 140}ms` } : undefined}
               >
                 4 s
               </span>
-              <span className="text-sm text-white/60 lg:hidden">median rollback</span>
-              <span className="hidden text-sm text-white/60 lg:inline">flip it off, from anywhere</span>
+              <span className="text-[14px] text-white/60 lg:hidden">median rollback</span>
+              <span className="hidden text-[14px] text-white/60 lg:inline">flip it off, from anywhere</span>
             </p>
           </div>
         </div>

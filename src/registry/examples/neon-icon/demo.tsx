@@ -38,7 +38,7 @@ export default function NeonIconDemo() {
       <Screw className="bottom-3 left-3" />
       <Screw className="bottom-3 right-3" />
 
-      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
+      <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">
         <span>Relay KX-7 · field unit</span>
         <span>Ch 04</span>
       </div>
@@ -56,7 +56,7 @@ export default function NeonIconDemo() {
               <NeonIcon icon={readout.icon} value={readout.value} animated={readout.animated} size={36} />
             </span>
             <div className="grid gap-0.5">
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">{readout.name}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">{readout.name}</span>
               <span className="text-xs tabular-nums text-white/80">{readout.reading}</span>
             </div>
           </li>
@@ -64,7 +64,7 @@ export default function NeonIconDemo() {
       </ul>
 
       <div className="mt-8 flex items-center gap-4 border-t border-white/[0.06] pt-5">
-        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">Link</span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">Link</span>
         <Slider
           value={[link]}
           onValueChange={([value]) => setLink(value)}

@@ -7,10 +7,11 @@ import { CodeBlock } from "@/components/site/code-block";
 import { CommandBlock } from "@/components/site/install-tabs";
 import { JsonLd } from "@/components/site/json-ld";
 import { PageShell } from "@/components/site/page-shell";
-import { PagerLinks } from "@/components/site/prose";
+import { InlineCode, PageHeader, PagerLinks, Trail, series, textLink } from "@/components/site/prose";
 import { registryUrl, siteConfig } from "@/config/site";
 import { runCommand } from "@/lib/commands";
 import { highlight, readSource } from "@/lib/highlight";
+import { cn } from "@/lib/utils";
 import { blockCategoryId, blockPath, blocks, getBlock, getBlockNeighbours, getItem, isNew } from "@/registry";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -92,80 +93,89 @@ export default async function BlockPage({ params }: Props) {
   return (
     <PageShell>
       <JsonLd data={structuredData} />
-      <header className="mb-10 max-w-3xl">
-        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
-          <Link href="/blocks" className="transition-colors hover:text-muted">
-            Blocks
-          </Link>
-          <span className="mx-2 text-white/15">/</span>
-          <Link href={`/blocks#${blockCategoryId(block.category)}`} className="transition-colors hover:text-muted">
-            {block.category}
-          </Link>
-          {isNew(block) && <span className="ml-3 text-[rgb(var(--neon-accent))]">new</span>}
-        </p>
-        <h1 className="text-balance text-[clamp(2.25rem,5vw,3.5rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-fg">
-          {block.name}
-        </h1>
-        <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-muted">{block.description}</p>
-        {(uses.length > 0 || block.dependencies.length > 0) && (
-          <div className="mt-5 flex flex-wrap items-center gap-2 font-mono text-[11px] text-dim">
-            <span className="uppercase tracking-[0.14em]">Uses</span>
-            {uses.map((dep) => (
-              <Link
-                key={dep.slug}
-                href={`/components/${dep.slug}`}
-                className="rounded-md border border-[rgb(var(--neon-accent)/0.3)] px-2 py-0.5 text-[rgb(var(--neon-accent))] transition-colors hover:border-[rgb(var(--neon-accent)/0.6)]"
-              >
-                {dep.name}
-              </Link>
-            ))}
-            {block.dependencies.map((dep) => (
-              <a
-                key={dep}
-                href={`https://www.npmjs.com/package/${dep}`}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-md border border-line px-2 py-0.5 text-muted transition-colors hover:border-line-strong hover:text-fg"
-              >
-                {dep}
-              </a>
-            ))}
-          </div>
+      <PageHeader
+        meta={
+          <Trail
+            items={[
+              { title: "Blocks", href: "/blocks" },
+              { title: block.category, href: `/blocks#${blockCategoryId(block.category)}` },
+            ]}
+          />
+        }
+        title={block.name}
+        className="mb-12"
+      >
+        <p>{block.description}</p>
+        {(uses.length > 0 || block.dependencies.length > 0 || isNew(block)) && (
+          <p className="mt-4 text-[14.5px] leading-[1.6]">
+            {isNew(block) && <span className="mr-2 text-[rgb(var(--neon-accent))]">New in {block.addedIn}.</span>}
+            {uses.length > 0 && (
+              <>
+                Built from{" "}
+                {series(
+                  uses.map((dep) => (
+                    <Link key={dep.slug} href={`/components/${dep.slug}`} className={textLink}>
+                      {dep.name}
+                    </Link>
+                  )),
+                )}
+                .{" "}
+              </>
+            )}
+            {block.dependencies.length > 0 && (
+              <>
+                Installs{" "}
+                {series(
+                  block.dependencies.map((dep) => (
+                    <a
+                      key={dep}
+                      href={`https://www.npmjs.com/package/${dep}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={cn(textLink, "font-mono text-[0.9em]")}
+                    >
+                      {dep}
+                    </a>
+                  )),
+                )}
+                .
+              </>
+            )}
+          </p>
         )}
-      </header>
+      </PageHeader>
 
       <BlockPreview slug={slug} html={html} code={code} height={block.height} />
 
-      <div className="mt-16 grid gap-12 lg:grid-cols-2">
-        <section aria-labelledby="installation">
-          <h2 id="installation" className="mb-4 text-xl font-semibold tracking-[-0.02em] text-fg">
+      <div className="mt-24 grid gap-16 lg:grid-cols-12 lg:gap-8">
+        <section aria-labelledby="installation" className="min-w-0 lg:col-span-6">
+          <h2 id="installation" className="type-display mb-6 text-[1.75rem] text-fg sm:text-[2rem]">
             Installation
           </h2>
           <CommandBlock commands={cli} />
-          <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed text-muted">
-            Adds <code className="font-mono text-[13px] text-fg">components/{slug}.tsx</code>
-            {uses.length > 0 && <> and the {uses.length} NeonKit components it is built from</>}. The color is set once
+          <p className="mt-5 max-w-[34rem] text-[15px] leading-[1.65] text-muted">
+            Adds <InlineCode>components/{slug}.tsx</InlineCode>
+            {uses.length > 0 && <> and the {uses.length} NeonKit components it&apos;s built from</>}. The color is set once,
             at the root of the block; change it there and everything inside follows.
           </p>
         </section>
-        <section aria-labelledby="usage">
-          <h2 id="usage" className="mb-4 text-xl font-semibold tracking-[-0.02em] text-fg">
+        <section aria-labelledby="usage" className="min-w-0 lg:col-span-5 lg:col-start-8">
+          <h2 id="usage" className="type-display mb-6 text-[1.75rem] text-fg sm:text-[2rem]">
             Usage
           </h2>
-          <CodeBlock code={`import ${name} from "@/components/${slug}";\n\nexport default function Page() {\n  return <${name} />;\n}`} />
+          <CodeBlock
+            title="app/page.tsx"
+            code={`import ${name} from "@/components/${slug}";\n\nexport default function Page() {\n  return <${name} />;\n}`}
+          />
         </section>
       </div>
 
       {related.length > 0 && (
-        <section aria-labelledby="related" className="mt-20">
-          <h2
-            id="related"
-            className="mb-6 flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.16em] text-dim"
-          >
+        <section aria-labelledby="related" className="mt-28">
+          <h2 id="related" className="type-display mb-8 text-[1.75rem] text-fg sm:text-[2rem]">
             More {block.category.toLowerCase()}
-            <span className="h-px flex-1 bg-line" />
           </h2>
-          <ul className="grid gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
             {related.map((other) => (
               <li key={other.slug}>
                 <BlockCard

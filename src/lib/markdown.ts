@@ -50,7 +50,7 @@ Palette names: ${neonColorNames.join(", ")}. Edit \`neonColors\` in \`lib/neon.t
 
 - Props: \`color\`, \`variant\`, \`size\` ("sm" | "md" | "lg"), \`disabled\`. Controlled/uncontrolled pairs use \`checked\`/\`defaultChecked\`/\`onCheckedChange\` and \`value\`/\`defaultValue\`/\`onValueChange\`.
 - Components forward refs, spread native props onto the root and accept \`className\`.
-- Motion comes from the \`motion\` package (\`motion/react\`); icons from \`lucide-react\`.
+- Motion comes from the \`motion\` package (\`motion/react\`). Icons are NeonKit's own set in \`@/components/ui/icons\`, with lucide-react names and props.
 - Everything respects \`prefers-reduced-motion\` and is keyboard accessible.`,
 };
 

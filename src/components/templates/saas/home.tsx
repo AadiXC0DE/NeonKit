@@ -31,7 +31,6 @@ export function SaasHome() {
       <Faq
         id="faq"
         clock={clock("faq")}
-        eyebrow="Questions"
         title="What teams ask before the first night."
         intro="Mostly about what happens when something goes wrong while everyone is asleep. Short version: it rolls back, and you hear about it at breakfast."
         items={faqs}

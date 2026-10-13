@@ -83,6 +83,28 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     const values = isControlled ? valueProp : uncontrolled;
     const isRange = values.length > 1;
 
+    const rootRef = React.useRef<HTMLDivElement>(null);
+    React.useImperativeHandle(ref, () => rootRef.current as HTMLDivElement);
+
+    // A form reset puts the thumbs back where they started.
+    const initialValues = React.useRef(values);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialValues.current;
+        if (initial.length === values.length && initial.every((value, i) => value === values[i])) return;
+        if (!isControlled) setUncontrolled(initial);
+        onValueChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = rootRef.current?.closest("form");
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     const railRef = React.useRef<HTMLDivElement>(null);
     const thumbRefs = React.useRef<(HTMLSpanElement | null)[]>([]);
     const drag = React.useRef<{ index: number; offset: number } | null>(null);
@@ -135,6 +157,19 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       event.preventDefault();
 
       let index = thumbRefs.current.findIndex((thumb) => thumb?.contains(event.target as Node));
+      if (index >= 0 && isRange) {
+        // Grips overlap when thumbs sit close together; take the one nearest the pointer.
+        let best = Infinity;
+        thumbRefs.current.forEach((thumb, i) => {
+          if (!thumb) return;
+          const rect = thumb.getBoundingClientRect();
+          const distance = Math.abs(event.clientX - (rect.left + rect.width / 2));
+          if (distance < best || (distance === best && i === index)) {
+            best = distance;
+            index = i;
+          }
+        });
+      }
       let offset = 0;
       const grabbed = thumbRefs.current[index];
       if (grabbed) {
@@ -197,7 +232,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
     return (
       <div
-        ref={ref}
+        ref={rootRef}
         role={isRange ? "group" : undefined}
         aria-label={isRange ? ariaLabel : undefined}
         aria-labelledby={isRange ? ariaLabelledBy : undefined}
@@ -277,6 +312,8 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
                   onKeyUp={handleKeyUp}
                   className={cn(
                     "peer absolute left-0 top-1/2 block -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[rgb(var(--neon))] bg-[#eef3fa] outline-none",
+                    // A larger invisible grip, so the thumb is easy to catch with a finger.
+                    "before:absolute before:-inset-3 before:rounded-full before:content-['']",
                     "shadow-[0_0_8px_rgb(var(--neon)/0.4),0_1px_3px_rgb(0_0_0/0.5)]",
                     "transition-[transform,scale,box-shadow] duration-150 ease-out motion-reduce:transition-none",
                     "focus-visible:scale-110 focus-visible:shadow-[0_0_18px_rgb(var(--neon)/0.8),0_1px_3px_rgb(0_0_0/0.5)]",
@@ -312,7 +349,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
         {name &&
           values.map((value, i) => (
-            <input key={i} type="hidden" name={isRange ? `${name}[]` : name} value={value} />
+            <input key={i} type="hidden" name={isRange ? `${name}[]` : name} value={value} disabled={disabled} />
           ))}
       </div>
     );

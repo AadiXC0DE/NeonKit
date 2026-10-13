@@ -1,10 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { ChevronRight, Ellipsis } from "lucide-react";
+import { ChevronRight, Ellipsis } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
+
+/** The single element in `node`. Server Components can pass it as a lazy reference, which Children resolves. */
+function resolveElement<P = Record<string, unknown>>(node: React.ReactNode): React.ReactElement<P> | null {
+  const [child] = React.Children.toArray(node);
+  return React.isValidElement<P>(child) ? child : null;
+}
 
 type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
 
@@ -39,6 +45,28 @@ function getElementRef<T>(element: React.ReactElement): AnyRef<T> {
     return (element.props as { ref?: React.Ref<T> }).ref;
   }
   return (element as unknown as { ref?: React.Ref<T> }).ref;
+}
+
+const LAZY = Symbol.for("react.lazy");
+
+type LazyType = { $$typeof: symbol; _payload: unknown; _init: (payload: unknown) => unknown };
+
+/**
+ * True when `node` is an element of `component`. Children passed down from a Server Component
+ * can arrive as lazy references to the client module, so those are resolved first. This file is
+ * already loaded by the time it runs, so resolving never suspends.
+ */
+function isElementOf(node: React.ReactNode, component: unknown) {
+  if (!React.isValidElement(node)) return false;
+  let type: unknown = node.type;
+  if (typeof type === "object" && type !== null && (type as LazyType).$$typeof === LAZY) {
+    try {
+      type = (type as LazyType)._init((type as LazyType)._payload);
+    } catch {
+      return false;
+    }
+  }
+  return type === component;
 }
 
 /** Flattens fragments so `items.map(item => <>…</>)` collapses like plain children. */
@@ -99,9 +127,7 @@ const BreadcrumbList = React.forwardRef<HTMLOListElement, React.OlHTMLAttributes
     const [expandedFor, setExpandedFor] = React.useState<string | null>(null);
 
     const nodes = flatten(children);
-    const itemIndexes = nodes.flatMap((node, index) =>
-      React.isValidElement(node) && node.type === BreadcrumbItem ? [index] : [],
-    );
+    const itemIndexes = nodes.flatMap((node, index) => (isElementOf(node, BreadcrumbItem) ? [index] : []));
     const count = itemIndexes.length;
     const trail = itemIndexes.map((index) => (nodes[index] as React.ReactElement).key).join("|");
     const limit = maxItems == null ? Infinity : Math.max(2, Math.floor(maxItems));
@@ -112,8 +138,7 @@ const BreadcrumbList = React.forwardRef<HTMLOListElement, React.OlHTMLAttributes
     const headEnd = overflowing ? itemIndexes[0] : -1;
     const tailStart = overflowing ? itemIndexes[count - (limit - 1)] : -1;
     const hidden = overflowing ? nodes.slice(headEnd + 1, tailStart) : [];
-    const isSeparator = (node: React.ReactNode) =>
-      React.isValidElement(node) && node.type === BreadcrumbSeparator;
+    const isSeparator = (node: React.ReactNode) => isElementOf(node, BreadcrumbSeparator);
     const leadingSeparator = isSeparator(hidden[0]) ? hidden[0] : null;
     const trailingSeparator =
       hidden.length > 1 && isSeparator(hidden[hidden.length - 1]) ? hidden[hidden.length - 1] : null;
@@ -195,7 +220,7 @@ const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
   (raw, ref) => {
     const { className, asChild = false, children, ...props } = fromRenderProp(raw);
     const child =
-      asChild && React.isValidElement<React.HTMLAttributes<HTMLElement>>(children) ? children : null;
+      asChild ? resolveElement<React.HTMLAttributes<HTMLElement>>(children) : null;
     const childRef = child ? getElementRef<HTMLAnchorElement>(child) : undefined;
     const mergedRef = React.useCallback(
       (node: HTMLAnchorElement | null) => {
@@ -274,8 +299,8 @@ const BreadcrumbEllipsis = React.forwardRef<HTMLButtonElement, React.ButtonHTMLA
       type="button"
       aria-label="Show more"
       className={cn(
-        "inline-flex h-6 w-7 cursor-pointer items-center justify-center rounded-md text-white/45 outline-none",
-        "transition-[background-color,color,box-shadow] duration-150 ease-out active:scale-[0.97]",
+        "inline-flex h-6 w-7 cursor-pointer items-center justify-center rounded-md text-white/50 outline-none",
+        "transition-[background-color,color,box-shadow,transform] duration-150 ease-out active:scale-[0.97]",
         "hover:bg-[rgb(var(--neon)/0.1)] hover:text-[rgb(var(--neon))] hover:shadow-[0_0_12px_rgb(var(--neon)/0.2)]",
         "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
         "[&_svg]:size-4",

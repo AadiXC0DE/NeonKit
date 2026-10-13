@@ -14,7 +14,12 @@ export const doc: ComponentDoc = {
       description: "Change text and it scrambles into the new value.",
       component: ScrambleTextDemo,
     },
-    { name: "hover", title: "On hover", component: ScrambleTextHover },
+    {
+      name: "hover",
+      title: "On hover",
+      description: "Inside a link, hover and keyboard focus on the link both replay the decode.",
+      component: ScrambleTextHover,
+    },
     {
       name: "charsets",
       title: "Charsets",
@@ -28,7 +33,7 @@ export const doc: ComponentDoc = {
       description: "Also accepts native attributes for the element it renders.",
       props: [
         { prop: "text", type: "string", description: "The text it decodes into." },
-        { prop: "trigger", type: '"mount" | "hover" | "inView"', default: '"inView"', description: "When the decode runs. hover replays it on every pointer enter." },
+        { prop: "trigger", type: '"mount" | "hover" | "inView"', default: '"inView"', description: "When the decode runs. hover replays it each time the pointer enters the text, or the link or button around it, and on keyboard focus." },
         { prop: "duration", type: "number", default: "900", description: "Milliseconds from the start to the last character locking in." },
         { prop: "charset", type: '"upper" | "hex" | "binary" | "symbols" | string', default: '"upper"', description: "Glyphs it scrambles through." },
         { prop: "as", type: '"span" | "p" | "div" | "h1" | "h2" | "h3" | "h4"', default: '"span"', description: "Element to render." },

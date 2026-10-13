@@ -54,7 +54,8 @@ const [time, setTime] = React.useState("09:30")
         { prop: "locale", type: "string", default: "browser", description: "BCP 47 tag for the default clock, the AM/PM labels and their order." },
         { prop: "showSeconds", type: "boolean", default: "false", description: "Adds a seconds segment and includes seconds in the value." },
         { prop: "minuteStep", type: "number", default: "1", description: "How far the arrow keys and scrubbing move minutes. Typed minutes can be anything." },
-        { prop: "name", type: "string", description: "Submits the value with a surrounding form." },
+        { prop: "name", type: "string", description: "Submits the value with a surrounding form. A form reset puts back the starting time." },
+        { prop: "required", type: "boolean", default: "false", description: "Stops the submit until every segment is filled. A half-typed time gets its own message." },
         { prop: "leading", type: "ReactNode", default: "clock icon", description: "Shown before the time. Pass null to remove it." },
         { prop: "label", type: "ReactNode", description: "Visible label. Names the group, and clicking it focuses the first segment." },
         { prop: "description", type: "ReactNode", description: "Helper text under the field." },
@@ -71,6 +72,7 @@ const [time, setTime] = React.useState("09:30")
     },
   ],
   notes: [
+    "When the browser rejects the field on submit (required, type, pattern), it turns red until it's edited or the form resets. The browser shows its own message.",
     "The field is a group named by its label, and each part is a spinbutton with aria-valuenow, aria-valuemin, aria-valuemax and a spoken aria-valuetext (\"Empty\" when blank).",
     "Every segment is a Tab stop. Arrow Left and Right also move between them.",
     "Arrow Up and Down step with wrap-around, Home and End jump to the ends, Backspace clears a segment and then steps back, and Delete clears in place.",

@@ -87,16 +87,16 @@ export default function KnobDemo() {
   };
 
   return (
-    <div className="relative w-full max-w-[700px] rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,#151821,#0b0d12)] px-5 pb-7 pt-5 shadow-[inset_0_1px_0_rgb(255_255_255/0.07),0_30px_60px_-30px_rgb(0_0_0/0.9)] sm:px-7">
+    <div className="relative w-full max-w-[700px] rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,#151821,#0b0d12)] px-3 pb-7 pt-5 shadow-[inset_0_1px_0_rgb(255_255_255/0.07),0_30px_60px_-30px_rgb(0_0_0/0.9)] sm:px-7">
       <Screw className="left-2.5 top-2.5" />
       <Screw className="right-2.5 top-2.5" />
       <Screw className="bottom-2.5 left-2.5" />
       <Screw className="bottom-2.5 right-2.5" />
 
-      <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] pb-4">
+      <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] px-2 pb-4 sm:px-0">
         <div className="flex items-baseline gap-3">
           <span className="text-sm font-semibold tracking-[0.08em] text-white/85">NK-1</span>
-          <span className="hidden text-[10px] uppercase tracking-[0.2em] text-white/35 sm:inline">
+          <span className="hidden text-[10px] uppercase tracking-[0.2em] text-white/50 sm:inline">
             Monophonic synthesizer
           </span>
         </div>
@@ -114,9 +114,9 @@ export default function KnobDemo() {
       </div>
 
       <div className="mt-6 flex flex-wrap items-stretch justify-center gap-x-7 gap-y-8">
-        <section aria-label="Filter" className="flex flex-col justify-between gap-4">
-          <h3 className="text-[10px] font-medium uppercase tracking-[0.24em] text-white/35">Filter</h3>
-          <div className="flex items-end gap-5">
+        <section aria-label="Filter" className="flex w-full flex-col justify-between gap-4 sm:w-auto">
+          <h3 className="text-[10px] font-medium uppercase tracking-[0.24em] text-white/50">Filter</h3>
+          <div className="flex items-end justify-between gap-1.5 sm:justify-start sm:gap-5">
             {filter.map((p) => (
               <Knob
                 key={p.id}
@@ -134,10 +134,10 @@ export default function KnobDemo() {
           </div>
         </section>
         <span aria-hidden className="hidden w-px bg-white/[0.06] sm:block" />
-        <section aria-label="Amp envelope" className="flex flex-col justify-between gap-4">
-          <h3 className="text-[10px] font-medium uppercase tracking-[0.24em] text-white/35">Amp envelope</h3>
+        <section aria-label="Amp envelope" className="flex w-full flex-col justify-between gap-4 sm:w-auto">
+          <h3 className="text-[10px] font-medium uppercase tracking-[0.24em] text-white/50">Amp envelope</h3>
           <EnvelopeShape a={values.attack} d={values.decay} s={values.sustain} r={values.release} />
-          <div className="flex items-end gap-3.5">
+          <div className="flex items-end justify-around gap-3.5 sm:justify-start">
             {envelope.map((p) => (
               <Knob
                 key={p.id}

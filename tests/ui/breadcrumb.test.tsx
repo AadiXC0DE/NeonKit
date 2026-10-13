@@ -162,4 +162,45 @@ describe("Breadcrumb", () => {
     render(<BreadcrumbEllipsis />);
     expect(screen.getByRole("button", { name: "Show more" })).toHaveAttribute("type", "button");
   });
+
+  it("collapses children that a Server Component passes as lazy references", () => {
+    // Before a client module is linked, React hands its elements over with a lazy type.
+    const lazy = <T,>(component: T) =>
+      ({ $$typeof: Symbol.for("react.lazy"), _payload: component, _init: (value: T) => value }) as unknown as T;
+    const Item = lazy(BreadcrumbItem);
+    const Separator = lazy(BreadcrumbSeparator);
+
+    render(
+      <Breadcrumb maxItems={3}>
+        <BreadcrumbList>
+          {trail.map((label) => (
+            <React.Fragment key={label}>
+              <Item>
+                <BreadcrumbLink href={`#${label}`}>{label}</BreadcrumbLink>
+              </Item>
+              <Separator />
+            </React.Fragment>
+          ))}
+          <Item>
+            <BreadcrumbPage>Reverse charge</BreadcrumbPage>
+          </Item>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+
+    expect(screen.getByRole("button", { name: "Show 3 more items" })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Billing" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "EU VAT" })).toBeInTheDocument();
+  });
+
+  it("merges onto an asChild link passed as a lazy node", () => {
+    const anchor = <a href="/billing">Billing</a>;
+    const lazyNode = {
+      $$typeof: Symbol.for("react.lazy"),
+      _payload: anchor,
+      _init: (value: React.ReactElement) => value,
+    } as unknown as React.ReactElement;
+    render(<BreadcrumbLink asChild>{lazyNode}</BreadcrumbLink>);
+    expect(screen.getByRole("link", { name: "Billing" }).className).toContain("text-white/55");
+  });
 });

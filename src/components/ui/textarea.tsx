@@ -31,6 +31,35 @@ const sizes = {
   },
 } as const;
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 export interface TextareaProps
   extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "color"> {
   /** Palette name or any hex color. Inherits `--neon-accent` when omitted. */
@@ -75,6 +104,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       rows,
       disabled,
       readOnly,
+      required,
       onChange,
       "aria-describedby": ariaDescribedBy,
       ...props
@@ -83,12 +113,14 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ) => {
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
     React.useImperativeHandle(ref, () => textareaRef.current as HTMLTextAreaElement);
+    const rejected = useRejected(textareaRef);
 
     const autoId = React.useId();
     const id = idProp ?? autoId;
-    const invalid = Boolean(error);
-    const message = invalid ? (error === true ? null : error) : description;
-    const messageId = message ? `${id}-${invalid ? "error" : "description"}` : undefined;
+    const errored = Boolean(error);
+    const message = errored ? (error === true ? null : error) : description;
+    const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
+    const invalid = errored || rejected;
     const countId = showCount ? `${id}-count` : undefined;
     const s = sizes[size];
 
@@ -145,6 +177,26 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       return () => observer.disconnect();
     }, [autoResize, resize]);
 
+    // A form reset puts the text back without a change event, so re-read the count and height.
+    React.useEffect(() => {
+      const form = textareaRef.current?.form;
+      if (!form) return;
+      let frame = 0;
+      const onReset = () => {
+        frame = window.requestAnimationFrame(() => {
+          const el = textareaRef.current;
+          if (!el) return;
+          if (value === undefined) setUncontrolledLength(el.value.length);
+          resize();
+        });
+      };
+      form.addEventListener("reset", onReset);
+      return () => {
+        form.removeEventListener("reset", onReset);
+        window.cancelAnimationFrame(frame);
+      };
+    }, [value, resize]);
+
     function handleChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
       onChange?.(event);
       if (value === undefined) setUncontrolledLength(event.target.value.length);
@@ -158,14 +210,18 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     }
 
     return (
-      <div className={cn("grid w-full gap-1.5", containerClassName)}>
+      <div
+        style={neonVars(color)}
+        className={cn("[--neon:var(--neon-accent,34_211_238)]", "grid w-full gap-1.5", containerClassName)}
+      >
         {label && (
           <label htmlFor={id} className={cn("w-fit font-medium text-white/80", s.label)}>
             {label}
+            {required && <RequiredDot />}
           </label>
         )}
         <div
-          style={neonVars(invalid ? INVALID : color, style)}
+          style={invalid ? neonVars(INVALID, style) : style}
           onMouseDown={handleMouseDown}
           className={cn(
             "[--neon:var(--neon-accent,34_211_238)]",
@@ -190,13 +246,14 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             rows={autoResize ? minRows : (rows ?? minRows)}
             disabled={disabled}
             readOnly={readOnly}
+            required={required}
             onChange={handleChange}
             aria-invalid={invalid || undefined}
             aria-describedby={
               [ariaDescribedBy, messageId, countId].filter(Boolean).join(" ") || undefined
             }
             className={cn(
-              "block w-full min-w-0 bg-transparent text-inherit outline-none placeholder:text-white/30",
+              "block w-full min-w-0 bg-transparent text-inherit outline-none placeholder:text-white/50",
               "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin] disabled:cursor-not-allowed",
               autoResize ? "resize-none overflow-hidden" : "resize-y",
               s.textarea,
@@ -214,7 +271,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               <span
                 className={cn(
                   "transition-colors duration-200",
-                  tone === "idle" && "text-white/35",
+                  tone === "idle" && "text-white/50",
                   tone === "near" && "text-[#fbbf24]",
                   tone === "limit" && "text-[#ff4d5e]",
                 )}
@@ -234,7 +291,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {message && (
           <p
             id={messageId}
-            className={cn("text-xs leading-5", invalid ? "text-[#ff4d5e]" : "text-white/55")}
+            className={cn("text-xs leading-5", errored ? "text-[#ff4d5e]" : "text-white/55")}
           >
             {message}
           </p>
@@ -244,5 +301,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   },
 );
 Textarea.displayName = "Textarea";
+
+/** The neon dot Field's Label uses, so required fields read the same everywhere. */
+function RequiredDot() {
+  return (
+    <span
+      aria-hidden
+      title="Required"
+      className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+    />
+  );
+}
 
 export { Textarea };

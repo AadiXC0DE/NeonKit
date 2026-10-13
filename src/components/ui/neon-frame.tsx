@@ -163,7 +163,8 @@ const NeonFrame = React.forwardRef<HTMLElement, NeonFrameProps>(
         id={primary ? labelId : undefined}
         className={cn(
           "nk-neon-frame-tab absolute z-10 inline-flex h-5 items-center gap-1.5 whitespace-nowrap border bg-[#07080c] px-2",
-          "font-mono text-[10px] font-medium uppercase leading-none tracking-[0.16em]",
+          // Set in the body face and left in the case it's given; wrap readings in font-mono yourself.
+          "text-[11px] font-medium leading-none tracking-[0.01em]",
           side === "top" ? "top-0" : "bottom-0",
           edge === "left" ? "left-[calc(var(--nk-arm)+10px)]" : "right-[calc(var(--nk-arm)+10px)]",
           primary

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Circle, CircleCheck, CircleDashed, CircleDot, CircleDotDashed, CircleX } from "lucide-react";
+import { Circle, CircleCheck, CircleDashed, CircleDot, CircleDotDashed, CircleX } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";

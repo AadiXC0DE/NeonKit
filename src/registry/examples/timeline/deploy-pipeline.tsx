@@ -1,4 +1,4 @@
-import { GitCommitHorizontal, Globe, Hammer, Rocket, ShieldCheck } from "lucide-react";
+import { GitCommitHorizontal, Globe, Hammer, Rocket, ShieldCheck } from "@/components/ui/icons";
 import { Timeline, TimelineItem } from "@/components/ui/timeline";
 
 export default function TimelineDeployPipeline() {

@@ -4,7 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { autoUpdate, flip, offset, shift, size as fitToViewport, useFloating } from "@floating-ui/react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -50,6 +50,35 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 export interface SelectProps
   extends Omit<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -65,6 +94,8 @@ export interface SelectProps
   size?: keyof typeof sizes;
   /** Submits the value under this name with a surrounding form. */
   name?: string;
+  /** Blocks form submission until something is picked, with the browser's own message. */
+  required?: boolean;
   label?: React.ReactNode;
   /** Helper text under the trigger. Hidden while `error` is set. */
   description?: React.ReactNode;
@@ -87,6 +118,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
       color,
       size = "md",
       name,
+      required = false,
       label,
       description,
       error,
@@ -117,14 +149,36 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
     const listboxId = `${id}-listbox`;
     const optionId = (index: number) => `${id}-option-${index}`;
 
-    const invalid = Boolean(error);
-    const message = invalid ? (error === true ? null : error) : description;
-    const messageId = message ? `${id}-${invalid ? "error" : "description"}` : undefined;
+    const errored = Boolean(error);
+    const message = errored ? (error === true ? null : error) : description;
+    const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
     const s = sizes[size];
     const reduceMotion = useReducedMotion();
 
     const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
     const selectedValue = value !== undefined ? value : uncontrolledValue;
+
+    // A form reset goes back to the value the select started with.
+    const proxyRef = React.useRef<HTMLInputElement>(null);
+    const rejected = useRejected(proxyRef, selectedValue ?? "");
+    const invalid = errored || rejected;
+    const initialValue = React.useRef(selectedValue);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialValue.current;
+        if (initial === selectedValue) return;
+        if (value === undefined) setUncontrolledValue(initial);
+        if (initial !== undefined) onValueChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = proxyRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
     const selectedIndex = options.findIndex((option) => option.value === selectedValue);
     const selected = selectedIndex >= 0 ? options[selectedIndex] : undefined;
 
@@ -332,6 +386,13 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             className={cn("w-fit font-medium text-white/80", s.label)}
           >
             {label}
+            {required && (
+              <span
+                aria-hidden
+                title="Required"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+              />
+            )}
           </label>
         )}
         <div className="relative">
@@ -352,6 +413,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             aria-labelledby={label ? labelId : ariaLabelledBy}
             aria-describedby={[ariaDescribedBy, messageId].filter(Boolean).join(" ") || undefined}
             aria-invalid={invalid || undefined}
+            aria-required={required || undefined}
             data-state={isOpen ? "open" : "closed"}
             data-placeholder={selected ? undefined : ""}
             style={invalid ? neonVars(INVALID, style) : style}
@@ -396,7 +458,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             {selected?.icon && (
               <span className="flex shrink-0 items-center text-white/50">{selected.icon}</span>
             )}
-            <span className={cn("min-w-0 flex-1 truncate", !selected && "text-white/55")}>
+            <span className={cn("min-w-0 flex-1 truncate", !selected && "text-white/50")}>
               {selected ? selected.label : placeholder}
             </span>
             <ChevronDown
@@ -407,6 +469,21 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               )}
             />
           </button>
+
+          {/* Carries the value into forms. It sits under the trigger so the browser's
+              "please select" bubble points at the right place, and hands focus on. */}
+          <input
+            ref={proxyRef}
+            aria-hidden
+            tabIndex={-1}
+            name={name}
+            value={selectedValue ?? ""}
+            required={required}
+            disabled={disabled}
+            onChange={() => {}}
+            onFocus={() => triggerRef.current?.focus()}
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-px w-full opacity-0"
+          />
 
           {isClient &&
             createPortal(
@@ -470,7 +547,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                             <span
                               className={cn(
                                 "flex shrink-0 items-center",
-                                isSelected ? "text-[rgb(var(--neon))]" : "text-white/45",
+                                isSelected ? "text-[rgb(var(--neon))]" : "text-white/50",
                               )}
                             >
                               {option.icon}
@@ -483,7 +560,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                                 className={cn(
                                   "truncate",
                                   s.hint,
-                                  active ? "text-white/55" : "text-white/40",
+                                  active ? "text-white/60" : "text-white/50",
                                 )}
                               >
                                 {option.description}
@@ -506,11 +583,10 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               document.body,
             )}
         </div>
-        {name && <input type="hidden" name={name} value={selectedValue ?? ""} disabled={disabled} />}
         {message && (
           <p
             id={messageId}
-            className={cn("text-xs leading-5", invalid ? "text-[#ff4d5e]" : "text-white/55")}
+            className={cn("text-xs leading-5", errored ? "text-[#ff4d5e]" : "text-white/55")}
           >
             {message}
           </p>

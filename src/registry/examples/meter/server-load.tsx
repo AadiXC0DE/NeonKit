@@ -22,7 +22,7 @@ export default function MeterServerLoad() {
     <div className="w-full max-w-sm rounded-xl border border-white/10 bg-white/[0.03] p-4">
       <div className="mb-4 flex items-center justify-between">
         <p className="text-sm font-medium text-white/90">edge-fra-02</p>
-        <p className="font-mono text-[11px] text-white/45">updated every 1 s</p>
+        <p className="text-xs text-white/50">Updated every second</p>
       </div>
       <div className="grid gap-3">
         {resources.map((resource, i) => {

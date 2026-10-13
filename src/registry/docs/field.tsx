@@ -3,6 +3,7 @@ import FieldDemo from "../examples/field/demo";
 import FieldCustomControl from "../examples/field/custom-control";
 import FieldValidation from "../examples/field/validation";
 import FieldBuildingBlocks from "../examples/field/building-blocks";
+import FieldForm from "../examples/field/form";
 
 export const doc: ComponentDoc = {
   usage: `import { Field } from "@/components/ui/field"
@@ -18,6 +19,13 @@ import { Switch } from "@/components/ui/switch"
       description:
         "One Field wraps a Switch, a native select and a Slider. Each control gets its id, label and description wired without extra props.",
       component: FieldDemo,
+    },
+    {
+      name: "form",
+      title: "In a form",
+      description:
+        "Every NeonKit control submits under its name and goes back to its starting value on reset. Required ones stop an empty submit with the browser's own message. Send it empty, then fill it in.",
+      component: FieldForm,
     },
     {
       name: "custom-control",

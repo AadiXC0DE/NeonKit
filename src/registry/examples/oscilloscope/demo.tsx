@@ -39,7 +39,7 @@ export default function OscilloscopeDemo() {
 
       <div className="mt-4 grid gap-5 px-1 pb-1 sm:grid-cols-[auto_1fr_1fr] sm:items-end">
         <div className="grid gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">Waveform</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">Waveform</span>
           <ToggleGroup
             size="sm"
             aria-label="Waveform"
@@ -56,8 +56,8 @@ export default function OscilloscopeDemo() {
           </ToggleGroup>
         </div>
         <div className="grid gap-3">
-          <span className="flex justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
-            Cycles <span className="tabular-nums text-white/60">{cycles.toFixed(1)}</span>
+          <span className="flex justify-between text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">
+            Cycles <span className="font-mono font-normal normal-case tracking-normal tabular-nums text-white/70">{cycles.toFixed(1)}</span>
           </span>
           <Slider
             size="sm"
@@ -70,8 +70,8 @@ export default function OscilloscopeDemo() {
           />
         </div>
         <div className="grid gap-3">
-          <span className="flex justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
-            Amplitude <span className="tabular-nums text-white/60">{Math.round(amplitude * 100)}%</span>
+          <span className="flex justify-between text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">
+            Amplitude <span className="font-mono font-normal normal-case tracking-normal tabular-nums text-white/70">{Math.round(amplitude * 100)}%</span>
           </span>
           <Slider
             size="sm"

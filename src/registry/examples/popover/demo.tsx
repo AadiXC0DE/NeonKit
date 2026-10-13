@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, Copy, Link2, Share2 } from "lucide-react";
+import { Check, Copy, Link2, Share2 } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -81,7 +81,7 @@ export default function PopoverDemo() {
                 <p className="truncate text-[13px] text-white/85">{person.name}</p>
                 <p className="truncate text-xs text-white/40">{person.email}</p>
               </div>
-              <span className="shrink-0 text-xs text-white/45">{person.access}</span>
+              <span className="shrink-0 text-xs text-white/50">{person.access}</span>
             </li>
           ))}
         </ul>

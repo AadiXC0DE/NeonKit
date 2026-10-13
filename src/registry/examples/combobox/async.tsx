@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { PlaneTakeoff } from "lucide-react";
+import { PlaneTakeoff } from "@/components/ui/icons";
 import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 
 const airports = [

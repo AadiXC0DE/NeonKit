@@ -14,7 +14,7 @@ export default function HardwareSwitchVariants() {
       {variants.map((v, i) => (
         <div key={v.variant} className="flex flex-col items-center gap-3">
           <HardwareSwitch variant={v.variant} label={v.label} defaultChecked={i === 0} />
-          <span className="text-xs text-white/40">{v.note}</span>
+          <span className="text-[13px] text-white/55">{v.note}</span>
         </div>
       ))}
     </div>

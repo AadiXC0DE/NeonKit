@@ -510,7 +510,7 @@ const SplitFlapBoard = React.forwardRef<HTMLDivElement, SplitFlapBoardProps>(
                   key={index}
                   role="columnheader"
                   className={cn(
-                    "shrink-0 truncate font-mono text-[10px] font-medium uppercase leading-4 tracking-[0.16em] text-white/45",
+                    "shrink-0 truncate text-[10px] font-semibold uppercase leading-4 tracking-[0.14em] text-white/50",
                     column.align === "right" && "text-right",
                     column.className,
                   )}

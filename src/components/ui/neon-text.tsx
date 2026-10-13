@@ -6,12 +6,17 @@ import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+// Light is sized in em so a 14px caption and a 96px headline burn alike:
+// a near-white core, a tight colored body and a wide, faint halo.
 const lit =
-  "[color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] [text-shadow:0_0_1px_rgb(255_255_255/0.9),0_0_6px_rgb(var(--neon)),0_0_16px_rgb(var(--neon)),0_0_38px_rgb(var(--neon)/0.75),0_0_80px_rgb(var(--neon)/0.45)]";
-const unlit = "text-[rgb(var(--neon)/0.16)] [text-shadow:0_1px_0_rgb(255_255_255/0.06)]";
+  "[color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] [text-shadow:0_0_0.015em_rgb(255_255_255/0.9),0_0_max(1.5px,0.05em)_rgb(var(--neon)),0_0_max(4px,0.14em)_rgb(var(--neon)),0_0_0.38em_rgb(var(--neon)/0.7),0_0_0.9em_rgb(var(--neon)/0.4)]";
+// Unlit, it is tinted glass with a faint highlight along the top of the tube.
+const unlit = "text-[rgb(var(--neon)/0.16)] [text-shadow:0_-0.014em_0_rgb(255_255_255/0.08)]";
 
 // Opacity keyframes for a tube catching: a couple of stutters, then steady.
-const powerOn = [0, 1, 0.1, 0.9, 0.25, 1, 1];
+// Starts from the faint unlit-glass level, so the letters are on screen before the tubes strike.
+const UNLIT = 0.12;
+const powerOn = [UNLIT, 1, 0.1, 0.9, 0.25, 1, 1];
 const powerOnTimes = [0, 0.1, 0.18, 0.3, 0.38, 0.55, 1];
 
 export interface NeonTextProps
@@ -107,17 +112,21 @@ const NeonText = React.forwardRef<HTMLElement, NeonTextProps>(
                 <motion.span
                   key={`${i}-${on}`}
                   className="inline-block whitespace-pre"
-                  initial={on && flicker && !reduceMotion ? { opacity: 0 } : false}
+                  // The server can't know the motion preference, so every first render starts as
+                  // unlit glass; under reduced motion the letters then light at once.
+                  initial={on && flicker ? { opacity: UNLIT } : false}
                   animate={animateLetter(i)}
                   transition={
                     buzzing === i
                       ? { duration: 0.6, ease: "linear" }
-                      : {
-                          duration: 0.9,
-                          delay: delays[i],
-                          times: powerOnTimes,
-                          ease: "linear",
-                        }
+                      : reduceMotion
+                        ? { duration: 0 }
+                        : {
+                            duration: 0.9,
+                            delay: delays[i],
+                            times: powerOnTimes,
+                            ease: "linear",
+                          }
                   }
                 >
                   {char}

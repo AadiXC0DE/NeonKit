@@ -44,7 +44,7 @@ describe.each(blocks.map((block) => [block.slug, block] as const))("%s", (slug, 
   it("only imports what a copied file can resolve", () => {
     const imports = [...source.matchAll(/from\s+["']([^"']+)["']/g)].map((match) => match[1]);
     for (const specifier of imports) {
-      expect(specifier, specifier).toMatch(/^(react|lucide-react|motion\/react|@\/lib\/(utils|neon)|@\/components\/ui\/[a-z0-9-]+)$/);
+      expect(specifier, specifier).toMatch(/^(react|motion\/react|@\/lib\/(utils|neon)|@\/components\/ui\/[a-z0-9-]+)$/);
     }
   });
 

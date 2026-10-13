@@ -35,23 +35,47 @@ function step(car: Car): Car {
 export default function GaugeDemo() {
   const [car, setCar] = React.useState<Car>({ speed: 0, rpm: 0, gear: 0, phase: "idle", clock: 0 });
 
+  const rootRef = React.useRef<HTMLDivElement>(null);
+
   React.useEffect(() => {
-    // Ignition: every needle sweeps to the stop and back, then the engine idles.
+    const node = rootRef.current;
+    if (!node) return;
     let interval = 0;
-    const sweep = window.setTimeout(() => setCar((c) => ({ ...c, speed: 260, rpm: 8 })), 150);
-    const settle = window.setTimeout(() => {
-      setCar({ speed: 0, rpm: IDLE, gear: 0, phase: "idle", clock: 0 });
-      interval = window.setInterval(() => setCar(step), 100);
-    }, 850);
+    let sweep = 0;
+    let settle = 0;
+    let ignited = false;
+    let visible = false;
+    const drive = () => {
+      if (visible && !interval) interval = window.setInterval(() => setCar(step), 100);
+    };
+    const park = () => {
+      window.clearInterval(interval);
+      interval = 0;
+    };
+    // Ignition the first time the cluster comes into view: every needle sweeps
+    // to the stop and back, then the engine idles. Off screen, the car waits.
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (!visible) return park();
+      if (ignited) return drive();
+      ignited = true;
+      sweep = window.setTimeout(() => setCar((c) => ({ ...c, speed: 260, rpm: 8 })), 150);
+      settle = window.setTimeout(() => {
+        setCar({ speed: 0, rpm: IDLE, gear: 0, phase: "idle", clock: 0 });
+        drive();
+      }, 850);
+    });
+    io.observe(node);
     return () => {
+      io.disconnect();
       window.clearTimeout(sweep);
       window.clearTimeout(settle);
-      window.clearInterval(interval);
+      park();
     };
   }, []);
 
   return (
-    <div className="relative w-full max-w-[680px] rounded-[40px] border border-white/[0.06] bg-[radial-gradient(ellipse_at_50%_0%,#161a22,#07080c_70%)] px-6 pb-8 pt-7 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),inset_0_-20px_40px_-20px_rgb(0_0_0/0.8),0_30px_60px_-30px_rgb(0_0_0/0.9)]">
+    <div ref={rootRef} className="relative w-full max-w-[680px] rounded-[40px] border border-white/[0.06] bg-[radial-gradient(ellipse_at_50%_0%,#161a22,#07080c_70%)] px-6 pb-8 pt-7 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),inset_0_-20px_40px_-20px_rgb(0_0_0/0.8),0_30px_60px_-30px_rgb(0_0_0/0.9)]">
       <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-6">
         <Gauge
           label="×1000 r/min"
@@ -63,14 +87,14 @@ export default function GaugeDemo() {
           formatValue={(v) => String(Math.round((v * 1000) / 50) * 50)}
         />
         <div className="flex w-24 flex-col items-center gap-3">
-          <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/40">Gear</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50">Gear</span>
           <span
             aria-live="off"
             className="text-5xl font-semibold tabular-nums leading-none [color:color-mix(in_srgb,rgb(var(--neon-accent,34_211_238))_30%,white)] [text-shadow:0_0_8px_rgb(var(--neon-accent,34_211_238)),0_0_22px_rgb(var(--neon-accent,34_211_238)/0.6)]"
           >
             {car.gear === 0 ? "N" : car.gear}
           </span>
-          <span className="font-mono text-[11px] tabular-nums text-white/40">
+          <span className="text-xs text-white/55">
             {car.phase === "brake" ? "Braking" : car.phase === "idle" ? "Idle" : car.phase === "cruise" ? "Cruise" : "Launch"}
           </span>
         </div>

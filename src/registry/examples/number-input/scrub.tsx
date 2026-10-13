@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { RotateCw } from "lucide-react";
+import { RotateCw } from "@/components/ui/icons";
 import { NumberInput } from "@/components/ui/number-input";
 
 const grip = "w-3 text-center font-mono text-[11px] font-medium";
@@ -13,7 +13,7 @@ export default function NumberInputScrub() {
 
   return (
     <div className="grid w-full max-w-sm gap-3 rounded-xl border border-white/10 bg-[#0a0b11] p-3">
-      <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-white/40">Frame</p>
+      <p className="text-[13px] font-medium text-white/70">Frame</p>
       <div className="grid grid-cols-2 gap-2">
         <NumberInput size="sm" aria-label="X position" leading={<span className={grip}>X</span>} value={frame.x} onValueChange={set("x")} />
         <NumberInput size="sm" aria-label="Y position" leading={<span className={grip}>Y</span>} value={frame.y} onValueChange={set("y")} />

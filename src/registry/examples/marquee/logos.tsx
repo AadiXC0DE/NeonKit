@@ -1,4 +1,4 @@
-import { Hexagon, Mountain, Orbit, Triangle, Waves, Zap } from "lucide-react";
+import { Hexagon, Mountain, Orbit, Triangle, Waves, Zap } from "@/components/ui/icons";
 import { Marquee } from "@/components/ui/marquee";
 
 const companies = [
@@ -16,7 +16,7 @@ export default function MarqueeLogos() {
       <p className="text-center text-sm text-white/50">Lighting up dashboards at</p>
       <Marquee speed={30} gap={56} fade={96} className="mt-6 py-2">
         {companies.map(({ name, icon: Icon }) => (
-          <span key={name} className="flex items-center gap-2 whitespace-nowrap text-lg font-medium tracking-tight text-white/45">
+          <span key={name} className="flex items-center gap-2 whitespace-nowrap text-lg font-medium tracking-tight text-white/55">
             <Icon className="size-5" strokeWidth={1.75} />
             {name}
           </span>

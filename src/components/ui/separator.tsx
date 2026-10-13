@@ -158,7 +158,7 @@ const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
                 "shrink-0 text-xs leading-4",
                 variant === "tube"
                   ? "font-medium text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.55)]"
-                  : "text-white/45",
+                  : "text-white/50",
               )}
             >
               {label}

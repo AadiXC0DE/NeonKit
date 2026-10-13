@@ -25,7 +25,7 @@ export const doc: ComponentDoc = {
       name: "bar-sign",
       title: "Script",
       description:
-        "Signs look best in a monoline face. This one loads Neonderthaw with next/font; Tilt Neon and Sacramento work too.",
+        "Signs look best in a monoline face. This one pulls Neonderthaw from Google Fonts with a stylesheet link; next/font, Tilt Neon or Sacramento work as well.",
       component: NeonSignBarSign,
     },
     {

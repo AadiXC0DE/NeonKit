@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, Play, RotateCcw } from "lucide-react";
+import { Check, Play, RotateCcw } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { queue, type QueuedDeploy } from "../data";
@@ -108,7 +108,7 @@ function Timeline({ night }: { night: NightRun }) {
           />
         ))}
       </div>
-      <div className="mt-2.5 flex justify-between font-mono text-[10px] tabular-nums text-white/60">
+      <div className="mt-2.5 flex justify-between font-mono text-[11px] tabular-nums text-white/50">
         {TICKS.map((tick) => (
           <span key={tick}>{tick}</span>
         ))}
@@ -122,25 +122,22 @@ export function QueuePanel({ night }: { night: NightRun }) {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex items-center justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">
-        <span>
-          Tonight
-          <span className="hidden sm:inline">
-            <span className="text-white/30"> · </span>production
-          </span>
-        </span>
+      <div className="flex items-baseline justify-between gap-3 text-[13px] text-white/55">
+        <span>Tonight on production</span>
         <span className="tabular-nums">
           {status === "idle" ? (
             <>
-              {queue.length} queued <span className="text-white/30">·</span> 02:00
+              {queue.length} queued for <span className="font-mono text-white/85">02:00</span>
             </>
           ) : (
-            <span className={cn(status === "running" && "text-white/90")}>{formatClock(clock)}</span>
+            <span className={cn("font-mono", status === "running" ? "text-white" : "text-white/85")}>
+              {formatClock(clock)}
+            </span>
           )}
         </span>
       </div>
 
-      <ol className="mt-5 overflow-hidden rounded-xl border border-white/[0.07] bg-[#07080c]">
+      <ol className="-mx-5 mt-3 flex flex-1 flex-col border-y border-white/[0.07] sm:-mx-7">
         {queue.map((deploy, i) => {
           const phase = phases[i];
           const bad = failing(deploy, phase);
@@ -150,7 +147,7 @@ export function QueuePanel({ night }: { night: NightRun }) {
             <li
               key={deploy.sha}
               className={cn(
-                "relative border-b border-white/[0.06] px-3.5 py-3.5 transition-colors duration-300 last:border-b-0 sm:px-5 sm:py-[18px]",
+                "relative flex flex-1 flex-col justify-center border-b border-white/[0.06] px-5 py-3.5 transition-colors duration-300 last:border-b-0 sm:px-7 sm:py-4",
                 bad ? "bg-[rgb(255_77_94/0.06)]" : live && "bg-[rgb(var(--neon)/0.05)]",
               )}
             >
@@ -161,7 +158,7 @@ export function QueuePanel({ night }: { night: NightRun }) {
                     <span className="whitespace-nowrap text-white/90">{deploy.service}</span>
                     <span className="text-white/60">{deploy.sha}</span>
                   </p>
-                  <p className="mt-0.5 truncate text-[13px] leading-5 text-white/60">
+                  <p className="mt-0.5 truncate text-[13px] leading-5 text-white/55">
                     {deploy.message}
                     <span className="hidden sm:inline">
                       <span className="text-white/30"> · </span>
@@ -169,7 +166,7 @@ export function QueuePanel({ night }: { night: NightRun }) {
                     </span>
                   </p>
                 </div>
-                <span className="w-[6.25rem] shrink-0 text-right font-mono text-[11px] leading-5 tabular-nums sm:w-[7.5rem] sm:text-[12px]">
+                <span className="w-[6.5rem] shrink-0 text-right text-[12px] leading-5 sm:w-[7.5rem] sm:text-[13px]">
                   <Status deploy={deploy} phase={phase} />
                 </span>
               </div>
@@ -193,11 +190,11 @@ export function QueuePanel({ night }: { night: NightRun }) {
 
       <Timeline night={night} />
 
-      <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-3 pt-5">
-        <p aria-live="polite" className="min-h-5 min-w-0 flex-1 basis-56 font-mono text-[11px] leading-5 text-white/60">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 pt-5">
+        <p aria-live="polite" className="min-h-5 min-w-0 flex-1 basis-56 text-[13px] leading-5 text-white/55">
           {night.event || "Simulated. Nothing leaves this page."}
         </p>
-        <Button variant="outline" size="sm" onClick={run} disabled={status === "running"} className="shrink-0">
+        <Button variant={status === "idle" ? "solid" : "outline"} size="sm" onClick={run} disabled={status === "running"} className="shrink-0">
           {status === "done" ? <RotateCcw aria-hidden /> : <Play aria-hidden />}
           {status === "running" ? "Window open" : status === "done" ? "Run it again" : "Run tonight's window"}
         </Button>

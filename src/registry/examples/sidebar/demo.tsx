@@ -13,7 +13,7 @@ import {
   RefreshCcw,
   SquareKanban,
   UserRoundCheck,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
@@ -128,7 +128,7 @@ function Workspace() {
       </span>
       <span className={cn("grid min-w-0 flex-1 transition-opacity duration-200", collapsed && "md:opacity-0")}>
         <span className="truncate text-sm font-medium text-white/90">Orbit</span>
-        <span className="truncate text-xs text-white/45">Lumen Labs</span>
+        <span className="truncate text-xs text-white/50">Lumen Labs</span>
       </span>
       <ChevronsUpDown
         aria-hidden
@@ -149,7 +149,7 @@ function Account() {
       <Avatar alt="" fallback="MO" size="sm" status="online" />
       <span className={cn("grid min-w-0 flex-1 transition-opacity duration-200", collapsed && "md:opacity-0")}>
         <span className="truncate text-sm text-white/90">Mira Okafor</span>
-        <span className="truncate text-xs text-white/45">mira@lumenlabs.dev</span>
+        <span className="truncate text-xs text-white/50">mira@lumenlabs.dev</span>
       </span>
       <ChevronsUpDown
         aria-hidden

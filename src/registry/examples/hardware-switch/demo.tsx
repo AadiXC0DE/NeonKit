@@ -76,8 +76,8 @@ export default function HardwareSwitchDemo() {
         />
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-black/60 bg-[#07080b] px-4 py-2.5 font-mono text-[11px] uppercase tracking-[0.12em] shadow-[inset_0_1px_4px_rgb(0_0_0/0.9),0_1px_0_rgb(255_255_255/0.05)]">
-        <span className="text-white/40">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-black/60 bg-[#07080b] px-4 py-2.5 font-mono text-xs shadow-[inset_0_1px_4px_rgb(0_0_0/0.9),0_1px_0_rgb(255_255_255/0.05)]">
+        <span className="text-white/50">
           DC bus{" "}
           <span
             className={cn(
@@ -90,7 +90,7 @@ export default function HardwareSwitchDemo() {
             {volts.toFixed(1)} V
           </span>
         </span>
-        <span className={cn("transition-colors duration-200", running ? "text-white/80" : "text-white/30")}>
+        <span className={cn("transition-colors duration-200", running ? "text-white/85" : "text-white/50")}>
           {running ? "Engine running" : canStart ? "Ready to start" : on.battery ? "Fuel pump off" : "Battery off"}
         </span>
       </div>

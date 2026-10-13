@@ -41,7 +41,8 @@ const kinds: Record<TerminalLine["kind"], string> = {
   output: "text-white/55",
   success: "text-[rgb(52_211_153)]",
   error: "text-[rgb(255_77_94)]",
-  comment: "text-white/45",
+  // Dimmer than output but still AA on the terminal's glass.
+  comment: "text-white/50",
 };
 
 function Caret({ blink, className }: { blink: boolean; className?: string }) {
@@ -209,23 +210,26 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
       >
         <style>{css}</style>
         <div className="relative flex h-9 items-center gap-3 border-b border-white/[0.06] px-3.5">
-          <span aria-hidden className="flex gap-1.5">
+          <span aria-hidden className="flex w-16 gap-1.5">
             <span className="size-2.5 rounded-full bg-white/[0.08] shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" />
             <span className="size-2.5 rounded-full bg-white/[0.08] shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" />
             <span className="size-2.5 rounded-full bg-white/[0.08] shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" />
           </span>
-          <span className="min-w-0 flex-1 truncate text-center text-[11px] uppercase tracking-[0.16em] text-white/60">
-            {title}
-          </span>
-          <span className="flex w-[46px] justify-end">
-            {done && !loop && !reduced && (
+          <span className="min-w-0 flex-1 truncate text-center text-xs text-white/55">{title}</span>
+          <span className="flex w-16 justify-end">
+            {!loop && !reduced && (
+              // Stays mounted while the session replays, so a keyboard user keeps focus on it.
               <button
                 type="button"
+                tabIndex={done ? 0 : -1}
                 onClick={() => {
                   setStep(0);
                   setRun((n) => n + 1);
                 }}
-                className="cursor-pointer rounded-md px-1.5 py-1 text-[10px] uppercase tracking-[0.14em] text-white/55 outline-none transition-colors hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className={cn(
+                  "-mr-1.5 inline-flex h-6 cursor-pointer items-center rounded-md px-1.5 font-sans text-xs font-medium text-white/60 outline-none transition-[color,background-color,opacity] duration-150 hover:bg-white/[0.06] hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
+                  !done && "pointer-events-none opacity-0 focus-visible:opacity-100",
+                )}
               >
                 Replay
               </button>

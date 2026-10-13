@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { HardwareSwitch } from "@/components/ui/hardware-switch";
 import { NeonSign } from "@/components/ui/neon-sign";
@@ -126,7 +126,7 @@ export default function CtaSign() {
         <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(transparent,#05060a)]" />
       </div>
 
-      <div className="mx-auto grid max-w-[1180px] items-center gap-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,420px)] xl:gap-12">
+      <div className="mx-auto grid max-w-[1180px] items-center gap-16 xl:grid-cols-[minmax(0,1fr)_minmax(0,440px)] xl:gap-12">
         <div className="relative flex flex-col items-center gap-12 sm:flex-row sm:items-end sm:gap-10">
           <NeonSign
             ref={signRef}
@@ -149,24 +149,24 @@ export default function CtaSign() {
         </div>
 
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">The Late Shift · Lisbon</p>
           <h2
             id="cta-sign-title"
             className={cn(
-              "mt-5 max-w-[14ch] text-balance text-[clamp(2.4rem,4.6vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] transition-colors duration-700",
+              "text-[clamp(2.75rem,5.4vw,4.5rem)] font-[620] leading-[0.96] tracking-[-0.04em] transition-colors duration-700 [font-stretch:112%]",
               on ? "text-white" : "text-white/25",
             )}
           >
-            Your table is still open at 1:40am.
+            <span className="block">Still open</span>
+            <span className="block">at 1:40am.</span>
           </h2>
           <p
             className={cn(
-              "mt-6 max-w-[44ch] text-pretty text-[15px] leading-relaxed transition-colors duration-700",
-              on ? "text-white/60" : "text-white/20",
+              "mt-6 max-w-[44ch] text-pretty text-[17px] leading-[1.6] transition-colors duration-700",
+              on ? "text-white/60" : "text-white/25",
             )}
           >
-            Book bars and kitchens that stay open past midnight. No deposit under six people, and you can cancel up
-            to 30 minutes before.
+            The Late Shift books Lisbon&apos;s bars and kitchens that stay open past midnight. No deposit under six
+            people, and you can cancel up to 30 minutes before.
           </p>
 
           <div className="relative">
@@ -189,14 +189,14 @@ export default function CtaSign() {
               <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-white/[0.08] pt-5">
                 {TONIGHT.map((stat) => (
                   <div key={stat.label} className="flex flex-col-reverse justify-end">
-                    <dt className="mt-1 font-mono text-[11px] leading-snug text-white/55">{stat.label}</dt>
-                    <dd className="text-xl font-semibold tabular-nums tracking-[-0.02em] text-white">{stat.value}</dd>
+                    <dt className="mt-1 text-[13px] leading-snug text-white/55">{stat.label}</dt>
+                    <dd className="text-[26px] font-[620] leading-tight tracking-[-0.035em] text-white [font-stretch:112%]">{stat.value}</dd>
                   </div>
                 ))}
               </dl>
             </div>
             {!on && (
-              <p className="absolute left-0 top-9 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+              <p className="absolute left-0 top-9 text-[14px] text-white/60">
                 Closed. Flip the switch.
               </p>
             )}

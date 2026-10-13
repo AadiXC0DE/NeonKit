@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Building2, GitBranch, UserRound, UsersRound } from "lucide-react";
+import { Building2, GitBranch, UserRound, UsersRound } from "@/components/ui/icons";
 import { Step, Stepper } from "@/components/ui/stepper";
 
 const steps = [

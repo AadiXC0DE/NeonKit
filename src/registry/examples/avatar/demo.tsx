@@ -18,7 +18,7 @@ export default function AvatarDemo() {
           <Avatar src={member.src} alt={member.name} status={member.status} />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-white/90">{member.name}</p>
-            <p className="truncate text-xs text-white/45">{member.role}</p>
+            <p className="truncate text-xs text-white/50">{member.role}</p>
           </div>
           <span className="shrink-0 text-xs text-white/40">{member.note}</span>
         </li>

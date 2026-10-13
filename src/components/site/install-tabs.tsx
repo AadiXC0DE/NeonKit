@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { CodeFrame } from "./code-frame";
+import { CopyButton } from "./copy-button";
 
 export type Highlighted = { code: string; html: string };
 
@@ -45,14 +45,16 @@ function Segmented<T extends string>({
   value,
   onChange,
   label,
+  className,
 }: {
   options: readonly T[];
   value: T;
   onChange: (value: T) => void;
   label: string;
+  className?: string;
 }) {
   return (
-    <div role="tablist" aria-label={label} className="flex items-center gap-0.5">
+    <div role="tablist" aria-label={label} className={cn("flex items-center gap-1", className)}>
       {options.map((option) => (
         <button
           key={option}
@@ -61,8 +63,8 @@ function Segmented<T extends string>({
           aria-selected={option === value}
           onClick={() => onChange(option)}
           className={cn(
-            "h-7 cursor-pointer rounded-md px-2.5 font-mono text-[11px] tracking-wide transition-colors",
-            option === value ? "bg-white/[0.07] text-fg" : "text-dim hover:text-muted",
+            "h-8 cursor-pointer rounded-lg px-2.5 text-[13px] transition-colors duration-150",
+            option === value ? "bg-white/[0.07] text-fg" : "text-muted hover:text-fg",
           )}
         >
           {option}
@@ -73,14 +75,18 @@ function Segmented<T extends string>({
 }
 
 /** Package-manager aware command block. `commands` is keyed by manager. */
-export function CommandBlock({ commands }: { commands: Record<Manager, Highlighted> }) {
+export function CommandBlock({ commands, className }: { commands: Record<Manager, Highlighted>; className?: string }) {
   const [pm, setPm] = usePackageManager();
   return (
-    <div className="overflow-hidden rounded-xl border border-line bg-surface">
-      <div className="flex h-10 items-center border-b border-line px-1.5">
+    <div className={cn("overflow-hidden rounded-xl border border-white/[0.07] bg-surface", className)}>
+      <div className="flex h-11 items-center justify-between gap-2 border-b border-white/[0.06] pl-1.5 pr-1.5">
         <Segmented options={managers} value={pm} onChange={setPm} label="Package manager" />
+        <CopyButton value={commands[pm].code} label="Copy command" />
       </div>
-      <CodeFrame html={commands[pm].html} code={commands[pm].code} className="rounded-none border-0 [&_.shiki]:py-0" />
+      <div
+        className="overflow-x-auto py-3.5 [&_.shiki]:text-[13.5px] [&_pre]:outline-none"
+        dangerouslySetInnerHTML={{ __html: commands[pm].html }}
+      />
     </div>
   );
 }
@@ -92,11 +98,17 @@ export function InstallTabs({
   cli: Record<Manager, Highlighted>;
   manual: React.ReactNode;
 }) {
-  const [mode, setMode] = React.useState<"CLI" | "Manual">("CLI");
+  const [mode, setMode] = React.useState<"Command line" | "By hand">("Command line");
   return (
-    <div className="space-y-4">
-      <Segmented options={["CLI", "Manual"] as const} value={mode} onChange={setMode} label="Installation method" />
-      {mode === "CLI" ? <CommandBlock commands={cli} /> : manual}
+    <div>
+      <Segmented
+        options={["Command line", "By hand"] as const}
+        value={mode}
+        onChange={setMode}
+        label="Installation method"
+        className="-ml-2.5 mb-5"
+      />
+      {mode === "Command line" ? <CommandBlock commands={cli} /> : manual}
     </div>
   );
 }

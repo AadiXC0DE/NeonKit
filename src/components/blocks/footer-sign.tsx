@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight, MapPin } from "@/components/ui/icons";
 import { Cityscape } from "@/components/ui/cityscape";
 import { NeonSign } from "@/components/ui/neon-sign";
 import { neonVars } from "@/lib/neon";
@@ -89,21 +89,22 @@ export default function FooterSign() {
 
         <div className="mx-auto grid max-w-[1180px] gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)] lg:items-end lg:gap-16">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-              Eating after dark · since 2019
-            </p>
             <NeonSign
               buzz
               lines={[{ text: "Neon Alley" }, { text: "eat late", className: "mt-[0.06em] text-[0.36em] tracking-[0.08em]" }]}
-              className="-ml-[0.1em] mt-6 text-[clamp(52px,11vw,120px)]"
+              className="-ml-[0.1em] text-[clamp(52px,11vw,120px)]"
               style={{ fontFamily: "var(--font-tilt-neon, inherit)" }}
             />
+            <p className="mt-8 max-w-[46ch] text-[17px] leading-[1.6] text-white/60">
+              Eating after dark in Leeds since 2019.{" "}
+              <span className="text-white/50">214 late kitchens reviewed, every bill paid by us.</span>
+            </p>
           </div>
 
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-1">
             <div>
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">The Counter</h2>
-              <address className="mt-4 text-[15px] not-italic leading-relaxed text-white/75">
+              <h2 className="text-[15px] font-medium text-white">The Counter</h2>
+              <address className="mt-2 text-[15px] not-italic leading-relaxed text-white/60">
                 41 Kiln Street, Leeds LS2 7HQ
                 <br />
                 Under the railway arch, follow the noodle steam.
@@ -118,8 +119,8 @@ export default function FooterSign() {
 
             <div>
               <div className="flex items-center justify-between gap-4">
-                <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Hours</h2>
-                <p role="status" className="flex h-5 items-center gap-2 text-xs text-white/60">
+                <h2 className="text-[15px] font-medium text-white">Hours</h2>
+                <p role="status" className="flex h-5 items-center gap-2 text-[13px] text-white/60">
                   {state && (
                     <>
                       <span
@@ -144,8 +145,8 @@ export default function FooterSign() {
                       <dt className={cn("flex items-center gap-2", today ? "text-white" : "text-white/55")}>
                         {row.label}
                         {today && (
-                          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[rgb(var(--neon))]">
-                            today
+                          <span className="text-[12px] text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]">
+                            Today
                           </span>
                         )}
                       </dt>
@@ -161,7 +162,7 @@ export default function FooterSign() {
         </div>
 
         <nav aria-label="Footer" className="mx-auto mt-16 max-w-[1180px] border-t border-white/[0.07] pt-4">
-          <ul className="flex flex-wrap gap-x-7 gap-y-1 text-sm text-white/60">
+          <ul className="flex flex-wrap gap-x-7 gap-y-1 text-[15px] text-white/65">
             {LINKS.map((link) => (
               <li key={link}>
                 <a
@@ -190,8 +191,8 @@ export default function FooterSign() {
         <div aria-hidden className="absolute inset-x-0 top-0 h-24 bg-[linear-gradient(#05060a,transparent)]" />
       </div>
       <div className="border-t border-white/[0.06] bg-[#05060a] px-6 py-5 sm:px-10 lg:px-16">
-        <div className="mx-auto flex max-w-[1180px] flex-col gap-2 font-mono text-[11px] text-white/55 sm:flex-row sm:justify-between">
-          <span>© 2026 Neon Alley Ltd. Reviews are paid for by us, never by the kitchens.</span>
+        <div className="mx-auto flex max-w-[1180px] flex-col gap-2 text-[13px] text-white/55 sm:flex-row sm:justify-between">
+          <span>© 2026 Neon Alley Ltd.</span>
           <span className="flex gap-5">
             <a href="#" className="-my-2 inline-block rounded-md py-2 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
               Privacy

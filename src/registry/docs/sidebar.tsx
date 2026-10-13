@@ -142,7 +142,7 @@ export const doc: ComponentDoc = {
     'The active item has aria-current="page". The tube is decorative and hidden from screen readers.',
     "On the rail the labels fade but stay in the accessibility tree, so every item keeps its name. The hover label is visual only and also appears on keyboard focus.",
     "The hover label closes on Escape, on scroll and when the pointer leaves the item.",
-    "Below md the sidebar is a modal drawer: focus moves into it, Escape and the backdrop close it, the page behind is inert and stops scrolling, and focus returns to the trigger.",
+    "Below md the sidebar is a modal drawer: focus moves into it and Tab cycles inside it, Escape and the backdrop close it, the page behind is inert and stops scrolling, and focus returns to the trigger.",
     "The width animation and the glide respect reduced motion.",
   ],
 };

@@ -6,12 +6,21 @@ import { cn } from "@/lib/utils";
 import { neonVars, toNeonRgb, type NeonColor } from "@/lib/neon";
 
 // @property lets the browser interpolate the angle, so the conic gradient
-// can rotate without rotating (and clipping) a real element.
+// can rotate without rotating (and clipping) a real element. The beam fades
+// in from the tail and ends in a white-hot head, like light racing down a tube.
 const css = `
 @property --nk-beam-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 @keyframes nk-beam { to { --nk-beam-angle: 360deg; } }
 .nk-beam {
-  background: conic-gradient(from var(--nk-beam-angle), transparent 0deg, transparent calc(360deg - var(--nk-beam-size)), rgb(var(--nk-beam-to) / 0.9), rgb(var(--neon)) 360deg);
+  background: conic-gradient(
+    from var(--nk-beam-angle),
+    transparent 0deg,
+    transparent calc(360deg - var(--nk-beam-size)),
+    rgb(var(--nk-beam-to) / 0.35) calc(360deg - var(--nk-beam-size) * 0.55),
+    rgb(var(--neon)) calc(360deg - var(--nk-beam-size) * 0.08),
+    color-mix(in srgb, rgb(var(--neon)) 35%, white) 359deg,
+    transparent 360deg
+  );
   animation: nk-beam var(--nk-beam-duration) linear infinite;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;

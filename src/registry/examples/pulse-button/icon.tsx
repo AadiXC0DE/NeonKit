@@ -1,4 +1,4 @@
-import { Bell, Mic } from "lucide-react";
+import { Bell, Mic } from "@/components/ui/icons";
 import { PulseButton } from "@/components/ui/pulse-button";
 
 export default function PulseButtonIcon() {

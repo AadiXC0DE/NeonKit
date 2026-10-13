@@ -18,8 +18,8 @@ export const doc: ComponentDoc = {
     { name: "intensity", title: "Intensity", component: GlitchTextIntensity },
     {
       name: "nav",
-      title: "Driven by a link",
-      description: "trigger=\"manual\" with active wired to the link's hover and keyboard focus.",
+      title: "Inside a link",
+      description: "trigger=\"hover\" also answers to the link or button around it, so keyboard focus sets it off too.",
       component: GlitchTextNav,
     },
     {
@@ -35,7 +35,7 @@ export const doc: ComponentDoc = {
       description: "Also accepts native attributes for the element it renders.",
       props: [
         { prop: "as", type: '"span" | "p" | "div" | "h1" | "h2" | "h3" | "h4"', default: '"span"', description: "Element to render." },
-        { prop: "trigger", type: '"hover" | "always" | "inView" | "manual"', default: '"always"', description: "Glitch while hovered, in periodic bursts, once per scroll into view, or while active." },
+        { prop: "trigger", type: '"hover" | "always" | "inView" | "manual"', default: '"always"', description: "Glitch while hovered (or while a surrounding link or button is hovered or keyboard-focused), in periodic bursts, once per scroll into view, or while active." },
         { prop: "active", type: "boolean", default: "false", description: "With trigger=\"manual\", glitches while true." },
         { prop: "intensity", type: '"subtle" | "medium" | "heavy"', default: '"medium"', description: "How far the slices jump. Medium adds a skew; heavy also tears a band out of the text." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "First split layer. Falls back to --neon-accent, then cyan." },

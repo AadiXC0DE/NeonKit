@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageShell } from "@/components/site/page-shell";
+import { PageHeader } from "@/components/site/prose";
 import { releases } from "@/config/changelog";
+import { cn } from "@/lib/utils";
 import { blocks, registry, templates } from "@/registry";
 
 export const metadata: Metadata = {
@@ -13,93 +15,89 @@ export const metadata: Metadata = {
 const formatDate = (iso: string) =>
   new Intl.DateTimeFormat("en", { year: "numeric", month: "long", day: "numeric" }).format(new Date(iso));
 
+function Added({ label, items }: { label: string; items: { name: string; href: string }[] }) {
+  if (!items.length) return null;
+  return (
+    <div className="mt-8">
+      <h3 className="text-[14px] font-medium text-fg">
+        {items.length} {label}
+      </h3>
+      <p className="mt-2 max-w-[44rem] text-[15px] leading-[1.75] text-muted">
+        {items.map((item, i) => (
+          <span key={item.href}>
+            <span className="whitespace-nowrap">
+              <Link href={item.href} className="transition-colors hover:text-fg">
+                {item.name}
+              </Link>
+              {i < items.length - 1 && (
+                <span aria-hidden className="ml-2 mr-1 text-white/20">
+                  /
+                </span>
+              )}
+            </span>{" "}
+          </span>
+        ))}
+      </p>
+    </div>
+  );
+}
+
 export default function ChangelogPage() {
   return (
     <PageShell>
-      <div className="max-w-3xl">
-        <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">Changelog</p>
-        <h1 className="text-balance text-[clamp(2.75rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-fg">
-          What&apos;s new.
-        </h1>
-      </div>
+      <PageHeader title="Changelog" size="lg">
+        Every release, newest first. Anything added in the last two carries a New mark across the site.
+      </PageHeader>
 
-      <ol className="mt-16 max-w-4xl">
+      <ol className="max-w-[72rem]">
         {releases.map((release, i) => {
           const added = registry.filter((item) => item.addedIn === release.version);
           const addedBlocks = blocks.filter((block) => block.addedIn === release.version);
           const addedTemplates = templates.filter((template) => template.addedIn === release.version);
+          const latest = i === 0;
           return (
-            <li key={release.version} className="grid gap-4 border-t border-line py-10 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-10">
-              <div className="font-mono text-[12px] text-dim">
-                <p className={i === 0 ? "neon-text text-[15px]" : "text-[15px] text-muted"}>v{release.version}</p>
-                <time dateTime={release.date} className="mt-1 block">
-                  {formatDate(release.date)}
-                </time>
+            <li
+              key={release.version}
+              className="grid gap-5 border-t border-white/[0.08] py-14 sm:py-16 lg:grid-cols-12 lg:gap-8"
+            >
+              <div className="lg:col-span-3">
+                <p
+                  className={cn(
+                    "type-display text-[clamp(2.5rem,4vw,3.5rem)] tabular-nums",
+                    latest ? "neon-text" : "text-fg",
+                  )}
+                >
+                  {release.version}
+                </p>
+                <p className="mt-3 text-[14px] text-muted">
+                  <time dateTime={release.date}>{formatDate(release.date)}</time>
+                  {latest && <span className="text-fg">, latest</span>}
+                </p>
               </div>
-              <div>
-                <h2 className="text-2xl font-semibold tracking-[-0.025em] text-fg">{release.title}</h2>
-                <ul className="mt-4 space-y-2.5 text-[15.5px] leading-relaxed text-muted">
+              <div className="min-w-0 lg:col-span-9">
+                <h2 id={`release-${release.version}`} className="text-[1.6rem] font-medium leading-tight tracking-[-0.02em] text-fg">
+                  {release.title}
+                </h2>
+                <ul className="mt-5 max-w-[44rem] space-y-3 text-[16px] leading-[1.65] text-muted">
                   {release.notes.map((note) => (
-                    <li key={note} className="flex gap-3">
-                      <span className="mt-[12px] h-px w-3 shrink-0 bg-[rgb(var(--neon-accent))]" />
+                    <li key={note} className="relative pl-5">
+                      <span aria-hidden className="absolute left-0 top-[0.8em] h-px w-2.5 bg-white/25" />
                       {note}
                     </li>
                   ))}
                 </ul>
-                {added.length > 0 && (
-                  <div className="mt-6">
-                    <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-dim">
-                      {added.length} components
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {added.map((item) => (
-                        <Link
-                          key={item.slug}
-                          href={`/components/${item.slug}`}
-                          className="rounded-md border border-line px-2.5 py-1 text-[13px] text-muted transition-colors hover:border-[rgb(var(--neon-accent)/0.5)] hover:text-fg"
-                        >
-                          {item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {addedTemplates.length > 0 && (
-                  <div className="mt-6">
-                    <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-dim">
-                      {addedTemplates.length} templates
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {addedTemplates.map((template) => (
-                        <Link
-                          key={template.slug}
-                          href={`/templates/${template.slug}`}
-                          className="rounded-md border border-line px-2.5 py-1 text-[13px] text-muted transition-colors hover:border-[rgb(var(--neon-accent)/0.5)] hover:text-fg"
-                        >
-                          {template.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {addedBlocks.length > 0 && (
-                  <div className="mt-6">
-                    <p className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-dim">
-                      {addedBlocks.length} blocks
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {addedBlocks.map((block) => (
-                        <Link
-                          key={block.slug}
-                          href={`/blocks/${block.slug}`}
-                          className="rounded-md border border-line px-2.5 py-1 text-[13px] text-muted transition-colors hover:border-[rgb(var(--neon-accent)/0.5)] hover:text-fg"
-                        >
-                          {block.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <Added
+                  label={added.length === 1 ? "component" : "components"}
+                  items={added.map((item) => ({ name: item.name, href: `/components/${item.slug}` }))}
+                />
+                <Added
+                  label={addedTemplates.length === 1 ? "template" : "templates"}
+                  items={addedTemplates.map((template) => ({ name: template.name, href: `/templates/${template.slug}` }))}
+                />
+                <Added
+                  label={addedBlocks.length === 1 ? "block" : "blocks"}
+                  items={addedBlocks.map((block) => ({ name: block.name, href: `/blocks/${block.slug}` }))}
+                />
               </div>
             </li>
           );

@@ -15,41 +15,34 @@ export default function Image() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: `radial-gradient(ellipse 60% 55% at 50% 42%, rgba(${rgb}, 0.22), #05060a 70%)`,
+        justifyContent: "space-between",
+        padding: "64px 80px",
+        // The only light in the room comes from the hour.
+        background: `radial-gradient(ellipse 30% 34% at 50% 61%, rgba(${rgb}, 0.18), #05060a 100%)`,
         backgroundColor: "#05060a",
         color: "white",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          padding: "28px 72px",
-          borderRadius: 40,
-          border: `3px solid rgba(${rgb}, 0.55)`,
-          boxShadow: `0 0 40px rgba(${rgb}, 0.45), inset 0 0 40px rgba(${rgb}, 0.25)`,
-          fontSize: 150,
-          fontWeight: 300,
-          letterSpacing: -2,
-          color: "#fde8fc",
-        }}
-      >
-        {brand.toLowerCase()}
+      <div style={{ display: "flex", fontSize: 28, fontWeight: 600, letterSpacing: -0.5, color: "rgba(255,255,255,0.9)" }}>
+        {brand}
       </div>
-      <div
-        style={{
-          display: "flex",
-          marginTop: 56,
-          fontSize: 44,
-          fontWeight: 600,
-          letterSpacing: -1,
-          color: "rgba(255,255,255,0.92)",
-        }}
-      >
-        Deploys that land at 2am.
+      <div style={{ display: "flex", flexDirection: "column", fontSize: 128, fontWeight: 700, letterSpacing: -5, lineHeight: 0.95 }}>
+        <div style={{ display: "flex" }}>Deploys that</div>
+        <div style={{ display: "flex" }}>
+          land at&nbsp;
+          <span
+            style={{
+              color: "#fde8fc",
+              fontWeight: 400,
+              letterSpacing: -1,
+              textShadow: `0 0 4px rgba(${rgb}, 1), 0 0 18px rgba(${rgb}, 0.9), 0 0 36px rgba(${rgb}, 0.45)`,
+            }}
+          >
+            2am
+          </span>
+        </div>
       </div>
-      <div style={{ display: "flex", marginTop: 16, fontSize: 24, color: "rgba(255,255,255,0.6)" }}>
+      <div style={{ display: "flex", fontSize: 26, color: "rgba(255,255,255,0.6)" }}>
         Queue it, close the laptop, read the report with coffee.
       </div>
     </div>,

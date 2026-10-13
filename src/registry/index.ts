@@ -2,9 +2,9 @@ import data from "./registry.json";
 import type { RegistryBlock, RegistryItem, RegistryTemplate } from "./types";
 
 /** The release being built. */
-export const currentVersion = "1.4";
+export const currentVersion = "1.5";
 /** Items added in these releases get a "new" badge. */
-export const newVersions = ["1.3", "1.4"];
+export const newVersions = ["1.4", "1.5"];
 
 export const categories = data.categories;
 export const registry: RegistryItem[] = data.items;

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Archive, Inbox, Mail, PenLine, Send, Settings, Star, Tag, Trash2 } from "lucide-react";
+import { Archive, Inbox, Mail, PenLine, Send, Settings, Star, Tag, Trash2 } from "@/components/ui/icons";
 import {
   Sidebar,
   SidebarContent,
@@ -44,7 +44,7 @@ export default function SidebarRail() {
     <SidebarProvider
       defaultCollapsed
       shortcut={false}
-      className="h-[440px] w-full max-w-3xl overflow-hidden rounded-xl border border-white/10 bg-[#05060a]"
+      className="h-[480px] w-full max-w-3xl overflow-hidden rounded-xl border border-white/10 bg-[#05060a]"
     >
       <Sidebar>
         <SidebarHeader>

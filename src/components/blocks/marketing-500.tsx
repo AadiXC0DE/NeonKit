@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight, RotateCw } from "lucide-react";
+import { ArrowUpRight, RotateCw } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { HardwareSwitch } from "@/components/ui/hardware-switch";
 import { NeonText } from "@/components/ui/neon-text";
@@ -73,7 +73,7 @@ function Breaker({ label, on, tripped, index }: { label: string; on: boolean; tr
           )}
         />
       </span>
-      <span className={cn("font-mono text-[10px] uppercase tracking-[0.12em]", tripped ? "text-[#ff4d5e]" : "text-white/55")}>
+      <span className={cn("text-[12px]", tripped ? "text-[#ff4d5e]" : "text-white/55")}>
         {label}
       </span>
     </div>
@@ -123,7 +123,7 @@ export default function Marketing500() {
         </span>
         <a
           href={STATUS_URL}
-          className="inline-flex items-center gap-2 rounded-md font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+          className="inline-flex items-center gap-2 rounded-md text-[13px] text-white/60 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
         >
           <span
             aria-hidden
@@ -148,13 +148,10 @@ export default function Marketing500() {
             </NeonText>
           </div>
 
-          <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-            Error 500 · {power ? "Power restored" : "Internal server error"}
-          </p>
-          <h1 aria-live="polite" className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.045em]">
+          <h1 aria-live="polite" className="mt-10 text-balance text-[clamp(2.5rem,5.4vw,4.5rem)] font-[620] leading-[0.96] tracking-[-0.04em] [font-stretch:112%]">
             {power ? "Power's back. Try that again." : "We tripped a breaker."}
           </h1>
-          <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-white/55">
+          <p className="mt-6 max-w-[46ch] text-[17px] leading-[1.6] text-white/60">
             {power
               ? "Your request didn't go through the first time. Nothing was charged or saved halfway, so it's safe to send again."
               : "Something on our side failed while handling your request. It's not your connection, and the on-call engineer was paged at 21:47."}
@@ -177,10 +174,10 @@ export default function Marketing500() {
               </a>
             </Button>
             {/* Lifted above the dimmed room so the way out stays readable */}
-            <span aria-live="polite" className="relative z-10 font-mono text-xs text-white/60">
+            <span aria-live="polite" className="relative z-10 text-[13px] text-white/60">
               {retry === "ok" ? (
                 <>
-                  <span className="text-[rgb(var(--neon))]">200 OK</span> in 182 ms
+                  <span className="font-mono text-[rgb(var(--neon))]">200 OK</span> in <span className="font-mono tabular-nums">182 ms</span>
                 </>
               ) : !power ? (
                 "Flip the main to restore power"
@@ -197,12 +194,13 @@ export default function Marketing500() {
 
           <div className="flex items-start justify-between gap-4 border-b border-white/[0.06] pb-5">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Panel B · eu-west-2</p>
-              <p className="mt-1.5 text-balance text-sm text-white/70">
+              <p className="text-[13px] text-white/55">Panel B, eu-west-2</p>
+              <p className="mt-1.5 text-balance text-[15px] text-white/85">
                 Incident {INCIDENT.id}: {INCIDENT.title}
               </p>
-              <p className="mt-1 font-mono text-[11px] text-white/55">
-                {power ? `Monitoring since ${INCIDENT.fixed}` : `Investigating since ${INCIDENT.since}`}
+              <p className="mt-1 text-[13px] text-white/55">
+                {power ? "Monitoring since " : "Investigating since "}
+                <span className="font-mono tabular-nums">{power ? INCIDENT.fixed : INCIDENT.since}</span>
               </p>
             </div>
             <HardwareSwitch variant="flip" size="md" checked={power} onCheckedChange={flip} label="Main" />
@@ -216,9 +214,14 @@ export default function Marketing500() {
         </div>
       </main>
 
-      <footer className="flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-white/[0.06] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
-        <span>Request ID req_01J9X4K2QW · POST /v2/deploys</span>
-        <span>Edge LHR-3</span>
+      <footer className="flex flex-wrap justify-between gap-x-6 gap-y-2 border-t border-white/[0.06] pt-5 text-[13px] text-white/55">
+        <span>
+          Request <code className="font-mono text-[12px] text-white/70">req_01J9X4K2QW</code>,{" "}
+          <code className="font-mono text-[12px] text-white/70">POST /v2/deploys</code>
+        </span>
+        <span>
+          Served by <span className="font-mono text-[12px] text-white/70">lhr-3</span>
+        </span>
       </footer>
 
       {/* The room itself dims and stutters until the main is back on */}

@@ -46,7 +46,7 @@ export default function CollapsibleAdvancedOptions() {
       </Collapsible>
 
       <div className="flex items-center justify-between gap-3">
-        <p aria-live="polite" className="min-w-0 truncate text-xs text-white/45">
+        <p aria-live="polite" className="min-w-0 truncate text-xs text-white/50">
           {saved}
         </p>
         <Button type="submit" variant="solid" size="sm">

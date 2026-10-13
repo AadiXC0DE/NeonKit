@@ -1,4 +1,4 @@
-import { Download, FileCode2, FileText, Link, Mail, Send, Share2, UserPlus } from "lucide-react";
+import { Download, FileCode2, FileText, Link, Mail, Send, Share2, UserPlus } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

@@ -50,7 +50,7 @@ export interface ScrambleTextProps
   extends Omit<React.HTMLAttributes<HTMLElement>, "color" | "children"> {
   /** The text it decodes into. Changing it scrambles into the new text. */
   text: string;
-  /** When the decode runs: on mount, on every hover, or when it scrolls into view. */
+  /** When the decode runs: on mount, on every hover (of the text or the link or button around it, keyboard focus included), or when it scrolls into view. */
   trigger?: Trigger;
   /** Milliseconds from the first glyph to the last one locking in. */
   duration?: number;
@@ -73,7 +73,6 @@ const ScrambleText = React.forwardRef<HTMLElement, ScrambleTextProps>(
       duration = 900,
       charset = "upper",
       as: Tag = "span",
-      onPointerEnter,
       ...props
     },
     ref,
@@ -165,6 +164,32 @@ const ScrambleText = React.forwardRef<HTMLElement, ScrambleTextProps>(
       };
     }, [text, trigger, arm, play, cells, reduced]);
 
+    // Hover follows the link or button the text sits in, and so does keyboard focus.
+    React.useEffect(() => {
+      const root = rootRef.current;
+      if (trigger !== "hover" || !root) return;
+      const host = root.closest<HTMLElement>("a, button, [role='link'], [role='button']") ?? root;
+      const onEnter = () => {
+        if (!reduced()) play();
+      };
+      const onFocus = () => {
+        let keyboard = true;
+        try {
+          keyboard = host.matches(":focus-visible");
+        } catch {
+          // Older engines without :focus-visible treat every focus as keyboard focus.
+        }
+        if (keyboard) onEnter();
+      };
+      host.addEventListener("pointerenter", onEnter);
+      host.addEventListener("focus", onFocus);
+      return () => {
+        host.removeEventListener("pointerenter", onEnter);
+        host.removeEventListener("focus", onFocus);
+        cancelAnimationFrame(frameRef.current);
+      };
+    }, [trigger, play, reduced]);
+
     const words = text.split(/(\s+)/);
 
     return (
@@ -172,10 +197,6 @@ const ScrambleText = React.forwardRef<HTMLElement, ScrambleTextProps>(
         ref={rootRef as React.Ref<HTMLHeadingElement>}
         style={neonVars(color, style)}
         className={cn("[--neon:var(--neon-accent,34_211_238)]", className)}
-        onPointerEnter={(event) => {
-          onPointerEnter?.(event);
-          if (trigger === "hover" && !reduced()) play();
-        }}
         {...props}
       >
         <style>{css}</style>

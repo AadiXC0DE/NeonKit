@@ -1,5 +1,6 @@
 import { docHref } from "../docs";
 import { A, Callout, Code, CodeBlock, FlagTable, H2, P, RefTable } from "../mdx";
+import { LayerStack } from "./layer-stack";
 
 const multi = `$ gantry build web --platform linux/amd64,linux/arm64 --push
   resolve  pnpm-lock.yaml · 412 packages           0.19s
@@ -64,19 +65,10 @@ export function CliBuild() {
 
       <H2 id="layer-cache">The layer cache</H2>
       <P>
-        Every image Gantry builds is made of the same four layers, from slowest-changing to fastest. A change only
-        rebuilds its own layer and the ones above it.
+        Every image Gantry builds is made of the same four layers, from slowest-changing at the bottom to fastest at
+        the top. A change only rebuilds its own layer and the ones above it. Pick a change to see what it costs.
       </P>
-      <RefTable
-        label="Image layers"
-        head={["Layer", "Rebuilt when", "Typical size"]}
-        rows={[
-          ["base", "The base image or system packages change.", "40–120 MB"],
-          ["deps", "The lockfile changes.", "80–400 MB"],
-          ["src", "Any file under the build context changes.", "1–20 MB"],
-          ["config", "Environment, command or ports change.", "< 1 KB"],
-        ]}
-      />
+      <LayerStack />
       <Callout type="note" title="The cache is per machine">
         Layers live in <Code>~/.gantry/layers</Code> and are never uploaded unless you push. In CI, cache that folder
         between runs; on a warm cache a typical build drops from minutes to seconds.

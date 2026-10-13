@@ -1,4 +1,4 @@
-import { Info } from "lucide-react";
+import { Info } from "@/components/ui/icons";
 import { Tooltip } from "@/components/ui/tooltip";
 
 export default function TooltipWrapping() {

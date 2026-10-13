@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight, Mail, Phone } from "lucide-react";
+import { ArrowUpRight, Mail, Phone } from "@/components/ui/icons";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Avatar, AvatarGroup } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -64,25 +64,20 @@ function Helpful() {
 
   if (vote) {
     return (
-      <p
-        ref={thanksRef}
-        role="status"
-        tabIndex={-1}
-        className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55 outline-none"
-      >
+      <p ref={thanksRef} role="status" tabIndex={-1} className="mt-5 text-[13px] text-white/55 outline-none">
         {vote === "yes" ? "Noted. Thanks." : "Thanks. We read every one of these."}
       </p>
     );
   }
   return (
-    <div className="mt-4 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
-      <span>Helpful?</span>
+    <div className="mt-5 flex items-center gap-1 text-[13px] text-white/55">
+      <span className="mr-2">Did this answer it?</span>
       {(["yes", "no"] as const).map((value) => (
         <button
           key={value}
           type="button"
           onClick={() => setVote(value)}
-          className="inline-flex h-9 cursor-pointer items-center rounded-md border border-white/10 px-3 uppercase text-white/60 outline-none transition-colors duration-150 hover:border-[rgb(var(--neon)/0.5)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+          className="inline-flex h-8 cursor-pointer items-center rounded-md px-2.5 capitalize text-white/70 outline-none transition-colors duration-150 hover:bg-[rgb(var(--neon)/0.1)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
         >
           {value}
         </button>
@@ -99,7 +94,7 @@ export default function FaqAccordion() {
       aria-labelledby="faq-accordion-title"
       // Change the color here; everything inside follows it.
       style={neonVars("cyan")}
-      className="relative isolate overflow-clip bg-[#05060a] px-6 py-20 text-white/90 sm:px-10 sm:py-24 lg:px-16 lg:py-28"
+      className="relative isolate overflow-clip bg-[#05060a] px-5 py-20 text-white/90 sm:px-10 sm:py-24 lg:px-16 lg:py-32"
     >
       {/* Late-afternoon light falling across the top-left corner */}
       <div
@@ -107,99 +102,102 @@ export default function FaqAccordion() {
         className="pointer-events-none absolute -left-40 -top-56 -z-10 h-[520px] w-[720px] rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/0.07),transparent)]"
       />
 
-      <div className="mx-auto grid max-w-[1180px] gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-[auto_1fr] lg:gap-x-20 lg:gap-y-10">
-        <div className="lg:col-start-1 lg:row-start-1">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Brightline · Help desk</p>
-          <h2
-            id="faq-accordion-title"
-            className="mt-5 max-w-[14ch] text-[clamp(2.4rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
-          >
-            What owners ask in week one.
-          </h2>
-          <p className="mt-6 max-w-[42ch] text-[15px] leading-relaxed text-white/55">
-            Brightline reads your inverter every ten seconds. Once the numbers start moving, these are the questions
-            that land in our inbox.
-          </p>
+      <div className="mx-auto grid max-w-[1180px] gap-14 lg:grid-cols-12 lg:gap-x-8">
+        <div className="lg:col-span-5">
+          <div className="lg:sticky lg:top-12">
+            <h2
+              id="faq-accordion-title"
+              className="text-[clamp(2.6rem,5vw,4.25rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
+            >
+              <span className="block">The week-one</span>
+              <span className="block">questions.</span>
+            </h2>
+            <p className="mt-6 max-w-[40ch] text-[17px] leading-[1.6] text-white/60">
+              Brightline reads your inverter every ten seconds.{" "}
+              <span className="text-white/50">Once new owners see the numbers move, these are what land in our inbox.</span>
+            </p>
+
+            <div className="mt-12 hidden max-w-sm border-t border-white/[0.08] pt-6 lg:block">
+              <StillStuck />
+            </div>
+          </div>
         </div>
 
-        <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-          <div className="flex items-baseline justify-between border-b border-white/10 pb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-            <span>{String(FAQS.length).padStart(2, "0")} questions</span>
-            <span>Updated 2 Oct 2026</span>
-          </div>
-          <Accordion type="single" collapsible value={open} onValueChange={setOpen}>
-            {FAQS.map((item, i) => {
+        <div className="lg:col-span-7">
+          <Accordion type="single" collapsible value={open} onValueChange={setOpen} className="border-t border-white/[0.08]">
+            {FAQS.map((item) => {
               const isOpen = open === item.id;
               return (
-                <AccordionItem key={item.id} value={item.id} className="border-white/[0.07] transition-[background-color] duration-300 data-[state=open]:bg-[radial-gradient(45%_90%_at_0%_45%,rgb(var(--neon)/0.07),transparent)]">
-                  <AccordionTrigger className="gap-5 py-5 text-[15px] sm:text-base">
-                    <span className="flex min-w-0 items-baseline gap-4 sm:gap-6">
-                      <span
-                        aria-hidden
-                        className={cn(
-                          "w-5 shrink-0 font-mono text-[11px] tabular-nums transition-colors duration-200",
-                          isOpen ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/50",
-                        )}
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className={cn("transition-colors duration-200", isOpen ? "text-white" : "text-white/80")}>
-                        {item.q}
-                      </span>
+                <AccordionItem
+                  key={item.id}
+                  value={item.id}
+                  className="border-white/[0.08] transition-[background-color] duration-300 data-[state=open]:bg-[radial-gradient(45%_90%_at_0%_45%,rgb(var(--neon)/0.06),transparent)]"
+                >
+                  <AccordionTrigger className="gap-6 py-6 text-left text-[18px] font-[480] leading-snug tracking-[-0.015em] sm:text-[20px]">
+                    <span className={cn("transition-colors duration-200", isOpen ? "text-white" : "text-white/75")}>
+                      {item.q}
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent className="pb-6 pl-[3.25rem] text-[15px] sm:pl-[3.75rem]">
-                    <p className="max-w-[60ch] text-pretty">{item.a}</p>
+                  <AccordionContent className="pb-7 text-[16px] leading-[1.6] text-white/60">
+                    <p className="max-w-[56ch] text-pretty">{item.a}</p>
                     <Helpful />
                   </AccordionContent>
                 </AccordionItem>
               );
             })}
           </Accordion>
-          <a
-            href="#"
-            className="group mt-6 inline-flex items-center gap-1.5 rounded-md py-2 text-sm text-white/60 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
-          >
-            All 140 help articles
-            <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-          </a>
-        </div>
+          <p className="mt-6 flex flex-wrap items-center justify-between gap-3 text-[13px] text-white/55">
+            <span>Eight of the most asked, updated 2 Oct 2026.</span>
+            <a
+              href="#"
+              className="group -my-2 inline-flex items-center gap-1.5 rounded-md py-2 text-sm text-white/75 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+            >
+              All 140 help articles
+              <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </a>
+          </p>
 
-        <div className="relative max-w-md self-start overflow-hidden rounded-[18px] border border-white/10 bg-white/[0.03] p-6 lg:sticky lg:top-10 lg:col-start-1 lg:row-start-2">
-          <span
-            aria-hidden
-            className="absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--neon)/0.5),transparent)]"
-          />
-          <div className="flex items-center justify-between gap-4">
-            <AvatarGroup size="md">
-              {CREW.map((name, i) => (
-                <Avatar key={name} alt={name} status={i === CREW.length - 1 ? "online" : undefined} />
-              ))}
-            </AvatarGroup>
-            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">Median reply 9 min</span>
+          <div className="mt-14 border-t border-white/[0.08] pt-6 lg:hidden">
+            <StillStuck />
           </div>
-          <h3 className="mt-5 text-lg font-semibold tracking-[-0.02em] text-white">Still stuck?</h3>
-          <p className="mt-2 text-pretty text-sm leading-relaxed text-white/55">
-            Our desk is three electricians and one very patient engineer. Send a photo of your inverter&apos;s label
-            and we&apos;ll take it from there.
-          </p>
-          <div className="mt-5 flex flex-wrap items-center gap-2">
-            <Button asChild size="sm">
-              <a href="mailto:help@brightline.example">
-                <Mail /> Email the desk
-              </a>
-            </Button>
-            <Button asChild size="sm" variant="ghost">
-              <a href="tel:+442038081172">
-                <Phone /> +44 20 3808 1172
-              </a>
-            </Button>
-          </div>
-          <p className="mt-5 border-t border-white/[0.06] pt-4 font-mono text-[11px] tracking-[0.04em] text-white/55">
-            Mon–Sat, 07:00–19:00 CET
-          </p>
         </div>
       </div>
     </section>
+  );
+}
+
+function StillStuck() {
+  return (
+    <>
+      <div className="flex items-center gap-4">
+        <AvatarGroup size="md">
+          {CREW.map((name, i) => (
+            <Avatar key={name} alt={name} status={i === CREW.length - 1 ? "online" : undefined} />
+          ))}
+        </AvatarGroup>
+        <p className="text-[13px] leading-snug text-white/55">
+          Median reply <span className="tabular-nums text-white/90">9 min</span>
+          <br />
+          Mon–Sat, 07:00–19:00 CET
+        </p>
+      </div>
+      <h3 className="mt-6 text-lg font-medium tracking-[-0.015em] text-white">Still stuck?</h3>
+      <p className="mt-1.5 text-pretty text-[15px] leading-relaxed text-white/60">
+        Our desk is three electricians and one very patient engineer. Send a photo of your inverter&apos;s label and
+        we&apos;ll take it from there.
+      </p>
+      <div className="mt-5 flex flex-wrap items-center gap-2">
+        <Button asChild size="sm">
+          <a href="mailto:help@brightline.example">
+            <Mail /> Email the desk
+          </a>
+        </Button>
+        <Button asChild size="sm" variant="ghost">
+          <a href="tel:+442038081172">
+            <Phone /> +44 20 3808 1172
+          </a>
+        </Button>
+      </div>
+    </>
   );
 }

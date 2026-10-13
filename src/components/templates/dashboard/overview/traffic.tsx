@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "@/components/ui/icons";
 import { GlowChart, Sparkline } from "@/components/ui/glow-chart";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
+import { display } from "../parts/page-header";
 import { RANGES, metricSeries, summarize, type Metric, type Range } from "../data";
 import { compact, signed, tick } from "../parts/format";
 
@@ -100,13 +101,14 @@ export function Traffic({ className }: { className?: string }) {
         ];
 
   return (
-    <section aria-labelledby="traffic-title" className={cn("relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]", className)}>
-      <div className="grid grid-cols-2 lg:grid-cols-4">
+    <section aria-labelledby="traffic-title" className={cn("relative", className)}>
+      <div className="grid grid-cols-2 border-y border-white/[0.08] lg:grid-cols-4">
         {ORDER.map((m, i) => {
           const s = METRICS[m];
           const { now: value, before, current: points } = all[m];
           const delta = s.delta(value, before);
-          const good = delta.value === 0 || delta.value > 0 === s.upIsGood;
+          // Only a regression gets color. Good news and deploy counts read in plain grey.
+          const good = m === "deploys" || delta.value === 0 || delta.value > 0 === s.upIsGood;
           const selected = m === metric;
           const Arrow = delta.value >= 0 ? ArrowUpRight : ArrowDownRight;
           return (
@@ -120,18 +122,18 @@ export function Traffic({ className }: { className?: string }) {
                 setMetric(m);
               }}
               className={cn(
-                "group relative min-w-0 cursor-pointer p-4 text-left outline-none transition-colors duration-200 sm:p-5",
+                "group relative min-w-0 cursor-pointer py-5 pr-4 text-left outline-none transition-colors duration-200 sm:pr-5",
                 "focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]",
-                i % 2 === 1 && "border-l border-white/[0.07]",
+                i % 2 === 1 ? "border-l border-white/[0.07] pl-4 sm:pl-5" : "pl-0",
                 i > 1 && "border-t border-white/[0.07] lg:border-t-0",
-                i === 2 && "lg:border-l",
-                selected ? "bg-[linear-gradient(180deg,rgb(var(--neon)/0.07),transparent_75%)]" : "hover:bg-white/[0.02]",
+                i === 2 && "lg:border-l lg:pl-5",
+                !selected && "hover:bg-white/[0.015]",
               )}
             >
               <span
                 aria-hidden
                 className={cn(
-                  "absolute inset-x-0 top-0 h-[2px] transition-opacity duration-300",
+                  "absolute inset-x-0 -top-px h-[2px] transition-opacity duration-300",
                   "bg-[linear-gradient(90deg,transparent,rgb(var(--neon))_20%,rgb(255_255_255/0.9)_50%,rgb(var(--neon))_80%,transparent)]",
                   "shadow-[0_0_12px_rgb(var(--neon)/0.9),0_0_28px_rgb(var(--neon)/0.45)]",
                   selected ? "opacity-100" : "opacity-0",
@@ -150,11 +152,11 @@ export function Traffic({ className }: { className?: string }) {
                   className={cn("hidden shrink-0 transition-opacity sm:block", selected ? "opacity-100" : "opacity-40")}
                 />
               </span>
-              <span className="mt-3 block text-[24px] font-semibold leading-none tracking-[-0.035em] text-white tabular-nums sm:text-[30px]">
+              <span className={cn(display, "mt-4 block text-[26px] tabular-nums sm:text-[32px]", selected ? "text-white" : "text-white/80")}>
                 {s.format(value)}
               </span>
               <span className="mt-2.5 flex items-center gap-1.5 text-xs">
-                <span className={cn("inline-flex items-center gap-0.5 font-medium tabular-nums", good ? "text-[rgb(52_211_153)]" : "text-[rgb(255_107_120)]")}>
+                <span className={cn("inline-flex items-center gap-0.5 font-medium tabular-nums", good ? "text-white/70" : "text-[rgb(255_107_120)]")}>
                   <Arrow aria-hidden className="size-3.5" />
                   {delta.text}
                 </span>
@@ -165,14 +167,13 @@ export function Traffic({ className }: { className?: string }) {
         })}
       </div>
 
-      <div className="relative border-t border-white/[0.07] p-4 sm:p-6">
-        <div aria-hidden className="pointer-events-none absolute -top-24 left-1/4 h-48 w-1/2 rounded-full bg-[rgb(var(--neon)/0.08)] blur-[70px]" />
+      <div className="relative pt-8">
         <div className="relative flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
             <h2 id="traffic-title" className="text-sm text-white/60">
               {spec.chartTitle}
             </h2>
-            <p className="mt-1.5 text-[26px] font-semibold leading-none tracking-[-0.03em] text-white tabular-nums">
+            <p className={cn(display, "mt-2 text-[26px] text-white tabular-nums")}>
               {point ? spec.format(point.y) : spec.format(now)}
             </p>
             <p className="mt-2 h-4 text-xs text-white/55">
@@ -189,14 +190,14 @@ export function Traffic({ className }: { className?: string }) {
           </div>
           <div className="flex items-center gap-4">
             {spec.type !== "bar" && (
-              <div aria-hidden className="hidden items-center gap-4 font-mono text-[11px] uppercase tracking-[0.12em] text-white/55 sm:flex">
+              <div aria-hidden className="hidden items-center gap-4 text-xs text-white/55 sm:flex">
                 <span className="flex items-center gap-1.5">
                   <span className="h-0.5 w-3 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />
-                  Now
+                  This period
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="h-0.5 w-3 rounded-full bg-white/35" />
-                  Prior
+                  The one before
                 </span>
               </div>
             )}

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, ArrowRight, Check, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Lock } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { OTPInput } from "@/components/ui/otp-input";
@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 import { neonVars } from "@/lib/neon";
 
 const POINTS = [
-  "Zero-knowledge. Keys never leave your devices.",
-  "Per-vault roles, read-only seats, one-click revoke.",
-  "SSO and SCIM on Team, $6 per seat a month.",
+  { lead: "Zero-knowledge.", rest: "Keys never leave your devices." },
+  { lead: "Per-vault roles.", rest: "Read-only seats, revoke in one click." },
+  { lead: "SSO and SCIM on Team,", rest: "$6 per seat a month." },
 ];
 
 const STEPS = ["Email", "Verify", "Vault"];
@@ -38,8 +38,8 @@ function Progress({ step }: { step: Step }) {
               i > step && "bg-[rgb(var(--neon)/0.14)]",
             )}
           />
-          <span className={cn("font-mono text-[10px] uppercase tracking-[0.16em]", i <= step ? "text-white/75" : "text-white/50")}>
-            0{i + 1} {label}
+          <span className={cn("text-[12px] transition-colors", i === step ? "text-white/90" : i < step ? "text-white/60" : "text-white/50")}>
+            {label}
           </span>
         </li>
       ))}
@@ -192,13 +192,13 @@ function SignupCard() {
               disabled={busy}
               className="w-full justify-between"
             />
-            <p className="font-mono text-[11px] text-white/55">Demo: any six digits work.</p>
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-4">
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">When you verify</p>
+            <p className="text-[13px] text-white/55">Demo: any six digits work.</p>
+            <div className="border-t border-white/[0.07] pt-4">
+              <p className="text-[13px] font-medium text-white/80">What happens when you verify</p>
               <ol className="mt-3 grid gap-2 text-[13px] leading-5 text-white/60">
                 {VERIFY_STEPS.map((text, i) => (
                   <li key={text} className="flex gap-3">
-                    <span className="font-mono text-[11px] leading-5 text-[rgb(var(--neon)/0.8)]">0{i + 1}</span>
+                    <span className="w-3 shrink-0 tabular-nums text-[rgb(var(--neon))]">{i + 1}</span>
                     {text}
                   </li>
                 ))}
@@ -233,15 +233,15 @@ function SignupCard() {
               </h2>
               <p className="mt-1 font-mono text-[12px] text-white/60">harbor.app/{slug}</p>
             </div>
-            <dl className="grid grid-cols-3 rounded-xl border border-white/[0.07] py-3 text-xs">
+            <dl className="grid grid-cols-3 border-y border-white/[0.07] py-3 text-[13px]">
               {[
                 ["Cipher", "AES-256"],
                 ["Members", "1 of 3"],
                 ["Recovery", "Kit ready"],
               ].map(([label, value]) => (
                 <div key={label} className="flex flex-col-reverse gap-1">
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">{label}</dt>
-                  <dd className="text-white/80">{value}</dd>
+                  <dt className="text-[12px] text-white/55">{label}</dt>
+                  <dd className="text-white/85">{value}</dd>
                 </div>
               ))}
             </dl>
@@ -285,8 +285,8 @@ export default function HeroSplitForm() {
       `}</style>
       <div aria-hidden className="absolute right-0 top-0 -z-10 h-full w-1/2 bg-[radial-gradient(ellipse_70%_60%_at_60%_45%,rgb(var(--neon)/0.1),transparent_70%)]" />
 
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[1fr_440px] lg:gap-20">
-        <div>
+      <div className="mx-auto grid max-w-6xl items-start gap-14 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-16">
+        <div className="flex h-full flex-col">
           <p className="flex items-center gap-2.5 text-[17px] font-semibold tracking-[-0.02em] text-white/90">
             <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="none" strokeWidth={1.7} strokeLinecap="round">
               <path d="M4 13a8 8 0 0 0 16 0M12 21V4M8 7h8" stroke="rgb(255 255 255 / 0.85)" />
@@ -296,24 +296,26 @@ export default function HeroSplitForm() {
           </p>
           <h1
             id="harbor-hero-title"
-            className="mt-10 [text-wrap:balance] text-[clamp(2.75rem,6.4vw,5.25rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/95"
+            className="mt-12 text-[clamp(2.4rem,6.2vw,4.6rem)] [text-wrap:balance] font-[620] leading-[0.96] tracking-[-0.045em] text-white/95 [font-stretch:112%] lg:mt-16"
           >
-            Stop pasting passwords into chat.
+            Stop pasting passwords in chat.
           </h1>
-          <p className="mt-6 max-w-md text-base leading-relaxed text-white/55 sm:text-lg">
-            Harbor gives your team one end-to-end encrypted vault, with autofill on every device and an audit log of who
-            opened what. We can&apos;t read it, and neither can anyone who breaches us.
+          <p className="mt-7 max-w-[46ch] text-[17px] leading-[1.6] text-white/60">
+            <span className="text-white/90">One end-to-end encrypted vault for the team,</span> with autofill on every
+            device and a log of who opened what. We can&apos;t read it, and neither can anyone who breaches us.
           </p>
-          <ul className="mt-9 grid gap-3">
+          <ul className="mt-10 max-w-[46ch] border-t border-white/[0.07]">
             {POINTS.map((point) => (
-              <li key={point} className="flex items-start gap-3 text-[15px] text-white/70">
-                <Check aria-hidden className="mt-[3px] size-4 shrink-0 text-[rgb(var(--neon))]" />
-                {point}
+              <li key={point.lead} className="border-b border-white/[0.07] py-3 text-[15px] text-white/55">
+                <span className="text-white/85">{point.lead}</span> {point.rest}
               </li>
             ))}
           </ul>
-          <p className="mt-10 border-t border-white/[0.07] pt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-            2,480 teams · audited by Halyard Security, Aug 2026
+          <p className="mt-8 flex items-center gap-2 text-[13px] text-white/55 lg:mt-auto lg:pt-10">
+            <Check aria-hidden className="size-3.5 text-[rgb(var(--neon))]" />
+            <span>
+              <span className="text-white/85">2,480 teams.</span> Audited by Halyard Security, Aug 2026.
+            </span>
           </p>
         </div>
 

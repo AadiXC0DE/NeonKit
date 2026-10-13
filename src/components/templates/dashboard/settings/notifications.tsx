@@ -22,7 +22,7 @@ export function NotificationsTab({
   return (
     <>
       <Section id="s-alerts" title="Alerts" description="Just for you. Teammates choose their own in their settings.">
-        <Panel className="divide-y divide-white/[0.06] py-1 sm:py-1">
+        <Panel className="-mt-4 divide-y divide-white/[0.06]">
           {NOTIFY.map((n) => (
             <Field key={n.key} orientation="horizontal" label={n.label} description={n.description} className="py-4">
               <Switch checked={draft.notify[n.key]} onCheckedChange={(on) => set("notify", { ...draft.notify, [n.key]: on })} />

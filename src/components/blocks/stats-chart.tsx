@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "@/components/ui/icons";
 import { GlowChart } from "@/components/ui/glow-chart";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { neonVars } from "@/lib/neon";
@@ -88,7 +88,7 @@ function Delta({ text, good, up }: { text: string; good: boolean; up: boolean })
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 font-mono text-[11px] tabular-nums",
+        "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 font-mono text-[12px] tabular-nums",
         good
           ? "bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))]"
           : "bg-[rgb(255_77_94/0.1)] text-[rgb(255_77_94)]",
@@ -141,6 +141,7 @@ export default function StatsChart() {
 
   const point = active !== null ? now.points[active] : null;
   const peak = Math.max(...now.points.map((p) => p.y));
+  const [uptime, ...rest] = kpis;
 
   return (
     <section
@@ -150,22 +151,31 @@ export default function StatsChart() {
       className="relative overflow-hidden bg-[#05060a] px-5 py-20 text-white/90 sm:px-10 sm:py-28"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end lg:gap-16">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-              Groundwork · public numbers
-            </p>
-            <h2
-              id={titleId}
-              className="mt-5 max-w-[18ch] text-balance text-[clamp(2.1rem,4.6vw,3.4rem)] font-semibold leading-[1] tracking-[-0.04em]"
-            >
-              48,000 endpoints, checked every minute from 14 regions.
-            </h2>
-          </div>
-          <div className="flex flex-col gap-5 lg:items-end">
-            <p className="max-w-sm text-pretty text-[15px] leading-relaxed text-white/55 lg:text-right">
-              Our own monitoring, monitored by us. Every outage below has a public write-up.
-            </p>
+        <div>
+          <h2
+            id={titleId}
+            className="max-w-[24ch] text-[clamp(2.2rem,4.4vw,3.6rem)] font-[620] leading-[0.98] tracking-[-0.04em] text-white [font-stretch:112%]"
+          >
+            48,000 endpoints, checked every minute from 14 regions.
+          </h2>
+          <p className="mt-6 max-w-[52ch] text-pretty text-[17px] leading-[1.6] text-white/60">
+            <span className="text-white/90">Groundwork&apos;s own monitoring, monitored by us.</span> Every outage below
+            has a public write-up.
+          </p>
+        </div>
+
+        {/* The headline figure, then the three that explain it. */}
+        <div className="mt-16 grid gap-10 border-t border-white/[0.08] pt-8 sm:mt-20 lg:grid-cols-12 lg:gap-8">
+          <dl className="lg:col-span-5">
+            <dt className="text-[14px] text-white/60">{uptime.label}, last {days} days</dt>
+            <dd className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <span className="text-[clamp(3.5rem,8vw,6.25rem)] font-[620] leading-[0.9] tracking-[-0.045em] text-white [font-stretch:112%]">
+                {uptime.value}
+              </span>
+              <Delta text={uptime.delta} good={uptime.good} up={uptime.up} />
+            </dd>
+          </dl>
+          <div className="flex flex-col gap-8 lg:col-span-7 lg:items-end">
             <ToggleGroup
               size="sm"
               aria-label="Date range"
@@ -176,94 +186,83 @@ export default function StatsChart() {
                 setRange(value as Range);
               }}
             >
-              <ToggleGroupItem value="7d" className="h-8 sm:h-6">7D</ToggleGroupItem>
-              <ToggleGroupItem value="30d" className="h-8 sm:h-6">30D</ToggleGroupItem>
-              <ToggleGroupItem value="90d" className="h-8 sm:h-6">90D</ToggleGroupItem>
+              <ToggleGroupItem value="7d" className="h-8 sm:h-7">7 days</ToggleGroupItem>
+              <ToggleGroupItem value="30d" className="h-8 sm:h-7">30 days</ToggleGroupItem>
+              <ToggleGroupItem value="90d" className="h-8 sm:h-7">90 days</ToggleGroupItem>
             </ToggleGroup>
+            <dl className="grid w-full grid-cols-3 gap-4 sm:gap-6 lg:max-w-[620px]">
+              {rest.map((kpi) => (
+                <div key={kpi.label} className="flex flex-col gap-2 border-l border-white/[0.08] pl-3 first:border-l-0 first:pl-0 sm:pl-5 sm:first:border-l sm:first:pl-5">
+                  <dt className="text-[13px] text-white/60 sm:text-[14px]">{kpi.label}</dt>
+                  <dd className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
+                    <span className="text-[clamp(1.35rem,2.6vw,2.1rem)] font-[620] leading-none tracking-[-0.03em] text-white [font-stretch:112%]">
+                      {kpi.value}
+                    </span>
+                    <Delta text={kpi.delta} good={kpi.good} up={kpi.up} />
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
 
-        <div className="mt-12 overflow-hidden rounded-[20px] border border-white/[0.08] bg-white/[0.02] sm:mt-14">
-          <dl className="grid grid-cols-2 border-b border-white/[0.07] lg:grid-cols-4">
-            {kpis.map((kpi, i) => (
-              <div
-                key={kpi.label}
-                className={cn(
-                  "flex flex-col gap-3 p-5 sm:p-6",
-                  i % 2 === 0 && "border-r border-white/[0.07]",
-                  i < 2 && "border-b border-white/[0.07] lg:border-b-0",
-                  i === 1 && "lg:border-r",
-                )}
-              >
-                <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{kpi.label}</dt>
-                <dd className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                  <span className="text-[clamp(1.5rem,3vw,2rem)] font-semibold tabular-nums leading-none tracking-[-0.03em]">
-                    {kpi.value}
-                  </span>
-                  <Delta text={kpi.delta} good={kpi.good} up={kpi.up} />
-                </dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="p-4 sm:p-6">
-            <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-1">
-              <p className="text-sm font-medium text-white/80">p95 response time, all regions</p>
-              <p aria-live="polite" className="font-mono text-xs tabular-nums text-white/60">
-                {point ? (
-                  <>
-                    {formatDate(point.x)} · <span className="text-white/85">{point.y} ms</span>
-                  </>
-                ) : (
-                  <>
-                    {days}-day average · <span className="text-white/85">{Math.round(now.p95)} ms</span>
-                  </>
-                )}
-              </p>
-            </div>
-            <GlowChart
-              key={range}
-              data={now.points.map(({ x, y }) => ({ x, y }))}
-              label={`p95 response time per day, last ${days} days`}
-              height={260}
-              yDomain={[0, Math.max(800, Math.ceil((peak * 1.15) / 200) * 200)]}
-              thresholds={[{ y: SLO_MS, label: `SLO ${SLO_MS} ms`, color: "#e6edf7" }]}
-              yFormat={(value) => `${Math.round(value)} ms`}
-              xFormat={(x) => formatDate(x as Date)}
-              curve="linear"
-              onActiveIndexChange={setActive}
-            />
-          </div>
-
-          <div className="border-t border-white/[0.07] px-5 py-4 sm:px-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
-              {now.incidents.length} {now.incidents.length === 1 ? "incident" : "incidents"} in this range
+        <div className="mt-14">
+          <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+            <p className="text-[15px] font-medium text-white/90">p95 response time, all regions</p>
+            <p aria-live="polite" className="text-[13px] text-white/60">
+              {point ? (
+                <>
+                  {formatDate(point.x)} <span className="ml-1.5 font-mono tabular-nums text-white/90">{point.y} ms</span>
+                </>
+              ) : (
+                <>
+                  {days}-day average <span className="ml-1.5 font-mono tabular-nums text-white/90">{Math.round(now.p95)} ms</span>
+                </>
+              )}
             </p>
-            <ul className="mt-3 grid gap-2">
-              {now.incidents.map((incident) => (
-                <li
-                  key={incident.daysAgo}
-                  className="grid grid-cols-[3.25rem_1fr_auto] items-baseline gap-x-3 text-sm sm:grid-cols-[4rem_1fr_auto] sm:gap-x-4"
-                >
-                  <span className="font-mono text-xs tabular-nums text-white/60">
-                    {formatDate(new Date(TODAY - incident.daysAgo * DAY))}
-                  </span>
-                  <span className="min-w-0 text-white/75">
-                    {incident.cause}
-                    <span className="ml-2.5 whitespace-nowrap font-mono text-xs tabular-nums text-white/60">
-                      {incident.minutes} min
-                    </span>
-                  </span>
-                  <a
-                    href="#"
-                    className="-my-2 rounded-md py-2 text-xs text-white/60 underline decoration-white/20 underline-offset-4 outline-none transition-colors hover:text-white/85 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
-                  >
-                    Write-up
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
+          <GlowChart
+            key={range}
+            data={now.points.map(({ x, y }) => ({ x, y }))}
+            label={`p95 response time per day, last ${days} days`}
+            height={300}
+            yDomain={[0, Math.max(800, Math.ceil((peak * 1.15) / 200) * 200)]}
+            thresholds={[{ y: SLO_MS, label: `SLO ${SLO_MS} ms`, color: "#e6edf7" }]}
+            yFormat={(value) => `${Math.round(value)} ms`}
+            xFormat={(x) => formatDate(x as Date)}
+            curve="linear"
+            onActiveIndexChange={setActive}
+          />
+        </div>
+
+        <div className="mt-12 grid gap-4 lg:grid-cols-12 lg:gap-8">
+          <h3 className="text-[15px] font-medium text-white/90 lg:col-span-4">
+            {now.incidents.length} {now.incidents.length === 1 ? "incident" : "incidents"} in this range
+          </h3>
+          <ul className="border-b border-white/[0.07] lg:col-span-8">
+            {now.incidents.map((incident) => (
+              <li
+                key={incident.daysAgo}
+                className="grid grid-cols-[3.5rem_1fr_auto] items-baseline gap-x-3 border-t border-white/[0.07] py-3 text-[14px] sm:grid-cols-[4.5rem_1fr_auto] sm:gap-x-4"
+              >
+                <span className="font-mono text-[12.5px] tabular-nums text-white/60">
+                  {formatDate(new Date(TODAY - incident.daysAgo * DAY))}
+                </span>
+                <span className="min-w-0 text-white/80">
+                  {incident.cause}
+                  <span className="ml-2.5 whitespace-nowrap font-mono text-[12.5px] tabular-nums text-white/55">
+                    {incident.minutes} min
+                  </span>
+                </span>
+                <a
+                  href="#"
+                  className="-my-2 rounded-md py-2 text-[13px] text-white/60 underline decoration-white/20 underline-offset-4 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                >
+                  Write-up
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

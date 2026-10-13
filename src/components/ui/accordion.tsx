@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -208,7 +208,8 @@ const AccordionTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAtt
           type="button"
           id={item.triggerId}
           aria-expanded={item.open}
-          aria-controls={item.contentId}
+          // The panel unmounts while closed, so only point at it when it exists.
+          aria-controls={item.open ? item.contentId : undefined}
           aria-disabled={locked || undefined}
           disabled={item.disabled}
           data-accordion-trigger=""

@@ -82,13 +82,17 @@ export function HueKnob({
           const a = (i / TICKS) * Math.PI * 2;
           const tickHue = (i / TICKS) * 360;
           const near = Math.abs(((tickHue - hue + 540) % 360) - 180) < 360 / TICKS;
+          // Rounded so server and browser trig agree to the last digit and hydration matches.
+          const at = (r: number) => ({ x: Math.round((36 + Math.sin(a) * r) * 1000) / 1000, y: Math.round((36 - Math.cos(a) * r) * 1000) / 1000 });
+          const inner = at(31);
+          const outer = at(i % 3 === 0 ? 35 : 33.5);
           return (
             <line
               key={i}
-              x1={36 + Math.sin(a) * 31}
-              y1={36 - Math.cos(a) * 31}
-              x2={36 + Math.sin(a) * (i % 3 === 0 ? 35 : 33.5)}
-              y2={36 - Math.cos(a) * (i % 3 === 0 ? 35 : 33.5)}
+              x1={inner.x}
+              y1={inner.y}
+              x2={outer.x}
+              y2={outer.y}
               stroke={`hsl(${tickHue} 95% 62%)`}
               strokeOpacity={near && !disabled ? 1 : 0.35}
               strokeWidth={1.2}

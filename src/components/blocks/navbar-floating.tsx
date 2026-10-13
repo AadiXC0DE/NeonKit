@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { neonVars } from "@/lib/neon";
@@ -16,9 +16,9 @@ const LINKS = [
 const TEAMS = ["Halftone", "Orrery", "Bellwether", "Kiln & Co", "Tessellate"];
 
 const FEATURES = [
-  { n: "01", title: "Overlay", stat: "0.5 px", body: "Drop the Figma frame on the live page and drag the split. Anything off by more than half a pixel lights up." },
-  { n: "02", title: "Pins on the DOM", stat: "1 click", body: "Comments attach to the element, not to a screenshot, so they survive the next deploy and the one after." },
-  { n: "03", title: "Fix tracking", stat: "14 min", body: "Parallax watches the preview URL and closes the thread when the fix lands. Median time from pin to fix." },
+  { title: "Overlay", stat: "0.5 px", body: "Drop the Figma frame on the live page and drag the split. Anything off by more than half a pixel lights up." },
+  { title: "Pins on the DOM", stat: "1 click", body: "Comments attach to the element, not to a screenshot, so they survive the next deploy and the one after." },
+  { title: "Fix tracking", stat: "14 min", body: "Parallax watches the preview URL and closes the thread when the fix lands. That's the median from pin to fix." },
 ];
 
 const THREAD = [
@@ -202,15 +202,18 @@ export default function NavbarFloating() {
           <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-24 -z-10 h-[560px] bg-[radial-gradient(ellipse_60%_60%_at_70%_0%,rgb(var(--neon)/0.1),transparent_70%)]" />
 
           <section aria-labelledby="parallax-hero" className="mx-auto max-w-6xl px-5 pt-16 sm:px-8 sm:pt-24">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Design review · v4.0</p>
-            <h2 id="parallax-hero" className="mt-5 max-w-3xl [text-wrap:balance] text-[clamp(2.5rem,6.5vw,4.75rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/90">
-              Review the build, not the screenshot.
+            <h2 id="parallax-hero" className="text-[clamp(2.2rem,6.6vw,5.25rem)] font-[620] leading-[0.96] tracking-[-0.045em] text-white/90 [font-stretch:112%]">
+              Review the build,
+              <br />
+              <span className="text-white/50">not the screenshot.</span>
             </h2>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-white/55">
-              Parallax lays the Figma frame over the deployed page, pins comments to real elements and tells you when the fix ships.
-              Nobody types &ldquo;see attached&rdquo; again.
-            </p>
-            <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Scroll this preview ↓</p>
+            <div className="mt-8 grid gap-6 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+              <p className="max-w-[48ch] text-[17px] leading-[1.6] text-white/60">
+                Parallax lays the Figma frame over the deployed page, pins comments to real elements and tells you when the
+                fix ships. <span className="text-white/90">Nobody types &ldquo;see attached&rdquo; again.</span>
+              </p>
+              <p className="text-[13px] text-white/50">Scroll the preview: the bar tightens.</p>
+            </div>
 
             <div className="mt-14 grid gap-4 lg:grid-cols-[1fr_300px]">
               {/* A page under review, with the overlay split down the middle. */}
@@ -237,8 +240,10 @@ export default function NavbarFloating() {
                   </div>
                 </div>
                 <div className="absolute inset-y-0 left-[58%] w-px bg-[rgb(var(--neon)/0.7)] shadow-[0_0_10px_rgb(var(--neon)/0.6)]" />
-                <span className="absolute left-[58%] top-4 -translate-x-1/2 rounded-full border border-[rgb(var(--neon)/0.5)] bg-[#0a0b11] px-2 py-0.5 font-mono text-[10px] text-[rgb(var(--neon))]">
-                  Figma │ Live
+                <span className="absolute left-[58%] top-4 flex -translate-x-1/2 gap-2.5 rounded-full border border-[rgb(var(--neon)/0.5)] bg-[#0a0b11] px-2.5 py-0.5 text-[11px] text-[rgb(var(--neon))]">
+                  <span>Figma</span>
+                  <span aria-hidden className="w-px bg-[rgb(var(--neon)/0.5)]" />
+                  <span>Live</span>
                 </span>
 
                 <span className="absolute right-[12%] top-[44%] grid size-6 place-items-center rounded-full border border-[rgb(var(--neon)/0.5)] bg-[#0a0b11] text-[11px] font-semibold text-[rgb(var(--neon))]">
@@ -246,23 +251,29 @@ export default function NavbarFloating() {
                 </span>
               </div>
               <div className="flex flex-col rounded-2xl border border-white/10 bg-[#0a0b11] p-5">
-                <p className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-                  Pin 1 · Button
-                  <span className="text-[rgb(52_211_153)]">Fixed</span>
+                <p className="flex items-center justify-between text-[13px] text-white/55">
+                  <span>
+                    <span className="text-white/85">Pin 1</span> on Button
+                  </span>
+                  <span className="flex items-center gap-1.5 text-[rgb(52_211_153)]">
+                    <span className="size-1.5 rounded-full bg-[rgb(52_211_153)] shadow-[0_0_6px_rgb(52_211_153)]" />
+                    Fixed
+                  </span>
                 </p>
                 <ul className="mt-4 grid gap-4 border-t border-white/[0.06] pt-4">
                   {THREAD.map((c) => (
                     <li key={c.when}>
-                      <p className="flex justify-between text-xs text-white/60">
+                      <p className="flex justify-between text-xs text-white/55">
                         <span className="font-medium text-white/80">{c.who}</span>
-                        {c.when}
+                        <span className="font-mono tabular-nums">{c.when}</span>
                       </p>
                       <p className="mt-1 text-sm leading-5 text-white/65">{c.text}</p>
                     </li>
                   ))}
                 </ul>
-                <p className="mt-auto border-t border-white/[0.06] pt-4 font-mono text-[11px] leading-5 text-white/55">
-                  Verified on preview-2291 · 14:02
+                <p className="mt-auto border-t border-white/[0.06] pt-4 text-[12px] leading-5 text-white/55">
+                  Verified on <span className="font-mono text-white/75">preview-2291</span> at{" "}
+                  <span className="font-mono text-white/75">14:02</span>
                 </p>
               </div>
             </div>
@@ -275,11 +286,11 @@ export default function NavbarFloating() {
                   key={team}
                   className={cn(
                     "text-lg",
-                    i === 0 && "font-mono uppercase tracking-[0.2em] text-sm",
+                    i === 0 && "font-medium italic tracking-[-0.02em]",
                     i === 1 && "font-serif italic",
                     i === 2 && "font-semibold tracking-[-0.04em]",
                     i === 3 && "font-light tracking-[0.04em]",
-                    i === 4 && "font-bold uppercase tracking-[-0.02em] text-base",
+                    i === 4 && "font-black tracking-[-0.06em]",
                   )}
                 >
                   {team}
@@ -289,37 +300,37 @@ export default function NavbarFloating() {
           </section>
 
           <section aria-labelledby="parallax-features" className="mx-auto max-w-6xl px-5 py-24 sm:px-8">
-            <h2 id="parallax-features" className="max-w-xl text-3xl font-semibold leading-[1.05] tracking-[-0.035em] text-white/90 sm:text-4xl">
+            <h2 id="parallax-features" className="max-w-[24ch] text-[clamp(2rem,4vw,3rem)] font-[620] leading-[1] tracking-[-0.04em] text-white/90 [font-stretch:112%]">
               Three things, done properly.
             </h2>
-            <div className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
+            <dl className="mt-12 border-t border-white/[0.08]">
               {FEATURES.map((f) => (
-                <div key={f.n} className="border-t border-white/10 pt-5">
-                  <p className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-                    {f.n} · {f.title}
-                    <span className="text-sm normal-case tracking-normal text-white/80">{f.stat}</span>
-                  </p>
-                  <p className="mt-4 text-[15px] leading-relaxed text-white/55">{f.body}</p>
+                <div key={f.title} className="grid gap-2 border-b border-white/[0.08] py-7 sm:grid-cols-[minmax(0,5fr)_minmax(0,3fr)_minmax(0,6fr)] sm:items-baseline sm:gap-8">
+                  <dt className="text-[15px] font-medium text-white/85 sm:order-2">{f.title}</dt>
+                  <dd className="text-[clamp(2.25rem,5vw,3.5rem)] font-[620] leading-none tracking-[-0.045em] tabular-nums text-white/90 [font-stretch:112%] sm:order-1">
+                    {f.stat}
+                  </dd>
+                  <dd className="max-w-[48ch] text-[15px] leading-[1.6] text-white/55 sm:order-3">{f.body}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
           </section>
 
           <section aria-labelledby="parallax-cta" className="mx-auto max-w-6xl px-5 pb-16 sm:px-8">
-            <div className="flex flex-col items-start justify-between gap-6 rounded-2xl border border-white/10 bg-white/[0.03] p-7 sm:flex-row sm:items-end sm:p-10">
+            <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
               <div>
-                <h2 id="parallax-cta" className="text-2xl font-semibold tracking-[-0.03em] text-white/90 sm:text-3xl">
+                <h2 id="parallax-cta" className="text-[clamp(1.75rem,3.4vw,2.5rem)] font-[620] leading-[1.02] tracking-[-0.04em] text-white/90 [font-stretch:112%]">
                   Your next review starts with a URL.
                 </h2>
-                <p className="mt-2 text-sm text-white/60">Free for two editors. $14 per editor after that.</p>
+                <p className="mt-3 text-[15px] text-white/55">Free for two editors, then $14 per editor a month.</p>
               </div>
-              <Button asChild variant="solid" className="shadow-[0_0_0_1px_rgb(var(--neon)),inset_0_1px_0_rgb(255_255_255/0.45)]">
+              <Button asChild variant="solid">
                 <a href="#start">
                   Paste a preview link <ArrowRight />
                 </a>
               </Button>
             </div>
-            <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">© 2026 Parallax Labs · Made in Lisbon</p>
+            <p className="mt-16 border-t border-white/[0.06] pt-6 text-[13px] text-white/50">© 2026 Parallax Labs. Made in Lisbon.</p>
           </section>
         </main>
       </div>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { Marquee } from "@/components/ui/marquee";
 import { neonVars } from "@/lib/neon";
 
@@ -102,22 +102,19 @@ export default function LogosMarquee() {
       style={neonVars("violet")}
       className="relative overflow-hidden bg-[#05060a] py-20 text-white/90 sm:py-24"
     >
-      <div className="mx-auto grid max-w-6xl gap-6 px-5 sm:px-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">In production</p>
-          <h2
-            id={titleId}
-            className="mt-4 text-balance text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1] tracking-[-0.04em]"
-          >
-            Shipped inside <span className="tabular-nums">3,912</span> teams.
-          </h2>
-        </div>
-        <p className="max-w-sm text-pretty text-[15px] leading-relaxed text-white/55">
+      <div className="mx-auto grid max-w-6xl gap-6 px-5 sm:px-10 lg:grid-cols-12 lg:items-end lg:gap-8">
+        <h2
+          id={titleId}
+          className="text-balance text-[clamp(2.4rem,5.6vw,4.5rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%] lg:col-span-8"
+        >
+          Shipped inside <span className="tabular-nums">3,912</span> teams.
+        </h2>
+        <p className="max-w-[38ch] text-pretty text-[16px] leading-[1.6] text-white/60 lg:col-span-4 lg:pb-2">
           Our SDK runs in apps that 41 million people open every month. These are some of the teams who put it there.
         </p>
       </div>
 
-      <div className="relative isolate mt-12 sm:mt-16">
+      <div className="relative isolate mt-14 sm:mt-20">
         {/* Hairlines above and below, and the strip lamp the logos pass under */}
         <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-white/[0.06]" />
         <span aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-white/[0.06]" />
@@ -157,12 +154,12 @@ export default function LogosMarquee() {
       </div>
 
       <div className="mx-auto mt-8 flex max-w-6xl flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 sm:px-10">
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
-          <span className="text-white/80">+41</span> since Monday · list updated weekly
+        <p className="text-[13px] text-white/55">
+          <span className="tabular-nums text-white/90">+41</span> teams since Monday. The list updates weekly.
         </p>
         <a
           href="#"
-          className="group -my-2 inline-flex items-center gap-1.5 rounded-md py-2 text-sm font-medium text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
+          className="group -my-2 inline-flex items-center gap-1.5 rounded-md py-2 text-[14px] font-medium text-white/80 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
         >
           Customer stories
           <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, AtSign, Bell, CheckCheck, CornerDownLeft, MailOpen, Settings2, Siren } from "lucide-react";
+import { ArrowLeft, AtSign, Bell, CheckCheck, CornerDownLeft, MailOpen, Settings2, Siren } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -110,6 +110,20 @@ const FILTERS = [
   { value: "alert", label: "Alerts" },
 ];
 
+// Incident IDs and channels read as code; people, policies and services read as words.
+function Source({ value }: { value: string }) {
+  return (
+    <>
+      {value.split(" · ").map((part, i) => (
+        <React.Fragment key={part}>
+          {i > 0 && <span aria-hidden className="text-white/30">·</span>}
+          <span className={/^(INC-\d+|#|SEV)/.test(part) ? "font-mono text-[11px]" : "text-xs"}>{part}</span>
+        </React.Fragment>
+      ))}
+    </>
+  );
+}
+
 function StatusBadge({ status }: { status: Status }) {
   if (status === "firing")
     return <Badge size="sm" color="red" variant="outline" pulse>Firing</Badge>;
@@ -144,7 +158,7 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
         <button type="button" onClick={onBack} className="-my-1 -ml-1 inline-flex items-center gap-1.5 rounded-md px-1 py-2 text-xs text-white/60 outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] lg:hidden">
           <ArrowLeft aria-hidden className="size-3.5" /> Back
         </button>
-        <span className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 lg:inline-flex">
+        <span className="hidden items-center gap-2 text-[13px] capitalize text-white/60 lg:inline-flex">
           <Icon className="size-3.5" aria-hidden /> {note.kind}
         </span>
         <Button variant="ghost" size="sm" onClick={onUnread} disabled={note.unread}>
@@ -154,10 +168,10 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
 
       <div className="flex-1 space-y-6 p-5 sm:p-6">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-            {note.source}{note.severity ? ` · SEV${note.severity}` : ""}
+          <p className="flex flex-wrap items-center gap-2 text-white/55">
+            <Source value={`${note.source}${note.severity ? ` · SEV${note.severity}` : ""}`} />
           </p>
-          <h2 id={`${note.id}-title`} className="mt-2 text-[22px] font-semibold leading-[1.15] tracking-[-0.02em] text-white/90">
+          <h2 id={`${note.id}-title`} className="mt-2.5 text-balance text-[24px] font-[620] leading-[1.1] tracking-[-0.03em] text-white [font-stretch:112%]">
             {note.title}
           </h2>
           {note.status && <div className="mt-3"><StatusBadge status={note.status} /></div>}
@@ -165,10 +179,10 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
 
         {note.kind === "mention" ? (
           <div className="space-y-4">
-            <figure className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
+            <figure className="border-l-2 border-[rgb(var(--neon)/0.5)] pl-4">
               <figcaption className="flex items-center gap-2.5 text-sm text-white/70">
                 <Avatar alt={note.author ?? ""} size="sm" /> {note.author}
-                <span className="ml-auto font-mono text-[11px] text-white/55">{note.time}</span>
+                <span className="ml-auto font-mono text-[11px] tabular-nums text-white/55">{note.time}</span>
               </figcaption>
               <blockquote className="mt-3 text-[15px] leading-relaxed text-white/80">
                 <span className="text-[rgb(var(--neon))]">@you</span> {note.body}
@@ -203,10 +217,10 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
         )}
 
         {note.trend && (
-          <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
-            <div className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
-              <span>{note.metric?.[0]} · last 30 min</span>
-              <span className="text-white/70">{note.trend[note.trend.length - 1]}{note.metric?.[1]}</span>
+          <div className="border-t border-white/[0.07] pt-4">
+            <div className="flex items-baseline justify-between text-[13px] text-white/60">
+              <span>{note.metric?.[0]}, last 30 minutes</span>
+              <span className={cn("font-mono text-sm tabular-nums", note.status === "firing" ? "text-[rgb(255_77_94)]" : "text-white/85")}>{note.trend[note.trend.length - 1]}{note.metric?.[1]}</span>
             </div>
             <Sparkline data={note.trend} width="100%" height={56} live={note.status === "firing"} className="mt-3" />
           </div>
@@ -216,7 +230,7 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
           <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
             {note.facts.map(([k, v]) => (
               <div key={k}>
-                <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{k}</dt>
+                <dt className="text-xs text-white/55">{k}</dt>
                 <dd className="mt-0.5 text-white/80">{v}</dd>
               </div>
             ))}
@@ -227,12 +241,12 @@ function Detail({ note, onAck, onResolve, onUnread, onBack }: {
           <ol className="space-y-2 border-l border-white/10 pl-4">
             {note.log.map(([t, text]) => (
               <li key={t + text} className="flex gap-3 text-[13px] text-white/60">
-                <span className="w-10 shrink-0 font-mono text-[11px] leading-5 text-white/55">{t}</span> {text}
+                <span className="w-10 shrink-0 font-mono text-[11px] leading-5 tabular-nums text-white/55">{t}</span> {text}
               </li>
             ))}
             {note.status !== "firing" && note.id === "n1" && (
               <li className="flex gap-3 text-[13px] text-white/80">
-                <span className="w-10 shrink-0 font-mono text-[11px] leading-5 text-white/55">02:15</span>
+                <span className="w-10 shrink-0 font-mono text-[11px] leading-5 tabular-nums text-white/55">02:15</span>
                 {note.status === "acked" ? "Acknowledged by you" : "Resolved by you"}
               </li>
             )}
@@ -317,7 +331,7 @@ export default function AppNotifications() {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-3">
-          <span className="hidden items-center gap-2 rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] text-white/55 sm:inline-flex">
+          <span className="hidden items-center gap-2 text-[13px] text-white/60 sm:inline-flex">
             <span className="size-1.5 rounded-full bg-[rgb(52_211_153)] shadow-[0_0_6px_rgb(52_211_153)]" /> On call until Thu 09:00
           </span>
           <span className="relative inline-flex size-9 items-center justify-center rounded-lg bg-white/[0.05] text-white/80" aria-label={`${unread.length} unread notifications`} role="img">
@@ -331,10 +345,9 @@ export default function AppNotifications() {
       <main className="mx-auto max-w-[1240px] px-4 pb-10 pt-8 sm:px-8 sm:pt-10">
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Inbox · Payments primary</p>
-            <h1 className="mt-2 text-4xl font-semibold leading-none tracking-[-0.035em] sm:text-[44px]">Notifications</h1>
-            <p className="mt-3 flex items-center gap-3 font-mono text-xs text-white/60">
-              <span aria-live="polite">{unread.length ? `${unread.length} unread` : "All read"}</span>
+            <h1 className="text-[28px] font-[620] leading-none tracking-[-0.03em] text-white [font-stretch:112%] sm:text-[32px]">Notifications</h1>
+            <p className="mt-3 flex items-center gap-3 text-[13px] text-white/60">
+              <span aria-live="polite">Payments primary, {unread.length ? <span className="tabular-nums text-white/85">{unread.length} unread</span> : "all read"}</span>
               <span aria-hidden className="h-3 w-px bg-white/15" />
               {/* aria-disabled rather than disabled, so focus stays put after the click empties the list. */}
               <button
@@ -352,7 +365,7 @@ export default function AppNotifications() {
               {FILTERS.map((f) => (
                 <ToggleGroupItem key={f.value} value={f.value} className="max-sm:h-8">
                   {f.label}
-                  <span className="font-mono text-[10px]">{count(f.value)}</span>
+                  <span className="text-[11px] tabular-nums opacity-70">{count(f.value)}</span>
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
@@ -360,8 +373,8 @@ export default function AppNotifications() {
           </div>
         </div>
 
-        <div className="mt-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_420px]">
-          <div ref={listRef} className={cn("flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] lg:max-h-[680px] lg:overflow-y-auto", mobileDetail && "hidden lg:flex")}>
+        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:gap-10">
+          <div ref={listRef} className={cn("-mx-4 flex flex-col border-t border-white/[0.07] sm:mx-0 lg:max-h-[700px] lg:overflow-y-auto lg:[scrollbar-color:rgb(255_255_255/0.1)_transparent] lg:[scrollbar-width:thin]", mobileDetail && "hidden lg:flex")}>
             {visible.length === 0 && (
               <div className="grid flex-1 place-items-center content-center px-6 py-24 text-center">
                 <svg aria-hidden viewBox="0 0 24 24" className="size-14" fill="none" strokeLinecap="round" strokeWidth="1.4" stroke="rgb(var(--neon) / 0.18)">
@@ -377,9 +390,9 @@ export default function AppNotifications() {
               if (!items.length) return null;
               return (
                 <div key={day.key} role="group" aria-label={day.label}>
-                  <div className="sticky top-0 z-10 flex items-baseline justify-between border-b border-white/[0.06] bg-[#08090e] px-5 py-2 font-mono text-[11px] uppercase tracking-[0.16em]">
-                    <span className="text-white/60">{day.label}</span>
-                    <span className="text-white/55">{day.date}</span>
+                  <div className="sticky top-0 z-10 flex items-baseline justify-between border-b border-white/[0.06] bg-[#05060a] px-4 pb-2.5 pt-5 text-[13px] sm:px-1">
+                    <span className="font-medium text-white/85">{day.label}</span>
+                    <span className="tabular-nums text-white/50">{day.date}</span>
                   </div>
                   <ul>
                     {items.map((n) => {
@@ -392,24 +405,24 @@ export default function AppNotifications() {
                             onClick={() => open(n.id)}
                             aria-current={active || undefined}
                             className={cn(
-                              "relative grid w-full grid-cols-[16px_minmax(0,1fr)_auto] gap-x-3.5 px-5 py-4 text-left outline-none transition-colors duration-150",
+                              "relative grid w-full grid-cols-[16px_minmax(0,1fr)_auto] gap-x-3.5 px-4 py-4 text-left outline-none transition-colors duration-150 sm:px-3",
                               "hover:bg-white/[0.03] focus-visible:bg-white/[0.04] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]",
                               active && "lg:bg-white/[0.04]",
                             )}
                           >
                             {active && (
-                              <span aria-hidden className="absolute inset-y-3 left-0 hidden w-[3px] rounded-r-full bg-[color-mix(in_srgb,rgb(var(--neon))_45%,white)] shadow-[0_0_8px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/0.6)] lg:block" />
+                              <span aria-hidden className="absolute inset-y-0 left-0 hidden w-[2px] bg-[color-mix(in_srgb,rgb(var(--neon))_45%,white)] shadow-[0_0_8px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/0.6)] lg:block" />
                             )}
                             <Icon aria-hidden className={cn("mt-0.5 size-4", n.status === "firing" ? "text-[rgb(255_77_94)]" : "text-white/35")} />
                             <span className="min-w-0">
-                              <span className={cn("block text-[15px] leading-snug", n.unread ? "font-medium text-white/90" : "text-white/70")}>{n.title}</span>
-                              <span className={cn("mt-1 line-clamp-2 text-sm leading-relaxed sm:line-clamp-1", n.unread ? "text-white/70" : "text-white/60")}>{n.body}</span>
-                              <span className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[11px] text-white/55">
-                                {n.source}
+                              <span className={cn("block text-[15px] leading-snug", n.unread ? "font-medium text-white" : "text-white/70")}>{n.title}</span>
+                              <span className={cn("mt-1 line-clamp-2 text-sm leading-relaxed sm:line-clamp-1", n.unread ? "text-white/65" : "text-white/55")}>{n.body}</span>
+                              <span className="mt-2 flex flex-wrap items-center gap-2 text-white/55">
+                                <Source value={n.source} />
                                 {n.status && <StatusBadge status={n.status} />}
                               </span>
                             </span>
-                            <span className="flex flex-col items-end gap-2.5 font-mono text-[11px] leading-6 text-white/55">
+                            <span className="flex flex-col items-end gap-2.5 font-mono text-[11px] leading-6 tabular-nums text-white/55">
                               {n.time}
                               {n.unread && (
                                 <span className="size-1.5 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_10px_rgb(var(--neon)/0.7)]">
@@ -427,7 +440,7 @@ export default function AppNotifications() {
             })}
           </div>
 
-          <div ref={detailRef} tabIndex={-1} className={cn("rounded-2xl border border-white/10 bg-[#0a0b11] outline-none lg:sticky lg:top-6 lg:block lg:self-start", !mobileDetail && "hidden")}>
+          <div ref={detailRef} tabIndex={-1} className={cn("rounded-2xl border border-white/10 bg-[#0a0b11] shadow-[0_30px_60px_-30px_rgb(0_0_0/0.9)] outline-none lg:sticky lg:top-6 lg:block lg:self-start", !mobileDetail && "hidden")}>
             <Detail
               key={selected.id}
               note={selected}

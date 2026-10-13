@@ -14,10 +14,16 @@ import {
   type Placement,
   type VirtualElement,
 } from "@floating-ui/react-dom";
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
+
+/** The single element in `node`. Server Components can pass it as a lazy reference, which Children resolves. */
+function resolveElement<P = Record<string, unknown>>(node: React.ReactNode): React.ReactElement<P> | null {
+  const [child] = React.Children.toArray(node);
+  return React.isValidElement<P>(child) ? child : null;
+}
 
 type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
 
@@ -111,7 +117,7 @@ function mergeProps(ours: AnyProps, theirs: AnyProps): AnyProps {
 
 const Slot = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
   ({ children, ...props }, forwardedRef) => {
-    const child = React.isValidElement<AnyProps>(children) ? children : null;
+    const child = resolveElement<AnyProps>(children as React.ReactNode);
     const ref = useComposedRefs(forwardedRef, child ? getElementRef(child) : undefined);
     if (!child) return null;
     return React.cloneElement(child, { ...mergeProps(props, child.props), ref } as AnyProps);
@@ -562,7 +568,9 @@ const MenuSurface = React.forwardRef<HTMLDivElement, MenuSurfaceProps>(
         shift({ padding: 8 }),
         size({
           padding: 8,
-          apply({ availableWidth, availableHeight, elements }) {
+          apply({ availableWidth, availableHeight, elements, rects }) {
+            // Lets a menu match its trigger: className="w-[var(--menu-trigger-width)]".
+            elements.floating.style.setProperty("--menu-trigger-width", `${rects.reference.width}px`);
             elements.floating.style.setProperty("--menu-available-width", `${Math.max(0, availableWidth)}px`);
             elements.floating.style.setProperty("--menu-available-height", `${Math.max(0, availableHeight)}px`);
           },
@@ -582,10 +590,14 @@ const MenuSurface = React.forwardRef<HTMLDivElement, MenuSurfaceProps>(
         ? ({ "--neon": inherited, "--neon-accent": inherited } as React.CSSProperties)
         : undefined;
 
+    // Read once per mount: StrictMode runs this effect twice, and taking the intent again would come
+    // back as "menu" and pull focus off the first item onto the panel.
+    const focusIntent = React.useRef<FocusIntent | null>(null);
     React.useEffect(() => {
       const panel = panelRef.current;
       if (!panel) return;
-      const intent = takeFocusIntent();
+      focusIntent.current ??= takeFocusIntent();
+      const intent = focusIntent.current;
       if (intent === "none") return;
       const items = getItems(panel);
       const target = intent === "first" ? items[0] : intent === "last" ? items[items.length - 1] : undefined;
@@ -1020,10 +1032,11 @@ const ItemShell = React.forwardRef<HTMLDivElement, ItemShellProps>(
       </>
     );
 
-    if (asChild && React.isValidElement<{ children?: React.ReactNode }>(children)) {
+    const asChildElement = asChild ? resolveElement<{ children?: React.ReactNode }>(children) : null;
+    if (asChildElement) {
       return (
         <Slot ref={forwardedRef as React.Ref<HTMLElement>} {...(itemProps as React.HTMLAttributes<HTMLElement>)}>
-          {React.cloneElement(children, undefined, inner(children.props.children))}
+          {React.cloneElement(asChildElement, undefined, inner(asChildElement.props.children))}
         </Slot>
       );
     }
@@ -1047,7 +1060,7 @@ function IconSlot({ icon, highlighted, danger }: { icon: React.ReactNode; highli
           ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_5px_rgb(var(--neon)/0.65))]"
           : danger
             ? "text-[rgb(var(--neon)/0.75)]"
-            : "text-white/45",
+            : "text-white/50",
       )}
     >
       {icon}

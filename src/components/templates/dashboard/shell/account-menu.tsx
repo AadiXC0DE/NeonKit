@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Command as CommandIcon, LogOut, Settings, UsersRound } from "lucide-react";
+import { Command as CommandIcon, LogOut, Settings, UsersRound } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import {
   DropdownMenu,

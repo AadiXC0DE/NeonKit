@@ -17,12 +17,12 @@ export default function ProgressCircular() {
           <CircularProgress value={value} size={76} color={color} aria-label={`${label} used`}>
             <span className="grid gap-1 leading-none">
               <span className="text-base">{value}%</span>
-              <span className="text-[10px] font-normal text-white/45">used</span>
+              <span className="text-[10px] font-normal text-white/50">used</span>
             </span>
           </CircularProgress>
           <div className="grid gap-0.5">
             <p className="text-sm text-white/90">{label}</p>
-            <p className="text-xs tabular-nums text-white/45">{detail}</p>
+            <p className="text-xs tabular-nums text-white/50">{detail}</p>
           </div>
         </div>
       ))}

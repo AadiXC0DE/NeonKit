@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, ArrowUpRight, Menu } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Menu } from "@/components/ui/icons";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -131,22 +131,19 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" size="sm" className="bg-[#05060a]">
               <SheetHeader>
-                <SheetTitle className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/55">
-                  Low Light 2027
+                <SheetTitle className="text-[14px] font-normal text-white/60">
+                  Low Light 2027, {event.shortDate}
                 </SheetTitle>
               </SheetHeader>
               <nav aria-label="Sections" className="mt-10">
                 <ul className="grid gap-1">
-                  {sections.map((section, index) => (
+                  {sections.map((section) => (
                     <li key={section.id}>
                       <SheetClose asChild>
                         <a
                           href={`#${section.id}`}
-                          className="flex items-baseline gap-4 rounded-lg py-2 text-[38px] font-semibold leading-[1.05] tracking-[-0.035em] text-white/85 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                          className="block rounded-lg py-1.5 text-[40px] font-[640] leading-[1.05] tracking-[-0.04em] text-white/85 outline-none transition-colors [font-stretch:112%] hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                         >
-                          <span className="w-6 shrink-0 font-mono text-[11px] font-normal tracking-[0.16em] text-white/55">
-                            0{index + 1}
-                          </span>
                           {section.label}
                         </a>
                       </SheetClose>
@@ -155,8 +152,8 @@ export function Header() {
                 </ul>
               </nav>
               <div className="mt-auto border-t border-white/[0.07] pt-6">
-                <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-                  {event.shortDate} · {event.venue}
+                <p className="mb-4 text-[14px] text-white/60">
+                  {event.venue}, {event.address}
                 </p>
                 <Button asChild variant="solid" size="lg" className="w-full" onClick={() => setMenuOpen(false)}>
                   {actionLink}

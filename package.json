@@ -41,7 +41,6 @@
     "@floating-ui/react-dom": "^2.1.9",
     "@radix-ui/react-slot": "^1.4.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.55.0",
     "motion": "^14.1.0",
     "next": "^16.4.0",
     "react": "^19.3.0",

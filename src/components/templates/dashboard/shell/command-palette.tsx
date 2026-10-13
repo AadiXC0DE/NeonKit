@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { BellOff, Copy, FolderGit2, PanelLeft, Plus, RotateCw, UserPlus } from "lucide-react";
+import { BellOff, Copy, FolderGit2, PanelLeft, Plus, RotateCw, UserPlus } from "@/components/ui/icons";
 import {
   CommandDialog,
   CommandEmpty,

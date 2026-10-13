@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { LayoutGroup, motion, useReducedMotion } from "motion/react";
-import { ChevronLeft, ChevronRight, CloudRain, FileWarning, Plus, Clapperboard } from "lucide-react";
+import { ChevronLeft, ChevronRight, CloudRain, FileWarning, Plus, Clapperboard } from "@/components/ui/icons";
 import { Avatar, AvatarGroup } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,8 +55,8 @@ function Tube({ state }: { state: "idle" | "full" | "over" }) {
       aria-hidden
       style={state === "over" ? neonVars("red") : undefined}
       className={cn(
-        "absolute inset-x-4 top-0 h-[2px] rounded-full transition-[background-color,box-shadow] duration-300",
-        state === "idle" && "bg-white/[0.08]",
+        "absolute inset-x-0 top-0 h-[2px] rounded-full transition-[background-color,box-shadow] duration-300",
+        state === "idle" && "bg-white/[0.1]",
         state === "full" && "bg-[rgb(var(--neon)/0.55)] shadow-[0_0_8px_rgb(var(--neon)/0.45)]",
         state === "over" && "nk-app-kanban-buzz bg-[color-mix(in_srgb,rgb(var(--neon))_45%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.8),0_0_32px_rgb(var(--neon)/0.4)]",
       )}
@@ -169,14 +169,16 @@ export default function AppKanban() {
 
       <header className="mx-auto flex w-full max-w-[1400px] flex-wrap items-end justify-between gap-x-8 gap-y-5 px-4 pb-6 pt-8 sm:px-8 lg:pt-12">
         <div className="min-w-0">
-          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-            <Clapperboard aria-hidden className="size-3.5 text-[rgb(var(--neon))]" />
-            Rigging · Saltmarsh · Day 8 of 32
-          </p>
-          <h1 id="kanban-title" className="mt-3 text-[34px] font-semibold leading-[0.95] tracking-[-0.04em] text-white sm:text-[48px]">
-            Production board
+          <h1 id="kanban-title" className="flex flex-wrap items-baseline gap-x-3 text-[30px] font-[620] leading-none tracking-[-0.035em] text-white [font-stretch:112%] sm:text-[34px]">
+            <span className="flex items-center gap-2.5">
+              <Clapperboard aria-hidden className="size-6 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.6))]" />
+              Saltmarsh
+            </span>
+            <span className="text-white/50">day 8 of 32</span>
           </h1>
-          <p className="mt-3 text-sm text-white/60">Tue, Oct 13 · Unit call 06:30 · Wrap 19:00</p>
+          <p className="mt-3 text-sm text-white/60">
+            Tuesday 13 October. Unit call <span className="tabular-nums text-white/85">06:30</span>, wrap <span className="tabular-nums text-white/85">19:00</span>.
+          </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <AvatarGroup size="sm" max={5}>
@@ -208,36 +210,36 @@ export default function AppKanban() {
 
       <LayoutGroup>
         <div className="mx-auto mt-5 w-full max-w-[1400px] snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-12 [scrollbar-color:rgb(255_255_255/0.12)_transparent] [scrollbar-width:thin] sm:scroll-px-8 sm:px-8 lg:snap-none">
-          <ol className="grid min-w-max grid-cols-[repeat(4,280px)] gap-3 lg:min-w-0 lg:grid-cols-4">
+          <ol className="grid min-w-max grid-cols-[repeat(4,288px)] gap-4 lg:min-w-0 lg:grid-cols-4 lg:gap-6">
             {COLUMNS.map((column) => {
               const cards = board[column.id];
               const state = column.limit === undefined ? "idle" : cards.length > column.limit ? "over" : cards.length === column.limit ? "full" : "idle";
               return (
-                <li key={column.id} aria-labelledby={`col-${column.id}`} className={cn("relative flex snap-start flex-col rounded-2xl border bg-white/[0.02] transition-colors duration-300", state === "over" ? "border-[rgb(255_77_94/0.35)]" : "border-white/[0.07]")}>
+                <li key={column.id} aria-labelledby={`col-${column.id}`} className="relative flex snap-start flex-col">
                   <Tube state={state} />
-                  {state === "over" && <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-32 rounded-t-2xl bg-[radial-gradient(ellipse_70%_100%_at_50%_0%,rgb(255_77_94/0.16),transparent)]" />}
-                  <div className="relative flex items-start justify-between gap-3 px-4 pb-3 pt-4">
+                  {state === "over" && <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-[radial-gradient(ellipse_70%_100%_at_50%_0%,rgb(255_77_94/0.14),transparent)]" />}
+                  <div className="relative flex items-start justify-between gap-3 pb-3.5 pt-4">
                     <div className="min-w-0">
-                      <h2 id={`col-${column.id}`} className="text-sm font-semibold tracking-[-0.01em] text-white/90">{column.title}</h2>
+                      <h2 id={`col-${column.id}`} className="text-[15px] font-[620] tracking-[-0.015em] text-white/90 [font-stretch:112%]">{column.title}</h2>
                       <p className={cn("mt-0.5 truncate text-xs", state === "over" ? "text-[rgb(255_77_94)]" : "text-white/60")}>
                         {state === "over" ? `Over the WIP limit by ${cards.length - column.limit!}` : column.note}
                       </p>
                     </div>
                     <span
                       className={cn(
-                        "shrink-0 rounded-md border px-1.5 py-0.5 font-mono text-[11px] tabular-nums transition-[color,border-color,box-shadow,text-shadow] duration-300",
-                        state === "over" && "border-[rgb(255_77_94/0.6)] text-[rgb(255_77_94)] shadow-[0_0_12px_rgb(255_77_94/0.35)] [text-shadow:0_0_8px_rgb(255_77_94/0.8)]",
-                        state === "full" && "border-[rgb(var(--neon)/0.45)] text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.6)]",
-                        state === "idle" && "border-white/10 text-white/60",
+                        "shrink-0 pt-0.5 font-mono text-xs tabular-nums transition-[color,text-shadow] duration-300",
+                        state === "over" && "text-[rgb(255_77_94)] [text-shadow:0_0_8px_rgb(255_77_94/0.8)]",
+                        state === "full" && "text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.6)]",
+                        state === "idle" && "text-white/55",
                       )}
                     >
                       {cards.length}
-                      {column.limit !== undefined && <span className="opacity-75"> / {column.limit}</span>}
+                      {column.limit !== undefined && <span>/{column.limit}</span>}
                       <span className="sr-only">{column.limit !== undefined ? " cards, limit " : " cards"}</span>
                     </span>
                   </div>
 
-                  <ul className="flex flex-1 flex-col gap-2 px-2 pb-2">
+                  <ul className="flex flex-1 flex-col gap-2">
                     {cards.map((card) => {
                       const at = ORDER.indexOf(column.id);
                       const dim = dept !== "all" && card.dept !== dept;
@@ -253,20 +255,20 @@ export default function AppKanban() {
                             aria-describedby="kanban-keys"
                             onKeyDown={(e) => onCardKey(e, card.id)}
                             className={cn(
-                              "group relative rounded-xl border bg-[#0a0b11] p-3.5 outline-none transition-[opacity,border-color,box-shadow] duration-300",
+                              "group relative rounded-xl border bg-[#0b0c12] p-3.5 outline-none transition-[opacity,border-color,box-shadow] duration-300",
                               "focus-visible:border-[rgb(var(--neon)/0.6)] focus-visible:shadow-[0_0_0_1px_rgb(var(--neon)/0.3),0_0_24px_-6px_rgb(var(--neon)/0.6)]",
                               moved === card.id ? "border-[rgb(var(--neon)/0.7)] shadow-[0_0_0_1px_rgb(var(--neon)/0.35),0_0_28px_-4px_rgb(var(--neon)/0.6)]" : "border-white/[0.08] hover:border-white/[0.16]",
                               dim && "opacity-30",
                             )}
                           >
-                            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
+                            <h3 className="text-[14px] leading-snug text-white/90">{card.title}</h3>
+                            <div className="mt-1.5 flex items-center gap-1.5 text-xs text-white/55">
                               <span className={cn(card.dept === dept && "text-[rgb(var(--neon))]")}>{card.dept}</span>
-                              {card.scene && <span aria-hidden className="text-white/25">·</span>}
-                              {card.scene && <span>{card.scene}</span>}
-                              <span className="ml-auto text-white/55">{card.day}</span>
+                              {card.scene && <span aria-hidden>·</span>}
+                              {card.scene && <span className="tabular-nums">{card.scene}</span>}
+                              <span className="ml-auto tabular-nums">{card.day}</span>
                             </div>
-                            <h3 className="mt-2 text-[14px] leading-snug text-white/90">{card.title}</h3>
-                            <div className="mt-3 flex min-h-7 items-center gap-2">
+                            <div className="mt-3 flex min-h-7 items-center gap-2 border-t border-white/[0.05] pt-2.5">
                               <span className="flex gap-1">
                                 {card.crew.map((n) => <Avatar key={n} alt={n} size="sm" className="size-6 text-[9px]" />)}
                               </span>
@@ -303,7 +305,7 @@ export default function AppKanban() {
                         <button
                           type="button"
                           onClick={() => { setDraft(""); setAdding(column.id); }}
-                          className="flex h-8 w-full cursor-pointer items-center gap-2 rounded-lg px-2 text-xs text-white/60 outline-none transition-colors hover:bg-white/[0.03] hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                          className="flex h-9 w-full cursor-pointer items-center gap-2 rounded-lg px-2 text-[13px] text-white/55 outline-none transition-colors hover:bg-white/[0.03] hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                         >
                           <Plus aria-hidden className="size-3.5" /> Add card
                         </button>

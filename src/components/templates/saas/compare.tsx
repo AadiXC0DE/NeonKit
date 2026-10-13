@@ -2,14 +2,14 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { contactEmail } from "./config";
 import { comparison, plans, type Billing } from "./data";
-import { Eyebrow, focusRing } from "./primitives";
+import { Headline, focusRing } from "./primitives";
 
 const FEATURED = plans.findIndex((p) => p.featured);
 
@@ -52,7 +52,7 @@ function Value({ value, featured }: { value: boolean | string; featured: boolean
         <span className="sr-only">Not included</span>
       </>
     );
-  return <span className={cn("font-mono text-[13px]", featured ? "text-white" : "text-white/75")}>{value}</span>;
+  return <span className={cn("text-[14px]", featured ? "text-white" : "text-white/70")}>{value}</span>;
 }
 
 export function Compare({ billing }: { billing: Billing }) {
@@ -65,21 +65,17 @@ export function Compare({ billing }: { billing: Billing }) {
       <div className="mx-auto max-w-[1120px]">
         <header className="grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <Eyebrow>Every line</Eyebrow>
-            <h2
-              id="compare-title"
-              className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
-            >
-              Compare before you commit.
-            </h2>
+            <Headline id="compare-title" className="text-[clamp(2.25rem,5vw,3.75rem)]">
+              Every line, side by side.
+            </Headline>
           </div>
-          <p className="max-w-md text-[15px] leading-relaxed text-white/60 lg:col-span-4 lg:col-start-9 lg:pb-1.5">
+          <p className="max-w-md text-pretty text-[16px] leading-[1.6] text-white/60 lg:col-span-4 lg:col-start-9 lg:pb-1.5">
             Same scheduler, same rollback, on every plan. What changes is how much you can tune it and who signs off.
             Hover or focus a feature for what it actually means.
           </p>
         </header>
 
-        <p className="mt-12 font-mono text-[11px] text-white/60 md:hidden">Scroll sideways to see every plan →</p>
+        <p className="mt-12 text-[13px] text-white/55 md:hidden">Scroll sideways for every plan.</p>
         <Table
           stickyHeader
           aria-label="Plan comparison"
@@ -96,8 +92,8 @@ export function Compare({ billing }: { billing: Billing }) {
           <TableHeader>
             <TableRow>
               <TableHead className="left-0 z-20 whitespace-normal rounded-tl-xl align-bottom shadow-[1px_0_0_rgb(255_255_255/0.06)] lg:top-16 lg:shadow-none">
-                <span className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/60">
-                  {billing === "yearly" ? "Billed yearly" : "Billed monthly"} · USD
+                <span className="text-[13px] font-normal text-white/55">
+                  {billing === "yearly" ? "Billed yearly" : "Billed monthly"}, in USD
                 </span>
               </TableHead>
               {plans.map((plan, i) => {
@@ -125,10 +121,10 @@ export function Compare({ billing }: { billing: Billing }) {
                       >
                         {plan.name}
                       </span>
-                      <span className="text-[28px] font-semibold leading-none tracking-[-0.03em] text-white tabular-nums">
+                      <span className="text-[30px] font-[620] leading-none tracking-[-0.04em] text-white [font-stretch:112%]">
                         ${price}
                       </span>
-                      <span className="text-[11px] font-normal text-white/60">
+                      <span className="text-[12px] font-normal text-white/55">
                         {price ? "per seat / month" : "free for good"}
                       </span>
                       <Button
@@ -152,7 +148,7 @@ export function Compare({ billing }: { billing: Billing }) {
                   <th
                     colSpan={4}
                     scope="colgroup"
-                    className="border-b border-white/[0.06] bg-white/[0.015] px-4 pb-2 pt-6 text-left font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/60"
+                    className="border-b border-white/[0.06] px-4 pb-3 pt-9 text-left text-[15px] font-medium text-white"
                   >
                     <span className="sticky left-4">{group.name}</span>
                   </th>

@@ -33,7 +33,7 @@ export default function PowerButtonDemo() {
       <Screw className="bottom-3 left-3" />
       <Screw className="bottom-3 right-3" />
 
-      <div className="flex items-center justify-between px-2 font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">
+      <div className="flex items-center justify-between px-2 font-mono text-[10px] uppercase tracking-[0.18em] text-white/50">
         <span>Monitor A</span>
         <span>230V · 50Hz</span>
       </div>

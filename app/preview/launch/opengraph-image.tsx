@@ -26,9 +26,9 @@ export default function OpengraphImage() {
           color: "#f3f1f5",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, letterSpacing: 5, color: "#8a8796" }}>
-          <span>{`${event.city.toUpperCase()} · 19 MARCH 2027`}</span>
-          <span>{`DOORS 18:30 · ${event.venue.toUpperCase()}`}</span>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 26, color: "#9a97a6" }}>
+          <span>{`${event.dateLabel}, ${event.venue}, ${event.city}`}</span>
+          <span>Doors 18:30</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>

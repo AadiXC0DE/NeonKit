@@ -12,7 +12,9 @@ export default function KbdSizes() {
         <Kbd size="lg" pressed className="col-start-2">
           W
         </Kbd>
-        <Kbd size="lg">A</Kbd>
+        <Kbd size="lg" className="col-start-1">
+          A
+        </Kbd>
         <Kbd size="lg">S</Kbd>
         <Kbd size="lg" pressed>
           D

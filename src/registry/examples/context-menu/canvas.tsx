@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ZoomIn } from "lucide-react";
+import { ZoomIn } from "@/components/ui/icons";
 import {
   ContextMenu,
   ContextMenuCheckboxItem,
@@ -58,7 +58,7 @@ export default function ContextMenuCanvas() {
             <div className="mt-3 h-5 w-14 rounded-md border border-[rgb(var(--neon)/0.5)]" />
           </div>
         </div>
-        <span className="absolute bottom-3 right-3 rounded-md bg-black/40 px-1.5 py-0.5 text-[11px] tabular-nums text-white/45">
+        <span className="absolute bottom-3 right-3 rounded-md bg-black/40 px-1.5 py-0.5 text-[11px] tabular-nums text-white/50">
           {zoom}%
         </span>
         <span className="absolute bottom-3 left-3 text-[11px] text-white/35">Right-click anywhere on the canvas</span>

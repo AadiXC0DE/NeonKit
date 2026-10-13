@@ -17,9 +17,9 @@ export default function HeartbeatRates() {
           <div>
             <p className="font-mono text-xl tabular-nums leading-tight text-white/90">
               {rate.bpm}
-              <span className="ml-1 text-[11px] text-white/45">bpm</span>
+              <span className="ml-1 text-[11px] text-white/55">bpm</span>
             </p>
-            <p className="text-xs text-white/45">{rate.label}</p>
+            <p className="text-xs text-white/55">{rate.label}</p>
           </div>
           <Heartbeat bpm={rate.bpm} height={56} />
         </div>

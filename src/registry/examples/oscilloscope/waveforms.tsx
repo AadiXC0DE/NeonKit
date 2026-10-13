@@ -13,7 +13,7 @@ export default function OscilloscopeWaveforms() {
       {waves.map(({ wave, label }) => (
         <figure key={wave} className="grid gap-2">
           <Oscilloscope wave={wave} frequency={2} amplitude={0.62} className="aspect-[16/9] rounded-xl" />
-          <figcaption className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">{label}</figcaption>
+          <figcaption className="text-[13px] text-white/55">{label}</figcaption>
         </figure>
       ))}
     </div>

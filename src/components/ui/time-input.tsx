@@ -146,6 +146,35 @@ const ClockIcon = () => (
   </svg>
 );
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 export interface TimeInputProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "color" | "defaultValue" | "onChange"> {
   /** Controlled value, "HH:mm" or "HH:mm:ss" in 24-hour time. Empty string for no time. */
@@ -167,6 +196,8 @@ export interface TimeInputProps
   disabled?: boolean;
   /** Submits the value under this name with a surrounding form. */
   name?: string;
+  /** Blocks form submission until every segment is filled. */
+  required?: boolean;
   /** Icon before the time. Pass null to remove the clock. */
   leading?: React.ReactNode;
   label?: React.ReactNode;
@@ -194,6 +225,7 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
       size = "md",
       disabled = false,
       name,
+      required = false,
       leading = <ClockIcon />,
       label,
       description,
@@ -211,9 +243,9 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
     const autoId = React.useId();
     const id = idProp ?? autoId;
     const labelId = `${id}-label`;
-    const invalid = Boolean(error);
-    const message = invalid ? (error === true ? null : error) : description;
-    const messageId = message ? `${id}-${invalid ? "error" : "description"}` : undefined;
+    const errored = Boolean(error);
+    const message = errored ? (error === true ? null : error) : description;
+    const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
     const describedBy = [ariaDescribedBy, messageId].filter(Boolean).join(" ") || undefined;
     const s = sizes[size];
 
@@ -436,8 +468,44 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
 
     const filled = format(current, cycle, showSeconds);
 
+    // A form reset goes back to the time the field started with.
+    const proxyRef = React.useRef<HTMLInputElement>(null);
+    const rejected = useRejected(proxyRef, filled);
+    const invalid = errored || rejected;
+    const initialValue = React.useRef(value ?? defaultValue ?? "");
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        setPending(null);
+        const initial = parse(initialValue.current, cycle);
+        if (segments.every((part) => initial[part] === current[part])) return;
+        commit(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = proxyRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
+    // A half-filled time reads as empty to the form; say what's missing instead.
+    const partial = !filled && segments.some((part) => current[part] !== null);
+    React.useEffect(() => {
+      proxyRef.current?.setCustomValidity(required && partial ? "Enter a complete time." : "");
+    }, [required, partial]);
+
+    const focusFirstEmpty = () => {
+      const empty = segments.findIndex((part) => current[part] === null);
+      focusSegment(empty >= 0 ? empty : 0);
+    };
+
     return (
-      <div className={cn("grid w-full gap-1.5", containerClassName)}>
+      <div
+        style={neonVars(color)}
+        className={cn("[--neon:var(--neon-accent,34_211_238)]", "grid w-full gap-1.5", containerClassName)}
+      >
         {label && (
           <label
             id={labelId}
@@ -447,6 +515,13 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
             className={cn("w-fit font-medium text-white/80", s.label)}
           >
             {label}
+            {required && (
+              <span
+                aria-hidden
+                title="Required"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+              />
+            )}
           </label>
         )}
         <div
@@ -457,14 +532,13 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
           aria-describedby={describedBy}
           aria-disabled={disabled || undefined}
           data-invalid={invalid || undefined}
-          style={neonVars(invalid ? INVALID : color, style)}
+          style={invalid ? neonVars(INVALID, style) : style}
           onMouseDown={(event) => {
             onMouseDown?.(event);
             // Clicks on the padding or the icon land in the first empty segment, like a native field.
             if (disabled || (event.target as HTMLElement).closest("[role=spinbutton]")) return;
             event.preventDefault();
-            const empty = segments.findIndex((part) => current[part] === null);
-            focusSegment(empty >= 0 ? empty : 0);
+            focusFirstEmpty();
           }}
           className={cn(
             "[--neon:var(--neon-accent,34_211_238)]",
@@ -482,7 +556,7 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
           {leading && (
             <span
               className={cn(
-                "flex shrink-0 items-center text-white/40 [&_svg]:transition-colors [&_svg]:duration-200 group-focus-within/field:[&_svg]:text-[rgb(var(--neon)/0.9)]",
+                "flex shrink-0 items-center text-white/50 [&_svg]:transition-colors [&_svg]:duration-200 group-focus-within/field:[&_svg]:text-[rgb(var(--neon)/0.9)]",
                 s.leading,
               )}
             >
@@ -573,10 +647,10 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
                     className={cn(
                       "relative inline-flex min-w-[2ch] cursor-ns-resize touch-none items-center justify-center whitespace-nowrap outline-none caret-transparent selection:bg-transparent",
                       "transition-[background-color,color] duration-150 ease-out",
-                      empty ? "text-white/30" : "text-white/90",
+                      empty ? "text-white/50" : "text-white/90",
                       !disabled &&
                         "focus:bg-[rgb(var(--neon)/0.12)] focus:text-white focus:[text-shadow:0_0_10px_rgb(var(--neon)/0.45)]",
-                      empty && "focus:text-white/55",
+                      empty && "focus:text-white/70",
                       disabled && "cursor-not-allowed",
                       s.segment,
                     )}
@@ -596,12 +670,25 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
               )}
             />
           </div>
+          {/* Carries the time into forms, under the field so a validation bubble points at it. */}
+          <input
+            ref={proxyRef}
+            aria-hidden
+            tabIndex={-1}
+            autoComplete="off"
+            name={name}
+            value={filled}
+            required={required}
+            disabled={disabled}
+            onChange={() => {}}
+            onFocus={focusFirstEmpty}
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-px w-full opacity-0"
+          />
         </div>
-        {name && <input type="hidden" name={name} value={filled} disabled={disabled} />}
         {message && (
           <p
             id={messageId}
-            className={cn("text-xs leading-5", invalid ? "text-[#ff4d5e]" : "text-white/55")}
+            className={cn("text-xs leading-5", errored ? "text-[#ff4d5e]" : "text-white/55")}
           >
             {message}
           </p>

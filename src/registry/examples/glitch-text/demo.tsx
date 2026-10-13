@@ -6,8 +6,8 @@ export default function GlitchTextDemo() {
       <GlitchText as="h2" intensity="heavy" className="text-[clamp(2.75rem,10vw,5.5rem)] font-semibold leading-none tracking-[-0.03em] text-white/90">
         SIGNAL LOST
       </GlitchText>
-      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/45">
-        Relay 07 · retrying in 30s
+      <p className="text-sm text-white/55">
+        Relay 07 dropped out. Retrying in <span className="font-mono tabular-nums text-white/80">00:30</span>
       </p>
     </div>
   );

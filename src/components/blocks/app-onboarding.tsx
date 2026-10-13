@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, ArrowRight, Check, FileText, Hash, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, FileText, Hash, Search } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ColorPicker } from "@/components/ui/color-picker";
@@ -29,6 +29,26 @@ const PAGES: Record<string, string[]> = {
   Everything: ["Handbook", "Meeting notes", "Projects"],
 };
 
+// The first page of each starter set, so the preview reads like a real wiki rather than grey bars.
+const FIRST_PAGE: Record<string, { body: string; pinned: string }> = {
+  Engineering: {
+    body: "When the job queue backs up past 10,000, page on-call before adding workers. Scaling first hides the cause, and the cause is usually one tenant.",
+    pinned: "Postgres failover drill, Thursday 14:00",
+  },
+  Research: {
+    body: "Two divers and one surface lead, always. Check the tide table against the harbour office, then log water temperature at 5 m and again at the kelp line.",
+    pinned: "Transect B moved 40 m north after the storm",
+  },
+  Operations: {
+    body: "Freight goes through Noordhaven Logistics, account 44-1182. Anything over €5,000 needs two approvals, and the second one can't be your manager.",
+    pinned: "Insurance renewal due 1 November",
+  },
+  Everything: {
+    body: "We write things down so nobody has to ask twice. If you answered a question in chat this week, it probably belongs on a page here.",
+    pinned: "New here? Start with the first-week page",
+  },
+};
+
 const ACCENTS = [
   { value: "#22d3ee", label: "Argon" },
   { value: "#a3e635", label: "Lime" },
@@ -44,54 +64,61 @@ const slugify = (s: string) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-"
 
 function Preview({ name, purpose, people, done }: { name: string; purpose: string; people: string[]; done: boolean }) {
   const title = name.trim() || "Untitled workspace";
+  const page = FIRST_PAGE[purpose];
   return (
     <div
       aria-hidden
       className={cn(
-        "relative overflow-hidden rounded-2xl border bg-[#0a0b11] text-left transition-[border-color,box-shadow] duration-500",
-        done ? "border-[rgb(var(--neon)/0.6)] shadow-[0_0_0_1px_rgb(var(--neon)/0.3),0_0_48px_-8px_rgb(var(--neon)/0.45)]" : "border-white/10",
+        "relative overflow-hidden rounded-2xl border bg-[#0a0b11] text-left shadow-[0_50px_100px_-40px_rgb(0_0_0/0.9)] transition-[border-color,box-shadow] duration-500",
+        done ? "border-[rgb(var(--neon)/0.6)] shadow-[0_0_0_1px_rgb(var(--neon)/0.3),0_0_60px_-10px_rgb(var(--neon)/0.45)]" : "border-white/10",
       )}
     >
-      <div className="flex h-8 items-center gap-1.5 border-b border-white/[0.06] px-3">
+      <div className="flex h-9 items-center gap-1.5 border-b border-white/[0.06] px-3.5">
         {[0, 1, 2].map((i) => <span key={i} className="size-2 rounded-full bg-white/10" />)}
-        <span className="ml-3 truncate font-mono text-[10px] text-white/55">fieldnote.app/{slugify(name) || "your-team"}</span>
+        <span className="ml-3 truncate font-mono text-[11px] text-white/55">
+          fieldnote.app/<span className="text-white/80">{slugify(name) || "your-team"}</span>
+        </span>
       </div>
-      <div className="grid min-h-[340px] grid-cols-[156px_minmax(0,1fr)]">
-        <div className="border-r border-white/[0.06] p-3">
+      <div className="grid min-h-[400px] grid-cols-[188px_minmax(0,1fr)]">
+        <div className="border-r border-white/[0.06] p-3.5">
           <div className="flex items-center gap-2">
             <span className="grid size-6 shrink-0 place-items-center rounded-md bg-[rgb(var(--neon))] text-[11px] font-semibold text-[#05060a] transition-colors duration-300">
               {title[0].toUpperCase()}
             </span>
             <span className="truncate text-[13px] font-medium text-white/85">{title}</span>
           </div>
-          <div className="mt-3 flex h-7 items-center gap-2 rounded-md border border-white/[0.06] px-2 text-[11px] text-white/55">
+          <div className="mt-3 flex h-7 items-center gap-2 rounded-md border border-white/[0.06] px-2 text-[12px] text-white/50">
             <Search className="size-3" /> Search
           </div>
-          <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.16em] text-white/55">{purpose}</p>
-          <ul className="mt-2 space-y-1 text-[12px]">
+          <p className="mt-5 px-2 text-[12px] text-white/50">{purpose}</p>
+          <ul className="mt-1.5 space-y-0.5 text-[13px]">
             {PAGES[purpose].map((p, i) => (
-              <li key={p} className={cn("flex items-center gap-2 rounded-md px-2 py-1", i === 0 ? "bg-[rgb(var(--neon)/0.12)] text-[rgb(var(--neon))]" : "text-white/60")}>
-                <FileText className="size-3 shrink-0" /> <span className="truncate">{p}</span>
+              <li key={p} className={cn("flex items-center gap-2 rounded-md px-2 py-1.5", i === 0 ? "bg-[rgb(var(--neon)/0.12)] text-[rgb(var(--neon))]" : "text-white/60")}>
+                <FileText className="size-3.5 shrink-0" /> <span className="truncate">{p}</span>
               </li>
             ))}
           </ul>
-          <div className="mt-5 flex items-center">
+          <div className="mt-6 flex items-center px-1">
             <Avatar alt="You" size="sm" className="ring-2 ring-[#0a0b11]" />
             {people.slice(0, 3).map((p) => (
               <Avatar key={p} alt={p.split("@")[0].replace(/[._-]/g, " ")} size="sm" className="-ml-1.5 ring-2 ring-[#0a0b11]" />
             ))}
-            {people.length > 3 && <span className="ml-1.5 font-mono text-[10px] text-white/55">+{people.length - 3}</span>}
+            {people.length > 3 && <span className="ml-1.5 font-mono text-[11px] text-white/55">+{people.length - 3}</span>}
           </div>
         </div>
-        <div className="p-5">
-          <p className="flex items-center gap-1.5 font-mono text-[10px] text-white/55"><Hash className="size-3" /> {PAGES[purpose][0].toLowerCase()}</p>
-          <p className="mt-2 text-lg font-semibold leading-tight tracking-[-0.02em] text-white/90">Welcome to {title}</p>
-          <div className="mt-4 space-y-2">
-            {[92, 84, 96, 60].map((w, i) => <div key={i} className="h-2 rounded-full bg-white/[0.06]" style={{ width: `${w}%` }} />)}
+        <div className="p-6 sm:p-8">
+          <p className="flex items-center gap-1.5 text-[12px] text-white/50">
+            <Hash className="size-3" /> {title} <span className="text-white/30">/</span> {PAGES[purpose][0]}
+          </p>
+          <p className="mt-4 text-[26px] font-[620] leading-[1.05] tracking-[-0.03em] text-white/90 [font-stretch:112%]">{PAGES[purpose][0]}</p>
+          <p className="mt-1.5 text-[12px] text-white/50">Edited just now by you</p>
+          <p className="mt-5 max-w-[46ch] text-[14px] leading-[1.65] text-white/65">{page.body}</p>
+          <div className="mt-6 border-l-2 border-[rgb(var(--neon))] bg-[rgb(var(--neon)/0.06)] py-2.5 pl-3.5 pr-3">
+            <p className="text-[12px] text-[rgb(var(--neon))]">Pinned</p>
+            <p className="mt-0.5 text-[13px] text-white/80">{page.pinned}</p>
           </div>
-          <div className="mt-5 rounded-lg border border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.06)] p-3">
-            <div className="h-2 w-1/3 rounded-full bg-[rgb(var(--neon)/0.5)]" />
-            <div className="mt-2 h-2 w-4/5 rounded-full bg-white/[0.06]" />
+          <div className="mt-6 space-y-2" aria-hidden>
+            {[88, 94, 52].map((w, i) => <div key={i} className="h-1.5 rounded-full bg-white/[0.05]" style={{ width: `${w}%` }} />)}
           </div>
         </div>
       </div>
@@ -134,13 +161,13 @@ export default function AppOnboarding() {
       aria-labelledby="fn-onboarding-title"
       className="relative isolate overflow-hidden bg-[#05060a] px-4 py-10 text-white/90 sm:px-8 sm:py-14"
     >
-      <div aria-hidden className="absolute -right-32 top-24 -z-10 h-[420px] w-[620px] rounded-full bg-[rgb(var(--neon)/0.08)] blur-[120px] transition-colors duration-500" />
+      <div aria-hidden className="absolute -right-32 top-24 -z-10 h-[520px] w-[720px] rounded-full bg-[rgb(var(--neon)/0.09)] blur-[120px] transition-colors duration-500" />
 
-      <div className="mx-auto grid max-w-[1160px] gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:items-start lg:gap-16">
+      <div className="mx-auto grid max-w-[1200px] gap-12 lg:grid-cols-[minmax(0,480px)_minmax(0,1fr)] lg:items-start lg:gap-20">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Fieldnote · Set up</p>
-          <h1 id="fn-onboarding-title" className="mt-3 text-[clamp(2.25rem,4.6vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em]">
-            {done ? "Your wiki is ready." : "Three steps to a wiki people actually read."}
+          <p className="text-[15px] font-medium tracking-[-0.01em] text-white/85">Fieldnote</p>
+          <h1 id="fn-onboarding-title" className="mt-10 text-balance text-[clamp(2.3rem,4.4vw,3.6rem)] font-[620] leading-[0.98] tracking-[-0.04em] [font-stretch:112%]">
+            {done ? "Your wiki is ready." : "A wiki people actually read."}
           </h1>
 
           <Stepper value={step} onValueChange={goTo} clickable aria-label="Workspace setup" className="mt-10">
@@ -248,9 +275,10 @@ export default function AppOnboarding() {
           </form>
         </div>
 
-        <div className="hidden md:block">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Live preview</p>
+        {/* The preview is the point: it runs off the right edge at full size and changes as you type. */}
+        <div className="hidden md:block lg:pt-[52px] lg:-mr-[120px] xl:-mr-[200px]">
           <Preview name={name} purpose={purpose} people={people} done={done} />
+          <p className="mt-3 text-[13px] text-white/50">This is your workspace. It changes as you type.</p>
         </div>
       </div>
     </section>

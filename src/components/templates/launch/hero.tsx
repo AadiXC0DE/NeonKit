@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "@/components/ui/icons";
 
-import { Avatar, AvatarGroup } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Cityscape } from "@/components/ui/cityscape";
+import { cn } from "@/lib/utils";
 
 import { event } from "./config";
 import { replay, speakers } from "./data";
@@ -18,9 +18,15 @@ const LEDE: Record<Phase, string> = {
   after: `Seven talks, a workshop and a panel on the details nobody asks for. Thanks to the 340 of you in the room and the ${replay.watched} on the stream. The replay is up.`,
 };
 
-const initials = (name: string) => name.split(" ").map((part) => part[0]).join("").slice(0, 2);
+// The poster's top-right corner, which keeps up with the night.
+const WHEN: Record<Phase, string> = {
+  before: "Doors 18:30, bar till 01:00",
+  live: "On air until 23:45, bar till 01:00",
+  after: `Replay out now, ${replay.runtime}`,
+};
 
-const FACTS = [`${speakers.length} speakers`, `${event.seats} seats`, "Captioned stream", "Bar till 01:00"];
+// How much of the city is still awake: a little before, most of it while we're on air, nearly nobody by Sunday.
+const WINDOWS: Record<Phase, number> = { before: 0.16, live: 0.3, after: 0.07 };
 
 const secondary =
   "group inline-flex h-12 items-center gap-2 rounded-lg px-1 text-[15px] font-medium text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5";
@@ -68,69 +74,85 @@ function Actions({ phase }: { phase: Phase }) {
   );
 }
 
+// "after dark." is lettered in glass tube. It only strikes while the night is actually on.
+const tube =
+  "[color:color-mix(in_srgb,rgb(var(--neon))_32%,white)] [text-shadow:0_0_2px_rgb(255_255_255/0.6),0_0_10px_rgb(var(--neon)/0.95),0_0_34px_rgb(var(--neon)/0.6),0_0_90px_rgb(var(--neon)/0.35)]";
+
 export function Hero() {
   const { phase, ready } = useEvent();
   const shown: Phase = ready ? phase : "before";
+  const host = speakers.find((speaker) => speaker.role === "Host");
+  const billed = speakers.filter((speaker) => speaker !== host);
 
   return (
     <section aria-labelledby="hero-title" className="relative isolate -mt-16 overflow-hidden pt-16">
-      <div aria-hidden className="absolute inset-0 -z-20 bg-[linear-gradient(to_bottom,#05060a_0%,#090812_50%,#150a16_100%)]" />
-      <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-[280px] sm:h-[340px] lg:h-[380px]">
-        <Cityscape seed={41} lights={0.2} signs={["LOW LIGHT", "HOTEL"]} style={{ fontFamily: "var(--font-tilt-neon, inherit)" }} />
+      <div aria-hidden className="absolute inset-0 -z-20 bg-[linear-gradient(to_bottom,#05060a_0%,#090812_55%,#170a17_100%)]" />
+      <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-[300px] sm:h-[360px] lg:h-[420px]">
+        <Cityscape
+          seed={41}
+          lights={WINDOWS[shown]}
+          signs={["LOW LIGHT", "HOTEL"]}
+          style={{ fontFamily: "var(--font-tilt-neon, inherit)" }}
+        />
       </div>
 
-      <div className="mx-auto max-w-[1240px] px-5 pb-[300px] pt-12 sm:px-8 sm:pb-[360px] sm:pt-16 lg:pb-[390px] lg:pt-20">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">
-          {event.city} <span className="text-white/30">·</span> {event.dateLabel}
-        </p>
+      <div className="mx-auto max-w-[1240px] px-5 pb-[268px] pt-10 sm:px-8 sm:pb-[330px] sm:pt-14 lg:pb-[300px] lg:pt-16">
+        {/* The poster's top line: when, where, and when to turn up. */}
+        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 text-[14px] text-white/60 sm:text-[15px]">
+          <p>
+            <span className="text-white/90">{event.dateLabel}</span>
+            <span className="hidden sm:inline">, {event.venue}, {event.city}</span>
+          </p>
+          <p>{WHEN[shown]}</p>
+        </div>
+
         <h1
           id="hero-title"
-          className="mt-6 text-[clamp(3rem,11vw,8.25rem)] font-semibold leading-[0.9] tracking-[-0.05em] text-white"
+          className="mt-8 font-[640] leading-[0.84] tracking-[-0.05em] text-white [font-stretch:112%] sm:mt-12"
         >
-          Interface craft,
-          <br />
-          <span className="text-white/45">after dark.</span>
+          <span className="block text-[clamp(3.1rem,11.4vw,9.75rem)]">Interface craft,</span>
+          <span
+            className={cn(
+              "block text-right text-[clamp(3.1rem,11.4vw,9.75rem)] transition-[color,text-shadow] duration-700",
+              shown === "live" ? tube : "text-white/40",
+            )}
+          >
+            after dark.
+          </span>
         </h1>
 
-        <div className="mt-10 grid gap-12 lg:mt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,600px)] lg:items-start lg:gap-16">
-          <div className="max-w-[46ch] lg:pt-2">
-            <p className="text-pretty text-base leading-relaxed text-white/65 sm:text-[17px]">{LEDE[shown]}</p>
+        <div className="mt-10 grid gap-12 sm:mt-14 lg:mt-12 lg:grid-cols-12 lg:items-start lg:gap-8">
+          <div className="lg:col-span-5 lg:pt-3">
+            <p className="max-w-[44ch] text-pretty text-[16px] leading-[1.6] text-white/70 sm:text-[17px]">{LEDE[shown]}</p>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
               <Actions phase={shown} />
             </div>
-            <a
-              href="#speakers"
-              className="group mt-10 flex items-center gap-4 rounded-lg border-t border-white/[0.07] pt-6 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
-            >
-              <AvatarGroup size="sm">
-                {speakers.slice(0, 4).map((speaker) => (
-                  <Avatar key={speaker.id} alt="" fallback={initials(speaker.name)} />
-                ))}
-              </AvatarGroup>
-              <span className="text-sm leading-snug text-white/60 transition-colors group-hover:text-white/85">
-                With {speakers[0].name}, {speakers[1].name} and {speakers.length - 2} more
-              </span>
-            </a>
+            <p className="mt-10 max-w-[44ch] border-t border-white/[0.08] pt-5 text-[14px] leading-relaxed text-white/60">
+              {shown === "after" ? "With thanks to" : "On stage:"}{" "}
+              {billed.map((speaker, index) => (
+                <span key={speaker.id}>
+                  <a
+                    href="#speakers"
+                    className="rounded-[3px] text-white/85 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                  >
+                    {speaker.name}
+                  </a>
+                  {index < billed.length - 2 ? ", " : index === billed.length - 2 ? " and " : "."}
+                </span>
+              ))}
+              {host && <> Hosted by {host.name}.</>}
+            </p>
           </div>
 
-          <div className="relative max-w-[600px]">
+          {/* Hung over the skyline like the board in a station hall. */}
+          <div className="relative lg:col-span-7 lg:col-start-6">
             <div
               aria-hidden
-              className="absolute -inset-x-10 -inset-y-12 -z-10 rounded-[50%] bg-[radial-gradient(closest-side,rgb(var(--neon)/0.14),transparent)]"
+              className="absolute -inset-x-10 -inset-y-12 -z-10 rounded-[50%] bg-[radial-gradient(closest-side,rgb(var(--neon)/0.13),transparent)]"
             />
             <DepartureBoard />
           </div>
         </div>
-      </div>
-
-      <div className="absolute inset-x-0 bottom-0 border-t border-white/[0.06] bg-[#05060a]/85 backdrop-blur-[6px]">
-        <ul className="mx-auto flex max-w-[1240px] justify-between gap-x-6 px-5 py-4 font-mono text-[11px] uppercase tracking-[0.16em] text-white/60 sm:px-8">
-          {FACTS.map((fact, i) => (
-            <li key={fact} className={i % 2 === 1 ? "hidden sm:block" : undefined}>
-              {fact}
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );

@@ -22,7 +22,7 @@ export function Wordmark({ className }: { className?: string }) {
     <span className={cn("flex items-center gap-2 text-[17px] font-semibold lowercase tracking-[-0.035em] text-white/90", className)}>
       <Mark />
       <span>
-        low light<span className="ml-1 font-mono text-[11px] font-normal tracking-normal text-white/55">&apos;27</span>
+        low light<span className="ml-1 text-[12px] font-medium tracking-normal text-white/55">&apos;27</span>
       </span>
     </span>
   );

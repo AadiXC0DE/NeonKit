@@ -65,7 +65,7 @@ export default function TableStickyHeader() {
         <TableBody>
           {requests.map((request) => (
             <TableRow key={request.id}>
-              <TableCell className="font-mono text-xs text-white/45">{request.time}</TableCell>
+              <TableCell className="font-mono text-xs text-white/50">{request.time}</TableCell>
               <TableCell className="font-mono text-xs text-white/70">{request.method}</TableCell>
               <TableCell className="whitespace-nowrap font-mono text-xs text-white/90">{request.path}</TableCell>
               <TableCell align="right" className={`font-mono text-xs ${statusClass(request.status)}`}>

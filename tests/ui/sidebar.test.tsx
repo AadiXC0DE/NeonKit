@@ -251,3 +251,79 @@ describe("Sidebar", () => {
     expect(panel().style.getPropertyValue("--neon")).toBe("163 230 53");
   });
 });
+
+describe("Sidebar mobile drawer", () => {
+  function mobile() {
+    return vi.spyOn(window, "matchMedia").mockImplementation(
+      (query: string) =>
+        ({
+          matches: query.includes("max-width"),
+          media: query,
+          onchange: null,
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          addListener: () => {},
+          removeListener: () => {},
+          dispatchEvent: () => false,
+        }) as MediaQueryList,
+    );
+  }
+
+  async function openDrawer() {
+    const trigger = screen.getByRole("button", { name: "Toggle sidebar" });
+    trigger.focus();
+    fireEvent.click(trigger);
+    // Focus lands two animation frames later, once the panel is visible.
+    await act(() => new Promise((resolve) => setTimeout(resolve, 50)));
+    return trigger;
+  }
+
+  it("is a modal dialog that takes focus and makes the page inert", async () => {
+    const spy = mobile();
+    render(<Shell />);
+    await openDrawer();
+    const dialog = screen.getByRole("dialog", { name: "Sidebar" });
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(dialog.contains(document.activeElement)).toBe(true);
+    expect(screen.getByText("Page").parentElement).toHaveAttribute("inert");
+    spy.mockRestore();
+  });
+
+  it("keeps Tab inside the drawer", async () => {
+    const spy = mobile();
+    render(
+      <>
+        <button type="button">Outside</button>
+        <Shell />
+      </>,
+    );
+    await openDrawer();
+    const dialog = screen.getByRole("dialog", { name: "Sidebar" });
+    const inbox = screen.getByRole("button", { name: /Inbox/ });
+    const roadmap = screen.getByRole("link", { name: "Roadmap" });
+
+    roadmap.focus();
+    fireEvent.keyDown(document.activeElement!, { key: "Tab" });
+    expect(document.activeElement).toBe(inbox);
+
+    fireEvent.keyDown(document.activeElement!, { key: "Tab", shiftKey: true });
+    expect(document.activeElement).toBe(roadmap);
+
+    // Focus that escaped (say, from a click elsewhere) is pulled back in on the next Tab.
+    screen.getByRole("button", { name: "Outside" }).focus();
+    fireEvent.keyDown(document.activeElement!, { key: "Tab" });
+    expect(dialog.contains(document.activeElement)).toBe(true);
+    spy.mockRestore();
+  });
+
+  it("closes on Escape and hands focus back to the trigger", async () => {
+    const spy = mobile();
+    render(<Shell />);
+    const trigger = await openDrawer();
+    fireEvent.keyDown(document.activeElement!, { key: "Escape" });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(document.activeElement).toBe(trigger);
+    expect(screen.getByText("Page").parentElement).not.toHaveAttribute("inert");
+    spy.mockRestore();
+  });
+});

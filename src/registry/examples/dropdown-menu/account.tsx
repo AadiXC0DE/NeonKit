@@ -1,4 +1,4 @@
-import { ChevronsUpDown, CreditCard, Keyboard, LifeBuoy, LogOut, Settings, User } from "lucide-react";
+import { ChevronsUpDown, CreditCard, Keyboard, LifeBuoy, LogOut, Settings, User } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -17,7 +17,7 @@ export default function DropdownMenuAccount() {
         <Avatar alt="Mara Okafor" size="sm" status="online" />
         <span className="min-w-0 flex-1">
           <span className="block truncate text-sm font-medium leading-5 text-white/90">Mara Okafor</span>
-          <span className="block truncate text-xs leading-4 text-white/45">Pro plan</span>
+          <span className="block truncate text-xs leading-4 text-white/50">Pro plan</span>
         </span>
         <ChevronsUpDown aria-hidden className="size-4 shrink-0 text-white/35" />
       </DropdownMenuTrigger>
@@ -25,7 +25,7 @@ export default function DropdownMenuAccount() {
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel className="pb-2">
           <span className="block text-sm font-medium text-white/90">Mara Okafor</span>
-          <span className="block font-normal text-white/45">mara@northlight.dev</span>
+          <span className="block font-normal text-white/50">mara@northlight.dev</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

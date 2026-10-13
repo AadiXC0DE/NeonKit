@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Pause, Play } from "lucide-react";
+import { Pause, Play } from "@/components/ui/icons";
 import { Equalizer } from "@/components/ui/equalizer";
 
 // Synthesizes a four-bar loop offline, so the example needs no audio file.
@@ -135,7 +135,7 @@ export default function EqualizerAudio() {
         </button>
         <div className="min-w-0">
           <p className="text-sm text-white/85">Synth loop, 112 bpm</p>
-          <p className="text-xs text-white/45">{!src ? "Rendering…" : playing ? "The bars read its real spectrum." : "Rendered in your browser. Press play."}</p>
+          <p className="text-xs text-white/55">{!src ? "Rendering…" : playing ? "The bars read its real spectrum." : "Rendered in your browser. Press play."}</p>
         </div>
       </div>
       <audio

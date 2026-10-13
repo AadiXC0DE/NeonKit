@@ -80,7 +80,7 @@ toast.success("Invite sent to ana@acme.dev")`,
     },
   ],
   notes: [
-    "The stack is a labelled region; toasts are announced politely, and errors use role=\"alert\" so they interrupt.",
+    "The stack is a labelled region. Each new or updated toast is read from a live region that stays mounted, politely, except errors, which interrupt.",
     "Hovering the stack or tabbing into it expands it and pauses every timer; timers also pause while the tab is hidden.",
     "Swipe a toast sideways to dismiss it. On touch screens the close button stays visible.",
     "Toasts disappear, so never make one the only way to reach an action.",

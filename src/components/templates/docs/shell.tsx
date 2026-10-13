@@ -3,9 +3,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Search } from "lucide-react";
+import { Menu, Search } from "@/components/ui/icons";
 
-import { Badge } from "@/components/ui/badge";
 import { KbdCombo } from "@/components/ui/kbd";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -93,11 +92,20 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
                 </SheetTrigger>
                 <Link href={docHref("")} className={cn("rounded-md py-1 pr-1", focusRing)}>
                   <Wordmark />
-                  <span className="sr-only"> docs home</span>
+                  <span className="sr-only"> home</span>
                 </Link>
-                <Badge size="sm" className="ml-1 font-mono">
-                  v{version}
-                </Badge>
+                <a
+                  href={`${repoUrl}/releases/tag/v${version}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={cn(
+                    "ml-0.5 hidden rounded-md px-1.5 py-1 font-mono text-[12px] tabular-nums text-white/50 transition-colors duration-150 hover:text-white sm:block",
+                    focusRing,
+                  )}
+                >
+                  <span className="sr-only">Release notes for version </span>
+                  {version}
+                </a>
               </div>
 
               <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 pr-2 sm:gap-3 sm:pr-5 lg:justify-between lg:pl-14 lg:pr-7">

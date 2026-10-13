@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu } from "@/components/ui/icons";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { brand, team } from "../config";
@@ -27,8 +27,8 @@ export function MobileNav({ open, onOpenChange }: { open: boolean; onOpenChange:
           <Logo />
           <div className="min-w-0">
             <SheetTitle>{brand}</SheetTitle>
-            <SheetDescription className="font-mono text-[11px] uppercase leading-4 tracking-[0.14em]">
-              {team.name} · {team.plan} plan
+            <SheetDescription className="text-xs leading-4">
+              {team.name}, {team.plan} plan
             </SheetDescription>
           </div>
         </SheetHeader>
@@ -60,7 +60,7 @@ export function MobileNav({ open, onOpenChange }: { open: boolean; onOpenChange:
             })}
           </ul>
 
-          <p className="mt-8 px-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Pinned</p>
+          <p className="mt-8 px-3 text-[13px] text-white/55">Pinned</p>
           <ul className="mt-2 grid gap-0.5">
             {PINNED.map((project) => (
               <li key={project.name}>

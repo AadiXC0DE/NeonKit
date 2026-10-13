@@ -387,6 +387,19 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
       engine.current = { redraw, recolor, sync };
       resize();
 
+      // A move to a screen with another pixel ratio needs a fresh backing store.
+      let dprQuery: MediaQueryList | undefined;
+      const onDpr = () => {
+        resize();
+        watchDpr();
+      };
+      const watchDpr = () => {
+        dprQuery?.removeEventListener?.("change", onDpr);
+        dprQuery = window.matchMedia?.(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+        dprQuery?.addEventListener?.("change", onDpr);
+      };
+      watchDpr();
+
       const resizeObserver = typeof ResizeObserver !== "undefined" ? new ResizeObserver(resize) : null;
       resizeObserver?.observe(host);
       const intersection =
@@ -417,6 +430,7 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
         intersection?.disconnect();
         document.removeEventListener("visibilitychange", sync);
         motion?.removeEventListener?.("change", onMotion);
+        dprQuery?.removeEventListener?.("change", onDpr);
         probe?.removeEventListener("transitionend", onProbe);
       };
     }, []);

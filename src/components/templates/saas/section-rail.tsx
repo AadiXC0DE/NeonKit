@@ -93,12 +93,9 @@ export function SectionRail() {
         visible ? "opacity-100" : "pointer-events-none -translate-x-2 opacity-0",
       )}
     >
-      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/60">
+      <p className="pl-4 text-[13px] text-white/55">
         <span className="sr-only">Night clock </span>
-        <span
-          ref={clockRef}
-          className="text-[13px] tabular-nums text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]"
-        >
+        <span ref={clockRef} className="font-mono text-[15px] tabular-nums text-white">
           21:40
         </span>
       </p>

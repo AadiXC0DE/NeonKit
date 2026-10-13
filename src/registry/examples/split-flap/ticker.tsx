@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { TrainFront } from "lucide-react";
+import { TrainFront } from "@/components/ui/icons";
 import { SplitFlap } from "@/components/ui/split-flap";
 
 const stops = ["SHIBUYA", "HARAJUKU", "YOYOGI", "SHINJUKU", "TAKADANOBABA", "IKEBUKURO", "OTSUKA", "UENO", "AKIHABARA"];
@@ -16,7 +16,7 @@ export default function SplitFlapTicker() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/55">
+      <div className="flex items-center gap-2 text-[13px] font-medium text-white/60">
         <TrainFront aria-hidden className="size-3.5" />
         Next stop
       </div>

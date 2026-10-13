@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight } from "@/components/ui/icons";
 import { docsNav, type NavSection } from "@/config/nav";
 import { cn } from "@/lib/utils";
 
@@ -63,18 +63,20 @@ function Section({
           aria-expanded={open}
           aria-controls={id}
           onClick={onToggle}
-          className="group mb-2 flex w-full cursor-pointer items-center justify-between px-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-dim transition-colors hover:text-muted"
+          className="group mb-1 flex h-8 w-full cursor-pointer items-center gap-2 rounded-md pl-3 pr-2 text-left text-[13px] font-medium text-fg/90 transition-colors hover:text-fg"
         >
-          <span className="flex items-center gap-1.5">
-            <ChevronRight className={cn("size-3 transition-transform duration-200", open && "rotate-90")} />
-            {section.title}
-          </span>
-          <span className="tabular-nums">{section.items.length}</span>
+          <span className="flex-1">{section.title}</span>
+          <span className="text-[12px] font-normal tabular-nums text-muted">{section.items.length}</span>
+          <ChevronRight
+            size={13}
+            strokeWidth={2}
+            className={cn("text-muted transition-transform duration-200 ease-out-quint", open && "rotate-90")}
+          />
         </button>
       ) : (
-        <h4 className="mb-2.5 px-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-dim">{section.title}</h4>
+        <p className="mb-1 flex h-8 items-center pl-3 text-[13px] font-medium text-fg/90">{section.title}</p>
       )}
-      <ul id={id} hidden={!open} className="space-y-px">
+      <ul id={id} hidden={!open}>
         {section.items.map((item) => {
           const active = pathname === item.href;
           return (
@@ -84,17 +86,18 @@ function Section({
                 onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex h-8 items-center justify-between rounded-md px-3 text-[13.5px] transition-colors",
-                  active ? "bg-white/[0.04] text-fg" : "text-muted hover:text-fg",
+                  "relative flex h-[30px] items-center gap-2 rounded-md pl-3 pr-2 text-[14px] transition-colors duration-150",
+                  active ? "text-fg" : "text-muted hover:text-fg",
                 )}
               >
                 {active && (
-                  <span className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-[rgb(var(--neon-accent))] shadow-[0_0_8px_rgb(var(--neon-accent))]" />
+                  <span
+                    aria-hidden
+                    className="absolute left-0 top-1/2 h-3.5 w-[2px] -translate-y-1/2 rounded-full bg-[rgb(var(--neon-accent))] shadow-[0_0_6px_rgb(var(--neon-accent)/0.9),0_0_14px_rgb(var(--neon-accent)/0.5)]"
+                  />
                 )}
-                {item.title}
-                {item.isNew && (
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-[rgb(var(--neon-accent))]">new</span>
-                )}
+                <span className="truncate">{item.title}</span>
+                {item.isNew && <span className="ml-auto text-[12px] text-[rgb(var(--neon-accent))]">New</span>}
               </Link>
             </li>
           );
@@ -119,7 +122,7 @@ export function DocsNav({ onNavigate }: { onNavigate?: () => void }) {
     writeCollapsed(collapsed.includes(title) ? collapsed.filter((t) => t !== title) : [...collapsed, title]);
 
   return (
-    <nav aria-label="Documentation" className="space-y-7">
+    <nav aria-label="Documentation" className="space-y-6">
       {docsNav.map((section, index) => (
         <Section
           key={section.title}

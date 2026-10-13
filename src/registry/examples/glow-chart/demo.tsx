@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "@/components/ui/icons";
 import { GlowChart, Sparkline } from "@/components/ui/glow-chart";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
@@ -104,7 +104,7 @@ export default function GlowChartDemo() {
             </p>
             {!point && <Delta value={change} good={change >= 0} />}
           </div>
-          <p className="mt-1.5 text-xs text-white/45">
+          <p className="mt-1.5 text-xs text-white/50">
             {day ?? `docs.halcyon.dev · last ${label} vs the ${label} before`}
           </p>
         </div>

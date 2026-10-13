@@ -79,6 +79,8 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "required passes through to the input and shows the neon dot after the label. A form reset puts back the starting number.",
+    "When the browser rejects the field on submit (required, type, pattern), it turns red until it's edited or the form resets. The browser shows its own message.",
     "The input is a spinbutton with aria-valuenow, aria-valuemin, aria-valuemax and aria-valuetext set to the formatted value.",
     "ArrowUp and ArrowDown step by step; with Shift, or PageUp and PageDown, by largeStep. Home and End jump to min and max when they're set.",
     "Enter commits what's typed and Escape drops it. Text that holds no number reverts to the last value; an empty field commits null.",

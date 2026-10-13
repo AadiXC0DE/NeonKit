@@ -5,11 +5,37 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+// In a group every avatar but the last is partly covered by its neighbour (the overlap plus
+// the 2px cut-out ring), so `shift` moves its initials left to the middle of the part you see.
 const sizes = {
-  sm: { root: "size-7 text-[11px]", square: "rounded-md", dot: "size-2 bottom-0 right-0", overlap: "[&>*+*]:-ml-1.5" },
-  md: { root: "size-9 text-[13px]", square: "rounded-lg", dot: "size-2.5 bottom-0 right-0", overlap: "[&>*+*]:-ml-2" },
-  lg: { root: "size-12 text-base", square: "rounded-xl", dot: "size-3 bottom-px right-px", overlap: "[&>*+*]:-ml-3" },
-  xl: { root: "size-16 text-xl", square: "rounded-2xl", dot: "size-3.5 bottom-0.5 right-0.5", overlap: "[&>*+*]:-ml-4" },
+  sm: {
+    root: "size-7 text-[10.5px]",
+    square: "rounded-md",
+    dot: "size-2 bottom-0 right-0",
+    overlap: "[&>*+*]:-ml-1.5",
+    shift: "[&>*:not(:last-child)]:[--avatar-shift:4px]",
+  },
+  md: {
+    root: "size-9 text-[12px]",
+    square: "rounded-lg",
+    dot: "size-2.5 bottom-0 right-0",
+    overlap: "[&>*+*]:-ml-2",
+    shift: "[&>*:not(:last-child)]:[--avatar-shift:5px]",
+  },
+  lg: {
+    root: "size-12 text-[15px]",
+    square: "rounded-xl",
+    dot: "size-3 bottom-px right-px",
+    overlap: "[&>*+*]:-ml-3",
+    shift: "[&>*:not(:last-child)]:[--avatar-shift:7px]",
+  },
+  xl: {
+    root: "size-16 text-[19px]",
+    square: "rounded-2xl",
+    dot: "size-3.5 bottom-0.5 right-0.5",
+    overlap: "[&>*+*]:-ml-4",
+    shift: "[&>*:not(:last-child)]:[--avatar-shift:9px]",
+  },
 } as const;
 
 // The 2px #05060a ring cuts the light out of the avatar edge.
@@ -113,8 +139,10 @@ const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
           )}
         >
           <span
+            data-avatar-fallback=""
             className={cn(
-              "flex items-center justify-center transition-opacity duration-200 ease-out motion-reduce:transition-none",
+              "flex items-center justify-center tracking-[-0.02em] transition-opacity duration-200 ease-out motion-reduce:transition-none",
+              "[transform:translateX(calc(var(--avatar-shift,0px)*-1))]",
               loaded && "opacity-0",
             )}
           >
@@ -176,7 +204,7 @@ const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
         <div
           ref={ref}
           style={neonVars(color, style)}
-          className={cn("flex items-center", sizes[size].overlap, className)}
+          className={cn("flex items-center", sizes[size].overlap, sizes[size].shift, className)}
           {...props}
         >
           {visible}

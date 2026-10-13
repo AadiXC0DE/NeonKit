@@ -41,8 +41,11 @@ function arcPath(from: number, to: number, radius: number) {
   return `M${x1.toFixed(2)} ${y1.toFixed(2)}A${radius} ${radius} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
 }
 
+// Printed scales use a true minus sign, not a hyphen.
+const minus = (text: string) => text.replace(/^-/, "\u2212");
+
 function trim(value: number) {
-  return String(Number(value.toFixed(2)));
+  return minus(String(Number(value.toFixed(2))));
 }
 
 export type GaugeZone = { from: number; to: number; color: NeonColor };
@@ -97,7 +100,7 @@ const Gauge = React.forwardRef<HTMLDivElement, GaugeProps>(
     const decimals = decimalsOf(value);
     const format = (v: number) => {
       const shown = Number(v.toFixed(decimals));
-      return formatValue ? formatValue(shown) : shown.toFixed(decimals);
+      return formatValue ? formatValue(shown) : minus(shown.toFixed(decimals));
     };
     const fraction = (v: number) => (clamp(v, min, max) - min) / range;
     const angleOf = (v: number) => -SWEEP / 2 + fraction(v) * SWEEP;
@@ -265,7 +268,17 @@ const Gauge = React.forwardRef<HTMLDivElement, GaugeProps>(
             );
           })}
           {label && (
-            <text x="100" y="70" textAnchor="middle" fontSize={s.legend} fontWeight={500} letterSpacing={s.legend * 0.2} style={{ fill: "rgb(255 255 255 / 0.45)" }}>
+            // Printed under the hub, clear of the numerals and the needle's sweep.
+            <text
+              x="100"
+              y="125"
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize={s.legend}
+              fontWeight={600}
+              letterSpacing={s.legend * 0.2}
+              style={{ fill: "rgb(255 255 255 / 0.5)" }}
+            >
               {label.toUpperCase()}
             </text>
           )}

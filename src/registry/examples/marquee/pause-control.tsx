@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Pause, Play } from "lucide-react";
+import { Pause, Play } from "@/components/ui/icons";
 import { Marquee } from "@/components/ui/marquee";
 
 const regions = [
@@ -38,7 +38,7 @@ export default function MarqueePauseControl() {
               }
             />
             <span className="text-white/80">{region.id}</span>
-            <span className="text-white/45">{region.ok ? region.latency : `${region.latency} degraded`}</span>
+            <span className="text-white/55">{region.ok ? region.latency : `${region.latency} degraded`}</span>
           </span>
         ))}
       </Marquee>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, Check, Rss } from "lucide-react";
+import { ArrowRight, Check, Rss } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { neonVars } from "@/lib/neon";
@@ -66,7 +66,7 @@ function Newsletter({ onJoined }: { onJoined: () => void }) {
 
   if (state === "done") {
     return (
-      <p ref={statusRef} tabIndex={-1} role="status" className="mt-6 flex items-start gap-3 text-sm leading-relaxed text-white/70 outline-none">
+      <p ref={statusRef} tabIndex={-1} role="status" className="flex items-start gap-3 text-[15px] leading-relaxed text-white/70 outline-none">
         <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.8))]" />
         <span>
           You&apos;re on the list. Issue 31 lands on 3 November, from{" "}
@@ -77,12 +77,13 @@ function Newsletter({ onJoined }: { onJoined: () => void }) {
   }
 
   return (
-    <form noValidate onSubmit={submit} className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-start">
+    <form noValidate onSubmit={submit} className="flex flex-col gap-3 sm:flex-row sm:items-start">
       <Input
         ref={inputRef}
         type="email"
         name="email"
         autoComplete="email"
+        size="lg"
         placeholder="you@company.com"
         aria-label="Email address"
         value={email}
@@ -93,7 +94,7 @@ function Newsletter({ onJoined }: { onJoined: () => void }) {
         error={error}
         containerClassName="flex-1"
       />
-      <Button type="submit" variant="solid" loading={state === "sending"}>
+      <Button type="submit" variant="solid" size="lg" loading={state === "sending"}>
         Subscribe {state === "idle" && <ArrowRight />}
       </Button>
     </form>
@@ -111,9 +112,30 @@ export default function FooterBig() {
       style={neonVars("violet")}
       className="relative isolate overflow-hidden border-t border-white/[0.06] bg-[#05060a] text-white/90"
     >
-      <div className="mx-auto box-content max-w-[1180px] px-6 pt-16 sm:px-10 sm:pt-20 lg:px-16">
-        <div className="grid gap-12 border-b border-white/[0.07] pb-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-20">
-          <div>
+      <div className="mx-auto box-content max-w-[1180px] px-5 pt-16 sm:px-10 sm:pt-24 lg:px-16">
+        <section
+          aria-labelledby="footer-big-newsletter"
+          className="grid gap-8 border-b border-white/[0.07] pb-14 sm:pb-16 lg:grid-cols-12 lg:items-end lg:gap-10"
+        >
+          <div className="lg:col-span-7">
+            <h2
+              id="footer-big-newsletter"
+              className="max-w-[18ch] text-balance text-[clamp(2rem,4.4vw,3.5rem)] font-[620] leading-[0.98] tracking-[-0.04em] text-white [font-stretch:112%]"
+            >
+              What shipped, what broke, what we learned.
+            </h2>
+            <p className="mt-5 max-w-[46ch] text-[17px] leading-[1.6] text-white/60">
+              The Dispatch, once a month.{" "}
+              <span className="text-white/50">11,400 engineers read it. No launch announcements, no tips.</span>
+            </p>
+          </div>
+          <div className="lg:col-span-5 lg:pb-1">
+            <Newsletter onJoined={() => setJoined(true)} />
+          </div>
+        </section>
+
+        <div className="grid gap-12 py-14 lg:grid-cols-12 lg:gap-10 lg:py-16">
+          <div className="lg:col-span-4">
             <a
               href="#"
               className="inline-flex items-center gap-2.5 rounded-md text-white outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
@@ -121,60 +143,48 @@ export default function FooterBig() {
               <Mark className="size-7 text-[rgb(var(--neon))]" />
               <span className="text-xl font-semibold tracking-[-0.03em]">Halcyon</span>
             </a>
-            <p className="mt-5 max-w-[34ch] text-[15px] leading-relaxed text-white/55">
+            <p className="mt-4 max-w-[30ch] text-[15px] leading-[1.55] text-white/55">
               Quiet tools for loud codebases. Tracing, linting and flaky-test triage for teams of 5 to 500.
             </p>
             <a
               href="#"
-              className="mt-7 inline-flex min-h-9 items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] py-1.5 pl-3 pr-3.5 sm:min-h-0 text-xs text-white/70 outline-none transition-colors hover:border-white/20 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+              className="mt-6 inline-flex items-center gap-2.5 rounded-md py-1 text-[13px] text-white/60 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
             >
               <span className="relative flex size-2">
                 <span className="absolute inset-0 animate-ping rounded-full bg-[rgb(52_211_153/0.6)] [animation-duration:2.4s] motion-reduce:hidden" />
                 <span className="relative size-2 rounded-full bg-[rgb(52_211_153)] shadow-[0_0_8px_rgb(52_211_153/0.8)]" />
               </span>
               All systems normal
-              <span className="font-mono text-[11px] text-white/55">99.98% · 90d</span>
+              <span className="font-mono text-[12px] tabular-nums text-white/50">99.98% over 90d</span>
             </a>
           </div>
 
-          <section aria-labelledby="footer-big-newsletter">
-            <h2 id="footer-big-newsletter" className="text-lg font-semibold tracking-[-0.02em] text-white">
-              The Dispatch
-            </h2>
-            <p className="mt-2 max-w-[44ch] text-sm leading-relaxed text-white/55">
-              Once a month: what shipped, what broke, and what we learned fixing it. 11,400 engineers read it.
-            </p>
-            <Newsletter onJoined={() => setJoined(true)} />
-          </section>
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 lg:col-span-8">
+            {COLUMNS.map((column) => (
+              <div key={column.title}>
+                <h2 className="text-[13px] font-normal text-white/50">{column.title}</h2>
+                <ul className="mt-3">
+                  {column.links.map((link) => (
+                    <li key={link}>
+                      <a
+                        href="#"
+                        className="inline-flex items-center gap-2 rounded-md py-2 text-[15px] text-white/75 outline-none transition-colors duration-150 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] sm:py-1.5"
+                      >
+                        {link}
+                        {link === "Careers" && (
+                          <span className="text-[12px] tabular-nums text-[rgb(var(--neon))]">4 open</span>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
         </div>
 
-        <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-10 py-14 sm:grid-cols-4">
-          {COLUMNS.map((column) => (
-            <div key={column.title}>
-              <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">{column.title}</h2>
-              <ul className="mt-3 sm:mt-3.5">
-                {column.links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="inline-flex items-center gap-2 rounded-md py-2 text-sm text-white/65 outline-none sm:py-1.5 transition-colors duration-150 hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
-                    >
-                      {link}
-                      {link === "Careers" && (
-                        <span className="rounded-full border border-[rgb(var(--neon)/0.3)] px-1.5 font-mono text-[10px] leading-4 text-[rgb(var(--neon))]">
-                          4 open
-                        </span>
-                      )}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </nav>
-
         <div className="flex flex-col gap-6 border-t border-white/[0.07] py-7 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-x-5 text-xs text-white/55">
+          <div className="flex flex-wrap items-center gap-x-5 text-[13px] text-white/55">
             <span className="w-full text-white/60 sm:w-auto">© 2026 Halcyon Labs, Inc.</span>
             {LEGAL.map((item) => (
               <a
@@ -192,7 +202,7 @@ export default function FooterBig() {
                 key={item.label}
                 href="#"
                 aria-label={item.label}
-                className="grid size-9 place-items-center rounded-lg text-white/45 outline-none transition-colors hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className="grid size-9 place-items-center rounded-lg text-white/55 outline-none transition-colors hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
               >
                 <svg aria-hidden viewBox="0 0 24 24" className="size-4 fill-current">
                   <path d={item.path} />
@@ -202,7 +212,7 @@ export default function FooterBig() {
             <a
               href="#"
               aria-label="Blog RSS feed"
-              className="grid size-9 place-items-center rounded-lg text-white/45 outline-none transition-colors hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+              className="grid size-9 place-items-center rounded-lg text-white/55 outline-none transition-colors hover:bg-white/[0.05] hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
             >
               <Rss aria-hidden className="size-4" />
             </a>

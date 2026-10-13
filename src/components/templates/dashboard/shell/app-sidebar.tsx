@@ -21,8 +21,8 @@ export function AppSidebar() {
           <Logo />
           <span className={cn("grid min-w-0 transition-opacity duration-200", collapsed && "opacity-0")}>
             <span className="truncate text-[15px] font-semibold leading-5 tracking-[-0.02em] text-white">{brand}</span>
-            <span className="truncate font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
-              {team.name} · {team.plan}
+            <span className="truncate text-xs leading-4 text-white/55">
+              {team.name}, {team.plan} plan
             </span>
           </span>
         </Link>

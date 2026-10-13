@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Plus, Search, X } from "lucide-react";
-import { Avatar } from "@/components/ui/avatar";
+import { Plus, Search, X } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -128,6 +127,7 @@ export function Projects() {
   }, [projects, query, status, framework, sort]);
 
   const busiest = Math.max(1, ...projects.map((p) => p.requests));
+  const failing = counts.failed ?? 0;
   const filtered = query.trim() !== "" || status !== "all" || framework !== "all";
   const clear = () => {
     setQuery("");
@@ -142,8 +142,16 @@ export function Projects() {
     <>
       <SearchParams onChange={onParams} />
       <PageHeader
-        eyebrow={`${team.name} · ${projects.length} projects`}
-        title="Projects"
+        title={
+          <>
+            {projects.length} projects,{" "}
+            {failing ? (
+              <span className="text-[rgb(255_107_120)] [text-shadow:0_0_18px_rgb(255_77_94/0.4)]">{failing} failing.</span>
+            ) : (
+              <span className="text-white/50">none failing.</span>
+            )}
+          </>
+        }
         actions={
           <Button variant="solid" size="sm" onClick={() => setCreating(true)}>
             <Plus aria-hidden />
@@ -151,7 +159,7 @@ export function Projects() {
           </Button>
         }
       >
-        Everything the team ships, from the storefront to the cron that bills it.
+        Everything {team.name} ships, from the storefront to the cron that bills it.
       </PageHeader>
 
       <section aria-labelledby="projects-title" className="mt-8">
@@ -174,7 +182,7 @@ export function Projects() {
               {STATUSES.map((s) => (
                 <ToggleGroupItem key={s.value} value={s.value}>
                   {s.label}
-                  <span className="font-mono text-[10px] text-white/55">{counts[s.value] ?? 0}</span>
+                  <span className={cn("font-mono text-[11px] tabular-nums", s.value === "failed" && counts.failed ? "text-[rgb(255_107_120)]" : "text-white/55")}>{counts[s.value] ?? 0}</span>
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>
@@ -200,16 +208,14 @@ export function Projects() {
                   Clear filters
                 </button>
               </>
-            ) : (
-              `${projects.length} projects`
-            )}
+            ) : null}
           </p>
         </div>
 
-        <Table containerClassName="mt-4">
+        <Table containerClassName="mt-6 rounded-none border-0 border-t border-white/[0.08] bg-transparent">
           <TableHeader>
             <TableRow>
-              <TableHead {...sortProps("name")}>Project</TableHead>
+              <TableHead className="pl-0" {...sortProps("name")}>Project</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="hidden lg:table-cell">Framework</TableHead>
               <TableHead className="hidden xl:table-cell">Region</TableHead>
@@ -219,7 +225,7 @@ export function Projects() {
               <TableHead align="right" className="hidden lg:table-cell" {...sortProps("deployedAgo")}>
                 Last deploy
               </TableHead>
-              <TableHead align="right" className="w-11 pl-0 pr-3">
+              <TableHead align="right" className="w-11 px-0">
                 <span className="sr-only">Actions</span>
               </TableHead>
             </TableRow>
@@ -230,13 +236,10 @@ export function Projects() {
                 key={p.id}
                 className={cn(fresh === p.id && "bg-[rgb(var(--neon)/0.07)] shadow-[inset_2px_0_0_rgb(var(--neon))]")}
               >
-                <TableCell>
-                  <div className="flex min-w-0 items-center gap-3">
-                    <Avatar alt="" fallback={initials(p.name)} size="sm" shape="square" className="text-[10px]" />
-                    <div className="min-w-0">
-                      <p className="truncate font-mono text-[13px] text-white/90">{p.name}</p>
-                      <p className="max-w-[140px] truncate text-xs text-white/55 lg:max-w-none">{p.domain}</p>
-                    </div>
+                <TableCell className="pl-0">
+                  <div className="min-w-0">
+                    <p className="truncate font-mono text-[13px] text-white/90">{p.name}</p>
+                    <p className="mt-0.5 max-w-[160px] truncate text-xs text-white/55 lg:max-w-none">{p.domain}</p>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -244,14 +247,15 @@ export function Projects() {
                 </TableCell>
                 <TableCell className="hidden text-white/75 lg:table-cell">{p.framework}</TableCell>
                 <TableCell className="hidden text-white/65 xl:table-cell">
-                  <span className="font-mono text-xs uppercase text-white/80">{p.region}</span> {CITY[p.region]}
+                  <span className="mr-1.5 font-mono text-xs text-white/55">{p.region.toUpperCase()}</span>
+                  {CITY[p.region]}
                 </TableCell>
                 <TableCell align="right" className="hidden font-mono text-[13px] text-white/80 sm:table-cell">
                   <span className="inline-flex items-center gap-3">
                     {p.requests ? compact(p.requests) : "—"}
                     <span aria-hidden className="hidden h-1 w-14 overflow-hidden rounded-full bg-white/[0.06] lg:block">
                       <span
-                        className="block h-full rounded-full bg-[rgb(var(--neon)/0.7)]"
+                        className="block h-full rounded-full bg-white/40"
                         style={{ width: `${Math.max(2, (p.requests / busiest) * 100)}%`, opacity: p.requests ? 1 : 0 }}
                       />
                     </span>
@@ -260,7 +264,7 @@ export function Projects() {
                 <TableCell align="right" className="hidden whitespace-nowrap text-[13px] text-white/60 lg:table-cell">
                   {p.status === "building" ? "deploying…" : ago(p.deployedAgo)}
                 </TableCell>
-                <TableCell align="right" className="py-2 pl-0 pr-3">
+                <TableCell align="right" className="px-0 py-2">
                   <RowActions project={p} onAction={(action) => act(p, action)} />
                 </TableCell>
               </TableRow>
@@ -279,11 +283,6 @@ export function Projects() {
       <NewProjectDialog open={creating} onOpenChange={setCreating} taken={projects.map((p) => p.name)} onCreate={create} />
     </>
   );
-}
-
-function initials(name: string) {
-  const parts = name.split("-");
-  return (parts.length > 1 ? parts[0][0] + parts[1][0] : name.slice(0, 2)).toUpperCase();
 }
 
 function EmptyState({ query, onClear }: { query: string; onClear: () => void }) {

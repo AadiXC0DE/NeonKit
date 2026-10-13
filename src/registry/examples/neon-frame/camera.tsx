@@ -4,7 +4,7 @@ export default function NeonFrameCamera() {
   return (
     <NeonFrame
       as="figure"
-      label="Cam 03 · Loading dock"
+      label="Cam 03, loading dock"
       tabs={{
         topRight: (
           <>
@@ -12,7 +12,7 @@ export default function NeonFrameCamera() {
             Rec
           </>
         ),
-        bottomLeft: "2026-10-10 23:41:07",
+        bottomLeft: <span className="font-mono tabular-nums">2026-10-10 23:41:07</span>,
         bottomRight: "1080p · 24 fps",
       }}
       className="w-full max-w-xl p-2"

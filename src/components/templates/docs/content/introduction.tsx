@@ -1,5 +1,10 @@
+import { CopyButton } from "@/components/ui/copy-button";
+
+import { installCommands } from "../config";
 import { docHref } from "../docs";
+import { copyText } from "../highlight";
 import { A, Callout, Code, CodeBlock, H2, LinkList, P, UL } from "../mdx";
+import { RunDiagram } from "./run-diagram";
 
 const firstRun = `$ gantry up
   resolve  pnpm-lock.yaml · 412 packages           0.21s
@@ -8,96 +13,56 @@ const firstRun = `$ gantry up
   start    web  -> http://localhost:3000            38ms
   ready    2 services healthy in 2.13s · watching src/`;
 
-const facts = [
-  { value: "9.4 MB", label: "One static binary" },
-  { value: "38 ms", label: "Median warm start" },
-  { value: "0", label: "Daemons. No root." },
-  { value: "OCI", label: "Images, any registry" },
+const specs = [
+  { label: "Binary", value: "9.4 MB, static" },
+  { label: "Warm start", value: "82 ms for two services" },
+  { label: "Daemons", value: "None. It runs as you, no root" },
+  { label: "Images", value: "OCI, push to any registry" },
 ];
 
-const stages = [
-  {
-    name: "Resolve",
-    time: "0.21 s",
-    body: "Reads the lockfile and gantry.toml and works out which layers each service needs.",
-  },
-  {
-    name: "Layer",
-    time: "1.84 s",
-    body: "Rebuilds only the layers whose inputs changed. Base and dependency layers come from the local cache.",
-  },
-  {
-    name: "Start",
-    time: "38 ms",
-    body: "Starts each service in its own namespaces, in dependency order, and waits for its health check.",
-  },
-  {
-    name: "Watch",
-    time: "live",
-    body: "Rebuilds the source layer on save and restarts just the services that use it.",
-  },
-];
-
-function Facts() {
+function Specs() {
   return (
-    <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6 border-y border-white/[0.07] py-6 sm:grid-cols-4">
-      {facts.map((fact) => (
-        <div key={fact.label} className="flex flex-col-reverse gap-1">
-          <dt className="text-[13px] text-white/60">{fact.label}</dt>
-          <dd className="text-[1.6rem] font-semibold tabular-nums tracking-[-0.03em] text-white">{fact.value}</dd>
+    <dl className="mt-8 grid border-t border-white/[0.07] sm:grid-cols-2 sm:gap-x-10">
+      {specs.map((spec) => (
+        <div key={spec.label} className="flex items-baseline justify-between gap-6 border-b border-white/[0.07] py-3.5">
+          <dt className="text-[14px] text-white/55">{spec.label}</dt>
+          <dd className="text-right text-[14px] tabular-nums text-white/90">{spec.value}</dd>
         </div>
       ))}
     </dl>
   );
 }
 
-/** The four stages as a 2×2 board. Finished stages hold a steady lamp; Watch keeps pulsing. */
-function Pipeline() {
+/** The one command a new reader needs, before anything else. */
+function InstallLine() {
+  const command = installCommands.npm;
   return (
-    <ol className="mt-8 grid list-none gap-px overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.07] p-0 sm:grid-cols-2">
-      {stages.map((stage, index) => {
-        const live = stage.time === "live";
-        return (
-          <li key={stage.name} className="relative bg-[#06070b] p-5 sm:p-6">
-            <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em]">
-              <span className="text-white/55">0{index + 1}</span>
-              <span className="flex items-center gap-2 text-[rgb(var(--neon))]">
-                <span aria-hidden className="relative flex size-1.5">
-                  {live && (
-                    <span className="absolute inset-0 animate-ping rounded-full bg-[rgb(var(--neon))] opacity-70 [animation-duration:1.8s] motion-reduce:animate-none" />
-                  )}
-                  <span className="relative size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/0.9)]" />
-                </span>
-                {stage.time}
-              </span>
-            </div>
-            <p className="mt-6 text-[15px] font-medium text-white">{stage.name}</p>
-            <p className="mt-1.5 text-[13.5px] leading-6 text-white/60">{stage.body}</p>
-          </li>
-        );
-      })}
-    </ol>
+    <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <div className="flex h-11 min-w-0 max-w-full items-center gap-3 rounded-lg border border-white/10 bg-[#0a0b11] pl-4 pr-1.5">
+        <code className="min-w-0 truncate font-mono text-[13.5px] text-white/90">
+          <span aria-hidden className="select-none text-[rgb(var(--neon))]">
+            ${" "}
+          </span>
+          {copyText(command, "sh")}
+        </code>
+        <CopyButton size="sm" value={copyText(command, "sh")} aria-label="Copy the install command" />
+      </div>
+      <A href={docHref("installation")}>Other ways to install</A>
+    </div>
   );
 }
 
 export function Introduction() {
   return (
     <>
-      {/* The first run is the page's lit object: a hairline of light on top, a pool of it underneath. */}
-      <div className="relative mt-10">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 -bottom-16 top-1/3 sm:-inset-x-10 bg-[radial-gradient(50%_50%_at_50%_45%,rgb(var(--neon)/0.08),transparent)]"
-        />
-        <CodeBlock
-          title="~/code/acme-web"
-          code={firstRun}
-          highlight={[6]}
-          className="mt-0 border-[rgb(var(--neon)/0.2)] shadow-[0_24px_60px_-28px_rgb(var(--neon)/0.35)]"
-        />
+      <InstallLine />
+
+      {/* The first run is the page's one lit object: a hairline of light along its top edge. */}
+      <div className="relative mt-12">
+        <CodeBlock title="~/code/acme-web" code={firstRun} highlight={[6]} className="mt-0" />
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-10 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--neon)/0.8),transparent)]"
+          className="pointer-events-none absolute inset-x-12 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--neon)/0.7),transparent)]"
         />
       </div>
 
@@ -107,7 +72,7 @@ export function Introduction() {
         It reads your lockfile, builds an OCI image in layers it can reuse, and starts your services directly, each in
         its own namespaces. There is no background service to install, keep running or restart.
       </P>
-      <Facts />
+      <Specs />
       <P>
         If you already have Dockerfiles, keep them. Gantry builds them as they are and only falls back to the lockfile
         for services that don&apos;t have one.
@@ -115,10 +80,11 @@ export function Introduction() {
 
       <H2 id="how-a-run-works">How a run works</H2>
       <P>
-        Every <Code>gantry up</Code> goes through the same four stages. Only the first always does work; the others are
-        skipped when nothing they depend on changed, which is why a warm start takes milliseconds.
+        Every <Code>gantry up</Code> goes through the same stages. Resolve always runs, but when the lockfile hasn&apos;t
+        changed it only checks a hash. Layer is skipped outright when its inputs are the same, which is why a warm start
+        takes milliseconds. Switch between the two below; the bar is to scale.
       </P>
-      <Pipeline />
+      <RunDiagram />
 
       <H2 id="when-not-to-use-gantry">When not to use Gantry</H2>
       <UL>

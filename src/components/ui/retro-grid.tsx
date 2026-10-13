@@ -65,21 +65,29 @@ const RetroGrid = React.forwardRef<HTMLDivElement, RetroGridProps>(
         {...props}
       >
         <style>{css}</style>
+        {/* Sky glow: the horizon's light falling off upward */}
+        {horizon && (
+          <div className="absolute inset-x-0 bottom-1/2 h-1/2 bg-[radial-gradient(ellipse_60%_100%_at_50%_100%,rgb(var(--neon)/0.16),rgb(var(--neon)/0.05)_45%,transparent_75%)]" />
+        )}
         <div className="absolute inset-x-0 bottom-0 top-1/2 [perspective-origin:50%_0%] [perspective:220px] [mask-image:linear-gradient(to_bottom,transparent,#000_40%)]">
           <div
             className="absolute inset-x-[-50%] top-0 h-full origin-top overflow-hidden"
             style={{ transform: `rotateX(${angle}deg)` }}
           >
+            {/* Each line is a hot core with a soft falloff either side, painted into the tile */}
             <div
               className={cn(
-                "absolute inset-x-0 top-0 h-[calc(100%+var(--cell))] [background-size:var(--cell)_var(--cell)] [background-image:linear-gradient(to_right,rgb(var(--neon)/var(--line))_1px,transparent_0),linear-gradient(to_bottom,rgb(var(--neon)/var(--line))_1px,transparent_0)]",
+                "absolute inset-x-0 top-0 h-[calc(100%+var(--cell))] [background-size:var(--cell)_var(--cell)]",
+                "[background-image:linear-gradient(to_right,color-mix(in_srgb,rgb(var(--neon)/var(--line))_70%,rgb(255_255_255/var(--line)))_1px,transparent_0),linear-gradient(to_bottom,color-mix(in_srgb,rgb(var(--neon)/var(--line))_70%,rgb(255_255_255/var(--line)))_1px,transparent_0),linear-gradient(to_right,rgb(var(--neon)/calc(var(--line)*0.35)),transparent_4px,transparent_calc(100%_-_4px),rgb(var(--neon)/calc(var(--line)*0.35))),linear-gradient(to_bottom,rgb(var(--neon)/calc(var(--line)*0.35)),transparent_4px,transparent_calc(100%_-_4px),rgb(var(--neon)/calc(var(--line)*0.35)))]",
                 speed > 0 && "nk-retro-grid",
               )}
             />
           </div>
+          {/* Haze on the floor where it meets the horizon */}
+          <div className="absolute inset-x-0 top-0 h-1/3 bg-[linear-gradient(to_bottom,rgb(var(--neon)/0.1),transparent)]" />
         </div>
         {horizon && (
-          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-px bg-[linear-gradient(to_right,transparent,rgb(var(--neon))_20%,rgb(var(--neon))_80%,transparent)] shadow-[0_0_14px_1px_rgb(var(--neon)/0.55),0_0_60px_6px_rgb(var(--neon)/0.3)]" />
+          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-px bg-[linear-gradient(to_right,transparent,color-mix(in_srgb,rgb(var(--neon))_60%,white)_20%,color-mix(in_srgb,rgb(var(--neon))_60%,white)_80%,transparent)] shadow-[0_0_4px_rgb(var(--neon)),0_0_14px_1px_rgb(var(--neon)/0.55),0_0_60px_6px_rgb(var(--neon)/0.3)]" />
         )}
       </div>
     );

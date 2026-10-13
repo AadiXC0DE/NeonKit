@@ -15,7 +15,7 @@ import {
   Terminal,
   Zap,
   type LucideIcon,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -63,7 +63,7 @@ function PanelLink({ title, description, icon: Icon, href }: Entry) {
         </span>
         <span className="min-w-0 pt-px">
           <span className="block text-sm font-medium leading-5 text-white/90">{title}</span>
-          <span className="block text-xs leading-5 text-white/45">{description}</span>
+          <span className="block text-xs leading-5 text-white/50">{description}</span>
         </span>
       </NavigationMenuLink>
     </li>
@@ -88,7 +88,7 @@ export default function NavigationMenuDemo() {
           <NavigationMenuList>
             <NavigationMenuItem value="product">
               <NavigationMenuTrigger>Product</NavigationMenuTrigger>
-              <NavigationMenuContent className="grid w-[min(600px,calc(100vw-48px))] gap-2 p-2 sm:grid-cols-[1fr_196px]">
+              <NavigationMenuContent className="grid w-[min(648px,calc(100vw-48px))] gap-2 p-2 sm:grid-cols-[1fr_176px]">
                 <ul className="grid gap-0.5 sm:grid-cols-2">
                   {products.map((product) => (
                     <PanelLink key={product.title} {...product} />
@@ -99,9 +99,7 @@ export default function NavigationMenuDemo() {
                   className="group hidden flex-col justify-between rounded-xl border border-white/[0.08] bg-white/[0.02] p-4 hover:border-white/15 sm:flex"
                 >
                   <span>
-                    <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-[rgb(var(--neon))]">
-                      New in v4
-                    </span>
+                    <span className="text-xs font-medium text-[rgb(var(--neon))]">New in v4</span>
                     <span className="mt-1.5 block text-sm font-medium leading-5 text-white/90">
                       Cold starts are 61% faster
                     </span>
@@ -176,8 +174,7 @@ export default function NavigationMenuDemo() {
         className="pointer-events-none absolute inset-x-0 bottom-0 top-14 bg-[radial-gradient(rgb(255_255_255/0.05)_1px,transparent_1px)] [background-size:20px_20px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]"
       />
       <div className="relative px-6 pt-20 text-center">
-        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[rgb(var(--neon))]">Edge platform</p>
-        <h2 className="mx-auto mt-3 max-w-md text-2xl font-semibold tracking-tight text-white/90 sm:text-3xl">
+        <h2 className="mx-auto max-w-md text-2xl font-semibold tracking-tight text-white/90 sm:text-3xl">
           Ship to every region in one push.
         </h2>
         <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-white/50">

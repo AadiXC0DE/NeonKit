@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { X } from "lucide-react";
+import { X } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -61,6 +61,35 @@ function tagKeys(tags: string[]) {
   });
 }
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 export interface TagInputProps
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -117,6 +146,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
       error,
       disabled,
       readOnly,
+      required,
       id: idProp,
       className,
       containerClassName,
@@ -155,9 +185,11 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
     const [announcement, setAnnouncement] = React.useState("");
     const focusRequest = React.useRef<number | "input" | null>(null);
 
-    const invalid = Boolean(problem) || Boolean(error);
+    const errored = Boolean(problem) || Boolean(error);
+    const rejected = useRejected(inputRef, tags.join("\n"));
+    const invalid = errored || rejected;
     const message = problem ?? (error ? (error === true ? null : error) : description);
-    const messageId = message ? `${id}-${invalid ? "error" : "description"}` : undefined;
+    const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
     const atMax = max !== undefined && tags.length >= max;
 
     const query = text.trim().toLowerCase();
@@ -178,6 +210,33 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
     const listOpen = open && available.length > 0 && !locked && !atMax;
     const active = listOpen && activeIndex < available.length ? activeIndex : -1;
 
+    // A form reset clears the typed text natively; put the starting tags back with it.
+    const initialTags = React.useRef(tags);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialTags.current;
+        setText("");
+        setProblem(null);
+        setArmed(false);
+        setOpen(false);
+        if (initial.length === tags.length && initial.every((tag, i) => tag === tags[i])) return;
+        if (valueProp === undefined) setUncontrolled(initial);
+        onValueChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = inputRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
+    function chipAt(index: number) {
+      return fieldRef.current?.querySelector<HTMLElement>(`[data-tag-index="${index}"]`) ?? null;
+    }
+
     // Moves focus once the chips have re-rendered after a removal.
     useIsomorphicLayoutEffect(() => {
       const request = focusRequest.current;
@@ -186,10 +245,6 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
       const chip = request === "input" ? null : chipAt(request);
       (chip ?? inputRef.current)?.focus();
     });
-
-    function chipAt(index: number) {
-      return fieldRef.current?.querySelector<HTMLElement>(`[data-tag-index="${index}"]`) ?? null;
-    }
 
     function setTags(next: string[]) {
       if (valueProp === undefined) setUncontrolled(next);
@@ -463,6 +518,13 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
         {label && (
           <label htmlFor={id} className={cn("w-fit font-medium text-white/80", s.label)}>
             {label}
+            {required && (
+              <span
+                aria-hidden
+                title="Required"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+              />
+            )}
           </label>
         )}
         <div className="relative">
@@ -518,7 +580,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                           className={cn(
                             "grid shrink-0 cursor-pointer place-items-center outline-none transition-colors duration-150",
                             "hover:bg-[rgb(var(--neon)/0.16)] hover:text-white",
-                            isArmed ? "text-white" : "text-white/45",
+                            isArmed ? "text-white" : "text-white/50",
                             s.chipRemove,
                           )}
                         >
@@ -538,6 +600,9 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
               autoComplete="off"
               disabled={disabled}
               readOnly={readOnly}
+              // Satisfied by the tags, not the text box, which is empty once a tag is committed.
+              required={required && tags.length === 0}
+              aria-required={required || undefined}
               role={suggestions ? "combobox" : undefined}
               aria-autocomplete={suggestions ? "list" : undefined}
               aria-expanded={suggestions ? listOpen : undefined}
@@ -552,7 +617,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
               onPaste={handlePaste}
               onBlur={handleBlur}
               className={cn(
-                "min-w-0 flex-1 basis-20 bg-transparent text-inherit outline-none placeholder:text-white/30 disabled:cursor-not-allowed",
+                "min-w-0 flex-1 basis-20 bg-transparent text-inherit outline-none placeholder:text-white/50 disabled:cursor-not-allowed",
                 s.input,
               )}
             />
@@ -602,7 +667,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
             <input key={keys[index]} type="hidden" name={name} value={tag} disabled={disabled} />
           ))}
         {message && (
-          <p id={messageId} className={cn("text-xs leading-5", invalid ? "text-[#ff4d5e]" : "text-white/55")}>
+          <p id={messageId} className={cn("text-xs leading-5", errored ? "text-[#ff4d5e]" : "text-white/55")}>
             {message}
           </p>
         )}

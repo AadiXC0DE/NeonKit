@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -104,7 +104,7 @@ function OpenSign({ on }: { on: boolean }) {
     <span
       aria-hidden
       className={cn(
-        "mt-1 rounded-lg border px-2.5 py-1 text-[15px] font-medium uppercase leading-none tracking-[0.18em] transition-[color,border-color,text-shadow,box-shadow] duration-500",
+        "rounded-[10px] border px-3 pb-1.5 pt-1 text-[22px] leading-none tracking-[0.01em] transition-[color,border-color,text-shadow,box-shadow] duration-500",
         on
           ? "border-[rgb(var(--neon)/0.7)] text-[color-mix(in_srgb,rgb(var(--neon))_35%,white)] shadow-[0_0_14px_rgb(var(--neon)/0.45),inset_0_0_10px_rgb(var(--neon)/0.25)] [text-shadow:0_0_4px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.8)]"
           : "border-[rgb(var(--neon)/0.14)] text-[rgb(var(--neon)/0.18)]",
@@ -122,37 +122,37 @@ function OfficeHours() {
   const data = OFFICES[office];
 
   return (
-    <div className="relative overflow-hidden rounded-[20px] border border-white/10 bg-[#08090e]">
-      <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-5 py-3.5">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Studio hours</p>
+    <div className="relative">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h3 className="text-[15px] font-medium tracking-[-0.01em] text-white/85">Both studios, right now</h3>
         <ToggleGroup aria-label="Studio" size="sm" value={office} onValueChange={(value) => setOffice(value as OfficeKey)}>
-          <ToggleGroupItem value="chicago" className="h-8 sm:h-6">Chicago</ToggleGroupItem>
-          <ToggleGroupItem value="porto" className="h-8 sm:h-6">Porto</ToggleGroupItem>
+          <ToggleGroupItem value="chicago" className="h-8 sm:h-7">Chicago</ToggleGroupItem>
+          <ToggleGroupItem value="porto" className="h-8 sm:h-7">Porto</ToggleGroupItem>
         </ToggleGroup>
       </div>
 
-      <div className="relative px-5 pb-6 pt-6 sm:px-7">
-        {/* The display lights the plate it sits on */}
-        <div aria-hidden className="absolute left-2 top-6 h-28 w-64 rounded-[50%] bg-[rgb(var(--neon)/0.13)] blur-[50px]" />
-        <p className="relative font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">
-          {data.city} · {data.zoneLabel}
-        </p>
-        <div className="relative mt-3 flex items-start justify-between gap-4">
+      <div className="relative mt-8">
+        {/* The display lights the wall it hangs on. */}
+        <div aria-hidden className="absolute -left-6 top-0 h-36 w-80 rounded-[50%] bg-[rgb(var(--neon)/0.12)] blur-[60px]" />
+        <div className="relative flex items-end justify-between gap-4">
           <SevenSegment
             value={status?.time ?? "--:--"}
             colonBlink
             unlit={0.07}
-            className="[--segment-h:52px] sm:[--segment-h:64px]"
+            className="[--segment-h:64px] sm:[--segment-h:92px]"
             aria-label={status ? `${data.city} local time ${status.time}` : `${data.city} local time`}
           />
-          <OpenSign on={Boolean(status?.open)} />
+          <span className="pb-2"><OpenSign on={Boolean(status?.open)} /></span>
         </div>
-        <p aria-live="polite" className="relative mt-4 text-[13px] text-white/55">
+        <p className="relative mt-4 text-[13px] text-white/55">
+          {data.city}, {data.zoneLabel.toLowerCase()}
+        </p>
+        <p aria-live="polite" className="relative mt-1 text-[15px] text-white/60">
           <span className="text-white/90">{status ? (status.open ? "Open now." : "Closed.") : "Checking hours."}</span>{" "}
           {status?.note}
         </p>
 
-        <dl className="relative mt-6 grid grid-cols-3 border-t border-white/[0.06] pt-5">
+        <dl className="relative mt-7 grid grid-cols-3 border-t border-white/[0.08] pt-5">
           {GROUPS.map((group) => {
             const hours = data.hours[group.days[0]];
             const today = status ? group.days.includes(status.day) : false;
@@ -160,14 +160,14 @@ function OfficeHours() {
               <div key={group.label} className="relative">
                 <dt
                   className={cn(
-                    "font-mono text-[10px] uppercase tracking-[0.14em]",
+                    "text-[13px]",
                     today ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]" : "text-white/55",
                   )}
                 >
                   {group.label}
                   {today && <span className="sr-only"> (today)</span>}
                 </dt>
-                <dd className={cn("mt-1.5 text-[13px] tabular-nums", today ? "text-white/90" : "text-white/55")}>
+                <dd className={cn("mt-1 text-[14px] tabular-nums", today ? "text-white/90" : "text-white/55")}>
                   {hours ? `${clock(hours[0])}–${clock(hours[1])}` : "Closed"}
                 </dd>
               </div>
@@ -176,7 +176,7 @@ function OfficeHours() {
         </dl>
       </div>
 
-      <div className="grid gap-4 border-t border-white/[0.06] px-5 py-5 text-[13px] sm:grid-cols-2 sm:px-7">
+      <div className="mt-5 grid gap-4 border-t border-white/[0.08] pt-5 text-[14px] sm:grid-cols-2">
         <address className="not-italic leading-relaxed text-white/70">
           {data.address.map((line) => (
             <span key={line} className="block">{line}</span>
@@ -267,8 +267,10 @@ function ContactForm() {
           <span className="grid size-11 place-items-center rounded-full border border-[rgb(var(--neon)/0.6)] bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))] shadow-[0_0_24px_rgb(var(--neon)/0.35),inset_0_0_10px_rgb(var(--neon)/0.2)]">
             <Check aria-hidden className="size-5" strokeWidth={2.5} />
           </span>
-          <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Ticket CL-2291</p>
-          <h3 ref={doneRef} tabIndex={-1} className="mt-3 text-[28px] font-semibold leading-[1.05] tracking-[-0.03em] text-white outline-none">
+          <p className="mt-8 text-[13px] text-white/55">
+            Ticket <span className="font-mono text-white/75">CL-2291</span>
+          </p>
+          <h3 ref={doneRef} tabIndex={-1} className="mt-2 text-[34px] font-[620] leading-[1.02] tracking-[-0.035em] text-white outline-none [font-stretch:112%]">
             Got it, {values.name.trim().split(" ")[0]}.
           </h3>
           <p className="mt-3 max-w-sm text-[15px] leading-relaxed text-white/55">
@@ -277,11 +279,11 @@ function ContactForm() {
           </p>
           <dl className="mt-8 grid gap-3 border-t border-white/[0.06] pt-5 text-[13px] sm:grid-cols-2">
             <div>
-              <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Scope</dt>
+              <dt className="text-[13px] text-white/55">Scope</dt>
               <dd className="mt-1 text-white/80">{services.length ? services.join(", ") : "Not sure yet"}</dd>
             </div>
             <div>
-              <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Budget</dt>
+              <dt className="text-[13px] text-white/55">Budget</dt>
               <dd className="mt-1 text-white/80">{BUDGETS.find((b) => b.value === budget)?.label ?? "Not given"}</dd>
             </div>
           </dl>
@@ -349,23 +351,22 @@ export default function MarketingContact() {
       style={neonVars("orange")}
       className="relative isolate overflow-hidden bg-[#05060a] px-6 py-20 text-white/90 sm:px-10 sm:py-28"
     >
-      <div className="mx-auto grid max-w-[1200px] gap-10 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-10">
+      <div className="mx-auto grid max-w-[1200px] gap-14 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-16">
         <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Copperline · Contact</p>
           <h2
             id="copperline-contact-title"
-            className="mt-5 text-[clamp(2.4rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
+            className="text-[clamp(2.6rem,5.6vw,4.75rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
           >
-            Tell us what&apos;s stuck.
+            Tell us <span className="sm:block">what&apos;s stuck.</span>
           </h2>
-          <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/55">
+          <p className="mt-6 max-w-[40ch] text-[17px] leading-[1.6] text-white/60">
             We&apos;re a twelve-person product agency. Send the messy version; we&apos;d rather read three honest
             sentences than a polished RFP.
           </p>
         </div>
 
         <div className="lg:col-span-7 lg:col-start-6 lg:row-span-2 lg:row-start-1">
-          <div className="rounded-[20px] border border-white/10 bg-white/[0.03]">
+          <div className="rounded-[18px] border border-white/10 bg-white/[0.025] shadow-[0_50px_100px_-50px_rgb(0_0_0/0.9)]">
             <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4 sm:px-9">
               <p className="text-sm font-medium text-white/90">New project brief</p>
               <a href="mailto:hello@copperline.studio" className="rounded-md text-[13px] text-white/60 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
@@ -376,7 +377,7 @@ export default function MarketingContact() {
           </div>
         </div>
 
-        <div className="lg:col-span-5 lg:col-start-1 lg:row-start-2">
+        <div className="lg:col-span-5 lg:col-start-1 lg:row-start-2 lg:self-end">
           <OfficeHours />
         </div>
       </div>

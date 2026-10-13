@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { flushSync } from "react-dom";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -53,6 +53,17 @@ const sizes = {
     label: "text-sm",
   },
 } as const;
+
+type PageCursor = { cursor: string; userSelect: string };
+
+/** Holds the scrub cursor on the whole page while dragging, and returns what was there. */
+function setPageCursor(next: PageCursor): PageCursor {
+  const style = document.documentElement.style;
+  const previous = { cursor: style.cursor, userSelect: style.userSelect };
+  style.cursor = next.cursor;
+  style.userSelect = next.userSelect;
+  return previous;
+}
 
 function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -118,6 +129,35 @@ function compactMultiplier(text: string, locale: string | undefined) {
   return 1;
 }
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 export interface NumberInputProps
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -181,6 +221,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       name,
       disabled,
       readOnly,
+      required,
       id: idProp,
       className,
       containerClassName,
@@ -198,9 +239,11 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 
     const autoId = React.useId();
     const id = idProp ?? autoId;
-    const invalid = Boolean(error);
-    const message = invalid ? (error === true ? null : error) : description;
-    const messageId = message ? `${id}-${invalid ? "error" : "description"}` : undefined;
+    const errored = Boolean(error);
+    const message = errored ? (error === true ? null : error) : description;
+    const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
+    const rejected = useRejected(inputRef);
+    const invalid = errored || rejected;
     const s = sizes[size];
     const locked = Boolean(disabled || readOnly);
 
@@ -289,6 +332,23 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       return true;
     }
 
+    // A form reset puts the starting number back and drops anything half typed.
+    const initialValue = React.useRef(value);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        setDraft(null);
+        setValue(initialValue.current);
+      };
+    });
+    React.useEffect(() => {
+      const form = inputRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     function stopRepeat() {
       if (repeat.current !== null) window.clearTimeout(repeat.current);
       repeat.current = null;
@@ -298,10 +358,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       () => () => {
         stopRepeat();
         const saved = savedCursor.current;
-        if (saved) {
-          document.documentElement.style.cursor = saved.cursor;
-          document.documentElement.style.userSelect = saved.userSelect;
-        }
+        if (saved) setPageCursor(saved);
       },
       [],
     );
@@ -410,10 +467,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         current.moved = true;
         current.startX = event.clientX;
         setScrubbing(true);
-        const root = document.documentElement;
-        savedCursor.current = { cursor: root.style.cursor, userSelect: root.style.userSelect };
-        root.style.cursor = "ew-resize";
-        root.style.userSelect = "none";
+        savedCursor.current = setPageCursor({ cursor: "ew-resize", userSelect: "none" });
       }
 
       // Changing modifiers mid-drag continues from here instead of jumping.
@@ -449,24 +503,12 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         setScrubbing(false);
         const saved = savedCursor.current;
         savedCursor.current = null;
-        if (saved) {
-          document.documentElement.style.cursor = saved.cursor;
-          document.documentElement.style.userSelect = saved.userSelect;
-        }
+        if (saved) setPageCursor(saved);
       } else if (current.fromLeading && event.pointerType !== "touch") {
         inputRef.current?.focus();
       }
     }
 
-    const scrubHandlers = (fromLeading: boolean) =>
-      canScrub
-        ? {
-            onPointerDown: (event: React.PointerEvent<HTMLElement>) => scrubStart(event, fromLeading),
-            onPointerMove: scrubMove,
-            onPointerUp: scrubEnd,
-            onPointerCancel: scrubEnd,
-          }
-        : {};
 
     // Clicks on the padding land in the input, like a native field.
     function handleMouseDown(event: React.MouseEvent<HTMLDivElement>) {
@@ -501,7 +543,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             if (event.detail === 0) stepBy(direction, step, commitDraft());
           }}
           className={cn(
-            "flex h-full shrink-0 cursor-pointer select-none items-center justify-center text-white/45 outline-none touch-manipulation",
+            "flex h-full shrink-0 cursor-pointer select-none items-center justify-center text-white/50 outline-none touch-manipulation",
             "transition-[background-color,color] duration-150 ease-out",
             "hover:bg-white/[0.04] hover:text-white/90",
             "active:bg-[rgb(var(--neon)/0.1)] active:text-[rgb(var(--neon))] active:[&_svg]:[filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.8))]",
@@ -523,7 +565,10 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         {label && (
           <label
             htmlFor={id}
-            {...scrubHandlers(false)}
+            onPointerDown={canScrub ? (event) => scrubStart(event, false) : undefined}
+            onPointerMove={canScrub ? scrubMove : undefined}
+            onPointerUp={canScrub ? scrubEnd : undefined}
+            onPointerCancel={canScrub ? scrubEnd : undefined}
             onClick={(event) => {
               if (suppressLabelClick.current) {
                 suppressLabelClick.current = false;
@@ -538,6 +583,13 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             )}
           >
             {label}
+            {required && (
+              <span
+                aria-hidden
+                title="Required"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+              />
+            )}
           </label>
         )}
         <div
@@ -562,9 +614,12 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           {leading && (
             <span
               data-scrub-handle={canScrub || undefined}
-              {...scrubHandlers(true)}
+              onPointerDown={canScrub ? (event) => scrubStart(event, true) : undefined}
+              onPointerMove={canScrub ? scrubMove : undefined}
+              onPointerUp={canScrub ? scrubEnd : undefined}
+              onPointerCancel={canScrub ? scrubEnd : undefined}
               className={cn(
-                "flex h-full shrink-0 select-none items-center text-white/40",
+                "flex h-full shrink-0 select-none items-center text-white/50",
                 "[&_svg]:transition-colors [&_svg]:duration-200 group-focus-within/field:[&_svg]:text-[rgb(var(--neon)/0.9)]",
                 canScrub && "cursor-ew-resize touch-none hover:text-white/70",
                 scrubbing && "text-[rgb(var(--neon))]",
@@ -586,6 +641,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             spellCheck={false}
             disabled={disabled}
             readOnly={readOnly}
+            required={required}
             aria-valuenow={value ?? undefined}
             aria-valuemin={min}
             aria-valuemax={max}
@@ -601,7 +657,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               commitDraft();
             }}
             className={cn(
-              "h-full w-full min-w-0 flex-1 bg-transparent tabular-nums text-inherit outline-none placeholder:text-white/30",
+              "h-full w-full min-w-0 flex-1 bg-transparent tabular-nums text-inherit outline-none placeholder:text-white/50",
               "transition-[color,text-shadow] duration-150 disabled:cursor-not-allowed",
               scrubbing && "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.5)]",
               s.input,
@@ -610,7 +666,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             )}
           />
           {trailing && (
-            <span className={cn("flex shrink-0 items-center text-white/40", s.trailing)}>{trailing}</span>
+            <span className={cn("flex shrink-0 items-center text-white/50", s.trailing)}>{trailing}</span>
           )}
           <div className="flex h-full shrink-0 items-stretch border-l border-white/10">
             {stepperButton(-1)}
@@ -619,7 +675,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         </div>
         {name && <input type="hidden" name={name} value={value ?? ""} disabled={disabled} />}
         {message && (
-          <p id={messageId} className={cn("text-xs leading-5", invalid ? "text-[#ff4d5e]" : "text-white/55")}>
+          <p id={messageId} className={cn("text-xs leading-5", errored ? "text-[#ff4d5e]" : "text-white/55")}>
             {message}
           </p>
         )}

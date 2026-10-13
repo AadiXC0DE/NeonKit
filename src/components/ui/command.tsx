@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { LoaderCircle, Search } from "lucide-react";
+import { LoaderCircle, Search } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -795,7 +795,7 @@ const CommandLoading = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTM
         ref={ref}
         role="presentation"
         style={{ order: -1, ...style }}
-        className={cn("flex items-center gap-2.5 px-3 py-2.5 text-sm text-white/45", className)}
+        className={cn("flex items-center gap-2.5 px-3 py-2.5 text-sm text-white/55", className)}
         {...props}
       >
         <LoaderCircle aria-hidden className="size-4 shrink-0 animate-spin text-[rgb(var(--neon)/0.8)]" />
@@ -837,7 +837,7 @@ const CommandGroup = React.forwardRef<HTMLDivElement, CommandGroupProps>(
               id={`${id}-heading`}
               aria-hidden
               data-command-group-heading=""
-              className="select-none px-3 pb-1.5 pt-2.5 font-mono text-[10.5px] font-medium uppercase tracking-[0.14em] text-white/55"
+              className="select-none px-3 pb-1 pt-3 text-xs font-medium leading-4 text-white/55"
             >
               {heading}
             </div>
@@ -1059,6 +1059,10 @@ const CommandDialog = React.forwardRef<HTMLDivElement, CommandDialogProps>(
       };
       document.documentElement.style.overflow = "hidden";
       dialog.showModal();
+      // showModal focuses the first control while the panel is still offscreen, and the browser can
+      // scroll the dialog to bring it into view. Undo that so the panel lands where it should.
+      dialog.scrollTop = 0;
+      dialog.scrollLeft = 0;
       dialog.querySelector<HTMLInputElement>('[role="combobox"]')?.focus();
     }, [open]);
 
@@ -1089,10 +1093,14 @@ const CommandDialog = React.forwardRef<HTMLDivElement, CommandDialogProps>(
         ref={dialogRef}
         aria-label={label ?? "Command menu"}
         onCancel={(event) => {
+          // React passes a nested dialog's cancel up to every ancestor's handler; only Escape on this one counts.
+          if (event.target !== event.currentTarget) return;
+          // Escape: let the exit animation run instead of closing instantly.
           event.preventDefault();
           setOpen(false);
         }}
-        onClose={() => {
+        onClose={(event) => {
+          if (event.target !== event.currentTarget) return;
           if (!dialogRef.current?.open) setOpen(false);
         }}
         style={neonVars(color)}

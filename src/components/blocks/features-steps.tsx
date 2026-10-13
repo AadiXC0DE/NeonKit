@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, LoaderCircle, RotateCcw } from "lucide-react";
+import { Check, LoaderCircle, RotateCcw } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Step, Stepper } from "@/components/ui/stepper";
@@ -9,9 +9,9 @@ import { neonVars } from "@/lib/neon";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
-  { title: "Connect", description: "Verify your domain" },
-  { title: "Template", description: "Write it once" },
-  { title: "Send", description: "One API call" },
+  { title: "Connect", description: "Verify your domain", copy: "Add four DNS records. We check them and tell you which one is wrong, by name." },
+  { title: "Template", description: "Write it once", copy: "Plain HTML or our editor. Variables are typed, so a typo fails the build, not the send." },
+  { title: "Send", description: "One API call", copy: "One call from your backend. Every message gets a delivery log you can hand to support." },
 ];
 
 const DNS = [
@@ -42,7 +42,6 @@ function useSequence() {
 
 function Panel({
   index,
-  state,
   title,
   copy,
   children,
@@ -56,26 +55,21 @@ function Panel({
   return (
     <article
       aria-label={`Step ${index + 1}: ${title}`}
-      className={cn(
-        "relative flex flex-col rounded-[18px] border p-5 transition-[border-color,background-color,box-shadow] duration-500 sm:p-6",
-        state === "current"
-          ? "border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.035)] shadow-[0_0_0_1px_rgb(var(--neon)/0.06),0_30px_80px_-40px_rgb(var(--neon)/0.6)]"
-          : "border-white/[0.08] bg-white/[0.02]",
-      )}
+      className="relative flex min-h-[440px] flex-1 flex-col rounded-[14px] border border-white/[0.08] bg-[#08090d] p-5 shadow-[inset_0_1px_0_rgb(255_255_255/0.04),0_50px_100px_-50px_rgb(0_0_0/0.9)] sm:p-8"
     >
-      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-        <span className={state === "upcoming" ? "" : "text-[rgb(var(--neon))]"}>0{index + 1}</span> · {title}
-      </p>
-      <p className="mt-2 text-[15px] leading-relaxed text-white/60">{copy}</p>
-      {/* Only the live artifact dims while upcoming; the step copy stays readable. */}
-      <div className={cn("mt-5 flex flex-1 flex-col transition-opacity duration-500", state === "upcoming" && "lg:opacity-[0.55]")}>{children}</div>
+      <div className="flex items-baseline justify-between gap-4">
+        <h3 className="text-[22px] font-[620] tracking-[-0.025em] text-white [font-stretch:112%]">{title}</h3>
+        <span className="text-[13px] tabular-nums text-white/50">Step {index + 1} of 3</span>
+      </div>
+      <p className="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-white/60 lg:hidden">{copy}</p>
+      <div className="mt-6 flex flex-1 flex-col">{children}</div>
     </article>
   );
 }
 
 function Mono({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-xl border border-white/[0.07] bg-[#07080c] px-4 py-3 font-mono text-[12px] leading-6 text-white/70", className)}>
+    <div className={cn("rounded-xl border border-white/[0.07] bg-[#05060a] px-4 py-3.5 font-mono text-[13px] leading-6 text-white/70", className)}>
       {children}
     </div>
   );
@@ -169,13 +163,13 @@ export default function FeaturesSteps() {
       copy="Add four DNS records. We check them for you and tell you which one is wrong, by name."
     >
       <Mono>
-        <span className="text-white/35">$</span> npm i <span className="text-white/90">@mailroom/node</span>
+        <span className="text-white/50">$</span> npm i <span className="text-white/90">@mailroom/node</span>
       </Mono>
       <ul className="mt-3 divide-y divide-white/[0.06] rounded-xl border border-white/[0.07]">
         {DNS.map((r, i) => {
           const ok = dnsDone || i < verified;
           return (
-            <li key={r.label} className="flex items-center gap-3 px-3.5 py-2.5 text-xs">
+            <li key={r.label} className="flex items-center gap-3 px-4 py-3 text-[13px]">
               <span className="w-12 shrink-0 font-mono text-white/55">{r.record}</span>
               <span className="min-w-0 flex-1 truncate font-mono text-white/70">{r.host}</span>
               <span className={cn("flex items-center gap-1.5 transition-colors", ok ? "text-[rgb(var(--neon))]" : "text-white/55")}>
@@ -206,16 +200,16 @@ export default function FeaturesSteps() {
     >
       <div className="overflow-hidden rounded-xl border border-white/[0.07] bg-[#0b0c11]">
         <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-2.5">
-          <span className="font-mono text-[11px] text-white/55">receipt.mrml</span>
+          <span className="font-mono text-[12px] text-white/55">receipt.mrml</span>
           <Badge size="sm" variant="outline">{step > 1 ? "v3 live" : "v3 draft"}</Badge>
         </div>
-        <div className="space-y-2.5 px-4 py-4 text-[13px] leading-relaxed text-white/75">
-          <p className="text-[15px] font-medium text-white">Thanks, <Var>{"{{first_name}}"}</Var></p>
+        <div className="space-y-3 px-5 py-5 text-[15px] leading-relaxed text-white/75">
+          <p className="text-[19px] font-medium tracking-[-0.01em] text-white">Thanks, <Var>{"{{first_name}}"}</Var></p>
           <p>
             We charged <Var>{"{{amount}}"}</Var> to the card ending <Var>{"{{last4}}"}</Var>. Your order ships from
             Portland on <Var>{"{{ship_date}}"}</Var>.
           </p>
-          <div className="flex items-center justify-between border-t border-dashed border-white/10 pt-2.5 font-mono text-[11px] text-white/55">
+          <div className="flex items-center justify-between border-t border-dashed border-white/10 pt-3 font-mono text-[12px] text-white/55">
             <span>Order FC-30418</span>
             <span>2 items</span>
           </div>
@@ -257,9 +251,9 @@ export default function FeaturesSteps() {
         <br />
         {"});"}
       </Mono>
-      <ol aria-live="polite" className="relative mt-3 min-h-[124px] space-y-1 rounded-xl border border-white/[0.07] px-3.5 py-3 font-mono text-[11px] leading-5">
+      <ol aria-live="polite" className="relative mt-3 min-h-[132px] space-y-1 rounded-xl border border-white/[0.07] px-4 py-3.5 font-mono text-[12.5px] leading-6">
         {step < 3 && logged === 0 && (
-          <li className="absolute inset-0 grid place-items-center text-white/55">{sending ? "Connecting…" : "Delivery log appears here"}</li>
+          <li className="absolute inset-0 grid place-items-center font-sans text-[13px] text-white/55">{sending ? "Connecting…" : "Delivery log appears here"}</li>
         )}
         {LOG.map((line, i) => {
           const shown = step > 2 || i < logged;
@@ -303,34 +297,53 @@ export default function FeaturesSteps() {
       className="relative isolate overflow-hidden bg-[#05060a] px-5 py-20 text-white/90 sm:px-10 sm:py-24 lg:px-16"
     >
       <div className="mx-auto max-w-[1200px]">
-        <header className="grid gap-6 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Mailroom · Transactional email</p>
-            <h2
-              id="features-steps-title"
-              className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
-            >
-              From zero to a delivered receipt before lunch.
-            </h2>
-          </div>
-          <p className="max-w-md text-[15px] leading-relaxed text-white/55 lg:col-span-4 lg:col-start-9 lg:pb-1.5">
-            Three steps, and you can do them right here. Most teams send their first real email 22 minutes after
-            signing up.
+        <header className="max-w-[900px]">
+          <h2
+            id="features-steps-title"
+            className="max-w-[19ch] text-[clamp(2.4rem,5.6vw,4.5rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
+          >
+            From zero to a delivered receipt before lunch.
+          </h2>
+          <p className="mt-6 max-w-[50ch] text-[17px] leading-[1.6] text-white/90">
+            Mailroom sends your transactional email.{" "}
+            <span className="text-white/50">Three steps, and you can do all of them right here.</span>
           </p>
         </header>
 
-        <Stepper value={step} onValueChange={goTo} clickable className="mt-14 lg:mt-16">
-          {STEPS.map((s) => (
-            <Step key={s.title} title={s.title} description={s.description} />
-          ))}
-        </Stepper>
-
-        <div className="mt-10 grid gap-4 lg:grid-cols-3">
-          {panels.map((panel, i) => (
-            <div key={i} className={cn(i === Math.min(step, 2) ? "flex" : "hidden lg:flex", "flex-col [&>article]:flex-1")}>
-              {panel}
+        <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-4">
+            <div className="lg:hidden">
+              <Stepper value={step} onValueChange={goTo} clickable>
+                {STEPS.map((s) => (
+                  <Step key={s.title} title={s.title} description={s.description} />
+                ))}
+              </Stepper>
             </div>
-          ))}
+            <div className="hidden lg:block">
+              <Stepper value={step} onValueChange={goTo} clickable orientation="vertical">
+                {STEPS.map((s) => (
+                  <Step key={s.title} title={s.title} description={s.copy} />
+                ))}
+              </Stepper>
+            </div>
+            <p className="mt-12 hidden border-t border-white/[0.08] pt-6 lg:block">
+              <span className="block text-[clamp(2.75rem,4vw,3.5rem)] font-[620] leading-none tracking-[-0.04em] text-white [font-stretch:112%]">
+                22 min
+              </span>
+              <span className="mt-2 block max-w-[30ch] text-[14px] leading-[1.5] text-white/55">
+                Median time from sign-up to a team&apos;s first real email.
+              </span>
+            </p>
+          </div>
+
+          {/* One stage: whichever step you're on, at full size. */}
+          <div className="flex min-w-0 flex-col lg:col-span-8">
+            {panels.map((panel, i) => (
+              <div key={i} className={cn(i === Math.min(step, 2) ? "flex" : "hidden", "flex-1 flex-col")}>
+                {panel}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

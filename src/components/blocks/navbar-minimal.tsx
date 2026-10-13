@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, Menu } from "lucide-react";
+import { ArrowRight, Menu } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -115,13 +115,11 @@ export default function NavbarMinimal() {
               </SheetTrigger>
               <SheetContent side="right" size="sm">
                 <SheetHeader>
-                  <SheetTitle className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/55">
-                    Kestrel · menu
-                  </SheetTitle>
+                  <SheetTitle className="text-[13px] font-normal text-white/55">Menu</SheetTitle>
                 </SheetHeader>
                 <nav aria-label="Mobile" className="mt-10">
                   <ul className="grid gap-1">
-                    {LINKS.map((link, index) => {
+                    {LINKS.map((link) => {
                       const current = link.href === active;
                       return (
                         <li key={link.href}>
@@ -131,16 +129,13 @@ export default function NavbarMinimal() {
                               aria-current={current ? "page" : undefined}
                               onClick={() => setActive(link.href)}
                               className={cn(
-                                "flex items-baseline gap-4 rounded-lg py-2 text-[40px] font-semibold leading-[1.05] tracking-[-0.035em] outline-none transition-colors",
+                                "flex items-baseline gap-4 rounded-lg py-2 text-[40px] font-[620] leading-[1.05] tracking-[-0.04em] outline-none transition-colors [font-stretch:112%]",
                                 "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
                                 current
                                   ? "[color:color-mix(in_srgb,rgb(var(--neon))_40%,white)] [text-shadow:0_0_14px_rgb(var(--neon)/0.55),0_0_40px_rgb(var(--neon)/0.25)]"
                                   : "text-white/80 hover:text-white",
                               )}
                             >
-                              <span aria-hidden className="w-6 shrink-0 font-mono text-[11px] font-normal tracking-[0.16em] text-white/35 [text-shadow:none]">
-                                0{index + 1}
-                              </span>
                               {link.label}
                             </a>
                           </SheetClose>
@@ -170,26 +165,27 @@ export default function NavbarMinimal() {
       {/* A slice of the page underneath, so the nav reads in context. */}
       <div
         aria-hidden
-        className="pointer-events-none mx-auto grid max-w-6xl select-none gap-12 px-5 pb-6 pt-14 [mask-image:linear-gradient(to_bottom,#000_50%,transparent)] sm:px-8 sm:pt-16 lg:grid-cols-[1fr_320px]"
+        className="pointer-events-none mx-auto grid max-w-6xl select-none gap-12 px-5 pb-6 pt-14 [mask-image:linear-gradient(to_bottom,#000_55%,transparent)] sm:px-8 sm:pt-20 lg:grid-cols-12"
       >
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Field notes, synced · v3.2</p>
-          <p className="mt-5 max-w-3xl [text-wrap:balance] text-[clamp(2.5rem,7vw,5.25rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/90">
-            Write it down before the light goes.
+        <div className="lg:col-span-8">
+          <p className="text-[clamp(2.4rem,6vw,4.4rem)] font-[620] leading-[0.96] tracking-[-0.045em] text-white/90 [font-stretch:112%]">
+            Write it down
+            <br />
+            before the light goes.
           </p>
-          <p className="mt-6 max-w-md text-base leading-relaxed text-white/60">
+          <p className="mt-6 max-w-[44ch] text-[17px] leading-[1.6] text-white/60">
             Notebooks that work offline at the trailhead, timestamp every observation and sync when you&apos;re back in range.
           </p>
         </div>
-        <div className="hidden self-end rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 lg:block">
-          <p className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-            Ridge survey · day 4<span className="text-white/50">offline</span>
+        <div className="hidden self-end lg:col-span-4 lg:block">
+          <p className="flex items-baseline justify-between text-[13px] text-white/55">
+            Ridge survey, day 4<span className="text-white/50">Offline</span>
           </p>
-          <ul className="mt-4 grid gap-3 border-t border-white/[0.06] pt-4 text-sm">
+          <ul className="mt-3 border-t border-white/[0.08] text-sm">
             {LOG.map((entry) => (
-              <li key={entry.time} className="flex gap-3">
-                <span className="font-mono text-xs leading-5 text-[rgb(var(--neon)/0.8)]">{entry.time}</span>
-                <span className="leading-5 text-white/60">{entry.text}</span>
+              <li key={entry.time} className="flex gap-4 border-b border-white/[0.06] py-2.5">
+                <span className="font-mono text-[13px] leading-5 text-[rgb(var(--neon)/0.85)]">{entry.time}</span>
+                <span className="leading-5 text-white/65">{entry.text}</span>
               </li>
             ))}
           </ul>

@@ -37,6 +37,35 @@ const sizes = {
   },
 } as const;
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "color" | "size"> {
   /** Palette name or any hex color. Inherits `--neon-accent` when omitted. */
@@ -73,6 +102,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       id: idProp,
       disabled,
       readOnly,
+      required,
       "aria-describedby": ariaDescribedBy,
       ...props
     },
@@ -80,12 +110,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
     React.useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
+    const rejected = useRejected(inputRef);
 
     const autoId = React.useId();
     const id = idProp ?? autoId;
-    const invalid = Boolean(error);
-    const message = invalid ? (error === true ? null : error) : description;
-    const messageId = message ? `${id}-${invalid ? "error" : "description"}` : undefined;
+    const errored = Boolean(error);
+    const message = errored ? (error === true ? null : error) : description;
+    const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
+    const invalid = errored || rejected;
     const s = sizes[size];
 
     // Clicks on the padding or icons land in the input, like a native field.
@@ -98,14 +130,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     }
 
     return (
-      <div className={cn("grid w-full gap-1.5", containerClassName)}>
+      <div
+        style={neonVars(color)}
+        className={cn("[--neon:var(--neon-accent,34_211_238)]", "grid w-full gap-1.5", containerClassName)}
+      >
         {label && (
           <label htmlFor={id} className={cn("w-fit font-medium text-white/80", s.label)}>
             {label}
+            {required && <RequiredDot />}
           </label>
         )}
         <div
-          style={neonVars(invalid ? INVALID : color, style)}
+          style={invalid ? neonVars(INVALID, style) : style}
           onMouseDown={handleMouseDown}
           className={cn(
             "[--neon:var(--neon-accent,34_211_238)]",
@@ -124,7 +160,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {leading && (
             <span
               className={cn(
-                "flex shrink-0 items-center text-white/40 [&_svg]:transition-colors [&_svg]:duration-200 group-focus-within/field:[&_svg]:text-[rgb(var(--neon)/0.9)]",
+                "flex shrink-0 items-center text-white/50 [&_svg]:transition-colors [&_svg]:duration-200 group-focus-within/field:[&_svg]:text-[rgb(var(--neon)/0.9)]",
                 s.leading,
               )}
             >
@@ -136,10 +172,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={id}
             disabled={disabled}
             readOnly={readOnly}
+            required={required}
             aria-invalid={invalid || undefined}
             aria-describedby={[ariaDescribedBy, messageId].filter(Boolean).join(" ") || undefined}
             className={cn(
-              "h-full w-full min-w-0 flex-1 bg-transparent text-inherit outline-none placeholder:text-white/30",
+              "h-full w-full min-w-0 flex-1 bg-transparent text-inherit outline-none placeholder:text-white/50 [color-scheme:dark]",
               "disabled:cursor-not-allowed [&::-webkit-search-cancel-button]:appearance-none",
               "[&:-webkit-autofill]:[-webkit-text-fill-color:rgb(255_255_255/0.9)] [&:-webkit-autofill]:[transition:background-color_9999s_ease-out]",
               s.input,
@@ -149,7 +186,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {trailing && (
-            <span className={cn("flex shrink-0 items-center text-white/40", s.trailing)}>
+            <span className={cn("flex shrink-0 items-center text-white/50", s.trailing)}>
               {trailing}
             </span>
           )}
@@ -157,7 +194,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {message && (
           <p
             id={messageId}
-            className={cn("text-xs leading-5", invalid ? "text-[#ff4d5e]" : "text-white/55")}
+            className={cn("text-xs leading-5", errored ? "text-[#ff4d5e]" : "text-white/55")}
           >
             {message}
           </p>
@@ -167,5 +204,16 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   },
 );
 Input.displayName = "Input";
+
+/** The neon dot Field's Label uses, so required fields read the same everywhere. */
+function RequiredDot() {
+  return (
+    <span
+      aria-hidden
+      title="Required"
+      className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+    />
+  );
+}
 
 export { Input };

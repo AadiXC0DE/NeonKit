@@ -34,7 +34,9 @@ function Dot({ x, y, r = 4, lit }: { x: number; y: number; r?: number; lit: bool
   );
 }
 
-const label = { fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 9, letterSpacing: "0.14em" };
+// Labels inside the drawings: place names in the sans, tokens and readings in mono, both in sentence case.
+const label = { fontFamily: "var(--font-sans, ui-sans-serif, system-ui, sans-serif)", fontSize: 10.5 };
+const reading = { fontFamily: "var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace)", fontSize: 10 };
 
 function Route({ lit }: { lit: boolean }) {
   const piers = [
@@ -68,11 +70,11 @@ function Route({ lit }: { lit: boolean }) {
       <g transform="translate(222 132)">
         <rect x={-9} y={-5} width={18} height={10} rx={5} fill="#0b0c12" stroke={CORE} className={cn("transition-opacity duration-500", lit ? "opacity-100" : "opacity-40")} />
       </g>
-      <text x={138} y={52} fill="rgb(255 255 255 / 0.55)" style={label}>
-        KATENDRECHT
+      <text x={138} y={52} fill="rgb(255 255 255 / 0.6)" style={label}>
+        Katendrecht
       </text>
-      <text x={196} y={214} fill="rgb(255 255 255 / 0.55)" style={label}>
-        ERASMUSBRUG · 4 MIN
+      <text x={204} y={216} fill="rgb(255 255 255 / 0.6)" style={label}>
+        Erasmusbrug, 4 min
       </text>
     </>
   );
@@ -103,11 +105,11 @@ function Tokens({ lit }: { lit: boolean }) {
       })}
       <Tube d="M158 128 h28 a8 8 0 0 0 0 -16 h-28 a8 8 0 0 0 0 16 z" lit={lit} width={1.8} />
       <Tube d="M172 128 V 147 H 262 V 222" lit={lit} width={1} dashed />
-      <text x={270} y={226} fill="rgb(255 255 255 / 0.55)" style={label}>
-        RADIUS.FULL
+      <text x={270} y={226} fill="rgb(255 255 255 / 0.6)" style={reading}>
+        radius.full
       </text>
-      <text x={30} y={30} fill="rgb(255 255 255 / 0.55)" style={label}>
-        46 / 46 COMPONENTS
+      <text x={30} y={30} fill="rgb(255 255 255 / 0.6)" style={label}>
+        46 of 46 components
       </text>
     </>
   );
@@ -139,11 +141,11 @@ function Wave({ lit }: { lit: boolean }) {
         );
       })}
       <Tube d={`M${playhead} 62 V 194`} lit={lit} width={1.4} />
-      <text x={30} y={40} fill="rgb(255 255 255 / 0.55)" style={label}>
-        ON AIR · 21:04
+      <text x={30} y={40} fill="rgb(255 255 255 / 0.6)" style={label}>
+        On air, 21:04
       </text>
-      <text x={316} y={222} fill="rgb(255 255 255 / 0.55)" style={label}>
-        0.6 S
+      <text x={330} y={222} fill="rgb(255 255 255 / 0.6)" style={reading}>
+        0.6 s
       </text>
     </>
   );
@@ -171,7 +173,7 @@ function Type({ lit }: { lit: boolean }) {
       <Tube d="M318 40 V 214" lit={false} width={1} />
       <Tube d="M318 40 V 112" lit={lit} width={1.6} />
       <Dot x={318} y={112} r={3.5} lit={lit} />
-      <text x={330} y={116} fill="rgb(255 255 255 / 0.55)" style={label}>
+      <text x={330} y={116} fill="rgb(255 255 255 / 0.6)" style={reading}>
         41%
       </text>
     </>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Copy, MailOpen, Pin, Reply, Trash2 } from "lucide-react";
+import { Copy, MailOpen, Pin, Reply, Trash2 } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import {
   ContextMenu,
@@ -80,7 +80,7 @@ export default function ContextMenuMessages() {
         <button
           type="button"
           onClick={() => setMessages(thread)}
-          className="w-full rounded-lg p-4 text-sm text-white/45 outline-none hover:text-white/70 focus-visible:ring-1 focus-visible:ring-[rgb(var(--neon)/0.5)]"
+          className="w-full rounded-lg p-4 text-sm text-white/50 outline-none hover:text-white/70 focus-visible:ring-1 focus-visible:ring-[rgb(var(--neon)/0.5)]"
         >
           Thread cleared. Bring it back
         </button>

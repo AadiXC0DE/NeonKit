@@ -16,7 +16,7 @@ import {
   Send,
   Star,
   Trash2,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -269,7 +269,7 @@ export default function AppInbox() {
         })}
       </ul>
       <div>
-        <p className="px-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">Labels</p>
+        <p className="px-3 text-xs font-medium text-white/55">Labels</p>
         <ul className="mt-2 grid gap-0.5">
           {(Object.keys(LABELS) as Label[]).map((l) => (
             <li key={l}>
@@ -302,7 +302,7 @@ export default function AppInbox() {
       <aside className="hidden w-[232px] shrink-0 flex-col border-r border-white/[0.06] bg-[#07080d] p-3 lg:flex">
         <div className="flex h-10 items-center gap-2 px-2">
           <Mail aria-hidden className="size-4 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.8))]" />
-          <span className="text-[15px] font-semibold tracking-[-0.02em]">Dispatch</span>
+          <span className="text-[15px] font-[620] tracking-[-0.02em] [font-stretch:112%]">Dispatch</span>
         </div>
         <Button variant="soft" className="mb-5 mt-3 w-full justify-start" onClick={startCompose}>
           <PenLine /> Compose
@@ -335,8 +335,8 @@ export default function AppInbox() {
             <Button variant="ghost" size="icon" aria-label="Mailboxes" className="size-8 lg:hidden" onClick={() => setFoldersOpen(true)}>
               <Menu />
             </Button>
-            <h2 id="inbox-list-title" className="text-[17px] font-semibold tracking-[-0.02em]">{title}</h2>
-            <span className="font-mono text-xs text-white/55">{visible.length}</span>
+            <h2 id="inbox-list-title" className="text-[19px] font-[620] tracking-[-0.025em] [font-stretch:112%]">{title}</h2>
+            <span className="font-mono text-xs tabular-nums text-white/55">{visible.length}</span>
             <ToggleGroup size="sm" aria-label="Show" value={filter} onValueChange={(v) => v && setFilter(v)} className="ml-auto">
               <ToggleGroupItem value="all" className="max-sm:h-8">All</ToggleGroupItem>
               <ToggleGroupItem value="unread" className="max-sm:h-8">Unread</ToggleGroupItem>
@@ -344,7 +344,7 @@ export default function AppInbox() {
           </div>
           <Input size="sm" type="search" aria-label="Search mail" placeholder="Search mail" leading={<Search />} value={query} onChange={(e) => setQuery(e.target.value)} />
         </div>
-        <ul ref={listRef} onKeyDown={onListKey} aria-label={`${title} messages`} className="min-h-0 flex-1 overflow-y-auto p-1.5 [scrollbar-color:rgb(255_255_255/0.1)_transparent] [scrollbar-width:thin]">
+        <ul ref={listRef} onKeyDown={onListKey} aria-label={`${title} messages`} className="min-h-0 flex-1 overflow-y-auto [scrollbar-color:rgb(255_255_255/0.1)_transparent] [scrollbar-width:thin]">
           {visible.map((m) => {
             const isSelected = m.id === selectedId;
             return (
@@ -355,23 +355,33 @@ export default function AppInbox() {
                   aria-current={isSelected ? "true" : undefined}
                   onClick={() => open(m.id)}
                   className={cn(
-                    "relative grid w-full cursor-pointer gap-1 rounded-xl px-3.5 py-3 text-left outline-none transition-colors duration-150",
+                    "relative grid w-full cursor-pointer gap-1 border-b border-white/[0.05] py-3.5 pl-5 pr-4 text-left outline-none transition-colors duration-150",
                     "focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]",
-                    isSelected ? "bg-[rgb(var(--neon)/0.08)] shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.18)]" : "hover:bg-white/[0.03]",
+                    isSelected ? "bg-[rgb(var(--neon)/0.07)]" : "hover:bg-white/[0.025]",
                   )}
                 >
-                  {isSelected && <span aria-hidden className="absolute inset-y-3 left-0 w-[2px] rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]" />}
+                  {isSelected && <span aria-hidden className="absolute inset-y-0 left-0 w-[2px] bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]" />}
                   <span className="flex items-center gap-2">
-                    {m.unread && <span className="size-1.5 shrink-0 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]"><span className="sr-only">Unread, </span></span>}
+                    {m.unread && <span className="-ml-3 mr-[2px] size-1.5 shrink-0 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]"><span className="sr-only">Unread, </span></span>}
                     <span className={cn("min-w-0 flex-1 truncate text-sm", m.unread ? "font-semibold text-white" : "text-white/80")}>{m.from}</span>
-                    <span className="shrink-0 text-xs tabular-nums text-white/60">{m.time}</span>
+                    <span className="shrink-0 text-xs tabular-nums text-white/55">{m.time}</span>
                   </span>
                   <span className={cn("truncate text-[13px]", m.unread ? "text-white/90" : "text-white/75")}>{m.subject}</span>
-                  <span className="line-clamp-1 pr-8 text-[13px] text-white/60">{m.body[0]}</span>
+                  <span className="line-clamp-1 pr-8 text-[13px] text-white/55">{m.body[0]}</span>
                   {(m.label || m.attachment) && (
-                    <span className="mt-1 flex items-center gap-2">
-                      {m.label && <Badge size="sm" color={LABELS[m.label]}>{m.label}</Badge>}
-                      {m.attachment && <File aria-label="Has attachment" className="size-3.5 text-white/50" />}
+                    <span className="mt-1 flex items-center gap-3 text-xs text-white/55">
+                      {m.label && (
+                        <span style={neonVars(LABELS[m.label])} className="inline-flex items-center gap-1.5">
+                          <span aria-hidden className="size-1.5 rounded-full bg-[rgb(var(--neon))]" />
+                          {m.label}
+                        </span>
+                      )}
+                      {m.attachment && (
+                        <span className="inline-flex items-center gap-1">
+                          <File aria-hidden className="size-3.5 text-white/50" />
+                          <span className="sr-only">Has attachment: </span>{m.attachment.name}
+                        </span>
+                      )}
                     </span>
                   )}
                 </button>
@@ -381,8 +391,8 @@ export default function AppInbox() {
                   aria-pressed={!!m.starred}
                   onClick={() => update(m.id, { starred: !m.starred })}
                   className={cn(
-                    "absolute bottom-1.5 right-1.5 grid size-9 cursor-pointer place-items-center rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] [&_svg]:size-3.5",
-                    m.starred ? "text-[rgb(251_191_36)]" : "text-white/45 hover:text-white/80",
+                    "absolute bottom-1 right-1.5 grid size-9 cursor-pointer place-items-center rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] [&_svg]:size-3.5",
+                    m.starred ? "text-[rgb(251_191_36)]" : "text-white/50 hover:text-white/80",
                   )}
                 >
                   <Star className={m.starred ? "fill-current" : undefined} />
@@ -437,7 +447,7 @@ export default function AppInbox() {
                   {selected.label && <Badge size="sm" color={LABELS[selected.label]}>{selected.label}</Badge>}
                   <Badge size="sm" variant="soft" color="white">{FOLDERS.find((f) => f.id === selected.folder)?.label}</Badge>
                 </div>
-                <h3 className="mt-4 text-[26px] font-semibold leading-[1.1] tracking-[-0.03em] text-white sm:text-[30px]">{selected.subject}</h3>
+                <h3 className="mt-5 text-balance text-[26px] font-[620] leading-[1.08] tracking-[-0.03em] text-white [font-stretch:112%] sm:text-[32px]">{selected.subject}</h3>
                 <div className="mt-6 flex items-center gap-3">
                   <Avatar alt={selected.from} size="md" />
                   <div className="min-w-0 text-sm">

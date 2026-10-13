@@ -20,7 +20,7 @@ import {
   UsersRound,
   Wallet,
   X,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -137,7 +137,7 @@ function Brand() {
       </svg>
       <span className={cn("grid min-w-0 transition-opacity duration-200", collapsed && "md:opacity-0")}>
         <span className="truncate text-sm font-semibold tracking-[-0.01em] text-white/90">Vantage</span>
-        <span className="truncate font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">Fernhill Inc.</span>
+        <span className="truncate text-xs text-white/55">Fernhill Inc.</span>
       </span>
     </a>
   );
@@ -146,7 +146,7 @@ function Brand() {
 function SeatUsage() {
   const { collapsed } = useSidebar();
   return (
-    <div className={cn("grid gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 transition-opacity duration-200", collapsed && "md:pointer-events-none md:opacity-0")}>
+    <div className={cn("grid gap-2 border-t border-white/[0.06] px-1.5 pt-4 transition-opacity duration-200", collapsed && "md:pointer-events-none md:opacity-0")}>
       <div className="flex items-baseline justify-between text-xs">
         <span className="text-white/70">Growth plan</span>
         <span className="tabular-nums text-white/60">8 / 10 seats</span>
@@ -381,94 +381,161 @@ export default function AppDashboard() {
           )}
         </header>
 
-        <main className="mx-auto w-full max-w-[1240px] px-4 pb-12 pt-7 sm:px-6 lg:px-8">
+        <main className="mx-auto w-full max-w-[1240px] px-4 pb-14 pt-7 sm:px-6 lg:px-10 lg:pt-9">
           <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-                Billing synced 3 min ago
+              <h1 className="text-[28px] font-[620] leading-none tracking-[-0.03em] text-white [font-stretch:112%] sm:text-[32px]">{title}</h1>
+              <p className="mt-2.5 flex items-center gap-2 text-[13px] text-white/55">
+                <span aria-hidden className="size-1.5 rounded-full bg-[rgb(52_211_153)]" />
+                Synced from Stripe at <span className="font-mono text-[12px] tabular-nums text-white/70">14:02</span>
               </p>
-              <h1 className="mt-2 text-[32px] font-semibold leading-none tracking-[-0.035em] text-white sm:text-[40px]">{title}</h1>
             </div>
             <div className="flex items-center gap-2">
               <ToggleGroup size="sm" aria-label="Date range" value={range} onValueChange={(v) => { if (!v) return; setActive(null); setRange(v as Range); }}>
-                <ToggleGroupItem value="7d" className="max-sm:h-8">7D</ToggleGroupItem>
-                <ToggleGroupItem value="30d" className="max-sm:h-8">30D</ToggleGroupItem>
-                <ToggleGroupItem value="90d" className="max-sm:h-8">90D</ToggleGroupItem>
+                <ToggleGroupItem value="7d" className="max-sm:h-8">7 days</ToggleGroupItem>
+                <ToggleGroupItem value="30d" className="max-sm:h-8">30 days</ToggleGroupItem>
+                <ToggleGroupItem value="90d" className="max-sm:h-8">90 days</ToggleGroupItem>
               </ToggleGroup>
-              <Button variant="ghost" size="sm" loading={exportState === "busy"} onClick={exportCsv} className="border border-white/10">
+              <Button variant="ghost" size="sm" loading={exportState === "busy"} onClick={exportCsv} className="border border-white/10 max-sm:px-2.5" aria-label={exportState === "done" ? "Exported" : "Export CSV"}>
                 {exportState === "done" ? <Check /> : exportState === "idle" ? <Download /> : null}
-                {exportState === "done" ? "Exported" : "Export"}
+                <span className="max-sm:hidden">{exportState === "done" ? "Exported" : "Export"}</span>
               </Button>
             </div>
           </div>
 
-          <dl className="mt-7 grid grid-cols-2 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] lg:grid-cols-4">
-            {kpis.map((kpi, i) => (
-              <div key={kpi.label} className={cn("p-4 sm:p-5", i % 2 === 1 && "border-l border-white/[0.06]", i > 1 && "border-t border-white/[0.06] lg:border-t-0", i === 2 && "lg:border-l")}>
-                <dt className="flex items-center justify-between gap-3 text-xs text-white/55">
-                  <span className="truncate">{kpi.label}</span>
-                  <Sparkline data={kpi.spark} width={64} height={22} dot={false} color={kpi.invert ? "white" : undefined} label={`${kpi.label}, last ${r.label}`} className="hidden shrink-0 opacity-80 sm:block" />
-                </dt>
-                <dd className="mt-3">
-                  <p className="text-[22px] font-semibold leading-none tracking-[-0.03em] text-white tabular-nums sm:text-[28px]">{kpi.value}</p>
-                  <p className="mt-2 flex items-center gap-1.5 text-xs text-white/60">
-                    <Delta value={kpi.delta} invert={kpi.invert} />
-                    <span className="hidden sm:inline">vs prior {r.label}</span>
-                  </p>
-                </dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
-            <section aria-labelledby="mrr-title" className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-6">
-              <div aria-hidden className="pointer-events-none absolute -top-24 left-1/3 h-48 w-2/3 rounded-full bg-[rgb(var(--neon)/0.07)] blur-[60px]" />
-              <div className="relative flex flex-wrap items-start justify-between gap-3">
+          {/* One number leads the page; everything else is read against it. */}
+          <div className="mt-9 grid border-t border-white/[0.07] lg:grid-cols-[minmax(0,1fr)_280px]">
+            <section aria-labelledby="mrr-title" className="relative pt-6 lg:pr-10">
+              <div aria-hidden className="pointer-events-none absolute -top-10 left-1/4 h-48 w-1/2 rounded-full bg-[rgb(var(--neon)/0.06)] blur-[70px]" />
+              <div className="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
                 <div>
-                  <h2 id="mrr-title" className="text-sm text-white/55">Monthly recurring revenue</h2>
-                  <p className="mt-1.5 text-[28px] font-semibold leading-none tracking-[-0.03em] text-white tabular-nums">{money(point ? (point.y ?? 0) : data.mrr)}</p>
-                  <p className="mt-2 text-xs text-white/60">
+                  <h2 id="mrr-title" className="text-[13px] text-white/60">Monthly recurring revenue</h2>
+                  <p className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <span className="text-[44px] font-[620] leading-none tracking-[-0.035em] text-white tabular-nums [font-stretch:112%] sm:text-[60px]">
+                      {money(point ? (point.y ?? 0) : data.mrr)}
+                    </span>
+                    {!point && <Delta value={data.mrrDelta} />}
+                  </p>
+                  <p className="mt-2.5 text-[13px] text-white/55">
                     {point ? new Intl.DateTimeFormat("en-US", { weekday: "long", month: "short", day: "numeric", timeZone: "UTC" }).format(point.x as Date) : `Last ${r.label}, against the ${r.label} before`}
                   </p>
                 </div>
-                <div className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.12em] text-white/55">
-                  <span className="flex items-center gap-1.5"><span aria-hidden className="h-0.5 w-3 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />Current</span>
-                  <span className="flex items-center gap-1.5"><span aria-hidden className="h-0.5 w-3 rounded-full bg-white/30" />Prior</span>
+                <div className="flex items-center gap-4 text-[13px] text-white/55">
+                  <span className="flex items-center gap-1.5"><span aria-hidden className="h-0.5 w-3.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />This period</span>
+                  <span className="flex items-center gap-1.5"><span aria-hidden className="h-0.5 w-3.5 rounded-full bg-white/30" />Prior</span>
                 </div>
               </div>
               <GlowChart
                 key={range}
-                className="relative mt-5"
+                className="relative mt-4"
                 data={data.series}
                 legend={false}
                 yDomain={data.domain}
-                height={250}
+                height={270}
                 label={`MRR per day, last ${r.label}`}
                 yFormat={(v, ctx) => (ctx === "axis" ? `$${Math.round(v / 1000)}k` : money(v))}
                 onActiveIndexChange={setActive}
               />
             </section>
 
-            <section aria-labelledby="movement-title" className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-6">
-              <h2 id="movement-title" className="text-sm text-white/55">MRR movement</h2>
-              <p className="mt-1.5 text-[28px] font-semibold leading-none tracking-[-0.03em] text-white tabular-nums">
+            <dl className="mt-6 grid grid-cols-3 border-t border-white/[0.07] lg:mt-0 lg:grid-cols-1 lg:content-start lg:border-l lg:border-t-0">
+              {kpis.slice(1).map((kpi, i) => (
+                <div key={kpi.label} className={cn("py-4 lg:py-6 lg:pl-7", i > 0 && "border-l border-white/[0.07] pl-3 sm:pl-5 lg:border-l-0 lg:border-t", i === 0 && "pr-3 lg:pr-0")}>
+                  <dt className="flex items-center justify-between gap-3 text-[13px] text-white/60">
+                    <span className="leading-tight lg:truncate">{kpi.label}</span>
+                    <Sparkline data={kpi.spark} width={64} height={22} dot={false} color={kpi.invert ? "white" : undefined} label={`${kpi.label}, last ${r.label}`} className="hidden shrink-0 opacity-80 lg:block" />
+                  </dt>
+                  <dd className="mt-2.5">
+                    <p className="text-[22px] font-[620] leading-none tracking-[-0.03em] text-white tabular-nums [font-stretch:112%] sm:text-[28px]">{kpi.value}</p>
+                    <p className="mt-2 flex items-center gap-1.5 text-xs text-white/55">
+                      <Delta value={kpi.delta} invert={kpi.invert} />
+                      <span className="hidden lg:inline">vs prior {r.label}</span>
+                    </p>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className="mt-10 grid gap-10 border-t border-white/[0.07] pt-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-0">
+            <section aria-labelledby="accounts-title" className="min-w-0 lg:pr-10">
+              <div className="flex items-baseline justify-between gap-3 pb-4">
+                <h2 id="accounts-title" className="text-[17px] font-[620] tracking-[-0.02em] text-white/90 [font-stretch:112%]">
+                  Largest accounts
+                  <span className="ml-2 font-mono text-xs font-normal tabular-nums text-white/55">{rows.length}</span>
+                </h2>
+                {query ? (
+                  <button type="button" onClick={() => setQuery("")} className="-my-2 flex cursor-pointer items-center gap-1.5 rounded-md py-2 text-[13px] text-white/60 outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
+                    <Filter aria-hidden className="size-3.5" />“{query}” <X aria-hidden className="size-3" />
+                  </button>
+                ) : (
+                  <a href="#accounts" className="-my-2 py-2 text-[13px] text-white/60 underline-offset-4 outline-none hover:text-white/90 hover:underline focus-visible:underline">All 1,348</a>
+                )}
+              </div>
+              <Table containerClassName="rounded-lg">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Account</TableHead>
+                    <TableHead className="hidden sm:table-cell">Plan</TableHead>
+                    <TableHead className="hidden md:table-cell">Status</TableHead>
+                    <TableHead align="right" className="hidden xl:table-cell" sortDirection={sort.key === "seats" && sort.dir} onSort={() => toggleSort("seats")}>Seats</TableHead>
+                    <TableHead align="right" sortDirection={sort.key === "mrr" && sort.dir} onSort={() => toggleSort("mrr")}>MRR</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {rows.map((a) => (
+                    <TableRow key={a.name}>
+                      <TableCell>
+                        <div className="flex min-w-0 items-center gap-3">
+                          <Avatar alt="" fallback={a.name.slice(0, 2).toUpperCase()} size="sm" shape="square" className="text-[10px]" />
+                          <div className="min-w-0">
+                            <p className="truncate text-white/90">{a.name}</p>
+                            <p className="truncate text-xs text-white/55">
+                              {a.domain}
+                              <span className="sm:hidden"> · {a.plan}</span>
+                              {a.status !== "Active" && <span className={cn("md:hidden", a.status === "Past due" ? "text-[rgb(255_77_94)]" : "text-white/70")}> · {a.status}</span>}
+                            </p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden text-white/70 sm:table-cell">{a.plan}</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <Badge size="sm" dot variant="soft" color={a.status === "Past due" ? "red" : a.status === "Trial" ? "white" : undefined}>{a.status}</Badge>
+                      </TableCell>
+                      <TableCell align="right" className="hidden text-white/70 xl:table-cell">{a.seats}</TableCell>
+                      <TableCell align="right" className="font-mono text-[13px] text-white/90">{money(a.mrr)}</TableCell>
+                    </TableRow>
+                  ))}
+                  {rows.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={5} className="py-10 text-center text-white/60">
+                        No accounts match “{query}”.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </section>
+
+            <section aria-labelledby="movement-title" className="flex flex-col lg:border-l lg:border-white/[0.07] lg:pl-7">
+              <h2 id="movement-title" className="text-[13px] text-white/60">MRR movement, last {r.label}</h2>
+              <p className="mt-2 text-[28px] font-[620] leading-none tracking-[-0.03em] text-white tabular-nums [font-stretch:112%]">
                 {data.net >= 0 ? "+" : ""}{money(data.net)}
               </p>
-              <p className="mt-2 text-xs text-white/60">Net change, last {r.label}</p>
               <ul className="mt-7 grid gap-4">
                 {data.movement.map((m) => (
                   <li key={m.label} className="grid gap-1.5">
-                    <div className="flex items-baseline justify-between text-xs">
+                    <div className="flex items-baseline justify-between text-[13px]">
                       <span className="text-white/65">{m.label}</span>
-                      <span className={cn("font-mono tabular-nums", m.value >= 0 ? "text-white/85" : "text-white/60")}>
+                      <span className={cn("font-mono text-xs tabular-nums", m.value >= 0 ? "text-white/85" : "text-white/60")}>
                         {m.value >= 0 ? "+" : ""}{money(m.value)}
                       </span>
                     </div>
-                    <div className="h-1.5 rounded-full bg-white/[0.04]">
+                    <div className="h-1 rounded-full bg-white/[0.05]">
                       <div
                         className={cn(
                           "h-full rounded-full transition-[width] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
-                          m.value >= 0 ? "bg-[rgb(var(--neon)/0.75)]" : "bg-white/20",
+                          m.value >= 0 ? "bg-[rgb(var(--neon)/0.75)]" : "bg-white/25",
                         )}
                         style={{ width: `${(Math.abs(m.value) / maxMove) * 100}%` }}
                       />
@@ -476,75 +543,18 @@ export default function AppDashboard() {
                   </li>
                 ))}
               </ul>
-              <dl className="mt-auto grid grid-cols-2 gap-4 border-t border-white/[0.06] pt-4 text-xs [&_dd]:mt-1 [&_dd]:font-mono [&_dd]:text-sm [&_dd]:text-white/85 [&_dt]:text-white/60 max-lg:mt-6">
+              <dl className="mt-8 grid grid-cols-2 gap-4 border-t border-white/[0.07] pt-4 text-[13px] [&_dd]:mt-1 [&_dd]:font-mono [&_dd]:text-sm [&_dd]:tabular-nums [&_dd]:text-white/85 [&_dt]:text-white/60">
                 <div>
                   <dt>Quick ratio</dt>
                   <dd>{data.quickRatio.toFixed(1)}</dd>
                 </div>
                 <div>
-                  <dt>Expansion share</dt>
+                  <dt>From expansion</dt>
                   <dd>{data.expansionShare}%</dd>
                 </div>
               </dl>
             </section>
           </div>
-
-          <section aria-labelledby="accounts-title" className="mt-4">
-            <div className="flex items-center justify-between gap-3 px-1 pb-3 pt-4">
-              <h2 id="accounts-title" className="text-base font-semibold tracking-[-0.01em] text-white/90">
-                Largest accounts
-                <span className="ml-2 font-mono text-xs font-normal text-white/55">{rows.length}</span>
-              </h2>
-              {query ? (
-                <button type="button" onClick={() => setQuery("")} className="-my-2 flex cursor-pointer items-center gap-1.5 rounded-md py-2 text-xs text-white/60 outline-none hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">
-                  <Filter aria-hidden className="size-3.5" />“{query}” <X aria-hidden className="size-3" />
-                </button>
-              ) : (
-                <a href="#accounts" className="-my-2 py-2 text-xs text-white/60 underline-offset-4 outline-none hover:text-white/90 hover:underline focus-visible:underline">View all</a>
-              )}
-            </div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Account</TableHead>
-                  <TableHead>Plan</TableHead>
-                  <TableHead className="hidden sm:table-cell md:hidden lg:table-cell">Status</TableHead>
-                  <TableHead align="right" className="hidden lg:table-cell" sortDirection={sort.key === "seats" && sort.dir} onSort={() => toggleSort("seats")}>Seats</TableHead>
-                  <TableHead align="right" sortDirection={sort.key === "mrr" && sort.dir} onSort={() => toggleSort("mrr")}>MRR</TableHead>
-                  <TableHead align="right" className="hidden xl:table-cell">Customer since</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {rows.map((a) => (
-                  <TableRow key={a.name}>
-                    <TableCell>
-                      <div className="flex min-w-0 items-center gap-3">
-                        <Avatar alt="" fallback={a.name.slice(0, 2).toUpperCase()} size="sm" shape="square" className="text-[10px]" />
-                        <div className="min-w-0">
-                          <p className="truncate text-white/90">{a.name}</p>
-                          <p className="truncate text-xs text-white/60">{a.domain}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-white/70">{a.plan}</TableCell>
-                    <TableCell className="hidden sm:table-cell md:hidden lg:table-cell">
-                      <Badge size="sm" dot variant="soft" color={a.status === "Past due" ? "red" : a.status === "Trial" ? "white" : undefined}>{a.status}</Badge>
-                    </TableCell>
-                    <TableCell align="right" className="hidden text-white/70 lg:table-cell">{a.seats}</TableCell>
-                    <TableCell align="right" className="font-mono text-[13px] text-white/90">{money(a.mrr)}</TableCell>
-                    <TableCell align="right" className="hidden text-white/60 xl:table-cell">{a.since}</TableCell>
-                  </TableRow>
-                ))}
-                {rows.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={6} className="py-10 text-center text-white/60">
-                      No accounts match “{query}”.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </section>
         </main>
       </SidebarInset>
     </SidebarProvider>

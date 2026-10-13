@@ -1,4 +1,4 @@
-import { Clock } from "lucide-react";
+import { Clock } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
@@ -23,7 +23,7 @@ export default function HoverCardTeam() {
             </HoverCardTrigger>
             <HoverCardContent side="right" align="start" sideOffset={14} className="w-64">
               <p className="text-sm font-medium text-white/90">{person.name}</p>
-              <p className="text-xs leading-5 text-white/45">
+              <p className="text-xs leading-5 text-white/50">
                 {person.role} · {person.city}
               </p>
               <div className="mt-3 flex items-center justify-between border-t border-white/[0.06] pt-3 text-xs text-white/55">

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { BellRing, Download, FilePlus2 } from "lucide-react";
+import { BellRing, Download, FilePlus2 } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -85,46 +85,70 @@ function Mark({ text, query }: { text: string; query: string }) {
   );
 }
 
+function Specs({ specs, className }: { specs: [string, string][]; className?: string }) {
+  return (
+    <dl className={cn("border-b border-white/[0.07]", className)}>
+      {specs.map(([k, v]) => (
+        <div key={k} className="flex items-baseline justify-between gap-6 border-t border-white/[0.07] py-3">
+          <dt className="text-[14px] text-white/55">{k}</dt>
+          <dd className="text-right text-[14px] text-white/85">{v}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+const rowTitle =
+  "text-balance text-[clamp(1.85rem,3.4vw,2.75rem)] font-[620] leading-[0.98] tracking-[-0.035em] text-white [font-stretch:112%]";
+
 function Row({
-  index,
-  label,
+  slug,
   title,
   body,
   specs,
-  flip,
+  layout,
   children,
 }: {
-  index: string;
-  label: string;
+  slug: string;
   title: string;
   body: string;
   specs: [string, string][];
-  flip?: boolean;
+  layout: "left" | "right" | "stacked";
   children: React.ReactNode;
 }) {
-  const id = `features-alternating-${index}`;
+  const id = `features-alternating-${slug}`;
+
+  // The third row breaks the zigzag: copy runs across the top and the table gets the full width.
+  if (layout === "stacked") {
+    return (
+      <div className="border-t border-white/[0.07] py-16 lg:py-20">
+        <div className="grid gap-8 lg:grid-cols-12 lg:gap-x-12">
+          <h3 id={id} className={cn(rowTitle, "lg:col-span-5")}>
+            {title}
+          </h3>
+          <div className="lg:col-span-6 lg:col-start-7">
+            <p className="max-w-[52ch] text-[17px] leading-[1.6] text-white/60">{body}</p>
+            <Specs specs={specs} className="mt-8" />
+          </div>
+        </div>
+        <div aria-labelledby={id} role="group" className="mt-12 min-w-0 lg:mt-16">
+          {children}
+        </div>
+      </div>
+    );
+  }
+
+  const flip = layout === "right";
   return (
-    <div className="grid gap-10 border-t border-white/[0.07] py-14 lg:grid-cols-12 lg:items-center lg:gap-x-12 lg:py-20">
-      <div className={cn("lg:row-start-1 lg:col-span-5", flip ? "lg:col-start-8" : "lg:col-start-1")}>
-        <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-          <span className="text-[rgb(var(--neon))]">{index}</span>
-          <span aria-hidden className="h-px w-8 bg-white/15" />
-          {label}
-        </p>
-        <h3 id={id} className="mt-5 text-balance text-[clamp(1.75rem,3.4vw,2.5rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-white">
+    <div className="grid gap-10 border-t border-white/[0.07] py-16 lg:grid-cols-12 lg:gap-x-12 lg:py-20">
+      <div className={cn("lg:row-start-1 lg:col-span-4", flip ? "lg:col-start-9 lg:self-end" : "lg:col-start-1 lg:pt-2")}>
+        <h3 id={id} className={rowTitle}>
           {title}
         </h3>
-        <p className="mt-4 max-w-md text-[15px] leading-relaxed text-white/55">{body}</p>
-        <dl className="mt-8 max-w-md border-b border-white/[0.06]">
-          {specs.map(([k, v]) => (
-            <div key={k} className="flex items-baseline justify-between gap-6 border-t border-white/[0.06] py-2.5">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{k}</dt>
-              <dd className="text-right text-sm text-white/75">{v}</dd>
-            </div>
-          ))}
-        </dl>
+        <p className="mt-5 max-w-[44ch] text-[16px] leading-[1.6] text-white/60">{body}</p>
+        <Specs specs={specs} className="mt-8" />
       </div>
-      <div aria-labelledby={id} role="group" className={cn("min-w-0 lg:row-start-1 lg:col-span-7", flip ? "lg:col-start-1" : "lg:col-start-6")}>
+      <div aria-labelledby={id} role="group" className={cn("min-w-0 lg:row-start-1 lg:col-span-8", flip ? "lg:col-start-1" : "lg:col-start-5")}>
         {children}
       </div>
     </div>
@@ -132,12 +156,7 @@ function Row({
 }
 
 function Stage({ children, className }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={cn("relative rounded-[20px] border border-white/[0.08] bg-white/[0.02] p-2 sm:p-3", className)}>
-      <div aria-hidden className="pointer-events-none absolute inset-x-10 -bottom-px h-px bg-[linear-gradient(90deg,transparent,rgb(var(--neon)/0.45),transparent)]" />
-      {children}
-    </div>
-  );
+  return <div className={cn("relative", className)}>{children}</div>;
 }
 
 function InvoiceSearch() {
@@ -152,7 +171,7 @@ function InvoiceSearch() {
       <Command
         label="Search invoices"
         onValueChange={setActive}
-        className="shadow-none [&_[data-command-group-heading]]:text-white/55"
+        className="shadow-none"
       >
         <CommandInput
           ref={inputRef}
@@ -206,7 +225,7 @@ function InvoiceSearch() {
           )}
         </div>
       </Command>
-      <p aria-live="polite" className="flex h-11 items-center gap-2 px-2 pt-2 font-mono text-[11px] text-white/60 sm:h-9">
+      <p aria-live="polite" className="flex h-12 items-center gap-2 pt-3 text-[13px] text-white/60 sm:h-11">
         {result ? (
           <>
             <span aria-hidden className="size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />
@@ -223,7 +242,7 @@ function InvoiceSearch() {
                   setSearch(q);
                   inputRef.current?.focus();
                 }}
-                className="inline-flex h-8 cursor-pointer items-center rounded-md border border-white/10 px-2 text-white/65 sm:h-6 sm:px-1.5 outline-none transition-colors hover:border-[rgb(var(--neon)/0.5)] hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                className="inline-flex h-8 cursor-pointer items-center rounded-md border border-white/10 px-2 font-mono text-[12px] text-white/65 sm:h-7 outline-none transition-colors hover:border-[rgb(var(--neon)/0.5)] hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
               >
                 {q}
               </button>
@@ -245,7 +264,7 @@ function DueCalendar() {
       <div className="grid overflow-hidden rounded-xl border border-white/10 bg-[#0a0b11] sm:grid-cols-[auto_1fr]">
         <div className="flex justify-center border-b border-white/[0.06] p-3 sm:border-b-0 sm:border-r">
           <Calendar
-            className="nk-features-alternating-cal [&_[role=columnheader]]:text-white/55"
+            className="nk-features-alternating-cal"
             selected={day}
             onSelect={setDay}
             defaultMonth={MONTH}
@@ -253,8 +272,8 @@ function DueCalendar() {
           />
         </div>
         <div className="flex min-w-0 flex-col p-5">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Due</p>
-          <p className="mt-1.5 text-lg font-medium tracking-[-0.01em] text-white">{longDay.format(day)}</p>
+          <p className="text-[13px] text-white/55">Due on</p>
+          <p className="mt-1 text-lg font-medium tracking-[-0.01em] text-white">{longDay.format(day)}</p>
           <ul aria-live="polite" className="mt-4 flex-1 space-y-2">
             {due.length ? (
               due.map((d) => (
@@ -273,7 +292,7 @@ function DueCalendar() {
             )}
           </ul>
           <div className="mt-5 flex items-baseline justify-between border-t border-white/[0.06] pt-3">
-            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">November</span>
+            <span className="text-[13px] text-white/55">Due in November</span>
             <span className="font-mono text-sm tabular-nums text-[rgb(var(--neon))]">$22,785.50</span>
           </div>
         </div>
@@ -303,18 +322,18 @@ function BankFeed() {
 
   return (
     <Stage>
-      <div className="flex flex-wrap items-center justify-between gap-3 px-2 pb-3 pt-1">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-4">
         <div className="min-w-0">
-          <p className="truncate text-sm text-white/85">Northline Credit Union ··4410</p>
-          <p className="font-mono text-[11px] text-white/55">
-            {rows.length - open.length} of {rows.length} reconciled · synced 4 min ago
+          <p className="truncate text-[15px] font-medium text-white/90">Northline Credit Union ··4410</p>
+          <p className="mt-0.5 text-[13px] text-white/55">
+            {rows.length - open.length} of {rows.length} reconciled, synced 4 min ago
           </p>
         </div>
         <Button size="sm" variant={selected.size ? "solid" : "outline"} disabled={!selected.size} onClick={reconcile}>
           {selected.size ? `Reconcile ${selected.size}` : open.length ? "Select to reconcile" : "All reconciled"}
         </Button>
       </div>
-      <Table density="compact" containerClassName="bg-[#0a0b11] overscroll-x-contain" className="min-w-[560px]">
+      <Table containerClassName="bg-[#0a0b11] overscroll-x-contain" className="min-w-[560px]">
         <TableHeader>
           <TableRow>
             <TableHead className="w-10">
@@ -379,19 +398,22 @@ export default function FeaturesAlternating() {
       className="relative isolate overflow-hidden bg-[#05060a] px-5 pt-20 text-white/90 sm:px-10 sm:pt-24 lg:px-16"
     >
       <div className="mx-auto max-w-[1200px]">
-        <header className="max-w-2xl pb-12 lg:pb-16">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Ledgerline · Books for studios of 2 to 40</p>
+        <header className="grid gap-8 pb-14 lg:grid-cols-12 lg:items-end lg:pb-20">
           <h2
             id="features-alternating-title"
-            className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
+            className="text-[clamp(2.4rem,5.4vw,4.25rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%] lg:col-span-8"
           >
             The books, kept while you do the actual work.
           </h2>
+          <p className="max-w-[38ch] text-[17px] leading-[1.6] text-white/90 lg:col-span-4 lg:pb-2">
+            Ledgerline does the bookkeeping for studios of 2 to 40.{" "}
+            <span className="text-white/50">Invoices, reminders and the bank feed, in one place.</span>
+          </p>
         </header>
 
         <Row
-          index="01"
-          label="Find"
+          slug="find"
+          layout="left"
           title="Every invoice, two keystrokes away."
           body="Press ⌘K anywhere in Ledgerline and type what you remember: a client, an amount, a word from the memo. Arrow through results; the status follows you."
           specs={[
@@ -404,9 +426,8 @@ export default function FeaturesAlternating() {
         </Row>
 
         <Row
-          flip
-          index="02"
-          label="Get paid"
+          slug="get-paid"
+          layout="right"
           title="Due dates you can actually see."
           body="Every open invoice lands on one calendar. Clients get a polite nudge three days before, on the day, and a week after, written in your voice, sent from your address."
           specs={[
@@ -419,8 +440,8 @@ export default function FeaturesAlternating() {
         </Row>
 
         <Row
-          index="03"
-          label="Reconcile"
+          slug="reconcile"
+          layout="stacked"
           title="Close the month on a Tuesday afternoon."
           body="Bank lines match themselves to invoices and receipts. What's left is a short list you tick through, not a spreadsheet you dread."
           specs={[

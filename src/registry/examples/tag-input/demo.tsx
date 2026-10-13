@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Send } from "lucide-react";
+import { Send } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { TagInput } from "@/components/ui/tag-input";
 

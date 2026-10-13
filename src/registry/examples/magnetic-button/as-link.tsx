@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 
 export default function MagneticButtonAsLink() {

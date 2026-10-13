@@ -146,6 +146,21 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
           }
         }
         g.fill();
+        // Big enough dots show the lens: a pin of reflected room light on each one.
+        if (dotSize >= 4) {
+          g.fillStyle = "rgba(255, 255, 255, 0.07)";
+          g.beginPath();
+          const r2 = radius * 0.32;
+          for (let c = 0; c < cols; c++) {
+            for (let r = 0; r < rows; r++) {
+              const x = center(c) - radius * 0.32;
+              const y = center(r) - radius * 0.32;
+              g.moveTo(x + r2, y);
+              g.arc(x, y, r2, 0, Math.PI * 2);
+            }
+          }
+          g.fill();
+        }
       };
 
       const startColumn = (shift: number) => {
@@ -241,6 +256,19 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
       resize(box.clientWidth);
       sync();
 
+      // Dragging the window to a screen with another pixel ratio needs a fresh backing store.
+      let dprQuery: MediaQueryList | undefined;
+      const onDpr = () => {
+        resize(box.clientWidth);
+        watchDpr();
+      };
+      const watchDpr = () => {
+        dprQuery?.removeEventListener?.("change", onDpr);
+        dprQuery = window.matchMedia?.(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+        dprQuery?.addEventListener?.("change", onDpr);
+      };
+      watchDpr();
+
       const resizeObserver =
         typeof ResizeObserver === "undefined"
           ? null
@@ -264,6 +292,7 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
         intersectionObserver?.disconnect();
         document.removeEventListener("visibilitychange", sync);
         motion?.removeEventListener?.("change", onMotion);
+        dprQuery?.removeEventListener?.("change", onDpr);
         probe.removeEventListener("transitionend", recolor);
       };
     }, [bitmap, rows, fixedColumns, dotSize, gap, pitch, height, speed, direction, color]);

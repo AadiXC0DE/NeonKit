@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { PageShell } from "@/components/site/page-shell";
+import { PageHeader, textLink } from "@/components/site/prose";
+import { cn } from "@/lib/utils";
 import { isNew, templatePreviewPath, templateThumb, templates } from "@/registry";
 
 export const metadata: Metadata = {
@@ -11,83 +13,96 @@ export const metadata: Metadata = {
   alternates: { canonical: "/templates" },
 };
 
+const pages = (n: number) => (n === 1 ? "1 page" : `${n} pages`);
+
+function TemplateEntry({
+  template,
+  featured = false,
+}: {
+  template: (typeof templates)[number];
+  featured?: boolean;
+}) {
+  const href = `/templates/${template.slug}`;
+  return (
+    <article className={cn("group relative", featured && "lg:grid lg:grid-cols-12 lg:gap-8")}>
+      <Link
+        href={href}
+        aria-label={`${template.name} template`}
+        className={cn(
+          "relative block aspect-[8/5] overflow-hidden rounded-[14px] border border-white/[0.07] bg-surface outline-none transition-[border-color,box-shadow] duration-200 ease-out-quint hover:border-[rgb(var(--neon-accent)/0.4)] hover:shadow-[0_0_0_1px_rgb(var(--neon-accent)/0.12),0_24px_64px_-28px_rgb(var(--neon-accent)/0.5)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent)/0.6)] focus-visible:ring-offset-4 focus-visible:ring-offset-background",
+          featured && "lg:col-span-8",
+        )}
+      >
+        <Image
+          src={templateThumb(template.slug)}
+          alt=""
+          width={960}
+          height={600}
+          unoptimized
+          loading={featured ? "eager" : "lazy"}
+          fetchPriority={featured ? "high" : undefined}
+          className="size-full object-cover object-top transition-transform duration-500 ease-out-quint group-hover:scale-[1.012] motion-reduce:transition-none"
+        />
+      </Link>
+      <div className={cn("mt-6", featured && "lg:col-span-4 lg:mt-0 lg:flex lg:flex-col lg:justify-end lg:pb-1")}>
+        <p className="text-[13.5px] text-muted">
+          {pages(template.routes.length)}, {template.registryDependencies.length} components
+          {isNew(template) && <span className="ml-2 text-[rgb(var(--neon-accent))]">New</span>}
+        </p>
+        <h2
+          className={cn(
+            "type-display mt-3 text-fg",
+            featured ? "text-[clamp(2rem,3.4vw,3rem)]" : "text-[clamp(1.75rem,2.6vw,2.25rem)]",
+          )}
+        >
+          <Link href={href} className="rounded-md outline-none focus-visible:underline">
+            {template.name}
+          </Link>
+        </h2>
+        <p className="mt-3 max-w-[30rem] text-pretty text-[15.5px] leading-[1.6] text-muted">{template.description}</p>
+        <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[12.5px] text-muted">
+          {template.routes.map((route) => (
+            <li key={route}>
+              /{template.slug}
+              {route}
+            </li>
+          ))}
+        </ul>
+        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-[14.5px]">
+          <Link href={href} className={cn(textLink, "font-medium")}>
+            Install and details
+          </Link>
+          <a
+            href={templatePreviewPath(template.slug)}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1 text-muted transition-colors hover:text-fg"
+          >
+            Live preview <ArrowUpRight size={14} />
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 export default function TemplatesPage() {
+  const [first, ...rest] = templates;
   return (
     <PageShell>
-      <div className="max-w-3xl">
-        <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">Templates</p>
-        <h1 className="text-balance text-[clamp(2.75rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-fg">
-          Whole sites, ready to fork.
-        </h1>
-        <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted">
-          Complete Next.js sites built from NeonKit components, each with one brand, one color and real copy. One
-          command installs the pages, their sections and every component they use.
-        </p>
-      </div>
+      <PageHeader title="Templates" size="lg">
+        Complete Next.js sites, each with one brand, one color and copy that sounds like a real product. One command
+        writes the pages, their sections and every component they use.
+      </PageHeader>
 
-      <ol className="mt-16 space-y-6">
-        {templates.map((template, i) => (
-          <li key={template.slug}>
-            <article className="group relative grid overflow-hidden rounded-2xl border border-line bg-surface transition-[border-color,box-shadow] duration-200 hover:border-[rgb(var(--neon-accent)/0.35)] hover:shadow-[0_0_40px_-12px_rgb(var(--neon-accent)/0.4)] lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
-              <Link
-                href={`/templates/${template.slug}`}
-                aria-label={`${template.name} template`}
-                className="relative block aspect-[8/5] overflow-hidden border-b border-line outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon-accent)/0.6)] lg:border-b-0 lg:border-r"
-              >
-                <Image
-                  src={templateThumb(template.slug)}
-                  alt=""
-                  width={960}
-                  height={600}
-                  unoptimized
-                  priority={i === 0}
-                  className="size-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.012] motion-reduce:transition-none"
-                />
-              </Link>
-              <div className="flex flex-col p-6 sm:p-8">
-                <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
-                  <span className="tabular-nums text-[rgb(var(--neon-accent))]">{String(i + 1).padStart(2, "0")}</span>
-                  {template.routes.length} {template.routes.length === 1 ? "page" : "pages"}
-                  {isNew(template) && <span className="text-[rgb(var(--neon-accent))]">new</span>}
-                </p>
-                <h2 className="mt-4 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold leading-[1.05] tracking-[-0.035em] text-fg">
-                  <Link href={`/templates/${template.slug}`} className="outline-none focus-visible:underline">
-                    {template.name}
-                  </Link>
-                </h2>
-                <p className="mt-3 max-w-md text-[15.5px] leading-relaxed text-muted">{template.description}</p>
-                <ul className="mt-6 flex flex-wrap gap-1.5 font-mono text-[11.5px] text-muted">
-                  {template.routes.map((route) => (
-                    <li key={route} className="rounded-md border border-line px-2 py-0.5">
-                      /{template.slug}
-                      {route}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-3 pt-8 text-[14px]">
-                  <Link
-                    href={`/templates/${template.slug}`}
-                    className="inline-flex items-center gap-1.5 text-fg underline decoration-white/20 underline-offset-4 transition-colors hover:decoration-[rgb(var(--neon-accent))]"
-                  >
-                    Install and details <ArrowRight className="size-3.5" />
-                  </Link>
-                  <a
-                    href={templatePreviewPath(template.slug)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-muted transition-colors hover:text-fg"
-                  >
-                    Live preview <ArrowUpRight className="size-3.5" />
-                  </a>
-                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-dim">
-                    {template.registryDependencies.length} components
-                  </span>
-                </div>
-              </div>
-            </article>
-          </li>
-        ))}
-      </ol>
+      {first && <TemplateEntry template={first} featured />}
+      {rest.length > 0 && (
+        <div className="mt-24 grid gap-x-8 gap-y-24 sm:mt-28 md:grid-cols-2">
+          {rest.map((template) => (
+            <TemplateEntry key={template.slug} template={template} />
+          ))}
+        </div>
+      )}
     </PageShell>
   );
 }

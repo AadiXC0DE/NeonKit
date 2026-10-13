@@ -1,4 +1,4 @@
-import { House, KeyRound } from "lucide-react";
+import { House, KeyRound } from "@/components/ui/icons";
 import {
   Breadcrumb,
   BreadcrumbItem,

@@ -11,7 +11,7 @@ export default function NeonSignOnAir() {
     <div className="flex w-full max-w-md items-center justify-between gap-6 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-4">
       <div className="flex min-w-0 flex-col gap-1">
         <span className="text-sm text-white/90">Studio B</span>
-        <span className="font-mono text-[11px] text-white/45">{live ? "Live · 2 mics open" : "Standby"}</span>
+        <span className="font-mono text-[11px] text-white/50">{live ? "Live · 2 mics open" : "Standby"}</span>
       </div>
       <div className="flex items-center gap-5">
         <NeonSign

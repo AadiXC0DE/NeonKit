@@ -7,7 +7,7 @@ export default function ParticlesDust() {
       <blockquote className="relative max-w-sm text-lg leading-snug text-white/85">
         &ldquo;We moved our alerting over on a Friday. Nobody noticed, which is the highest praise an on-call team can give.&rdquo;
       </blockquote>
-      <figcaption className="relative mt-4 font-mono text-xs text-white/45">Mara Okafor · SRE lead, Lumen</figcaption>
+      <figcaption className="relative mt-4 text-sm text-white/60">Mara Okafor · SRE lead, Lumen</figcaption>
     </figure>
   );
 }

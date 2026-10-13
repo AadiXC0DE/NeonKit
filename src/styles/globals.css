@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
-  --font-neon: var(--font-tilt-neon), var(--font-hanken), sans-serif;
+  --font-sans: var(--font-mona), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-fragment), ui-monospace, SFMono-Regular, monospace;
+  --font-neon: var(--font-tilt-neon), var(--font-mona), sans-serif;
 
   --color-background: #05060a;
   --color-surface: #0a0c12;
@@ -176,4 +176,59 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Display type: Mona Sans widened toward signage. Headlines only. */
+@utility type-display {
+  font-family: var(--font-sans);
+  font-stretch: 112%;
+  font-weight: 620;
+  letter-spacing: -0.038em;
+  line-height: 0.98;
+}
+
+/* ── Docs pages (site only) ────────────────────────────────────────── */
+
+/* Line numbers for code that is a file. Commands and one-liners stay bare. */
+.nk-numbered .shiki code {
+  counter-reset: line;
+}
+.nk-numbered .shiki .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2.25ch;
+  margin-right: 1.5rem;
+  text-align: right;
+  color: rgb(255 255 255 / 0.18);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+/* The preview stage: a case lit from above in the current color, with a floor that catches it. */
+.nk-stage {
+  background:
+    radial-gradient(ellipse 46% 58% at 50% -6%, rgb(var(--neon) / 0.13), transparent 72%),
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgb(var(--neon) / 0.035), transparent 70%),
+    linear-gradient(to top, rgb(255 255 255 / 0.022), transparent 34%),
+    #07080d;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.05),
+    inset 0 0 80px rgb(0 0 0 / 0.55),
+    0 30px 60px -40px rgb(0 0 0 / 0.9);
+}
+.nk-stage::before {
+  content: "";
+  position: absolute;
+  inset-inline: 22%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--neon) / 0.8) 50%, transparent);
+  box-shadow: 0 0 12px rgb(var(--neon) / 0.5);
+  pointer-events: none;
+}
+
+/* The skip link focuses <main>; it doesn't need a ring around the whole page. */
+main[tabindex="-1"]:focus {
+  outline: none;
 }

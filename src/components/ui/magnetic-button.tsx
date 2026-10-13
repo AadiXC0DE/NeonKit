@@ -18,6 +18,26 @@ function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }
   return { ...props, asChild: true, children };
 }
 
+// Server Components can hand children over as lazy references, which only resolve
+// on the client. Unwrapping them here keeps server and client HTML the same.
+const reactUse = (React as unknown as Record<string, unknown>)[" use ".trim()] as
+  | (<T>(usable: PromiseLike<T>) => T)
+  | undefined;
+
+function unwrapLazy(node: React.ReactNode): React.ReactNode {
+  const lazy = node as { $$typeof?: symbol; _payload?: { then?: unknown } } | null;
+  if (
+    reactUse &&
+    lazy &&
+    typeof lazy === "object" &&
+    lazy.$$typeof === Symbol.for("react.lazy") &&
+    typeof lazy._payload?.then === "function"
+  ) {
+    return reactUse(lazy._payload as PromiseLike<React.ReactNode>);
+  }
+  return node;
+}
+
 const variants = {
   outline:
     "border border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.06)] text-[rgb(var(--neon))] shadow-[0_0_12px_rgb(var(--neon)/0.25),inset_0_0_12px_rgb(var(--neon)/0.12)] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)] hover:border-[rgb(var(--neon))] hover:bg-[rgb(var(--neon)/0.12)] hover:shadow-[0_0_24px_rgb(var(--neon)/0.5),inset_0_0_16px_rgb(var(--neon)/0.2)]",
@@ -112,7 +132,8 @@ const MagneticButton = React.forwardRef<HTMLButtonElement, MagneticButtonProps>(
     } = fromRenderProp(raw);
     const rootRef = React.useRef<HTMLElement | null>(null);
     const labelRef = React.useRef<HTMLSpanElement>(null);
-    const child = asChild && React.isValidElement<AnyProps>(children) ? children : null;
+    const resolved = asChild ? unwrapLazy(children) : children;
+    const child = asChild && React.isValidElement<AnyProps>(resolved) ? resolved : null;
     const childRef = child ? getElementRef(child) : undefined;
     const composedRef = React.useCallback(
       (node: HTMLButtonElement | null) => {

@@ -16,10 +16,14 @@ export default function CityscapeFooter() {
         </div>
         {Object.entries(links).map(([group, items]) => (
           <div key={group}>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">{group}</p>
-            <ul className="mt-3 space-y-2 text-sm text-white/70">
+            <p className="text-sm font-medium text-white/90">{group}</p>
+            <ul className="mt-3 space-y-2 text-sm text-white/60">
               {items.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item}>
+                  <a href={`#${item.toLowerCase()}`} className="rounded-[4px] outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent,34_211_238)/0.6)]">
+                    {item}
+                  </a>
+                </li>
               ))}
             </ul>
           </div>

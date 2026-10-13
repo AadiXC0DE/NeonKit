@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Mic, MicOff } from "lucide-react";
+import { Mic, MicOff } from "@/components/ui/icons";
 import { Meter } from "@/components/ui/meter";
 
 type Status = "idle" | "listening" | "blocked";

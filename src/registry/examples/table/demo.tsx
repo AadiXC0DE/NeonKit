@@ -98,7 +98,7 @@ export default function TableDemo() {
     <div className="grid w-full max-w-3xl gap-3">
       <div className="flex items-baseline justify-between gap-4 px-1">
         <h3 className="text-sm font-medium text-white/90">Deployments</h3>
-        <p aria-live="polite" className="text-xs text-white/45">
+        <p aria-live="polite" className="text-xs text-white/50">
           {selected.size > 0 ? `${selected.size} of ${deployments.length} selected` : `${deployments.length} deployments`}
         </p>
       </div>

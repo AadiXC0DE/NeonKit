@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Heart, Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
+import { Heart, Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, Volume2, VolumeX } from "@/components/ui/icons";
 import { Equalizer } from "@/components/ui/equalizer";
 import { Fader } from "@/components/ui/fader";
 import { Slider } from "@/components/ui/slider";
@@ -80,8 +80,8 @@ function Cover({ art, label, className }: { art: Art; label?: string; className?
       )}
       {label && (
         <>
-          <text x="8" y="12" fill={ink} fontSize="4.2" letterSpacing="0.6" className="font-mono">{label.toUpperCase()}</text>
-          <text x="92" y="94" fill={ink} fontSize="4.2" letterSpacing="0.6" textAnchor="end" className="font-mono">LATE RADIO</text>
+          <text x="8" y="13" fill={ink} fontSize="5.2" fontWeight="600" letterSpacing="-0.15">{label}</text>
+          <text x="92" y="93" fill={ink} fontSize="4.2" textAnchor="end">late radio</text>
         </>
       )}
     </svg>
@@ -184,14 +184,16 @@ export default function AppMusicPlayer() {
       <div className="mx-auto max-w-[1180px]">
         <header className="flex items-center justify-between gap-4 border-b border-white/[0.06] pb-5">
           <div className="flex items-baseline gap-3">
-            <span className="text-lg font-semibold tracking-[-0.03em]">late radio</span>
-            <span className="hidden font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 sm:inline">102.4 · Rotterdam</span>
+            <span className="text-lg font-[620] tracking-[-0.03em] [font-stretch:112%]">late radio</span>
+            <span className="hidden text-[13px] text-white/55 sm:inline">102.4 FM, Rotterdam</span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="hidden font-mono text-[11px] text-white/55 md:inline">2,481 listening</span>
+            <span className="hidden text-[13px] text-white/55 md:inline">
+              <span className="font-mono tabular-nums text-white/75">2,481</span> listening
+            </span>
             <span
               className={cn(
-                "rounded-md border px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] transition-[color,border-color,box-shadow,text-shadow] duration-300",
+                "rounded-md border px-2.5 py-1 text-[13px] font-semibold tracking-[-0.01em] transition-[color,border-color,box-shadow,text-shadow] duration-300",
                 playing
                   ? "nk-app-music-player-onair border-[rgb(var(--neon))] text-[color-mix(in_srgb,rgb(var(--neon))_35%,white)] shadow-[0_0_10px_rgb(var(--neon)/0.6),inset_0_0_8px_rgb(var(--neon)/0.3)] [text-shadow:0_0_6px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.7)]"
                   : "border-[rgb(var(--neon)/0.18)] text-[rgb(var(--neon)/0.3)]",
@@ -202,8 +204,8 @@ export default function AppMusicPlayer() {
           </div>
         </header>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-10">
-          <div className="grid gap-8 md:grid-cols-[minmax(0,300px)_minmax(0,1fr)] md:items-center lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)]">
+        <div className="mt-8 grid gap-10 sm:mt-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-0">
+          <div className="grid gap-8 md:grid-cols-[minmax(0,300px)_minmax(0,1fr)] md:items-center md:gap-10 lg:items-end lg:grid-cols-[minmax(0,400px)_minmax(0,1fr)] lg:pr-12">
             <div className="relative">
               <div
                 aria-hidden
@@ -216,17 +218,20 @@ export default function AppMusicPlayer() {
             </div>
 
             <div className="min-w-0">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-                Night shift with Ines Maro · {index + 1} of {TRACKS.length}
+              <p className="text-[13px] text-white/55">
+                Night shift with Ines Maro, track <span className="tabular-nums">{index + 1}</span> of {TRACKS.length}
               </p>
-              <h2 id="late-radio-title" className="mt-3 text-[clamp(2.25rem,4.4vw,3.4rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white">
-                {track.title}
+              <h2
+                id="late-radio-title"
+                className="mt-3 text-balance lg:min-h-[1.92em] text-[clamp(2.4rem,4.6vw,3.6rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%] md:flex md:items-end"
+              >
+                <span>{track.title}</span>
               </h2>
-              <p className="mt-3 text-lg text-white/70">
-                {track.artist} <span className="text-white/55">· {track.album}</span>
+              <p className="mt-3 text-[17px] text-white/75">
+                {track.artist} <span className="text-white/50">from {track.album}</span>
               </p>
 
-              <Equalizer bars={36} height={56} gap={3} playing={playing} className="mt-7" />
+              <Equalizer bars={36} height={64} gap={3} playing={playing} className="mt-8" />
 
               <div className="mt-6">
                 <Slider
@@ -238,7 +243,7 @@ export default function AppMusicPlayer() {
                   thumbLabels={["Seek"]}
                   formatValue={time}
                 />
-                <div className="mt-2 flex justify-between font-mono text-[11px] tabular-nums text-white/55">
+                <div className="mt-2 flex justify-between font-mono text-[12px] tabular-nums text-white/55">
                   <span>{time(elapsed)}</span>
                   <span>-{time(track.seconds - elapsed)}</span>
                 </div>
@@ -285,10 +290,10 @@ export default function AppMusicPlayer() {
             </div>
           </div>
 
-          <aside aria-labelledby="late-radio-queue" className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-2">
-            <div className="flex items-baseline justify-between px-3 pb-2 pt-3">
-              <h3 id="late-radio-queue" className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Up next</h3>
-              <span className="font-mono text-[11px] text-white/55">{time(TRACKS.reduce((n, t) => n + t.seconds, 0))} total</span>
+          <aside aria-labelledby="late-radio-queue" className="-mx-2 flex flex-col border-t border-white/[0.06] pt-4 lg:mx-0 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
+            <div className="flex items-baseline justify-between px-2 pb-3">
+              <h3 id="late-radio-queue" className="text-[15px] font-medium tracking-[-0.01em] text-white/90">Up next</h3>
+              <span className="text-[13px] text-white/50"><span className="font-mono tabular-nums">{time(TRACKS.reduce((n, t) => n + t.seconds, 0))}</span> tonight</span>
             </div>
             <ol className="mb-2">
               {TRACKS.map((t, i) => {
@@ -321,17 +326,19 @@ export default function AppMusicPlayer() {
                         <span className={cn("block truncate text-sm", active ? "text-[color-mix(in_srgb,rgb(var(--neon))_45%,white)] [text-shadow:0_0_12px_rgb(var(--neon)/0.5)]" : "text-white/85")}>
                           {t.title}
                         </span>
-                        <span className="block truncate text-xs text-white/60">{t.artist}</span>
+                        <span className="block truncate text-[13px] text-white/55">{t.artist}</span>
                       </span>
-                      <span className="pr-1 font-mono text-[11px] tabular-nums text-white/55">{time(t.seconds)}</span>
+                      <span className="pr-1 font-mono text-[12px] tabular-nums text-white/50">{time(t.seconds)}</span>
                     </button>
                   </li>
                 );
               })}
             </ol>
-            <p className="mt-auto flex items-baseline justify-between gap-3 border-t border-white/[0.06] px-3 pb-2 pt-3 font-mono text-[11px] text-white/55">
-              <span>Next show 03:00</span>
-              <span className="truncate text-white/75">Slow Hands with Dee Okafor</span>
+            <p className="mt-auto flex items-baseline justify-between gap-3 border-t border-white/[0.06] px-2 pt-4 text-[13px] text-white/55">
+              <span className="truncate">
+                Then <span className="text-white/80">Slow Hands</span> with Dee Okafor
+              </span>
+              <span className="font-mono tabular-nums text-white/70">03:00</span>
             </p>
           </aside>
         </div>

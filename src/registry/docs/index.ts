@@ -92,6 +92,29 @@ import { doc as lightRaysDoc } from "./light-rays";
 import { doc as cityscapeDoc } from "./cityscape";
 import { doc as rainGlassDoc } from "./rain-glass";
 import { doc as particlesDoc } from "./particles";
+import { doc as alertDialogDoc } from "./alert-dialog";
+import { doc as drawerDoc } from "./drawer";
+import { doc as menubarDoc } from "./menubar";
+import { doc as buttonGroupDoc } from "./button-group";
+import { doc as inputGroupDoc } from "./input-group";
+import { doc as itemDoc } from "./item";
+import { doc as emptyDoc } from "./empty";
+import { doc as codeBlockDoc } from "./code-block";
+import { doc as chatMessageDoc } from "./chat-message";
+import { doc as promptInputDoc } from "./prompt-input";
+import { doc as conversationDoc } from "./conversation";
+import { doc as iconsDoc } from "./icons";
+import { doc as dataTableDoc } from "./data-table";
+import { doc as treeViewDoc } from "./tree-view";
+import { doc as resizableDoc } from "./resizable";
+import { doc as carouselDoc } from "./carousel";
+import { doc as statDoc } from "./stat";
+import { doc as donutChartDoc } from "./donut-chart";
+import { doc as odometerDoc } from "./odometer";
+import { doc as statusLightDoc } from "./status-light";
+import { doc as dockDoc } from "./dock";
+import { doc as imageCompareDoc } from "./image-compare";
+import { doc as bannerDoc } from "./banner";
 
 export const docs: Record<string, ComponentDoc> = {
   "button": buttonDoc,
@@ -186,4 +209,27 @@ export const docs: Record<string, ComponentDoc> = {
   "cityscape": cityscapeDoc,
   "rain-glass": rainGlassDoc,
   "particles": particlesDoc,
+  "alert-dialog": alertDialogDoc,
+  "drawer": drawerDoc,
+  "menubar": menubarDoc,
+  "button-group": buttonGroupDoc,
+  "input-group": inputGroupDoc,
+  "item": itemDoc,
+  "empty": emptyDoc,
+  "code-block": codeBlockDoc,
+  "chat-message": chatMessageDoc,
+  "prompt-input": promptInputDoc,
+  "conversation": conversationDoc,
+  "icons": iconsDoc,
+  "data-table": dataTableDoc,
+  "tree-view": treeViewDoc,
+  "resizable": resizableDoc,
+  "carousel": carouselDoc,
+  "stat": statDoc,
+  "donut-chart": donutChartDoc,
+  "odometer": odometerDoc,
+  "status-light": statusLightDoc,
+  "dock": dockDoc,
+  "image-compare": imageCompareDoc,
+  "banner": bannerDoc,
 };

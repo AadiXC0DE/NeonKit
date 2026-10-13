@@ -35,10 +35,10 @@ export default function RadarTracking() {
       <Radar blips={blips} rings={5} label="Harbour approach" />
       <table className="font-mono text-xs text-white/70">
         <thead>
-          <tr className="text-left text-[10px] uppercase tracking-[0.14em] text-white/40">
-            <th className="pb-2 pr-5 font-normal">Contact</th>
-            <th className="pb-2 pr-5 font-normal">Brg</th>
-            <th className="pb-2 font-normal">Rng</th>
+          <tr className="text-left font-sans text-xs text-white/55">
+            <th className="pb-2 pr-5 font-medium">Contact</th>
+            <th className="pb-2 pr-5 font-medium">Bearing</th>
+            <th className="pb-2 font-medium">Range</th>
           </tr>
         </thead>
         <tbody>

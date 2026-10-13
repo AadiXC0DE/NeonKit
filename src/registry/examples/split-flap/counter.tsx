@@ -26,7 +26,7 @@ export default function SplitFlapCounter() {
         flipDuration={70}
         className="[--flap-h:48px] sm:[--flap-h:60px]"
       />
-      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/55">Passengers through gate B today</p>
+      <p className="text-[13px] text-white/55">Passengers through gate B today</p>
     </div>
   );
 }

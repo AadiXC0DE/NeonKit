@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2 } from "@/components/ui/icons";
 import { HoldButton } from "@/components/ui/hold-button";
 
 export default function HoldButtonDestructive() {

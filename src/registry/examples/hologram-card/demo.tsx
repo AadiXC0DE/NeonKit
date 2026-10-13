@@ -67,16 +67,16 @@ export default function HologramCardDemo() {
           >
             Kowloon Nights
           </h3>
-          <span className="font-mono text-[10px] tracking-[0.12em] text-[rgb(var(--neon))]">HOLO</span>
+          <span className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[rgb(var(--neon))]">Holo</span>
         </div>
 
         <div className="mt-2 aspect-[8/5] overflow-hidden rounded-md border border-white/10">
           <Skyline />
         </div>
 
-        <p className="mt-2 flex justify-between px-0.5 font-mono text-[9px] uppercase tracking-[0.16em] text-white/45">
-          <span>Signage · 1987</span>
-          <span>Nathan Rd</span>
+        <p className="mt-2 flex justify-between px-0.5 text-[10px] font-medium text-white/55">
+          <span>Signage, 1987</span>
+          <span>Nathan Road</span>
         </p>
 
         <p className="mt-2 px-0.5 text-[11.5px] leading-[1.45] text-white/70">
@@ -86,14 +86,14 @@ export default function HologramCardDemo() {
         <dl className="mt-auto grid grid-cols-3 divide-x divide-white/10 rounded-md border border-white/10 bg-white/[0.03] py-1.5 text-center">
           {stats.map((stat) => (
             <div key={stat.label}>
-              <dt className="text-[8.5px] uppercase tracking-[0.16em] text-white/40">{stat.label}</dt>
-              <dd className="mt-0.5 font-mono text-[12px] tabular-nums text-white/90">{stat.value}</dd>
+              <dt className="text-[8.5px] font-semibold uppercase tracking-[0.14em] text-white/50">{stat.label}</dt>
+              <dd className="mt-0.5 text-[13px] font-semibold tabular-nums text-white/90">{stat.value}</dd>
             </div>
           ))}
         </dl>
 
-        <p className="mt-2 flex justify-between px-0.5 font-mono text-[9px] text-white/35">
-          <span>Neon Archive · Series 1</span>
+        <p className="mt-2 flex justify-between px-0.5 text-[9.5px] tabular-nums text-white/50">
+          <span>Neon Archive, series 1</span>
           <span>07/24</span>
         </p>
       </div>

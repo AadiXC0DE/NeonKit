@@ -1,12 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
-import { Hanken_Grotesk, JetBrains_Mono, Tilt_Neon } from "next/font/google";
+import { Fragment_Mono, Mona_Sans, Tilt_Neon } from "next/font/google";
+import { AccentScript } from "@/components/site/accent-script";
 import { AccentRestorer } from "@/components/site/accent-store";
+import { SkipLink } from "@/components/site/skip-link";
 import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 
-const sans = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken", display: "swap" });
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap" });
+// Mona Sans carries the whole hierarchy: its width axis widens display type, body stays at 100%.
+const sans = Mona_Sans({ subsets: ["latin"], axes: ["wdth"], variable: "--font-mona", display: "swap" });
+const mono = Fragment_Mono({ subsets: ["latin"], weight: "400", variable: "--font-fragment", display: "swap" });
 const neon = Tilt_Neon({ subsets: ["latin"], variable: "--font-tilt-neon", display: "swap" });
 
 export const metadata: Metadata = {
@@ -66,10 +68,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${neon.variable}`} suppressHydrationWarning>
       <body className="min-h-dvh">
-        {/* Apply a visitor's saved accent before first paint. */}
-        <Script id="neonkit-accent" strategy="beforeInteractive">
-          {`try{var a=JSON.parse(localStorage.getItem("neonkit:accent"));if(a&&a.rgb)document.documentElement.style.setProperty("--neon-accent",a.rgb)}catch(e){}`}
-        </Script>
+        <AccentScript />
+        <SkipLink />
         <AccentRestorer />
         {children}
       </body>

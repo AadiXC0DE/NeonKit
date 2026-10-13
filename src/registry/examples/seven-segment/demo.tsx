@@ -37,7 +37,7 @@ export default function SevenSegmentDemo() {
         <div className="relative flex items-end gap-3 lg:gap-4">
           <SevenSegment value={time} colonBlink={Boolean(now)} className="[--segment-h:64px] lg:[--segment-h:104px]" />
           <div className="flex flex-col items-start gap-2 pb-1">
-            <span className="flex gap-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.18em]">
+            <span className="flex gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em]">
               <span className={pm ? "text-white/25" : "text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.8)]"}>am</span>
               <span className={pm ? "text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.8)]" : "text-white/25"}>pm</span>
             </span>

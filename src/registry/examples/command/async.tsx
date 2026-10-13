@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Package } from "lucide-react";
+import { Package } from "@/components/ui/icons";
 import {
   Command,
   CommandEmpty,
@@ -85,9 +85,11 @@ export default function CommandAsync() {
           )}
         </CommandList>
       </Command>
-      <p className="truncate px-1 font-mono text-[11px] text-white/40">
-        {added.length ? `npm i ${added.join(" ")}` : "Nothing added yet."}
-      </p>
+      {added.length ? (
+        <p className="truncate px-1 font-mono text-xs text-white/60">npm i {added.join(" ")}</p>
+      ) : (
+        <p className="px-1 text-xs text-white/50">Nothing added yet.</p>
+      )}
     </div>
   );
 }

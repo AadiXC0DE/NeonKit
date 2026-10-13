@@ -17,6 +17,12 @@ import {
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+/** The single element in `node`. Server Components can pass it as a lazy reference, which Children resolves. */
+function resolveElement<P = Record<string, unknown>>(node: React.ReactNode): React.ReactElement<P> | null {
+  const [child] = React.Children.toArray(node);
+  return React.isValidElement<P>(child) ? child : null;
+}
+
 type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
 
 /**
@@ -105,7 +111,7 @@ function mergeSlotProps(slotProps: AnyProps, childProps: AnyProps) {
 /** Merges props and refs onto its single child element. The child's handlers run first. */
 const Slot = React.forwardRef<HTMLElement, AnyProps & { children?: React.ReactNode }>(
   ({ children, ...props }, forwardedRef) => {
-    const child = React.isValidElement<AnyProps>(children) ? children : null;
+    const child = resolveElement<AnyProps>(children as React.ReactNode);
     const ref = useComposedRefs(forwardedRef, child ? getElementRef(child) : undefined);
     if (!child) return null;
     return React.cloneElement(child, { ...mergeSlotProps(props, child.props), ref } as AnyProps);
@@ -203,7 +209,7 @@ const PopoverTrigger = React.forwardRef<HTMLButtonElement, PopoverTriggerProps>(
     const { open, setOpen, setTrigger, triggerId, contentId } = usePopover("PopoverTrigger");
     const ref = useComposedRefs<HTMLElement>(forwardedRef as PossibleRef<HTMLElement>, setTrigger);
     const childId =
-      asChild && React.isValidElement<{ id?: string }>(children) ? children.props.id : undefined;
+      asChild ? resolveElement<{ id?: string }>(children)?.props.id : undefined;
 
     const triggerProps = {
       ...props,

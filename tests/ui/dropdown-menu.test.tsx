@@ -376,3 +376,23 @@ describe("DropdownMenu", () => {
     expect(button).toHaveAttribute("aria-expanded", "true");
   });
 });
+
+describe("DropdownMenu under StrictMode", () => {
+  it("leaves focus on the first item when opened from the keyboard", async () => {
+    // StrictMode runs effects twice; the second run used to pull focus back onto the panel.
+    render(
+      <React.StrictMode>
+        <ProjectMenu />
+      </React.StrictMode>,
+    );
+    const trigger = screen.getByRole("button", { name: "Actions" });
+    trigger.focus();
+    fireEvent.keyDown(trigger, { key: "Enter" });
+    await waitFor(() => expect(document.activeElement).toBe(screen.getByRole("menuitem", { name: /Open project/ })));
+
+    fireEvent.keyDown(document.activeElement!, { key: "Escape" });
+    fireEvent.keyDown(trigger, { key: "ArrowUp" });
+    await waitFor(() => expect(document.activeElement).toHaveTextContent("Delete project"));
+  });
+});
+

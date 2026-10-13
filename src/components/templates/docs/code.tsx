@@ -28,10 +28,12 @@ type PreProps = {
   code: string;
   lang: Lang;
   lit?: number[];
+  /** Leaves room on the right for a floating copy button. */
+  gutter?: boolean;
   className?: string;
 };
 
-function Pre({ code, lang, lit = [], className }: PreProps) {
+function Pre({ code, lang, lit = [], gutter = false, className }: PreProps) {
   const ref = React.useRef<HTMLPreElement>(null);
   const [scrolls, setScrolls] = React.useState(false);
   const lines = highlight(code, lang);
@@ -63,6 +65,7 @@ function Pre({ code, lang, lit = [], className }: PreProps) {
             key={index}
             className={cn(
               "block px-4 sm:px-5",
+              gutter && "pr-14 sm:pr-14",
               lit.includes(index + 1) && "bg-[rgb(var(--neon)/0.07)] shadow-[inset_2px_0_0_rgb(var(--neon))]",
             )}
           >

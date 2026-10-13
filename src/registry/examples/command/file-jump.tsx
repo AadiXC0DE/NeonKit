@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Braces, FileCode, FileText } from "lucide-react";
+import { Braces, FileCode, FileText } from "@/components/ui/icons";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 
 const files = [
@@ -43,8 +43,8 @@ export default function CommandFileJump() {
           ))}
         </CommandList>
       </Command>
-      <p className="truncate px-1 font-mono text-[11px] text-white/40">
-        Open: <span className="text-white/70">{opened}</span>
+      <p className="truncate px-1 text-xs text-white/50">
+        Opened <span className="font-mono text-white/70">{opened}</span>
       </p>
     </div>
   );

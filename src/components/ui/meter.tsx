@@ -194,7 +194,7 @@ const Meter = React.forwardRef<HTMLDivElement, MeterProps>(
           <span
             id={labelId}
             className={cn(
-              "shrink-0 select-none font-mono uppercase leading-none tracking-[0.12em] text-white/55",
+              "shrink-0 select-none font-semibold uppercase leading-none tracking-[0.12em] text-white/60",
               s.label,
             )}
           >

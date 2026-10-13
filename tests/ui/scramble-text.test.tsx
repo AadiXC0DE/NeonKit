@@ -69,6 +69,23 @@ describe("ScrambleText", () => {
     expect(states(container)).toEqual(["l", "l", "l", "l"]);
   });
 
+  it("replays when the link around it is hovered or focused", () => {
+    const { container } = render(
+      <a href="#docs">
+        <ScrambleText text="Docs" trigger="hover" duration={400} />
+      </a>,
+    );
+    const link = container.querySelector("a") as HTMLAnchorElement;
+    fireEvent.pointerEnter(link);
+    expect(states(container).every((s) => s === "s")).toBe(true);
+    act(() => {
+      vi.advanceTimersByTime(600);
+    });
+    expect(states(container)).toEqual(["l", "l", "l", "l"]);
+    act(() => link.focus());
+    expect(states(container).every((s) => s === "s")).toBe(true);
+  });
+
   it("scrambles into new text", () => {
     const { container, rerender } = render(<ScrambleText text="ONE" trigger="mount" duration={300} />);
     act(() => {

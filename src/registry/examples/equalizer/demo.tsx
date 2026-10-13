@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { Pause, Play, SkipBack, SkipForward } from "@/components/ui/icons";
 import { Equalizer } from "@/components/ui/equalizer";
 
 export default function EqualizerDemo() {

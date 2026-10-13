@@ -12,7 +12,7 @@ type Channel = { level: number; peak: number; peakAt: number };
 
 // A stand-in for a real mix: a steady bed, a kick on every beat and a little
 // grit, with the right channel a touch behind the left.
-function useStereoSignal() {
+function useStereoSignal(ref: React.RefObject<HTMLElement | null>) {
   const [channels, setChannels] = React.useState<[Channel, Channel]>([
     { level: 0, peak: 0, peakAt: 0 },
     { level: 0, peak: 0, peakAt: 0 },
@@ -26,8 +26,9 @@ function useStereoSignal() {
       { level: 0, peak: 0, peakAt: 0 },
       { level: 0, peak: 0, peakAt: 0 },
     ];
+    let visible = true;
     const tick = (now: number) => {
-      raf = requestAnimationFrame(tick);
+      raf = visible ? requestAnimationFrame(tick) : 0;
       if (now - last < 30) return;
       last = now;
       const t = (now - start) / 1000;
@@ -47,9 +48,18 @@ function useStereoSignal() {
       });
       setChannels([{ ...state[0] }, { ...state[1] }]);
     };
+    // The meters stop when the panel scrolls away and pick up again when it's back.
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !raf) raf = requestAnimationFrame(tick);
+    });
+    if (ref.current) io.observe(ref.current);
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [ref]);
 
   return channels;
 }
@@ -79,17 +89,18 @@ function Screw({ className }: { className: string }) {
 }
 
 export default function MeterDemo() {
-  const [left, right] = useStereoSignal();
+  const panelRef = React.useRef<HTMLDivElement>(null);
+  const [left, right] = useStereoSignal(panelRef);
 
   return (
-    <div className="relative rounded-2xl border border-white/10 bg-[linear-gradient(180deg,#11131a,#0a0b10)] px-8 pb-6 pt-5 shadow-[inset_0_1px_0_rgb(255_255_255/0.05)]">
+    <div ref={panelRef} className="relative rounded-2xl border border-white/10 bg-[linear-gradient(180deg,#11131a,#0a0b10)] px-8 pb-6 pt-5 shadow-[inset_0_1px_0_rgb(255_255_255/0.05)]">
       <Screw className="left-2.5 top-2.5" />
       <Screw className="right-2.5 top-2.5" />
       <Screw className="bottom-2.5 left-2.5" />
       <Screw className="bottom-2.5 right-2.5" />
-      <div className="mb-4 flex items-baseline justify-between gap-10 font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
-        <span>Master</span>
-        <span>Peak dBFS</span>
+      <div className="mb-4 flex items-baseline justify-between gap-10 text-xs">
+        <span className="font-medium text-white/80">Master</span>
+        <span className="text-white/50">Peak, dBFS</span>
       </div>
       <div className="grid grid-cols-[auto_2rem_auto] justify-center gap-x-3 gap-y-2">
         <div className="text-center">
@@ -104,7 +115,7 @@ export default function MeterDemo() {
           {scale.map((db) => (
             <span
               key={db}
-              className="absolute inset-x-0 translate-y-1/2 text-center font-mono text-[10px] tabular-nums text-white/45"
+              className="absolute inset-x-0 translate-y-1/2 text-center text-[10px] font-medium tabular-nums text-white/50"
               style={{ bottom: `calc(4px + ${toLevel(db)} * (100% - 8px))` }}
             >
               {db > 0 ? `+${db}` : db < 0 ? `\u2212${-db}` : db}
@@ -112,9 +123,9 @@ export default function MeterDemo() {
           ))}
         </div>
         <Meter aria-label="Right channel" orientation="vertical" size="lg" value={right.level} className="h-72" />
-        <span className="text-center font-mono text-[11px] text-white/55">L</span>
+        <span className="text-center text-[11px] font-semibold text-white/60">L</span>
         <span />
-        <span className="text-center font-mono text-[11px] text-white/55">R</span>
+        <span className="text-center text-[11px] font-semibold text-white/60">R</span>
       </div>
     </div>
   );

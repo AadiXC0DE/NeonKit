@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Activity, Database, LayoutGrid, LifeBuoy, Menu, Rocket, ScrollText, Settings } from "lucide-react";
+import { Activity, Database, LayoutGrid, LifeBuoy, Menu, Rocket, ScrollText, Settings } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";

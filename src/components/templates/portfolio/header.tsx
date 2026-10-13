@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Menu } from "lucide-react";
+import { Menu } from "@/components/ui/icons";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
@@ -42,7 +42,7 @@ function LightsSwitch({ className }: { className?: string }) {
       onCheckedChange={setOn}
       className={className}
       label={
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/65">
+        <span className="text-[13px] text-white/70">
           Lights<span className="sr-only"> (shortcut: L)</span>
         </span>
       }
@@ -140,14 +140,12 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" size="sm" className="bg-[#07080d]">
               <SheetHeader>
-                <SheetTitle className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/60">
-                  {brand}
-                </SheetTitle>
+                <SheetTitle className="text-[15px] font-medium text-white/80">{brand}</SheetTitle>
                 <SheetDescription className="sr-only">Jump to a section</SheetDescription>
               </SheetHeader>
               <nav aria-label="Sections" className="mt-10">
                 <ol className="space-y-1">
-                  {sections.map((section, index) => (
+                  {sections.map((section) => (
                     <li key={section.id}>
                       <a
                         href={`#${section.id}`}
@@ -155,11 +153,8 @@ export function Header() {
                           event.preventDefault();
                           jumpTo(section.id);
                         }}
-                        className="flex items-baseline gap-4 rounded-lg py-2 text-[34px] font-medium leading-tight tracking-[-0.03em] text-white/90 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                        className="block rounded-lg py-1.5 text-[40px] leading-[1.05] tracking-[-0.038em] text-white/90 outline-none transition-colors [font-stretch:112%] [font-weight:620] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
-                        <span className="font-mono text-[11px] tracking-[0.1em] text-white/55">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
                         {section.label}
                       </a>
                     </li>

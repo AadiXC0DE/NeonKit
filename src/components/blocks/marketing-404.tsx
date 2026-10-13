@@ -1,4 +1,4 @@
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Search } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { NeonSign } from "@/components/ui/neon-sign";
 import { cn } from "@/lib/utils";
@@ -30,10 +30,10 @@ function KeyFob({ room, label, href, tilt }: (typeof KEYS)[number]) {
         )}
       >
         <span aria-hidden className="size-2.5 rounded-full border border-white/20 bg-[#05060a]" />
-        <span className="mt-2 font-mono text-[22px] font-semibold tabular-nums tracking-[-0.02em] text-white/80 transition-[color,text-shadow] duration-300 group-hover:text-[color-mix(in_srgb,rgb(var(--neon))_35%,white)] group-hover:[text-shadow:0_0_8px_rgb(var(--neon)),0_0_20px_rgb(var(--neon)/0.6)] group-focus-visible:text-[color-mix(in_srgb,rgb(var(--neon))_35%,white)]">
+        <span className="mt-2 text-[24px] font-[620] tabular-nums tracking-[-0.03em] text-white/80 [font-stretch:112%] transition-[color,text-shadow] duration-300 group-hover:text-[color-mix(in_srgb,rgb(var(--neon))_35%,white)] group-hover:[text-shadow:0_0_8px_rgb(var(--neon)),0_0_20px_rgb(var(--neon)/0.6)] group-focus-visible:text-[color-mix(in_srgb,rgb(var(--neon))_35%,white)]">
           {room}
         </span>
-        <span className="mt-1 text-center text-[12px] leading-tight text-white/55 group-hover:text-white/80">{label}</span>
+        <span className="mt-1 text-center text-[12px] leading-tight text-white/60 group-hover:text-white/85">{label}</span>
       </a>
     </li>
   );
@@ -63,7 +63,7 @@ export default function Marketing404() {
         >
           wayside<span className="text-[rgb(var(--neon))]">.</span>
         </a>
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Roadside stays since 2014</span>
+        <span className="text-[13px] text-white/55">Roadside stays since 2014</span>
       </header>
 
       <main className="grid flex-1 items-center gap-12 py-12 lg:grid-cols-[1fr_1.05fr] lg:gap-8 lg:py-16">
@@ -84,13 +84,10 @@ export default function Marketing404() {
         </div>
 
         <div className="max-w-[540px]">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-            Error <span className="text-[rgb(var(--neon))]">404</span> · Page not found
-          </p>
-          <h1 className="mt-5 text-[clamp(2.5rem,6vw,4.5rem)] font-semibold leading-[0.95] tracking-[-0.045em]">
+          <h1 className="text-[clamp(2.75rem,6.4vw,5.25rem)] font-[620] leading-[0.96] tracking-[-0.04em] [font-stretch:112%]">
             We checked every floor.
           </h1>
-          <p className="mt-6 max-w-[44ch] text-[17px] leading-relaxed text-white/55">
+          <p className="mt-7 max-w-[44ch] text-[17px] leading-[1.6] text-white/60">
             This page checked out, or it never checked in. The link might be old, or typed from memory on the
             road. Grab a key from the front desk instead.
           </p>
@@ -118,11 +115,13 @@ export default function Marketing404() {
         </div>
       </main>
 
-      <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-white/[0.06] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
-        <span className="[overflow-wrap:anywhere]">
-          GET {REQUESTED} <span className="text-[rgb(var(--neon)/0.8)]">→ 404</span>
+      <footer className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-white/[0.06] pt-5 text-[13px] text-white/55">
+        <code className="font-mono text-[12px] [overflow-wrap:anywhere]">
+          GET {REQUESTED} <span className="text-[rgb(var(--neon))]">→ 404</span>
+        </code>
+        <span>
+          Quote <span className="font-mono text-[12px] text-white/70">{REF}</span> if you call the front desk.
         </span>
-        <span>Ref {REF}</span>
       </footer>
     </section>
   );

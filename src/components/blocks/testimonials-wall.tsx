@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { neonVars } from "@/lib/neon";
@@ -106,49 +106,28 @@ const quotes: Quote[] = [
 const lit =
   "[color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] [text-shadow:0_0_1px_rgb(255_255_255/0.8),0_0_6px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/0.7),0_0_42px_rgb(var(--neon)/0.4)]";
 
-function Card({ item }: { item: Quote }) {
-  const featured = item.featured;
+const FEATURED = quotes.find((item) => item.featured)!;
+const REST = quotes.filter((item) => !item.featured);
+
+function Note({ item }: { item: Quote }) {
   return (
-    <figure
-      className={cn(
-        "relative mb-4 break-inside-avoid overflow-hidden rounded-[18px] border p-5 sm:p-6",
-        featured
-          ? "border-[rgb(var(--neon)/0.5)] bg-[rgb(var(--neon)/0.035)] shadow-[0_0_0_1px_rgb(var(--neon)/0.12),0_0_36px_-6px_rgb(var(--neon)/0.45),inset_0_0_28px_-10px_rgb(var(--neon)/0.35)]"
-          : "border-white/[0.07] bg-white/[0.02]",
-      )}
-    >
-      {featured && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -top-16 left-1/2 h-32 w-3/4 -translate-x-1/2 rounded-[50%] bg-[rgb(var(--neon)/0.16)] blur-[40px]"
-        />
-      )}
+    <figure className="mb-12 break-inside-avoid">
       {item.metric && (
-        <div className={cn("relative mb-5 border-b pb-4", featured ? "border-[rgb(var(--neon)/0.18)]" : "border-white/[0.06]")}>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">{item.metric.label}</p>
-          <p
-            className={cn(
-              "mt-1.5 font-semibold tabular-nums tracking-[-0.03em]",
-              featured ? cn("text-[28px] leading-tight", lit) : "text-xl text-white/90",
-            )}
-          >
+        <p className="mb-4">
+          <span className="block text-[26px] font-[600] leading-tight tracking-[-0.03em] text-white [font-stretch:108%]">
             {item.metric.value}
-          </p>
-        </div>
+          </span>
+          <span className="mt-0.5 block text-[13px] text-white/55">{item.metric.label}</span>
+        </p>
       )}
-      <blockquote
-        className={cn(
-          "relative text-pretty",
-          featured ? "text-[19px] leading-[1.45] tracking-[-0.01em] text-white/90" : "text-[15px] leading-relaxed text-white/70",
-        )}
-      >
+      <blockquote className="text-pretty text-[16px] leading-[1.6] text-white/70">
         <p>{item.quote}</p>
       </blockquote>
-      <figcaption className="relative mt-5 flex items-center gap-3">
-        <Avatar alt={item.name} size="sm" ring={featured} />
+      <figcaption className="mt-4 flex items-center gap-3">
+        <Avatar alt={item.name} size="sm" />
         <span className="min-w-0 text-sm leading-tight">
           <span className="block truncate font-medium text-white/90">{item.name}</span>
-          <span className="block truncate text-[13px] text-white/60">
+          <span className="block truncate text-[13px] text-white/55">
             {item.role}, {item.company}
           </span>
         </span>
@@ -175,47 +154,62 @@ export default function TestimonialsWall() {
       aria-labelledby={titleId}
       // Change the color here; everything inside follows it.
       style={neonVars("pink")}
-      className="relative overflow-hidden bg-[#05060a] px-5 py-20 text-white/90 sm:px-10 sm:py-28"
+      className="relative isolate overflow-hidden bg-[#05060a] px-5 py-20 text-white/90 sm:px-10 sm:py-28"
     >
+      {/* The one lit number throws a little light on the wall behind it */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-24 top-40 -z-10 h-[420px] w-[680px] rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/0.1),transparent)]"
+      />
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-end lg:gap-16">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Lockstep · field reports</p>
-            <h2
-              id={titleId}
-              className="mt-5 max-w-[17ch] text-balance text-[clamp(2.1rem,5vw,3.5rem)] font-semibold leading-[1] tracking-[-0.04em]"
-            >
-              Fewer pages at 3 a.m. Their words, not ours.
-            </h2>
-          </div>
-          <div className="flex flex-col gap-4 lg:items-end">
-            <p className="max-w-sm text-pretty text-[15px] leading-relaxed text-white/55 lg:text-right">
-              Unedited, from the teams that moved their pipelines over this year. We asked for numbers; most of them
-              sent some.
-            </p>
-            <a
-              href="#"
-              className="group -my-2 inline-flex items-center gap-1.5 rounded-md py-2 text-sm font-medium text-white/75 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
-            >
-              Read all 212 case notes
-              <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-            </a>
-          </div>
-        </div>
+        <h2
+          id={titleId}
+          className="text-[clamp(2rem,5.4vw,4.5rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
+        >
+          <span className="block">Fewer pages at 3&nbsp;a.m.</span>
+          <span className="block text-white/50">Their words, not ours.</span>
+        </h2>
 
-        <div className="relative mt-14 sm:mt-16">
+        <figure className="mt-16 grid gap-8 border-t border-white/[0.08] pt-10 lg:mt-20 lg:grid-cols-12 lg:gap-8 lg:pt-12">
+          <p className="lg:col-span-5">
+            {/* Before and after: only the result is lit. */}
+            <span className="block text-[clamp(3rem,7vw,6rem)] font-[620] leading-[0.95] tracking-[-0.045em] [font-stretch:112%]">
+              <span className="block text-white/40">{FEATURED.metric!.value.split(" → ")[0]}</span>
+              <span className={cn("block whitespace-nowrap", lit)}>
+                <span aria-hidden className="text-white/30 [text-shadow:none]">→ </span>
+                <span className="sr-only">down to </span>
+                {FEATURED.metric!.value.split(" → ")[1]}
+              </span>
+            </span>
+            <span className="mt-3 block text-[14px] text-white/55">
+              {FEATURED.metric!.label}, {FEATURED.company}
+            </span>
+          </p>
+          <div className="lg:col-span-7 lg:pt-2">
+            <blockquote className="text-pretty text-[clamp(1.35rem,2.2vw,1.85rem)] leading-[1.35] tracking-[-0.015em] text-white/90">
+              <p>&ldquo;{FEATURED.quote}&rdquo;</p>
+            </blockquote>
+            <figcaption className="mt-6 flex items-center gap-3">
+              <Avatar alt={FEATURED.name} size="md" ring />
+              <span className="text-sm leading-tight">
+                <span className="block font-medium text-white/90">{FEATURED.name}</span>
+                <span className="block text-[13px] text-white/55">
+                  {FEATURED.role}, {FEATURED.company}
+                </span>
+              </span>
+            </figcaption>
+          </div>
+        </figure>
+
+        <div className="relative mt-16 border-t border-white/[0.08] pt-12 lg:mt-20">
           {/* Clipped by a wrapper: a height cap on the columns element itself would spill extra columns sideways. */}
           <div
             id={wallId}
-            className={cn(
-              // The negative margin and matching padding leave room for the featured card's glow.
-              "-mx-5 -mt-10 px-5 pt-10 sm:-mx-8 sm:px-8",
-              !expanded && "max-h-[1180px] overflow-hidden sm:max-h-[900px] lg:max-h-[700px]",
-            )}
+            className={cn(!expanded && "max-h-[1100px] overflow-hidden sm:max-h-[820px] lg:max-h-[640px]")}
           >
-            <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
-              {quotes.map((item) => (
-                <Card key={item.name} item={item} />
+            <div className="columns-1 gap-12 sm:columns-2 lg:columns-3 [column-rule:1px_solid_rgb(255_255_255/0.06)]">
+              {REST.map((item) => (
+                <Note key={item.name} item={item} />
               ))}
             </div>
           </div>
@@ -225,7 +219,7 @@ export default function TestimonialsWall() {
               className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(to_bottom,transparent,#05060a_85%)]"
             />
           )}
-          <div className={cn("flex justify-center", expanded ? "mt-8" : "absolute inset-x-0 bottom-2")}>
+          <div className={cn("flex justify-center", expanded ? "mt-4" : "absolute inset-x-0 bottom-2")}>
             <Button
               variant="outline"
               aria-expanded={expanded}
@@ -241,6 +235,17 @@ export default function TestimonialsWall() {
               />
             </Button>
           </div>
+        </div>
+
+        <div className="mt-12 flex flex-col gap-3 border-t border-white/[0.06] pt-6 text-sm text-white/55 sm:flex-row sm:items-center sm:justify-between">
+          <p>Unedited, from teams that moved their pipelines over this year. We asked for numbers; most sent some.</p>
+          <a
+            href="#"
+            className="group -my-2 inline-flex shrink-0 items-center gap-1.5 self-start whitespace-nowrap rounded-md py-2 text-sm font-medium text-white/80 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a] sm:self-auto"
+          >
+            Read all 212 case notes
+            <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </a>
         </div>
       </div>
     </section>

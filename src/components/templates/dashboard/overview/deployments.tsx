@@ -2,12 +2,14 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowRight, GitBranch } from "lucide-react";
+import { ArrowRight, GitBranch } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { basePath } from "../config";
 import { DEPLOYMENTS, type Deployment } from "../data";
 import { duration } from "../parts/format";
+import { display } from "../parts/page-header";
+import { cn } from "@/lib/utils";
 import { StatusBadge } from "../parts/status-badge";
 
 export function RecentDeployments({ className }: { className?: string }) {
@@ -23,12 +25,12 @@ export function RecentDeployments({ className }: { className?: string }) {
 
   return (
     <section aria-labelledby="deploys-title" className={className}>
-      <div className="flex items-end justify-between gap-4 px-1 pb-4">
+      <div className="flex items-end justify-between gap-4 pb-5">
         <div>
-          <h2 id="deploys-title" className="text-lg font-semibold tracking-[-0.02em] text-white">
-            Recent deployments
+          <h2 id="deploys-title" className={cn(display, "text-[22px] text-white")}>
+            Deployments
           </h2>
-          <p className="mt-1 text-[13px] text-white/60">Production and preview, newest first.</p>
+          <p className="mt-2 text-[13px] text-white/60">Production and preview, newest first.</p>
         </div>
         <Link
           href={`${basePath}/projects`}
@@ -38,28 +40,28 @@ export function RecentDeployments({ className }: { className?: string }) {
           <ArrowRight aria-hidden className="size-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
       </div>
-      <Table>
+      <Table containerClassName="rounded-none border-0 border-t border-white/[0.08] bg-transparent">
         <TableHeader>
           <TableRow>
-            <TableHead>Deployment</TableHead>
+            <TableHead className="pl-0">Deployment</TableHead>
             <TableHead className="hidden sm:table-cell">Commit</TableHead>
-            <TableHead className="hidden xl:table-cell">Author</TableHead>
-            <TableHead className="hidden xl:table-cell">Environment</TableHead>
+            <TableHead className="hidden lg:table-cell xl:hidden">Author</TableHead>
+            <TableHead className="hidden lg:table-cell xl:hidden">Environment</TableHead>
             <TableHead align="right" className="hidden lg:table-cell">Build</TableHead>
-            <TableHead align="right">Age</TableHead>
+            <TableHead align="right" className="pr-0">Age</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {rows.map((d) => (
             <TableRow key={d.id}>
-              <TableCell>
+              <TableCell className="pl-0">
                 <div className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5 sm:flex-col sm:items-start">
                   <span className="whitespace-nowrap font-mono text-[13px] text-white/90">{d.project}</span>
                   <StatusBadge status={d.status} />
                   <span className="w-full max-w-[230px] truncate text-xs text-white/60 sm:hidden">{d.commit}</span>
                 </div>
               </TableCell>
-              <TableCell className="hidden max-w-[220px] sm:table-cell xl:max-w-[340px]">
+              <TableCell className="hidden max-w-[220px] sm:table-cell xl:max-w-[280px]">
                 <p className="truncate text-white/85">{d.commit}</p>
                 <p className="mt-1 flex min-w-0 items-center gap-1.5 font-mono text-xs text-white/55">
                   <GitBranch aria-hidden className="size-3 shrink-0" />
@@ -68,19 +70,19 @@ export function RecentDeployments({ className }: { className?: string }) {
                   <span>{d.sha}</span>
                 </p>
               </TableCell>
-              <TableCell className="hidden xl:table-cell">
+              <TableCell className="hidden lg:table-cell xl:hidden">
                 <span className="flex items-center gap-2.5 whitespace-nowrap">
                   <Avatar alt="" fallback={initials(d.author)} size="sm" className="text-[10px]" />
                   <span className="text-white/75">{d.author}</span>
                 </span>
               </TableCell>
-              <TableCell className="hidden xl:table-cell">
+              <TableCell className="hidden lg:table-cell xl:hidden">
                 <span className={d.environment === "Production" ? "text-white/85" : "text-white/60"}>{d.environment}</span>
               </TableCell>
               <TableCell align="right" className="hidden font-mono text-[13px] text-white/75 lg:table-cell">
-                {d.status === "building" ? <span className="text-[rgb(var(--neon))]">running</span> : duration(d.duration)}
+                {d.status === "building" ? <span className="font-sans text-white/55">running</span> : duration(d.duration)}
               </TableCell>
-              <TableCell align="right" className="whitespace-nowrap text-[13px] text-white/60">
+              <TableCell align="right" className="whitespace-nowrap pr-0 text-[13px] text-white/60">
                 {d.age}
               </TableCell>
             </TableRow>

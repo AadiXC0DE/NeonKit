@@ -14,7 +14,7 @@ import {
   Settings,
   Terminal,
   UserPlus,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import {
   CommandDialog,
   CommandEmpty,

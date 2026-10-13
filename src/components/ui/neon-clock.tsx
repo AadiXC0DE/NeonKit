@@ -224,7 +224,7 @@ const NeonClock = React.forwardRef<HTMLDivElement, NeonClockProps>(
     const caption = label ? (
       <span
         id={labelId}
-        className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-white/55"
+        className="text-[13px] font-medium leading-none text-white/60"
       >
         {label}
       </span>
@@ -291,7 +291,7 @@ const NeonClock = React.forwardRef<HTMLDivElement, NeonClockProps>(
             <span
               ref={meridiem}
               hidden={hourCycle !== 12}
-              className="ml-[0.18em] self-start pt-[0.08em] font-mono text-[0.22em] font-medium tracking-[0.12em]"
+              className="ml-[0.18em] self-start pt-[0.08em] text-[0.22em] font-semibold tracking-[0.08em]"
             >
               --
             </span>

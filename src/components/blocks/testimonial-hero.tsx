@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "@/components/ui/icons";
 import { NeonSign } from "@/components/ui/neon-sign";
 import { neonVars } from "@/lib/neon";
 import { cn } from "@/lib/utils";
@@ -132,12 +132,12 @@ export default function TestimonialHero() {
       <style>{css}</style>
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-between gap-6 border-b border-white/[0.07] pb-5">
-          <h2 id={titleId} className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-            <span className="hidden sm:inline">Backline · </span>Customer stories
+          <h2 id={titleId} className="text-[15px] font-medium tracking-[-0.01em] text-white/85">
+            Three kitchens on Backline<span className="hidden text-white/50 sm:inline">, in their own words</span>
           </h2>
           <div className="flex items-center gap-3">
-            <p className="whitespace-nowrap font-mono text-[11px] tabular-nums tracking-[0.16em] text-white/55">
-              <span className="text-white/80">0{index + 1}</span> / 0{stories.length}
+            <p className="whitespace-nowrap text-[13px] tabular-nums text-white/55">
+              <span className="text-white/90">{index + 1}</span> of {stories.length}
             </p>
             {/* The figure remounts on every switch, so announce from a region that stays put. */}
             <p aria-live="polite" className="sr-only">
@@ -152,7 +152,7 @@ export default function TestimonialHero() {
           </div>
         </div>
 
-        <div className="mt-20 grid gap-14 sm:mt-24 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-20">
+        <div className="mt-20 grid gap-14 sm:mt-24 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-20">
           <figure
             key={shown}
             className={cn(
@@ -167,7 +167,7 @@ export default function TestimonialHero() {
             >
               &ldquo;
             </span>
-            <blockquote className="relative text-pretty sm:min-h-[4.48em] lg:min-h-[5.6em] text-[clamp(1.65rem,4.6vw,3.15rem)] font-medium leading-[1.12] tracking-[-0.03em] text-white/45">
+            <blockquote className="relative text-pretty sm:min-h-[4.48em] lg:min-h-[5.6em] text-[clamp(1.65rem,4.6vw,3.25rem)] font-[540] leading-[1.1] tracking-[-0.032em] text-white/40 [font-stretch:104%]">
               <p>
                 {story.quote[0]}
                 <span className="text-white/95">{story.quote[1]}</span>
@@ -196,7 +196,7 @@ export default function TestimonialHero() {
                 <span className="text-sm font-medium text-white/85">
                   {story.role}, {story.company}
                 </span>
-                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">{story.detail}</span>
+                <span className="text-[13px] text-white/55">{story.detail}</span>
               </span>
             </figcaption>
           </figure>
@@ -215,7 +215,7 @@ export default function TestimonialHero() {
                   className="flex flex-col-reverse gap-2 border-t border-white/[0.07] pt-4 lg:border-b lg:border-t-0 lg:py-6 lg:first:pt-0"
                 >
                   <dt className="text-sm text-white/60">{stat.label}</dt>
-                  <dd className="text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tabular-nums leading-none tracking-[-0.035em] text-white/95">
+                  <dd className="whitespace-nowrap text-[clamp(1.85rem,3vw,2.3rem)] font-[620] leading-none tracking-[-0.04em] text-white/95 [font-stretch:112%]">
                     {stat.value}
                   </dd>
                 </div>

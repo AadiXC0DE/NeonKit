@@ -544,6 +544,18 @@ const RainGlass = React.forwardRef<HTMLDivElement, RainGlassProps>(
 
       paintShading();
       const resizeObserver = new ResizeObserver(resize);
+      // A move to a screen with another pixel ratio needs a fresh backing store.
+      let dprQuery: MediaQueryList | undefined;
+      const onDpr = () => {
+        resize();
+        watchDpr();
+      };
+      const watchDpr = () => {
+        dprQuery?.removeEventListener?.("change", onDpr);
+        dprQuery = window.matchMedia?.(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+        dprQuery?.addEventListener?.("change", onDpr);
+      };
+      watchDpr();
       resizeObserver.observe(root);
       const intersection =
         typeof IntersectionObserver === "undefined"
@@ -564,6 +576,7 @@ const RainGlass = React.forwardRef<HTMLDivElement, RainGlassProps>(
       return () => {
         cancelAnimationFrame(raf);
         resizeObserver.disconnect();
+        dprQuery?.removeEventListener?.("change", onDpr);
         intersection?.disconnect();
         document.removeEventListener("visibilitychange", sync);
         motion.removeEventListener("change", sync);

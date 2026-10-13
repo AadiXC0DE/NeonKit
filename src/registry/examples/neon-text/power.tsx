@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Power } from "lucide-react";
+import { Power } from "@/components/ui/icons";
 import { NeonText } from "@/components/ui/neon-text";
 
 export default function NeonTextPower() {
@@ -16,7 +16,7 @@ export default function NeonTextPower() {
         type="button"
         onClick={() => setOn((v) => !v)}
         aria-pressed={on}
-        className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs uppercase tracking-[0.2em] text-white/60 transition-colors hover:border-white/20 hover:text-white/90"
+        className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 text-[13px] font-medium text-white/70 outline-none transition-[color,border-color,transform] duration-150 hover:border-white/20 hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a] active:scale-[0.97]"
       >
         <Power className="size-3.5" /> {on ? "Switch off" : "Switch on"}
       </button>

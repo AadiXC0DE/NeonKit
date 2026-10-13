@@ -11,25 +11,25 @@ const services = [
 export default function GlowChartSparklines() {
   return (
     <div className="w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-      <div className="flex items-baseline justify-between border-b border-white/[0.06] px-5 py-3.5">
+      <div className="flex items-baseline justify-between gap-3 border-b border-white/[0.06] px-4 py-3.5 sm:px-5">
         <p className="text-sm font-medium text-white/90">Services</p>
-        <p className="text-xs text-white/45">Requests / min · last hour</p>
+        <p className="text-xs text-white/50">Requests / min · last hour</p>
       </div>
       <ul className="divide-y divide-white/[0.06]">
         {services.map((service) => (
-          <li key={service.name} className="flex items-center gap-4 px-5 py-3">
+          <li key={service.name} className="flex items-center gap-3 px-4 py-3 sm:gap-4 sm:px-5">
             <div className="min-w-0 flex-1">
               <p className="truncate font-mono text-[13px] text-white/85">{service.name}</p>
               <p className="text-xs text-white/40">{service.region}</p>
             </div>
             <Sparkline
               data={service.trend}
-              width={88}
+              width={76}
               height={28}
               live={service.live}
               label={`${service.name} requests per minute, last hour`}
             />
-            <p className="w-14 text-right text-sm font-medium tabular-nums text-white/90">{service.rpm}</p>
+            <p className="w-12 text-right text-sm font-medium tabular-nums text-white/90">{service.rpm}</p>
           </li>
         ))}
       </ul>

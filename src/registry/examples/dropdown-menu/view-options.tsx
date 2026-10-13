@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -81,7 +81,7 @@ export default function DropdownMenuViewOptions() {
           </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <p className="max-w-xs text-center text-xs leading-5 text-white/45">{summary.join(" · ")}</p>
+      <p className="max-w-xs text-center text-xs leading-5 text-white/50">{summary.join(" · ")}</p>
     </div>
   );
 }

@@ -6,9 +6,7 @@ export default function RetroGridDemo() {
       <RetroGrid />
       <p className="relative text-center text-4xl font-semibold tracking-tight text-white/90">
         Drive
-        <span className="block text-sm font-normal tracking-[0.4em] text-white/40 uppercase">
-          into the night
-        </span>
+        <span className="mt-1 block text-base font-normal tracking-normal text-white/55">into the night</span>
       </p>
     </div>
   );

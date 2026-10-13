@@ -13,7 +13,7 @@ export default function HoldButtonDemo() {
           <p className="truncate font-mono text-[13px] text-white/90">checkout-web@a41f9c2</p>
           <p className="mt-0.5 text-[13px] text-white/55">Preview passed 214 checks · 3m ago</p>
         </div>
-        <span className="shrink-0 rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
+        <span className="shrink-0 rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-white/70">
           {promoted ? "Production" : "Preview"}
         </span>
       </div>

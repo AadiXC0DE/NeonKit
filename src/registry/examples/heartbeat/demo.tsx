@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Heart } from "lucide-react";
+import { Heart } from "@/components/ui/icons";
 import { Heartbeat } from "@/components/ui/heartbeat";
 
 export default function HeartbeatDemo() {
@@ -17,7 +17,7 @@ export default function HeartbeatDemo() {
 
   return (
     <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-[#06070b] shadow-[inset_0_1px_0_rgb(255_255_255/0.05)]">
-      <div className="flex items-center justify-between border-b border-white/[0.07] px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.16em] text-white/40">
+      <div className="flex items-center justify-between border-b border-white/[0.07] px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">
         <span>Bed 4 · Adult</span>
         <span>II · 25 mm/s</span>
       </div>
@@ -27,7 +27,7 @@ export default function HeartbeatDemo() {
         </div>
         <dl className="grid grid-cols-3 gap-px border-t border-white/[0.07] bg-white/[0.07] sm:w-44 sm:grid-cols-1 sm:border-l sm:border-t-0">
           <div className="bg-[#06070b] px-4 py-3">
-            <dt className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
+            <dt className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">
               HR
               <Heart
                 ref={heart}
@@ -40,13 +40,13 @@ export default function HeartbeatDemo() {
             </dd>
           </div>
           <div className="bg-[#06070b] px-4 py-3">
-            <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">SpO₂ %</dt>
+            <dt className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">SpO₂ %</dt>
             <dd className="mt-1 font-mono text-2xl tabular-nums leading-none text-white/80">98</dd>
           </div>
           <div className="bg-[#06070b] px-4 py-3">
-            <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">NIBP</dt>
+            <dt className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">NIBP</dt>
             <dd className="mt-1 font-mono text-2xl tabular-nums leading-none text-white/80">
-              118<span className="text-white/45">/</span>76
+              118<span className="text-white/50">/</span>76
             </dd>
           </div>
         </dl>

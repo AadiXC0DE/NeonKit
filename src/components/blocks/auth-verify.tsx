@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { OTPInput } from "@/components/ui/otp-input";
@@ -10,7 +10,7 @@ import { neonVars } from "@/lib/neon";
 
 const ACCOUNT = "m.okafor@tessellate.io";
 const DEVICE = "Pixel 8 ··42";
-const SESSION = ["Lisbon, PT", "Chrome, macOS", "10:42"];
+const SESSION = { device: "Chrome on macOS", place: "Lisbon, PT", time: "10:42" };
 const TRUSTED_UNTIL = "12 Nov 2026";
 const WRONG_CODE = "000000";
 const RESEND_AFTER = 30;
@@ -51,7 +51,7 @@ const css = `
 function Arch({ state, flashes }: { state: State; flashes: number }) {
   const lit = state === "done";
   return (
-    <svg viewBox="0 0 320 250" aria-hidden className="w-full max-w-[220px] overflow-visible lg:max-w-[340px]">
+    <svg viewBox="0 0 320 250" aria-hidden className="w-full max-w-[240px] overflow-visible sm:max-w-[300px] lg:max-w-[480px]">
       {STONES.map((d, i) =>
         i === 4 ? null : (
           <path
@@ -175,22 +175,22 @@ export default function AuthVerify() {
         </p>
       </header>
 
-      <main className="flex flex-1 items-center justify-center py-10">
-        <div className="grid w-full max-w-[560px] overflow-hidden rounded-[20px] border border-white/10 bg-white/[0.02] lg:max-w-[920px] lg:grid-cols-[0.9fr_1fr]">
-          <div className="relative isolate flex flex-col items-center justify-between gap-6 border-b border-white/[0.06] bg-[#07080d] px-5 pb-5 pt-8 sm:px-8 sm:pb-6 sm:pt-10 lg:border-b-0 lg:border-r">
-            <div
-              aria-hidden
-              className={cn(
-                "absolute left-1/2 top-[30%] -z-10 h-48 w-64 -translate-x-1/2 rounded-full bg-[rgb(var(--neon)/0.22)] blur-[70px] transition-opacity duration-700",
-                state === "done" ? "opacity-100" : "opacity-0",
-              )}
-            />
-            <div className="flex flex-1 items-center justify-center">
-              <Arch state={state} flashes={flashes} />
-            </div>
-            <div className="grid w-full gap-3 font-mono text-[11px] uppercase tracking-[0.16em]">
-              <p className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-                <span className="text-white/55">Session</span>
+      <main className="mx-auto grid w-full max-w-[1180px] flex-1 items-center gap-10 py-10 lg:grid-cols-12 lg:gap-8 lg:py-14">
+        {/* The arch is the lock: the keystone lights when the code checks out. */}
+        <div className="relative isolate flex flex-col items-center gap-8 lg:col-span-6 lg:items-start">
+          <div
+            aria-hidden
+            className={cn(
+              "absolute left-1/2 top-[22%] -z-10 h-56 w-80 -translate-x-1/2 rounded-full bg-[rgb(var(--neon)/0.22)] blur-[80px] transition-opacity duration-700",
+              state === "done" ? "opacity-100" : "opacity-0",
+            )}
+          />
+          <div className="flex w-full justify-center border-b border-white/[0.08] pb-px">
+            <Arch state={state} flashes={flashes} />
+          </div>
+          <div className="grid w-full gap-1.5 text-[13px]">
+              <p className="flex items-center justify-between">
+                <span className="text-white/55">This sign-in</span>
                 <span
                   aria-live="polite"
                   className={cn(
@@ -203,26 +203,23 @@ export default function AuthVerify() {
                   {status}
                 </span>
               </p>
-              <p className="flex flex-wrap justify-between gap-x-4 gap-y-1 text-white/55">
-                {SESSION.map((s) => (
-                  <span key={s}>{s}</span>
-                ))}
+              <p className="flex flex-wrap gap-x-2 text-white/55">
+                {SESSION.device} in {SESSION.place}, at <span className="font-mono tabular-nums text-white/70">{SESSION.time}</span>
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col justify-center p-5 sm:p-10 lg:min-h-[544px]">
+          <div className="mx-auto flex w-full max-w-[460px] flex-col justify-center lg:col-span-5 lg:col-start-8 lg:mx-0 lg:min-h-[520px]">
             {state === "done" ? (
               <div className="grid gap-5 py-6">
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">Verified</p>
                 <h1
                   ref={titleRef}
                   tabIndex={-1}
-                  className="text-[clamp(2.25rem,5vw,3rem)] font-semibold leading-[0.95] tracking-[-0.04em] outline-none"
+                  className="text-[clamp(2.75rem,6vw,4.25rem)] font-[620] leading-[0.96] tracking-[-0.04em] outline-none [font-stretch:112%]"
                 >
                   You&apos;re in.
                 </h1>
-                <p className="max-w-[36ch] text-[15px] leading-relaxed text-white/55">
+                <p className="max-w-[36ch] text-[17px] leading-[1.6] text-white/60">
                   {remember
                     ? `This browser is trusted until ${TRUSTED_UNTIL}. We'll ask again after that, or from anywhere new.`
                     : "We'll ask for a code again next time you sign in from this browser."}
@@ -246,13 +243,13 @@ export default function AuthVerify() {
                 className="grid gap-6"
               >
                 <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Step 2 of 2 · Two-factor</p>
-                  <h1 className="mt-4 text-[clamp(1.875rem,4vw,2.5rem)] font-semibold leading-[1] tracking-[-0.04em]">
+                  <h1 className="text-[clamp(2rem,4vw,2.75rem)] font-[620] leading-[0.98] tracking-[-0.04em] [font-stretch:112%]">
                     {backup ? "Use a backup code" : "Enter the code from your phone"}
                   </h1>
-                  <p className="mt-3 max-w-[40ch] text-[15px] leading-relaxed text-white/55">
+                  <p className="mt-4 max-w-[40ch] text-[16px] leading-[1.55] text-white/60">
+                    <span className="text-white/90">Password accepted.</span>{" "}
                     {backup
-                      ? "One of the eight-character codes you saved when you turned on two-factor. Each works once."
+                      ? "Now one of the eight-character codes you saved when you turned on two-factor. Each works once."
                       : `Open Keystone on ${DEVICE} and type the code shown for tessellate.io.`}
                   </p>
                 </div>
@@ -331,7 +328,6 @@ export default function AuthVerify() {
               </form>
             )}
           </div>
-        </div>
       </main>
     </section>
   );

@@ -59,6 +59,7 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "A form reset moves the selection back to where it started and calls onValueChange.",
     "Options are native radio inputs sharing one name, so the group is a single tab stop and arrow keys move and select.",
     "Give the group an accessible name with aria-label or aria-labelledby.",
     "Each label is wired with aria-labelledby, so descriptions and card content are read as descriptions, not as part of the name.",

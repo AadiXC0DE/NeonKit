@@ -24,7 +24,9 @@ export function Wordmark({ className }: { className?: string }) {
   return (
     <span className={cn("inline-flex items-center gap-2", className)}>
       <GantryMark />
-      <span className="text-[15px] font-semibold lowercase tracking-[-0.03em] text-white">{brand}</span>
+      <span className="text-[15px] font-semibold lowercase tracking-[-0.03em] text-white">
+        {brand} <span className="font-normal text-white/50">docs</span>
+      </span>
     </span>
   );
 }

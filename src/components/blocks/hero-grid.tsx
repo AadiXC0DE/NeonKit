@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check } from "@/components/ui/icons";
 import { Avatar, AvatarGroup } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,15 +45,15 @@ function DeliveryLog() {
 
   return (
     <div className="relative rounded-2xl border border-white/10 bg-[#0a0b11]/90 shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)] backdrop-blur-[6px]">
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+      <div className="flex items-center justify-between border-b border-white/[0.06] px-4 py-3 text-[13px] text-white/60">
         <span className="flex items-center gap-2">
           <span className="relative flex size-1.5">
             <span className="absolute inset-0 animate-ping rounded-full bg-[rgb(var(--neon))] opacity-60 [animation-duration:1.8s] motion-reduce:animate-none" />
             <span className="relative size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />
           </span>
-          Live deliveries
+          Deliveries, live
         </span>
-        <span className="normal-case tracking-normal text-white/55">us-east-1</span>
+        <span className="font-mono text-[12px] text-white/50">us-east-1</span>
       </div>
       <ol aria-label="Recent webhook deliveries" className="divide-y divide-white/[0.05] font-mono text-[12px]">
         {rows.map((row, i) => (
@@ -79,15 +79,15 @@ function DeliveryLog() {
           </li>
         ))}
       </ol>
-      <dl className="grid grid-cols-3 border-t border-white/[0.06] text-center">
+      <dl className="grid grid-cols-3 divide-x divide-white/[0.06] border-t border-white/[0.06]">
         {[
-          ["p99", "212 ms"],
-          ["first try", "99.97%"],
-          ["kept", "30 days"],
+          ["p99 latency", "212 ms"],
+          ["First try", "99.97%"],
+          ["Logs kept", "30 days"],
         ].map(([label, value]) => (
-          <div key={label} className="px-2 py-3">
-            <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">{label}</dt>
-            <dd className="mt-1 text-sm font-medium text-white/85">{value}</dd>
+          <div key={label} className="flex flex-col-reverse px-4 py-3.5 text-left">
+            <dt className="mt-0.5 text-[12px] text-white/50">{label}</dt>
+            <dd className="font-mono text-[15px] tabular-nums text-white/90">{value}</dd>
           </div>
         ))}
       </dl>
@@ -201,7 +201,7 @@ export default function HeroGrid() {
           </span>
           <a
             href="#status"
-            className="-my-2 flex items-center gap-2 rounded-md py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55 outline-none hover:text-white/80 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+            className="-my-2 flex items-center gap-2 rounded-md py-2 text-[13px] text-white/60 outline-none transition-colors hover:text-white/90 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
           >
             <span className="size-1.5 rounded-full bg-[rgb(52_211_153)] shadow-[0_0_6px_rgb(52_211_153)]" />
             <span className="hidden sm:inline">All regions delivering</span>
@@ -209,24 +209,24 @@ export default function HeroGrid() {
           </a>
         </div>
 
-        <div className="grid items-start gap-14 pb-56 pt-14 sm:pb-64 lg:grid-cols-[1fr_400px] lg:gap-16 lg:pt-20">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Webhook infrastructure</p>
-            <h1
-              id="relay-hero-title"
-              className="mt-5 max-w-2xl [text-wrap:balance] text-[clamp(2.75rem,6.4vw,5.25rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/95"
-            >
-              <span className="block">Send the event.</span>
-              <span className="block">We&apos;ll make sure it lands.</span>
-            </h1>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-white/55 sm:text-lg">
-              Relay signs, queues and retries every webhook with per-endpoint backoff, then keeps 30 days of logs with a
+        <h1
+          id="relay-hero-title"
+          className="pt-12 text-[clamp(2.75rem,7.4vw,6rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white/95 [font-stretch:112%] lg:pt-20"
+        >
+          <span className="block">Send the event.</span>
+          <span className="block">We&apos;ll make sure it lands.</span>
+        </h1>
+
+        <div className="grid items-stretch gap-14 pb-56 pt-8 sm:pb-64 lg:grid-cols-[1fr_440px] lg:gap-16 lg:pb-[220px] lg:pt-10">
+          <div className="flex flex-col lg:pt-2">
+            <p className="max-w-[44ch] text-[17px] leading-[1.6] text-white/60">
+              Relay signs, queues and retries every webhook with backoff per endpoint, then keeps 30 days of logs with a
               replay button for the bad days.
             </p>
             <div className="mt-9">
               <SignupForm />
             </div>
-            <div className="mt-10 flex items-center gap-4">
+            <div className="mt-10 flex items-center gap-4 lg:mt-auto lg:pb-1">
               <AvatarGroup size="md">
                 {CUSTOMERS.map((name) => (
                   <Avatar key={name} alt={name} />
@@ -239,7 +239,9 @@ export default function HeroGrid() {
             </div>
           </div>
 
-          <div className="lg:mt-6">
+          {/* The log stands on the horizon: every delivery lands somewhere. */}
+          <div className="relative">
+            <div aria-hidden className="absolute -bottom-6 left-[8%] right-[8%] h-10 rounded-[50%] bg-[rgb(var(--neon)/0.22)] blur-[24px]" />
             <DeliveryLog />
           </div>
         </div>

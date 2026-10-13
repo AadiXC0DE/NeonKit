@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, CornerDownLeft } from "lucide-react";
+import { ArrowRight, CornerDownLeft } from "@/components/ui/icons";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Kbd } from "@/components/ui/kbd";
 import { neonVars } from "@/lib/neon";
@@ -151,21 +151,16 @@ export default function FaqSearch() {
       `}</style>
 
       <div className="mx-auto max-w-[1180px]">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] lg:items-end lg:gap-16">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Tidewater · Answers</p>
-            <h2
-              id="faq-search-title"
-              className="mt-5 max-w-[16ch] text-[clamp(2.4rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
-            >
-              Ask it the way you&apos;d ask a coworker.
-            </h2>
-          </div>
-          <p className="max-w-[40ch] text-pretty text-[15px] leading-relaxed text-white/55 lg:pb-2">
-            Twelve answers, searched as you type. If yours isn&apos;t here, it goes to a person on the team, not a
-            ticket queue.
-          </p>
-        </div>
+        <h2
+          id="faq-search-title"
+          className="max-w-[16ch] text-[clamp(2.5rem,5.6vw,4.5rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
+        >
+          Ask it the way you&apos;d ask a coworker.
+        </h2>
+        <p className="mt-6 max-w-[46ch] text-pretty text-[17px] leading-[1.6] text-white/60">
+          Twelve answers, searched as you type.{" "}
+          <span className="text-white/50">If yours isn&apos;t here, it goes to a person on the team, not a ticket queue.</span>
+        </p>
 
         <div className="mt-12 grid grid-cols-1 overflow-hidden rounded-[20px] border border-white/10 bg-white/[0.02] lg:mt-16 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)]">
           <div className="flex flex-col border-b border-white/[0.08] lg:border-b-0 lg:border-r">
@@ -211,7 +206,7 @@ export default function FaqSearch() {
                   </CommandGroup>
                 ))}
               </CommandList>
-              <div className="mt-auto hidden items-center gap-4 border-t border-white/[0.06] px-4 py-3 font-mono text-[11px] text-white/55 sm:flex">
+              <div className="mt-auto hidden items-center gap-4 border-t border-white/[0.06] px-4 py-3 text-[12px] text-white/55 sm:flex">
                 <span className="flex items-center gap-1.5">
                   <Kbd size="sm" listen="ArrowUp">↑</Kbd>
                   <Kbd size="sm" listen="ArrowDown">↓</Kbd>
@@ -238,28 +233,30 @@ export default function FaqSearch() {
               Showing: {current.q}
             </p>
             <article key={current.id} className="nk-faq-search-in">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+              <p className="text-[13px] text-white/55">
                 <span className="text-[rgb(var(--neon))]">{current.topic}</span>
-                <span aria-hidden className="px-2 text-white/20">
-                  /
+                <span aria-hidden className="px-2 text-white/25">
+                  ·
                 </span>
-                {String(ALL.indexOf(current) + 1).padStart(2, "0")} of {ALL.length}
+                <span className="tabular-nums">
+                  {ALL.indexOf(current) + 1} of {ALL.length}
+                </span>
               </p>
               <h3
                 ref={titleRef}
                 tabIndex={-1}
-                className="mt-5 max-w-[22ch] text-balance outline-none text-[clamp(1.5rem,2.6vw,2.125rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-white"
+                className="mt-4 max-w-[20ch] text-balance text-[clamp(1.75rem,3.2vw,2.75rem)] font-[620] leading-[1.02] tracking-[-0.035em] text-white outline-none [font-stretch:112%]"
               >
                 {current.q}
               </h3>
-              <p className="mt-5 max-w-[56ch] text-pretty text-base leading-relaxed text-white/60">{current.a}</p>
+              <p className="mt-6 max-w-[56ch] text-pretty text-[17px] leading-[1.6] text-white/65">{current.a}</p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/[0.06] pt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-white/55">
+              <div className="mt-8 flex flex-wrap items-center gap-1 border-t border-white/[0.06] pt-5 text-[13px] text-white/55">
                 {vote[current.id] ? (
                   <span ref={voteRef} role="status" tabIndex={-1} className="outline-none">{vote[current.id] === "yes" ? "Glad it helped." : "Noted. We'll rewrite this one."}</span>
                 ) : (
                   <>
-                    <span>Answered it?</span>
+                    <span className="mr-2">Did this answer it?</span>
                     {(["yes", "no"] as const).map((value) => (
                       <button
                         key={value}
@@ -268,25 +265,25 @@ export default function FaqSearch() {
                           setVote((votes) => ({ ...votes, [current.id]: value }));
                           focusNext.current = "vote";
                         }}
-                        className="inline-flex h-9 cursor-pointer items-center rounded-md border border-white/10 px-3 uppercase text-white/60 outline-none transition-colors duration-150 hover:border-[rgb(var(--neon)/0.5)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                        className="inline-flex h-8 cursor-pointer items-center rounded-md px-2.5 capitalize text-white/75 outline-none transition-colors duration-150 hover:bg-[rgb(var(--neon)/0.1)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
                         {value}
                       </button>
                     ))}
                   </>
                 )}
-                <span className="ml-auto hidden normal-case tracking-[0.04em] sm:inline">Updated 18 Sep 2026</span>
+                <span className="ml-auto hidden sm:inline">Updated 18 Sep 2026</span>
               </div>
 
               <div className="mt-10">
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Also in {current.topic}</p>
+                <h4 className="text-[14px] font-medium text-white/80">More on {current.topic.toLowerCase()}</h4>
                 <ul className="mt-3">
                   {related.map((item) => (
                     <li key={item.id}>
                       <button
                         type="button"
                         onClick={() => open(item.id, true)}
-                        className="group flex w-full cursor-pointer items-center justify-between gap-4 rounded-md border-b border-white/[0.06] py-3 text-left text-sm text-white/65 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                        className="group flex w-full cursor-pointer items-center justify-between gap-4 rounded-md border-b border-white/[0.06] py-3 text-left text-[15px] text-white/65 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                       >
                         {item.q}
                         <ArrowRight className="size-4 shrink-0 text-white/30 transition-[color,transform] duration-200 group-hover:translate-x-0.5 group-hover:text-[rgb(var(--neon))]" />

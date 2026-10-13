@@ -14,7 +14,7 @@ export default function ScrambleTextHover() {
         <a
           key={link.href}
           href={link.href}
-          className="rounded-md font-mono text-sm uppercase tracking-[0.14em] text-white/60 outline-none transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent)/0.6)]"
+          className="rounded-md font-mono text-sm text-white/60 outline-none transition-colors hover:text-white focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent)/0.6)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#05060a]"
         >
           <ScrambleText text={link.label} trigger="hover" duration={500} charset="symbols" />
         </a>

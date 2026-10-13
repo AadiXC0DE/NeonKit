@@ -80,7 +80,8 @@ export const doc: ComponentDoc = {
           type: "(query: string) => string | void",
           description: "Called on Create. Add the option to options yourself; return its value to select it (defaults to the text).",
         },
-        { prop: "name", type: "string", description: "Submits the value with a form. Multiple adds one entry per value." },
+        { prop: "name", type: "string", description: "Submits the value with a form. Multiple adds one entry per value. A form reset puts back the starting selection." },
+        { prop: "required", type: "boolean", default: "false", description: "Satisfied by a picked option, not by typed text, so chips count and a half-typed search doesn't." },
         { prop: "label", type: "ReactNode", description: "Visible label. Names both the input and the list." },
         { prop: "description", type: "ReactNode", description: "Helper text under the field." },
         {
@@ -107,6 +108,7 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "When the browser rejects the field on submit (required, type, pattern), it turns red until it's edited or the form resets. The browser shows its own message.",
     "Follows the WAI-ARIA editable combobox pattern with list autocomplete: focus stays in the input and aria-activedescendant tracks the highlighted option.",
     "ArrowDown and ArrowUp open the list and move through it, wrapping and skipping disabled options. Home and End jump to the ends while it's open.",
     "Enter picks the highlighted option, Escape closes the list and restores the selected label, and Tab closes it. Space types a space.",

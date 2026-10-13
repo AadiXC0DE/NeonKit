@@ -22,7 +22,7 @@ export default function TubeDividerDemo() {
       />
 
       <div className="relative flex items-center justify-between gap-4">
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">The Halcyon Room</span>
+        <span className="text-sm font-medium text-white/70">The Halcyon Room</span>
         <Switch size="sm" label="Lights" checked={on} onCheckedChange={setOn} />
       </div>
 
@@ -38,10 +38,10 @@ export default function TubeDividerDemo() {
       <ol className="relative grid gap-4">
         {lineup.map((slot) => (
           <li key={slot.time} className="grid grid-cols-[3.5rem_1fr] items-baseline gap-3">
-            <span className="font-mono text-sm tabular-nums text-white/45">{slot.time}</span>
+            <span className="font-mono text-sm tabular-nums text-white/60">{slot.time}</span>
             <span>
               <span className="block text-base font-medium text-white/90">{slot.act}</span>
-              <span className="block text-xs text-white/45">{slot.note}</span>
+              <span className="block text-xs text-white/55">{slot.note}</span>
             </span>
           </li>
         ))}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CodeBlock } from "@/components/site/code-block";
+import { DocArticle } from "@/components/site/doc-article";
 import { H2, InlineCode, P, PageHeader, PagerLinks } from "@/components/site/prose";
 import { ThemingPlayground } from "@/components/site/theming-playground";
 import { neonColorNames, neonColors } from "@/lib/neon";
@@ -15,8 +16,16 @@ const toHex = (rgb: string) =>
 
 export default function ThemingPage() {
   return (
-    <article className="max-w-3xl">
-      <PageHeader eyebrow="Getting started" title="Theming">
+    <DocArticle
+      toc={[
+        { id: "per-component", title: "Per component" },
+        { id: "per-section", title: "Per section" },
+        { id: "app-wide", title: "App-wide" },
+        { id: "palette", title: "Palette" },
+        { id: "custom-palette", title: "Changing the palette" },
+      ]}
+    >
+      <PageHeader title="Theming">
         Every component reads its color from one CSS variable, <InlineCode>--neon</InlineCode>. Set it per component,
         per section or for the whole app.
       </PageHeader>
@@ -59,24 +68,26 @@ export default function ThemingPage() {
       />
 
       <H2 id="palette">Palette</H2>
-      <P>Eleven tuned colors. Each one keeps 4.5:1 contrast with dark text when used as a solid fill.</P>
-      <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3">
-        {neonColorNames.map((name) => (
-          <div key={name} className="flex items-center gap-3 bg-background p-4">
-            <span
-              className="size-8 shrink-0 rounded-md"
-              style={{
-                background: `rgb(${neonColors[name]})`,
-                boxShadow: `0 0 18px rgb(${neonColors[name]} / 0.45)`,
-              }}
-            />
-            <span className="min-w-0">
-              <span className="block text-[14px] font-medium text-fg">{name}</span>
-              <span className="block font-mono text-[11.5px] text-dim">{toHex(neonColors[name])}</span>
-            </span>
-          </div>
-        ))}
-      </div>
+      <P>Eleven tuned colors. Each keeps 4.5:1 contrast with dark text when used as a solid fill.</P>
+      <ul className="mt-8 grid grid-cols-4 gap-x-4 gap-y-10 sm:grid-cols-6 lg:grid-cols-11 lg:gap-x-2">
+        {neonColorNames.map((name) => {
+          const rgb = neonColors[name];
+          return (
+            <li key={name} className="flex flex-col items-center text-center">
+              <span
+                aria-hidden
+                className="h-20 w-[7px] rounded-full"
+                style={{
+                  background: `linear-gradient(to right, rgb(${rgb}), #fff 45%, rgb(${rgb}))`,
+                  boxShadow: `0 0 4px rgb(${rgb}), 0 0 16px rgb(${rgb} / 0.75), 0 0 36px rgb(${rgb} / 0.35)`,
+                }}
+              />
+              <span className="mt-5 text-[14px] font-medium text-fg">{name}</span>
+              <span className="mt-0.5 font-mono text-[12px] text-muted">{toHex(rgb)}</span>
+            </li>
+          );
+        })}
+      </ul>
 
       <H2 id="custom-palette">Changing the palette</H2>
       <P>
@@ -97,6 +108,6 @@ export default function ThemingPage() {
         prev={{ title: "Installation", href: "/docs/installation" }}
         next={{ title: "Use with AI", href: "/docs/ai" }}
       />
-    </article>
+    </DocArticle>
   );
 }

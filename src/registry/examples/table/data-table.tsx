@@ -204,7 +204,7 @@ export default function TableDataTable() {
       </Table>
 
       <div className="flex flex-wrap items-center justify-between gap-3 px-1">
-        <p className="text-xs tabular-nums text-white/45">
+        <p className="text-xs tabular-nums text-white/50">
           {start + 1}–{start + rows.length} of {sorted.length}
         </p>
         <Pagination size="sm" page={page} onPageChange={setPage} pageCount={pageCount} />

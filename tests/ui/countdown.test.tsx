@@ -104,4 +104,10 @@ describe("Countdown", () => {
     const timer = screen.getByRole("timer", { name: "Doors open in" });
     expect(timer.style.getPropertyValue("--neon")).toBe("251 191 36");
   });
+  it("prints unit captions as readable legends, not mono eyebrows", () => {
+    render(<Countdown to={NOW + 5000} />);
+    const caption = screen.getByText("Seconds");
+    expect(caption).toHaveClass("text-white/55");
+    expect(caption.className).not.toContain("font-mono");
+  });
 });

@@ -24,7 +24,7 @@ export default function NeonSignDemo() {
       <Switch
         checked={on}
         onCheckedChange={setOn}
-        label={<span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/55">Power</span>}
+        label={<span className="text-[13px] font-medium text-white/60">Power</span>}
       />
     </div>
   );

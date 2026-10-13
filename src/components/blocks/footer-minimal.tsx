@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp } from "@/components/ui/icons";
 import { TubeDivider } from "@/components/ui/tube-divider";
 import { neonVars } from "@/lib/neon";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ function BackToTop({ className }: { className: string }) {
         window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
       }}
       className={cn(
-        "size-9 shrink-0 cursor-pointer place-items-center rounded-lg border border-white/10 text-white/50 outline-none transition-colors hover:border-[rgb(var(--neon)/0.5)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
+        "size-9 shrink-0 cursor-pointer place-items-center rounded-lg border border-white/10 text-white/60 outline-none transition-colors hover:border-[rgb(var(--neon)/0.5)] hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
         className,
       )}
     >
@@ -75,7 +75,7 @@ export default function FooterMinimal() {
           </div>
 
           <nav aria-label="Footer">
-            <ul className="flex flex-wrap gap-x-7 gap-y-3 text-sm text-white/55">
+            <ul className="flex flex-wrap gap-x-7 gap-y-3 text-[14px] text-white/60">
               {LINKS.map((link) => (
                 <li key={link}>
                   <a
@@ -90,7 +90,9 @@ export default function FooterMinimal() {
           </nav>
 
           <div className="flex items-center gap-5">
-            <p className="font-mono text-[11px] tracking-[0.04em] text-white/55">© 2026 Ferrous · Made in Rotterdam</p>
+            <p className="text-[13px] text-white/50">
+              © 2026 Ferrous. <span className="text-white/60">Made in Rotterdam.</span>
+            </p>
             <BackToTop className="hidden lg:grid" />
           </div>
         </div>

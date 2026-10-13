@@ -11,10 +11,16 @@ import {
   type Variants,
 } from "motion/react";
 import { autoUpdate, offset, shift, size, useFloating, type Middleware } from "@floating-ui/react-dom";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
+
+/** The single element in `node`. Server Components can pass it as a lazy reference, which Children resolves. */
+function resolveElement<P = Record<string, unknown>>(node: React.ReactNode): React.ReactElement<P> | null {
+  const [child] = React.Children.toArray(node);
+  return React.isValidElement<P>(child) ? child : null;
+}
 
 type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
 
@@ -96,7 +102,7 @@ function mergeProps(ours: AnyProps, theirs: AnyProps): AnyProps {
 
 const Slot = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
   ({ children, ...props }, forwardedRef) => {
-    const child = React.isValidElement<AnyProps>(children) ? children : null;
+    const child = resolveElement<AnyProps>(children as React.ReactNode);
     const ref = useComposedRefs(forwardedRef, child ? getElementRef(child) : undefined);
     if (!child) return null;
     return React.cloneElement(child, { ...mergeProps(props, child.props), ref } as AnyProps);
@@ -448,7 +454,12 @@ const NavigationMenuList = React.forwardRef<HTMLUListElement, React.HTMLAttribut
     return (
       <div
         ref={frameRef}
-        className="relative min-w-0 max-sm:overflow-x-auto max-sm:[scrollbar-width:none] max-sm:[&::-webkit-scrollbar]:hidden"
+        className={cn(
+          "relative min-w-0",
+          // On small screens the bar scrolls sideways; the edges fade so a clipped item reads as more.
+          "max-sm:overflow-x-auto max-sm:[scrollbar-width:none] max-sm:[&::-webkit-scrollbar]:hidden",
+          "max-sm:[mask-image:linear-gradient(to_right,transparent,black_12px,black_calc(100%-12px),transparent)]",
+        )}
       >
         <ul
           ref={ref}
@@ -656,7 +667,12 @@ const Pane = React.forwardRef<HTMLDivElement, { value: string; entry: ContentEnt
       animate="center"
       exit="exit"
       transition={{ duration: 0.22, ease: EASE }}
-      className={cn("outline-none", className)}
+      // max-w-full lets fixed-width content wrap when the panel is capped to the viewport.
+      // The pane scrolls when the panel would run past the bottom of the viewport (2px for the border).
+      className={cn(
+        "max-h-[calc(var(--nk-nav-max-height,100vh)-2px)] max-w-full overflow-y-auto overscroll-contain outline-none",
+        className,
+      )}
       {...props}
     >
       <InPanelContext.Provider value>{children}</InPanelContext.Provider>
@@ -681,8 +697,9 @@ function Panel({ value, entry }: { value: string; entry: ContentEntry }) {
       shift({ padding: 8 }),
       size({
         padding: 8,
-        apply({ availableWidth, elements }) {
+        apply({ availableWidth, availableHeight, elements }) {
           elements.floating.style.maxWidth = `${Math.max(0, availableWidth)}px`;
+          elements.floating.style.setProperty("--nk-nav-max-height", `${Math.max(120, availableHeight)}px`);
         },
       }),
       transformOrigin,

@@ -1,116 +1,96 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown } from "lucide-react";
-import { Avatar } from "@/components/ui/avatar";
+import { ChevronDown } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { sections } from "./config";
 import { quotes, type Quote } from "./data";
-import { Eyebrow } from "./primitives";
+import { Headline, display } from "./primitives";
 
 const section = sections[3];
 
-const lit =
-  "[color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] [text-shadow:0_0_1px_rgb(255_255_255/0.8),0_0_6px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/0.7),0_0_42px_rgb(var(--neon)/0.4)]";
-
-function Card({ item }: { item: Quote }) {
-  const featured = item.featured;
+function Attribution({ item, className }: { item: Quote; className?: string }) {
   return (
-    <figure
-      className={cn(
-        "relative mb-4 break-inside-avoid overflow-hidden rounded-[18px] border p-5 sm:p-6",
-        featured
-          ? "border-[rgb(var(--neon)/0.5)] bg-[rgb(var(--neon)/0.035)] shadow-[0_0_0_1px_rgb(var(--neon)/0.12),0_0_36px_-6px_rgb(var(--neon)/0.45),inset_0_0_28px_-10px_rgb(var(--neon)/0.35)]"
-          : "border-white/[0.07] bg-white/[0.02]",
-      )}
-    >
-      {featured && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -top-16 left-1/2 h-32 w-3/4 -translate-x-1/2 rounded-[50%] bg-[rgb(var(--neon)/0.16)] blur-[40px]"
-        />
-      )}
+    <figcaption className={cn("text-[14px] leading-snug", className)}>
+      <span className="text-white/90">{item.name}</span>
+      <span className="text-white/50">
+        , {item.role} at {item.company}
+      </span>
+    </figcaption>
+  );
+}
+
+/** A note from the wall: just the words and who said them. A number, when they sent one, goes on top. */
+function Note({ item }: { item: Quote }) {
+  return (
+    <figure className="mb-12 break-inside-avoid">
       {item.metric && (
-        <div
-          className={cn(
-            "relative mb-5 border-b pb-4",
-            featured ? "border-[rgb(var(--neon)/0.18)]" : "border-white/[0.06]",
-          )}
-        >
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/60">{item.metric.label}</p>
-          <p
-            className={cn(
-              "mt-1.5 font-semibold tabular-nums tracking-[-0.03em]",
-              featured ? cn("text-[28px] leading-tight", lit) : "text-xl text-white/90",
-            )}
-          >
-            {item.metric.value}
-          </p>
-        </div>
+        <p className="mb-4">
+          <span className={cn("block text-[34px] leading-none text-white", display)}>{item.metric.value}</span>
+          <span className="mt-1.5 block text-[13px] text-white/50">{item.metric.label}</span>
+        </p>
       )}
-      <blockquote
-        className={cn(
-          "relative text-pretty",
-          featured
-            ? "text-[19px] leading-[1.45] tracking-[-0.01em] text-white/90"
-            : "text-[15px] leading-relaxed text-white/70",
-        )}
-      >
+      <blockquote className="text-pretty text-[16px] leading-[1.6] text-white/70">
         <p>{item.quote}</p>
       </blockquote>
-      <figcaption className="relative mt-5 flex items-center gap-3">
-        <Avatar alt={item.name} size="sm" ring={featured} />
-        <span className="min-w-0 text-sm leading-tight">
-          <span className="block truncate font-medium text-white/90">{item.name}</span>
-          <span className="block truncate text-[13px] text-white/60">
-            {item.role}, {item.company}
-          </span>
-        </span>
-      </figcaption>
+      <Attribution item={item} className="mt-3" />
     </figure>
   );
 }
 
 export function Testimonials() {
   const [expanded, setExpanded] = React.useState(false);
+  const lead = quotes.find((q) => q.featured) ?? quotes[0];
+  const rest = quotes.filter((q) => q !== lead);
 
   return (
     <section
       id={section.id}
       aria-labelledby="customers-title"
-      className="relative scroll-mt-20 overflow-hidden px-5 py-20 sm:px-8 lg:py-28"
+      className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 lg:py-36"
     >
       <div className="mx-auto max-w-[1120px]">
-        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-end lg:gap-16">
-          <div>
-            <Eyebrow clock={section.clock}>Field notes</Eyebrow>
-            <h2
-              id="customers-title"
-              className="mt-5 max-w-[16ch] text-balance text-[clamp(2.1rem,5vw,3.5rem)] font-semibold leading-[1] tracking-[-0.04em] text-white"
-            >
-              Fewer alarms set for 1:55am.
-            </h2>
-          </div>
-          <p className="max-w-sm text-pretty text-[15px] leading-relaxed text-white/60 lg:justify-self-end lg:text-right">
-            From teams that moved their releases to the middle of the night this year. We asked for numbers; most of
-            them sent some.
-          </p>
-        </div>
+        <Headline id="customers-title" clock={section.clock} className="text-[clamp(2.25rem,5.4vw,4.5rem)]">
+          Fewer alarms set for 1:55am.
+        </Headline>
 
-        <div className="relative mt-14 sm:mt-16">
+        {/* One team's number, set as large as the headline, then the quote that explains it */}
+        <figure className="mt-16 grid gap-8 border-t border-white/[0.08] pt-10 lg:mt-20 lg:grid-cols-12 lg:gap-8 lg:pt-14">
+          {lead.metric && (
+            <p className="lg:col-span-5">
+              <span
+                className={cn(
+                  "block whitespace-nowrap text-[clamp(4rem,10vw,8.5rem)]",
+                  display,
+                  "leading-[0.9]",
+                  "[color:color-mix(in_srgb,rgb(var(--neon))_22%,white)] [text-shadow:0_0_30px_rgb(var(--neon)/0.35)]",
+                )}
+              >
+                {lead.metric.value}
+              </span>
+              <span className="mt-4 block text-[14px] text-white/55">
+                {lead.metric.label}, {lead.company}
+              </span>
+            </p>
+          )}
+          <div className="lg:col-span-6 lg:col-start-7">
+            <blockquote className="text-pretty text-[clamp(1.35rem,2.3vw,1.75rem)] leading-[1.4] tracking-[-0.012em] text-white/90">
+              <p>&ldquo;{lead.quote}&rdquo;</p>
+            </blockquote>
+            <Attribution item={lead} className="mt-6" />
+          </div>
+        </figure>
+
+        <div className="relative mt-20 lg:mt-28">
           {/* Clipped by a wrapper: a height cap on the columns element itself would spill extra columns sideways. */}
           <div
             id="customers-wall"
-            className={cn(
-              // The negative margin and matching padding leave room for the featured card's glow.
-              "-mx-5 -mt-10 px-5 pt-10 sm:-mx-8 sm:px-8",
-              !expanded && "max-h-[1120px] overflow-hidden sm:max-h-[880px] lg:max-h-[700px]",
-            )}
+            className={cn(!expanded && "max-h-[980px] overflow-hidden sm:max-h-[760px] lg:max-h-[620px]")}
           >
-            <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
-              {quotes.map((item) => (
-                <Card key={item.name} item={item} />
+            <div className="columns-1 gap-12 sm:columns-2 lg:columns-3">
+              {rest.map((item) => (
+                <Note key={item.name} item={item} />
               ))}
             </div>
           </div>
@@ -120,13 +100,13 @@ export function Testimonials() {
               className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(to_bottom,transparent,#05060a_85%)]"
             />
           )}
-          <div className={cn("flex justify-center", expanded ? "mt-8" : "absolute inset-x-0 bottom-2")}>
+          <div className={cn("flex", expanded ? "mt-4" : "absolute inset-x-0 bottom-2")}>
             <Button
-              variant="outline"
+              variant="ghost"
               aria-expanded={expanded}
               aria-controls="customers-wall"
               onClick={() => setExpanded((value) => !value)}
-              className="bg-[#05060a]"
+              className="-ml-3 text-white/85"
             >
               {expanded ? "Show fewer" : `Read all ${quotes.length}`}
               <ChevronDown

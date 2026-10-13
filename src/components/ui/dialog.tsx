@@ -2,10 +2,16 @@
 
 import * as React from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { X } from "lucide-react";
+import { X } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
+
+/** The single element in `node`. Server Components can pass it as a lazy reference, which Children resolves. */
+function resolveElement<P = Record<string, unknown>>(node: React.ReactNode): React.ReactElement<P> | null {
+  const [child] = React.Children.toArray(node);
+  return React.isValidElement<P>(child) ? child : null;
+}
 
 type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
 
@@ -45,8 +51,8 @@ function useDialog(component: string) {
 /** Merges props onto its single child element, chaining the child's own onClick. */
 const Slot = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
   ({ children, className, onClick, ...props }, ref) => {
-    if (!React.isValidElement<React.HTMLAttributes<HTMLElement>>(children)) return null;
-    const child = children;
+    const child = resolveElement<React.HTMLAttributes<HTMLElement>>(children);
+    if (!child) return null;
 
     return React.cloneElement(child, {
       ...props,
@@ -188,6 +194,10 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
       triggerRef.current = null;
       document.documentElement.style.overflow = "hidden";
       dialog.showModal();
+      // showModal focuses the first control while the panel is still offscreen, and the browser can
+      // scroll the dialog to bring it into view. Undo that so the panel lands where it should.
+      dialog.scrollTop = 0;
+      dialog.scrollLeft = 0;
     }, [open, triggerRef]);
 
     React.useEffect(
@@ -219,11 +229,14 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
         aria-labelledby={titleId}
         aria-describedby={hasDescription ? descriptionId : undefined}
         onCancel={(event) => {
+          // React passes a nested dialog's cancel up to every ancestor's handler; only Escape on this one counts.
+          if (event.target !== event.currentTarget) return;
           // Escape: let the exit animation run instead of closing instantly.
           event.preventDefault();
           setOpen(false);
         }}
-        onClose={() => {
+        onClose={(event) => {
+          if (event.target !== event.currentTarget) return;
           if (!dialogRef.current?.open) setOpen(false);
         }}
         style={neonVars(color)}
@@ -258,7 +271,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
                   exit={{ ...hiddenPanel, transition: exit }}
                   transition={enter}
                   className={cn(
-                    "pointer-events-auto relative w-full rounded-2xl border border-[rgb(var(--neon)/0.18)] bg-[#0a0b11] p-6 text-white/90",
+                    "pointer-events-auto relative w-full rounded-[14px] border border-[rgb(var(--neon)/0.18)] bg-[#0a0b11] p-6 text-white/90",
                     "shadow-[0_0_0_1px_rgb(0_0_0/0.5),0_24px_64px_-16px_rgb(0_0_0/0.9),0_0_80px_-24px_rgb(var(--neon)/0.35)]",
                     sizes[size],
                     className,
@@ -276,7 +289,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
                       aria-label="Close"
                       onClick={() => setOpen(false)}
                       className={cn(
-                        "absolute right-3.5 top-3.5 flex size-8 items-center justify-center rounded-lg text-white/45 outline-none",
+                        "absolute right-3.5 top-3.5 flex size-8 items-center justify-center rounded-lg text-white/50 outline-none",
                         "transition-[background-color,color,transform] duration-150 ease-out hover:bg-white/[0.06] hover:text-white/90 active:scale-[0.97]",
                         "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0b11]",
                       )}

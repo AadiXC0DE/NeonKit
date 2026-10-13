@@ -1,21 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  ArrowRight,
-  BookOpen,
-  Boxes,
-  ChartColumn,
-  Database,
-  FileText,
-  GitMerge,
-  Menu,
-  Rocket,
-  ShieldAlert,
-  Users,
-  Waypoints,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight, Menu } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
@@ -30,23 +16,23 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { cn } from "@/lib/utils";
 import { neonVars } from "@/lib/neon";
 
-type Entry = { title: string; description: string; href: string; icon: LucideIcon };
+type Entry = { title: string; description: string; href: string };
 
 const PRODUCT: { heading: string; items: Entry[] }[] = [
   {
     heading: "Build",
     items: [
-      { title: "Affected builds", description: "Runs only what a commit touched.", href: "#affected", icon: Waypoints },
-      { title: "Remote cache", description: "One cache for CI and every laptop.", href: "#cache", icon: Database },
-      { title: "Merge queue", description: "Batches PRs, bisects the breakage.", href: "#queue", icon: GitMerge },
+      { title: "Affected builds", description: "Runs only what a commit touched.", href: "#affected" },
+      { title: "Remote cache", description: "One cache for CI and every laptop.", href: "#cache" },
+      { title: "Merge queue", description: "Batches PRs, bisects the breakage.", href: "#queue" },
     ],
   },
   {
     heading: "Ship",
     items: [
-      { title: "Preview deploys", description: "A URL per package, per PR.", href: "#previews", icon: Rocket },
-      { title: "Flaky test quarantine", description: "Retries and mutes repeat offenders.", href: "#flaky", icon: ShieldAlert },
-      { title: "Pipeline insights", description: "Where the minutes go, per package.", href: "#insights", icon: ChartColumn },
+      { title: "Preview deploys", description: "A URL per package, per PR.", href: "#previews" },
+      { title: "Flaky test quarantine", description: "Retries and mutes repeat offenders.", href: "#flaky" },
+      { title: "Pipeline insights", description: "Where the minutes go, per package.", href: "#insights" },
     ],
   },
 ];
@@ -55,15 +41,15 @@ const RESOURCES: { heading: string; items: Entry[] }[] = [
   {
     heading: "Learn",
     items: [
-      { title: "Documentation", description: "Config reference and guides.", href: "#docs", icon: BookOpen },
-      { title: "Monorepo recipes", description: "pnpm, Nx, Bazel, Turborepo.", href: "#recipes", icon: Boxes },
+      { title: "Documentation", description: "Config reference and guides.", href: "#docs" },
+      { title: "Monorepo recipes", description: "pnpm, Nx, Bazel, Turborepo.", href: "#recipes" },
     ],
   },
   {
     heading: "Company",
     items: [
-      { title: "Customers", description: "How 1,180 teams cut CI time.", href: "#customers", icon: Users },
-      { title: "Changelog", description: "v2.14 shipped Oct 9.", href: "#changelog", icon: FileText },
+      { title: "Customers", description: "How 1,180 teams cut CI time.", href: "#customers" },
+      { title: "Changelog", description: "v2.14 shipped Oct 9.", href: "#changelog" },
     ],
   },
 ];
@@ -111,7 +97,7 @@ function PipelineCard() {
       className="group relative flex flex-col overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.02] p-4 hover:border-white/15"
     >
       <span aria-hidden className="pointer-events-none absolute -right-10 -top-12 size-40 rounded-full bg-[rgb(var(--neon)/0.12)] blur-[40px]" />
-      <span className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
+      <span className="flex items-center justify-between text-[12px] text-white/55">
         <span className="flex items-center gap-2">
           <span
             className={cn(
@@ -121,9 +107,11 @@ function PipelineCard() {
                 : "animate-pulse bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))] motion-reduce:animate-none",
             )}
           />
-          main · #{run}
+          <span>
+            <span className="font-mono text-white/75">main</span> run <span className="font-mono tabular-nums text-white/75">#{run}</span>
+          </span>
         </span>
-        <span className="tabular-nums text-white/70">0:{String(clock).padStart(2, "0")}</span>
+        <span className="font-mono tabular-nums text-white/75">0:{String(clock).padStart(2, "0")}</span>
       </span>
 
       <span className="mt-4 block text-sm font-medium leading-5 text-white/90" aria-live="polite">
@@ -161,18 +149,17 @@ function PipelineCard() {
   );
 }
 
-function PanelLink({ title, description, href, icon: Icon }: Entry) {
+function PanelLink({ title, description, href }: Entry) {
   return (
     <li>
-      <NavigationMenuLink href={href} className="group px-3 py-2.5">
-        <span className="flex items-center gap-2.5 text-sm font-medium leading-5 text-white/90">
-          <Icon
-            aria-hidden
-            className="size-3.5 shrink-0 text-white/35 transition-[color,filter] duration-150 group-hover:text-[rgb(var(--neon))] group-hover:[filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.8))] group-focus-visible:text-[rgb(var(--neon))]"
-          />
-          {title}
-        </span>
-        <span className="mt-0.5 block pl-6 text-xs leading-5 text-white/60">{description}</span>
+      <NavigationMenuLink href={href} className="group relative px-3 py-2.5">
+        {/* A short tube on the left edge strikes on hover and focus. */}
+        <span
+          aria-hidden
+          className="absolute left-0 top-3 h-4 w-[2px] scale-y-50 rounded-full bg-[rgb(var(--neon)/0.2)] opacity-0 transition-[opacity,transform,background-color,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-y-100 group-hover:bg-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] group-hover:opacity-100 group-hover:shadow-[0_0_4px_rgb(var(--neon)),0_0_10px_rgb(var(--neon)/0.7)] group-focus-visible:scale-y-100 group-focus-visible:opacity-100"
+        />
+        <span className="block text-[14px] font-medium leading-5 text-white/90">{title}</span>
+        <span className="mt-0.5 block text-[13px] leading-5 text-white/55">{description}</span>
       </NavigationMenuLink>
     </li>
   );
@@ -181,7 +168,7 @@ function PanelLink({ title, description, href, icon: Icon }: Entry) {
 function Column({ heading, items }: { heading: string; items: Entry[] }) {
   return (
     <div>
-      <p className="px-3 pb-1.5 pt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">{heading}</p>
+      <p className="px-3 pb-1.5 pt-2 text-[13px] text-white/50">{heading}</p>
       <ul className="grid gap-0.5">
         {items.map((item) => (
           <PanelLink key={item.title} {...item} />
@@ -218,14 +205,14 @@ function MobileSection({
 }) {
   return (
     <Collapsible className="border-b border-white/[0.07]">
-      <CollapsibleTrigger className="flex w-full justify-between py-4 text-2xl font-semibold tracking-[-0.03em] text-white/90">
+      <CollapsibleTrigger className="flex w-full justify-between py-4 text-2xl font-[620] tracking-[-0.035em] text-white/90 [font-stretch:112%]">
         {heading}
       </CollapsibleTrigger>
       <CollapsibleContent>
         <div className="grid gap-5 pb-5">
           {groups.map((group) => (
             <div key={group.heading}>
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">{group.heading}</p>
+              <p className="text-[13px] text-white/50">{group.heading}</p>
               <ul className="mt-1 grid gap-1">
                 {group.items.map((item) => (
                   <li key={item.title}>
@@ -326,9 +313,7 @@ export default function NavbarMega() {
               </SheetTrigger>
               <SheetContent side="right" size="sm">
                 <SheetHeader>
-                  <SheetTitle className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/55">
-                    Forgeline
-                  </SheetTitle>
+                  <SheetTitle className="text-[13px] font-normal text-white/55">Menu</SheetTitle>
                 </SheetHeader>
                 <nav aria-label="Mobile" className="mt-6">
                   <MobileSection heading="Product" groups={PRODUCT} onNavigate={close} />
@@ -338,7 +323,7 @@ export default function NavbarMega() {
                       key={label}
                       href={`#${label.toLowerCase()}`}
                       onClick={close}
-                      className="block border-b border-white/[0.07] py-4 text-2xl font-semibold tracking-[-0.03em] text-white/90 outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                      className="block border-b border-white/[0.07] py-4 text-2xl font-[620] tracking-[-0.035em] text-white/90 [font-stretch:112%] outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
                     >
                       {label}
                     </a>
@@ -367,11 +352,12 @@ export default function NavbarMega() {
         aria-hidden
         className="pointer-events-none mx-auto max-w-6xl select-none px-5 pb-12 pt-20 [mask-image:linear-gradient(to_bottom,#000_45%,transparent)] sm:px-8 sm:pt-28"
       >
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">CI/CD for monorepos</p>
-        <p className="mt-5 max-w-4xl [text-wrap:balance] text-[clamp(2.5rem,7vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/90">
-          Build what changed. Skip the other 38 packages.
+        <p className="text-[clamp(2.5rem,6.6vw,5.5rem)] font-[620] leading-[0.96] tracking-[-0.045em] text-white/90 [font-stretch:112%]">
+          Build what changed.
+          <br />
+          <span className="text-white/50">Skip the other 38.</span>
         </p>
-        <p className="mt-6 max-w-lg text-base leading-relaxed text-white/60">
+        <p className="mt-6 max-w-[44ch] text-[17px] leading-[1.6] text-white/60">
           Forgeline reads your workspace graph, runs only what a commit affects and shares every artifact through one cache.
         </p>
       </div>

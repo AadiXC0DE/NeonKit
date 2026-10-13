@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/ui/icons";
 
 import { event } from "./config";
 import { replay, speakers } from "./data";
@@ -25,14 +25,14 @@ export function LiveBanner() {
       className="relative z-50 overflow-hidden border-b border-[rgb(var(--neon)/0.25)] bg-[linear-gradient(90deg,rgb(var(--neon)/0.16),rgb(var(--neon)/0.06)_60%,rgb(var(--neon)/0.12))]"
     >
       <div className="mx-auto flex max-w-[1240px] items-center gap-x-4 gap-y-1 px-5 py-2.5 text-[13px] leading-5 sm:px-8">
-        <span className="flex shrink-0 items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] [color:color-mix(in_srgb,rgb(var(--neon))_45%,white)]">
+        <span className="flex shrink-0 items-center gap-2 font-medium [color:color-mix(in_srgb,rgb(var(--neon))_45%,white)]">
           <span aria-hidden className="relative flex size-2">
             {phase === "live" && (
               <span className="absolute inset-0 animate-ping rounded-full bg-[rgb(var(--neon))] opacity-60 [animation-duration:1.6s] motion-reduce:animate-none" />
             )}
             <span className="relative size-2 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_6px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.7)]" />
           </span>
-          {phase === "live" ? "On air now" : "Replay is up"}
+          {phase === "live" ? "On air" : "Replay is up"}
         </span>
 
         <p className="min-w-0 flex-1 truncate text-white/75">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { BlockGallery } from "@/components/site/block-gallery";
 import { PageShell } from "@/components/site/page-shell";
+import { PageHeader } from "@/components/site/prose";
 import { blockCategories, blocks, isNew } from "@/registry";
 
 export const metadata: Metadata = {
@@ -14,30 +15,21 @@ export default function BlocksPage() {
 
   return (
     <PageShell>
-      <div className="max-w-3xl">
-        <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">Blocks</p>
-        <h1 className="text-balance text-[clamp(2.75rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-fg">
-          Whole sections, ready to glow.
-        </h1>
-        <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted">
-          {blocks.length} heroes, pricing tables, auth screens and app shells, built from NeonKit components and working
-          out of the box. One command adds the block and everything it uses.
-        </p>
-      </div>
-
-      <div className="mt-14">
-        <BlockGallery
-          categories={categories}
-          blocks={blocks.map((block) => ({
-            slug: block.slug,
-            name: block.name,
-            category: block.category,
-            description: block.description,
-            isNew: isNew(block),
-            uses: block.registryDependencies.length,
-          }))}
-        />
-      </div>
+      <PageHeader title="Blocks" size="lg" className="mb-10 sm:mb-12">
+        {blocks.length} heroes, pricing tables, auth screens and app shells, each one assembled from NeonKit
+        components with believable copy. One command adds the block and every component it uses.
+      </PageHeader>
+      <BlockGallery
+        categories={categories}
+        blocks={blocks.map((block) => ({
+          slug: block.slug,
+          name: block.name,
+          category: block.category,
+          description: block.description,
+          isNew: isNew(block),
+          uses: block.registryDependencies.length,
+        }))}
+      />
     </PageShell>
   );
 }

@@ -84,6 +84,26 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       if (inputRef.current) inputRef.current.indeterminate = indeterminate;
     });
 
+    // A form reset unticks the native box without a change event. Follow it, and tell a
+    // controlled parent, so the drawn box never disagrees with what the form submits.
+    const initialChecked = React.useRef(checked);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialChecked.current;
+        if (initial === checked) return;
+        if (!isControlled) setUncontrolled(initial);
+        onCheckedChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = inputRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     const state = indeterminate ? "indeterminate" : checked ? "checked" : "unchecked";
     const on = state !== "unchecked";
     const s = sizes[size];
@@ -120,7 +140,8 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               [describedBy, description && descriptionId].filter(Boolean).join(" ") ||
               undefined
             }
-            className="peer absolute inset-0 m-0 size-full cursor-[inherit] appearance-none opacity-0"
+            // Reaches a few pixels past the box, so a bare checkbox in a table row is easy to hit.
+            className="peer absolute -inset-1.5 m-0 cursor-[inherit] appearance-none opacity-0"
             {...props}
           />
           <span

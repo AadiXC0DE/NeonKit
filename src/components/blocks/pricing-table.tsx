@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check } from "lucide-react";
+import { Check } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -77,7 +77,7 @@ function Cell({ value, featured }: { value: Value; featured: boolean }) {
         <span className="sr-only">Not included</span>
       </>
     );
-  return <span className={cn("font-mono text-[13px]", featured ? "text-white" : "text-white/70")}>{value}</span>;
+  return <span className={cn("text-[14px]", featured ? "text-white" : "text-white/70")}>{value}</span>;
 }
 
 export default function PricingTable() {
@@ -89,46 +89,52 @@ export default function PricingTable() {
       className="relative isolate bg-[#05060a] px-5 py-20 text-white/90 sm:px-10 sm:py-24 lg:px-16"
     >
       <div className="mx-auto max-w-[1200px]">
-        <header className="grid gap-6 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Cartograph · Maps API</p>
-            <h2
-              id="pricing-table-title"
-              className="mt-4 text-balance text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
-            >
-              Compare every line before you commit.
-            </h2>
+        <header>
+          <h2
+            id="pricing-table-title"
+            className="max-w-[15ch] text-[clamp(2.4rem,5.6vw,4.5rem)] font-[620] leading-[0.96] tracking-[-0.04em] text-white [font-stretch:112%]"
+          >
+            Compare every line before you commit.
+          </h2>
+          <div className="mt-10 flex flex-col gap-6 border-t border-white/[0.08] pt-6 sm:flex-row sm:items-end sm:justify-between">
+            <p className="flex flex-col gap-2 sm:flex-row sm:items-end sm:gap-4">
+              <span className="text-[clamp(2.75rem,5vw,3.75rem)] font-[620] leading-[0.85] tracking-[-0.045em] text-[rgb(var(--neon))] [font-stretch:112%] [text-shadow:0_0_24px_rgb(var(--neon)/0.45)]">
+                $0.50
+              </span>
+              <span className="max-w-[30ch] pb-0.5 text-[15px] leading-snug text-white/60">
+                <span className="text-white/90">per 1,000 map loads past your plan,</span> the same rate on every tier.
+              </span>
+            </p>
+            <p className="text-[14px] text-white/55 sm:max-w-[26ch] sm:text-right">
+              Point at a feature to see exactly what it counts.
+            </p>
           </div>
-          <p className="max-w-md text-[15px] leading-relaxed text-white/55 lg:col-span-4 lg:col-start-9 lg:pb-1.5">
-            Usage past your plan bills at the same rate on every tier: $0.50 per 1,000 map loads. Hover any feature
-            for what it actually counts.
-          </p>
         </header>
 
-        <p className="mt-12 font-mono text-[11px] text-white/55 md:hidden">Scroll sideways to see every plan →</p>
+        <p className="mt-12 text-[13px] text-white/55 md:hidden">Scroll sideways to see every plan.</p>
         <Table
           stickyHeader
           aria-label="Plan comparison"
-          className="min-w-[640px] table-fixed"
+          className="min-w-[640px] table-fixed proportional-nums"
           // Scrolls sideways inside its own frame on small screens; on desktop the header sticks to the page.
-          containerClassName="mt-3 overscroll-x-contain bg-[#07080c] md:mt-12 lg:overflow-visible"
+          containerClassName="mt-3 overscroll-x-contain rounded-none border-0 bg-transparent md:mt-14 lg:overflow-visible"
         >
           <colgroup>
-            <col className="w-44 lg:w-[34%]" />
+            <col className="w-36 sm:w-44 lg:w-[34%]" />
             <col />
             <col />
             <col />
           </colgroup>
           <TableHeader>
             <TableRow>
-              <TableHead className="left-0 z-20 whitespace-normal rounded-tl-xl align-bottom shadow-[1px_0_0_rgb(255_255_255/0.06)] lg:shadow-none">
-                <span className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/55">Billed monthly · USD</span>
+              <TableHead className="left-0 z-20 whitespace-normal bg-[#05060a] align-bottom shadow-[1px_0_0_rgb(255_255_255/0.06)] lg:shadow-none">
+                <span className="text-[13px] font-normal text-white/55">Monthly, in USD</span>
               </TableHead>
               {PLANS.map((plan, i) => (
                 <TableHead
                   key={plan.name}
                   align="center"
-                  className={cn("h-auto py-5 align-top", i === PLANS.length - 1 && "rounded-tr-xl", i === FEATURED && "bg-[#0f1220]")}
+                  className={cn("h-auto bg-[#05060a] py-6 align-top", i === FEATURED && "rounded-t-xl bg-[#0c0f1b]")}
                 >
                   {i === FEATURED && (
                     <span
@@ -137,12 +143,14 @@ export default function PricingTable() {
                     />
                   )}
                   <div className="flex flex-col items-center gap-1">
-                    <span className={cn("text-sm font-medium", i === FEATURED ? "text-[rgb(var(--neon))]" : "text-white/85")}>
+                    <span className={cn("text-[15px] font-medium", i === FEATURED ? "text-[rgb(var(--neon))]" : "text-white/85")}>
                       {plan.name}
                     </span>
-                    <span className="text-[28px] font-semibold leading-none tracking-[-0.03em] text-white">{plan.price}</span>
-                    <span className="text-[11px] font-normal text-white/55">{plan.note}</span>
-                    <Button size="sm" variant={i === FEATURED ? "solid" : "ghost"} className={cn("mt-2.5", i !== FEATURED && "border border-white/10")}>
+                    <span className="mt-1 text-[40px] font-[620] leading-none tracking-[-0.045em] text-white [font-stretch:112%]">
+                      {plan.price}
+                    </span>
+                    <span className="mt-1 text-[13px] font-normal text-white/55">{plan.note}</span>
+                    <Button size="sm" variant={i === FEATURED ? "solid" : "ghost"} className={cn("mt-4", i !== FEATURED && "border border-white/10")}>
                       {plan.cta}
                     </Button>
                   </div>
@@ -157,14 +165,14 @@ export default function PricingTable() {
                   <th
                     colSpan={4}
                     scope="colgroup"
-                    className="border-b border-white/[0.06] bg-white/[0.015] px-4 pb-2 pt-6 text-left font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-white/55"
+                    className="border-b border-white/[0.1] px-4 pb-3 pt-10 text-left text-[15px] font-medium tracking-[-0.01em] text-white/90"
                   >
                     <span className="sticky left-4">{group.name}</span>
                   </th>
                 </tr>
                 {group.rows.map((row) => (
                   <TableRow key={row.feature}>
-                    <TableHead className="sticky left-0 z-10 whitespace-normal bg-[#07080c] font-normal text-white/80 shadow-[1px_0_0_rgb(255_255_255/0.06)] lg:static lg:shadow-none">
+                    <TableHead className="sticky left-0 z-10 whitespace-normal bg-[#05060a] font-normal text-white/80 shadow-[1px_0_0_rgb(255_255_255/0.06)] lg:static lg:shadow-none">
                       <Tooltip
                         content={<span className="block w-60 whitespace-normal text-left leading-snug">{row.tip}</span>}
                         side="top"

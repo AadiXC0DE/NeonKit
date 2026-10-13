@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 
 export default function ButtonAsLink() {

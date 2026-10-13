@@ -8,6 +8,18 @@ export type Release = {
 
 export const releases: Release[] = [
   {
+    version: "1.5",
+    date: "2026-10-15",
+    title: "A full pass",
+    notes: [
+      "22 new components: Alert Dialog, Drawer, Menubar, Button Group, Input Group, Item, Empty, Data Table, Tree View, Resizable, Carousel, Stat, Donut Chart, Odometer, Status Light, Dock, Image Compare, Banner, Code Block, and an AI set of Chat Message, Prompt Input and Conversation.",
+      "NeonKit icons: 310 glyphs drawn as bent glass tube, with blockout gaps where one tube passes behind another. Same names and props as lucide-react, and the library no longer depends on it.",
+      "Every existing component was rechecked. Custom controls now reset with their form and validate when required, asChild triggers work with children passed from server pages, nested dialogs close one at a time, and hydration mismatches in a handful of instruments are gone.",
+      "A new site: Mona Sans and Fragment Mono, a landing page you can play with, and component, block, template and docs pages rebuilt to match.",
+      "Every block and template was redrawn: fewer boxes, one dominant idea per section, and light only where it means something.",
+    ],
+  },
+  {
     version: "1.4",
     date: "2026-10-14",
     title: "Templates",

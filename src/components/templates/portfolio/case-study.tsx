@@ -1,13 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Cover } from "./covers";
 import type { Project } from "./data";
 import { useLights } from "./lights";
+import { display } from "./section-heading";
 
 export function CaseStudy({
   project,
@@ -31,8 +32,6 @@ export function CaseStudy({
   }, [project.slug]);
 
   const meta = [
-    ["Client", project.client],
-    ["Year", String(project.year)],
     ["Role", project.role],
     ["Team", project.team],
     ["Duration", project.duration],
@@ -42,10 +41,12 @@ export function CaseStudy({
   return (
     <div ref={topRef} className="flex flex-1 flex-col">
       <SheetHeader>
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">
-          Case study {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+        <p className="text-[14px] text-white/60">
+          {project.client}, {project.year}
+          <span className="text-white/30"> / </span>
+          case study {index + 1} of {total}
         </p>
-        <SheetTitle className="mt-3 text-[clamp(26px,4vw,34px)] font-medium leading-[1.08] tracking-[-0.03em] text-white">
+        <SheetTitle className={cn(display, "mt-3 text-white text-[clamp(30px,4.4vw,42px)] leading-[1.02]")}>
           {project.title}
         </SheetTitle>
         <SheetDescription className="mt-1 text-[15px] leading-relaxed text-white/60">{project.outcome}</SheetDescription>
@@ -53,10 +54,10 @@ export function CaseStudy({
 
       <Cover art={project.cover} lit={on} className="mt-7 aspect-[16/10] shrink-0 rounded-xl border border-white/[0.08]" />
 
-      <dl className="mt-7 grid grid-cols-2 gap-x-6 gap-y-4 border-b border-white/[0.07] pb-7 sm:grid-cols-3">
+      <dl className="mt-7 grid grid-cols-2 gap-x-6 gap-y-5 border-b border-white/[0.07] pb-7">
         {meta.map(([label, value]) => (
           <div key={label} className="min-w-0">
-            <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/55">{label}</dt>
+            <dt className="text-[13px] text-white/55">{label}</dt>
             <dd className="mt-1 text-sm leading-snug text-white/85">{value}</dd>
           </div>
         ))}
@@ -68,7 +69,8 @@ export function CaseStudy({
             <dt className="mt-1 text-[13px] leading-snug text-white/60">{stat.label}</dt>
             <dd
               className={cn(
-                "text-[clamp(22px,4vw,30px)] font-medium tabular-nums tracking-[-0.03em] transition-[color,text-shadow] duration-500",
+                display,
+                "text-[clamp(26px,4vw,36px)] leading-none transition-[color,text-shadow] duration-500",
                 on
                   ? "text-[color-mix(in_srgb,rgb(var(--neon))_70%,white)] [text-shadow:0_0_18px_rgb(var(--neon)/0.45)]"
                   : "text-white/90",
@@ -94,7 +96,7 @@ export function CaseStudy({
           <ol className="space-y-3">
             {project.work.map((step, i) => (
               <li key={step} className="flex gap-4">
-                <span className="mt-[3px] font-mono text-[11px] text-white/55">{String(i + 1).padStart(2, "0")}</span>
+                <span className="w-4 shrink-0 text-[15px] tabular-nums text-white/40">{i + 1}</span>
                 <span>{step}</span>
               </li>
             ))}

@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/tooltip";
 
@@ -23,7 +23,7 @@ export default function TooltipSides() {
             content={
               <span className="flex items-center gap-2">
                 {label}
-                <kbd className="font-sans text-white/45">{key}</kbd>
+                <kbd className="font-sans text-white/50">{key}</kbd>
               </span>
             }
           >

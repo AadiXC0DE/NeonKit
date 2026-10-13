@@ -84,7 +84,7 @@ export default function FileDropzoneDemo() {
           <h3 className="text-sm font-medium text-white/90">Launch assets</h3>
           <p className="text-xs text-white/55">Everything here ships with the Aurora press release.</p>
         </div>
-        <span className="shrink-0 pt-px font-mono text-[11px] tabular-nums text-white/45">
+        <span className="shrink-0 pt-px font-mono text-[11px] tabular-nums text-white/50">
           {done}/{files.length} uploaded
         </span>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -92,48 +92,57 @@ export default function MarketingNewsletter() {
       aria-labelledby="night-desk-title"
       // Change the color here; everything inside follows it.
       style={neonVars("pink")}
-      className="bg-[#05060a] px-4 py-16 text-white/90 sm:px-10 lg:py-24"
+      className="overflow-hidden bg-[#05060a] px-5 py-16 text-white/90 sm:px-10 lg:py-24"
     >
-      <div className="relative isolate mx-auto max-w-[1120px] overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.02]">
-        {/* The desk lamp: a short tube along the top edge and the cone it throws down the card */}
-        <div aria-hidden className="pointer-events-none absolute left-[6%] top-0 -z-10 h-[440px] w-[min(560px,88%)]">
-          <div className="absolute inset-0 blur-[10px]">
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--neon)/0.16),rgb(var(--neon)/0.045)_50%,transparent)] [clip-path:polygon(30%_0,70%_0,100%_100%,0_100%)]" />
+      <div className="relative isolate mx-auto max-w-[1180px]">
+        {/* The desk lamp: a short tube above the masthead and the cone it throws down the page */}
+        <div aria-hidden className="pointer-events-none absolute -top-16 left-[-4%] -z-10 h-[520px] w-[min(680px,100%)] sm:-top-16 lg:-top-24">
+          <div className="absolute inset-0 blur-[12px]">
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--neon)/0.18),rgb(var(--neon)/0.05)_50%,transparent)] [clip-path:polygon(32%_0,68%_0,100%_100%,0_100%)]" />
           </div>
-          <span className="absolute inset-x-[30%] top-0 h-[3px] rounded-b-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.8),0_0_40px_6px_rgb(var(--neon)/0.35)]" />
+          <span className="absolute inset-x-[32%] top-0 h-[3px] rounded-b-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.8),0_0_40px_6px_rgb(var(--neon)/0.35)]" />
         </div>
 
-        <div className="grid lg:grid-cols-[1.1fr_1fr]">
-          <div className="flex flex-col p-6 pt-12 sm:p-12">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Weekly since March 2023 · Thursdays, 21:00 CET</p>
-            <h2 id="night-desk-title" className="mt-5 text-[clamp(2.75rem,6vw,4.5rem)] font-semibold leading-[0.92] tracking-[-0.045em]">
-              The Night Desk
-            </h2>
-            <p className="mt-5 max-w-[42ch] text-[17px] leading-relaxed text-white/55">
-              Frontend craft, filed after hours. One essay a week on the details that make an interface feel right:
-              optical alignment, motion curves, focus states, the 4px decisions.
+        <div className="flex flex-col gap-6 border-b border-white/[0.08] pb-8 lg:flex-row lg:items-end lg:justify-between lg:pb-10">
+          <h2
+            id="night-desk-title"
+            className="text-[clamp(2.5rem,11vw,7.5rem)] font-[620] leading-[0.92] tracking-[-0.045em] [font-stretch:112%] sm:whitespace-nowrap"
+          >
+            The Night Desk
+          </h2>
+          <p className="max-w-[30ch] text-[15px] leading-[1.5] text-white/60 lg:mb-3 lg:max-w-[24ch] lg:shrink-0 lg:text-right">
+            <span className="text-white/90">No.&nbsp;{NEXT.number}, &ldquo;{NEXT.title}&rdquo;</span> lands{" "}
+            {NEXT.when}.
+          </p>
+        </div>
+
+        <div className="grid gap-14 pt-10 lg:grid-cols-12 lg:gap-10 lg:pt-12">
+          <div className="lg:col-span-5">
+            <p className="max-w-[42ch] text-[17px] leading-[1.6] text-white/60">
+              <span className="text-white/90">Frontend craft, filed after hours.</span> One essay a week on the details that
+              make an interface feel right: optical alignment, motion curves, focus states, the 4px decisions.
             </p>
 
-            <dl className="mt-8 grid max-w-[400px] grid-cols-3 gap-4">
+            <dl className="mt-9 grid max-w-[400px] grid-cols-3 gap-4">
               {STATS.map((s) => (
-                <div key={s.label} className="grid gap-1">
+                <div key={s.label} className="grid gap-1.5">
                   <dt className="sr-only">{s.label}</dt>
-                  <dd className="text-[28px] font-semibold leading-none tracking-[-0.03em] tabular-nums">{s.value}</dd>
-                  <dd className="font-mono text-[11px] uppercase tracking-[0.12em] text-white/55">{s.label}</dd>
+                  <dd className="text-[30px] font-[620] leading-none tracking-[-0.04em] tabular-nums [font-stretch:112%]">{s.value}</dd>
+                  <dd className="text-[13px] text-white/55">{s.label}</dd>
                 </div>
               ))}
             </dl>
 
-            <div className="mt-auto pt-10">
+            <div className="mt-10">
               {status === "done" ? (
                 <div
                   ref={doneRef}
                   tabIndex={-1}
                   aria-live="polite"
-                  className="rounded-2xl border border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.05)] p-5 outline-none"
+                  className="border-l-2 border-[rgb(var(--neon))] pl-5 outline-none"
                 >
-                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[rgb(var(--neon))]">You&apos;re on the desk</p>
-                  <p className="mt-2 text-[15px] leading-relaxed text-white/70">
+                  <p className="text-[20px] font-[620] tracking-[-0.03em] text-white [font-stretch:112%]">You&apos;re on the desk.</p>
+                  <p className="mt-2 text-[15px] leading-relaxed text-white/65">
                     Confirm from the email we just sent to <span className="text-white/90 [overflow-wrap:anywhere]">{email}</span>. No.&nbsp;{NEXT.number},
                     &ldquo;{NEXT.title}&rdquo;, lands {NEXT.when}.
                   </p>
@@ -175,10 +184,9 @@ export default function MarketingNewsletter() {
               )}
             </div>
           </div>
-
-          <div className="border-t border-white/[0.06] bg-black/20 p-6 sm:p-12 lg:border-l lg:border-t-0">
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">From the archive</h3>
-            <ul className="mt-4">
+          <div className="lg:col-span-6 lg:col-start-7">
+            <h3 className="text-[15px] font-medium text-white/90">From the archive</h3>
+            <ul className="mt-3 border-t border-white/[0.08]">
               {ISSUES.map((issue) => {
                 const expanded = open === issue.number;
                 return (
@@ -193,17 +201,17 @@ export default function MarketingNewsletter() {
                       <span className={cn("font-mono text-xs tabular-nums transition-colors", expanded ? "text-[rgb(var(--neon))]" : "text-white/55")}>
                         No.{issue.number}
                       </span>
-                      <span className={cn("text-[15px] leading-snug transition-colors", expanded ? "text-white/95" : "text-white/70 group-hover:text-white/90")}>
+                      <span className={cn("text-[16px] leading-snug transition-colors", expanded ? "text-white" : "text-white/70 group-hover:text-white/90")}>
                         {issue.title}
                       </span>
-                      <span className="font-mono text-[11px] text-white/55">{issue.minutes} min</span>
+                      <span className="text-[13px] tabular-nums text-white/55">{issue.minutes} min</span>
                     </button>
                     <div
                       id={`issue-${issue.number}`}
                       hidden={!expanded}
                       className="pb-5 pl-[calc(3.25rem+0.75rem)]"
                     >
-                      <p className="text-sm leading-relaxed text-white/55">{issue.excerpt}</p>
+                      <p className="max-w-[56ch] text-[15px] leading-[1.6] text-white/60">{issue.excerpt}</p>
                       <a
                         href={`#issue-${issue.number}-full`}
                         className="mt-1 inline-flex items-center gap-1 rounded-md py-2 text-[13px] text-[rgb(var(--neon))] outline-none hover:[text-shadow:0_0_12px_rgb(var(--neon)/0.6)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, ChartColumn, Filter, LayoutGrid, Repeat, Rocket, Zap, type LucideIcon } from "lucide-react";
+import { ArrowRight, ChartColumn, Filter, LayoutGrid, Repeat, Rocket, Zap, type LucideIcon } from "@/components/ui/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlowChart } from "@/components/ui/glow-chart";
@@ -90,9 +90,9 @@ function Dashboard() {
             </li>
           ))}
         </ul>
-        <p className="mt-8 flex items-center gap-2 px-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
+        <p className="mt-8 flex items-center gap-2 px-2 text-[12px] text-white/55">
           <span className="size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />
-          312 online now
+          <span className="font-mono tabular-nums text-white/80">312</span> online now
         </p>
       </aside>
 
@@ -101,7 +101,7 @@ function Dashboard() {
           <p className="text-sm font-medium text-white/85">
             Overview <span className="text-white/55">· last 30 days</span>
           </p>
-          <span className="hidden rounded-md border border-white/10 px-2 py-1 font-mono text-[10px] text-white/55 sm:block">Sep 13 – Oct 12</span>
+          <span className="hidden text-[12px] tabular-nums text-white/55 sm:block">Sep 13 – Oct 12</span>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-4">
@@ -148,8 +148,8 @@ function Dashboard() {
         <table className="mt-4 w-full text-[13px]">
           <caption className="sr-only">Top events this month</caption>
           <thead>
-            <tr className="border-b border-white/[0.06] text-left font-mono text-[10px] uppercase tracking-[0.14em] text-white/55">
-              <th scope="col" className="py-2 font-normal">Event</th>
+            <tr className="border-b border-white/[0.06] text-left text-[12px] text-white/55">
+              <th scope="col" className="py-2 font-normal">Top events</th>
               <th scope="col" className="hidden py-2 text-right font-normal sm:table-cell">Users</th>
               <th scope="col" className="py-2 text-right font-normal">Count</th>
             </tr>
@@ -184,46 +184,49 @@ export default function HeroProduct() {
       aria-labelledby="tally-hero-title"
       // Change the color here; everything inside follows it.
       style={neonVars("violet")}
-      className="relative isolate overflow-hidden bg-[#05060a] px-4 pt-20 text-white sm:px-8 sm:pt-28"
+      className="relative isolate overflow-hidden bg-[#05060a] px-5 pt-16 text-white sm:px-8 sm:pt-24"
     >
-      <div aria-hidden className="absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(ellipse_50%_70%_at_50%_0%,rgb(var(--neon)/0.12),transparent_70%)]" />
+      <div aria-hidden className="absolute -left-[10%] top-0 -z-10 h-[520px] w-[70%] bg-[radial-gradient(ellipse_60%_60%_at_30%_10%,rgb(var(--neon)/0.1),transparent_70%)]" />
 
-      <div className="mx-auto max-w-3xl text-center">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Product analytics · no cookies</p>
+      <div className="mx-auto max-w-6xl">
         <h1
           id="tally-hero-title"
-          className="mt-5 [text-wrap:balance] text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.045em] text-white/95"
+          className="max-w-[15ch] text-[clamp(2.55rem,7.6vw,6.5rem)] [text-wrap:balance] font-[620] leading-[0.94] tracking-[-0.045em] text-white/95 [font-stretch:112%]"
         >
           Count what people actually do.
         </h1>
-        <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/55 sm:text-lg">
-          Tally turns the events you already log into funnels, retention curves and a straight answer to &ldquo;did that
-          release help?&rdquo; One script tag, no consent banner.
-        </p>
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Button asChild variant="solid" size="lg" className="shadow-[0_0_0_1px_rgb(var(--neon)),inset_0_1px_0_rgb(255_255_255/0.45)]">
-            <a href="#start">
-              Start counting <ArrowRight />
-            </a>
-          </Button>
-          <Button asChild variant="ghost" size="lg">
-            <a href="#demo">Open the live demo</a>
-          </Button>
-        </div>
-        <p className="mt-5 font-mono text-[11px] text-white/55">Free to 100k events a month · $0.09 per 1k after</p>
-      </div>
 
-      {/* The screenshot, laid back in perspective, with its light pooling on the floor beneath. */}
-      <div className="relative mx-auto mt-16 max-w-5xl sm:mt-20 [perspective:2200px]">
-        <div aria-hidden className="absolute inset-x-[8%] top-[18%] -z-10 h-[70%] rounded-[50%] bg-[rgb(var(--neon)/0.28)] blur-[90px]" />
-        <div
-          className="origin-top [mask-image:linear-gradient(to_bottom,#000_62%,transparent_98%)] [transform:rotateX(14deg)]"
-        >
-          <div className="rounded-[22px] border border-white/[0.08] bg-white/[0.02] p-1.5 shadow-[0_0_0_1px_rgb(0_0_0/0.6),0_-1px_0_rgb(255_255_255/0.06),0_40px_120px_-30px_rgb(var(--neon)/0.45)] sm:p-2">
-            <Dashboard />
+        <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:items-end">
+          <p className="max-w-[46ch] text-[17px] leading-[1.6] text-white/60 lg:col-span-6">
+            <span className="text-white/90">Tally turns the events you already log into funnels, retention curves and a straight answer to &ldquo;did that release help?&rdquo;</span>{" "}
+            One script tag, no consent banner.
+          </p>
+          <div className="lg:col-span-5 lg:col-start-8">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-3">
+              <Button asChild variant="solid" size="lg">
+                <a href="#start">
+                  Start counting <ArrowRight />
+                </a>
+              </Button>
+              <Button asChild variant="ghost" size="lg">
+                <a href="#demo">Live demo</a>
+              </Button>
+            </div>
+            <p className="mt-4 text-[13px] text-white/55">
+              Free to 100k events a month, then <span className="text-white/80">$0.09</span> per thousand.
+            </p>
           </div>
         </div>
-        <div aria-hidden className="absolute inset-x-[20%] -top-px h-px bg-[linear-gradient(90deg,transparent,color-mix(in_srgb,rgb(var(--neon))_40%,white),transparent)] shadow-[0_0_12px_rgb(var(--neon)/0.8)]" />
+
+        {/* The real screen, flat and at size, running off the right edge; its light pools under it. */}
+        <div className="relative mt-16 sm:mt-20">
+          <div aria-hidden className="absolute inset-x-[10%] top-[10%] -z-10 h-[60%] rounded-[50%] bg-[rgb(var(--neon)/0.16)] blur-[100px]" />
+          <div className="[mask-image:linear-gradient(to_bottom,#000_70%,transparent_99%)]">
+            <div className="rounded-[22px] border border-white/[0.08] bg-white/[0.02] p-1.5 shadow-[0_0_0_1px_rgb(0_0_0/0.6),0_40px_120px_-40px_rgb(var(--neon)/0.35)] sm:p-2">
+              <Dashboard />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

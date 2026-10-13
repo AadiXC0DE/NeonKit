@@ -1,85 +1,57 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import { blocks, currentVersion, registry, templates } from "@/registry";
 import { LogoMark } from "./logo";
 
-const columns = [
-  {
-    title: "Library",
-    links: [
-      { label: "Components", href: "/components" },
-      { label: "Installation", href: "/docs/installation" },
-      { label: "Theming", href: "/docs/theming" },
-      { label: "Use with AI", href: "/docs/ai" },
-      { label: "Changelog", href: "/changelog" },
-    ],
-  },
-  {
-    title: "Connect",
-    links: [
-      { label: "GitHub", href: siteConfig.github },
-      { label: "X / Twitter", href: siteConfig.author.x },
-      { label: "Request a component", href: "/request" },
-      { label: "Report a bug", href: `${siteConfig.issues}/new?template=bug-report.yml` },
-    ],
-  },
-  {
-    title: "Support",
-    links: [
-      { label: "Sponsor", href: "/sponsor" },
-      { label: "GitHub Sponsors", href: siteConfig.sponsor.github },
-      { label: "Buy me a coffee", href: siteConfig.sponsor.coffee },
-      { label: "MIT license", href: `${siteConfig.github}/blob/main/LICENSE` },
-    ],
-  },
-];
+const link =
+  "text-fg underline decoration-white/20 decoration-1 underline-offset-[0.18em] transition-[text-decoration-color] duration-200 hover:decoration-[rgb(var(--neon-accent))]";
 
+function Out({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a href={href} target="_blank" rel="noreferrer" className={link}>
+      {children}
+    </a>
+  );
+}
+
+function In({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href} className={link}>
+      {children}
+    </Link>
+  );
+}
+
+/** A colophon rather than a link farm: the links live in two sentences. */
 export function SiteFooter() {
   return (
     <footer className="border-t border-line">
-      <div className="mx-auto grid max-w-[88rem] gap-12 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_repeat(3,1fr)]">
-        <div className="max-w-xs">
-          <Link href="/" className="inline-flex items-center gap-2.5 text-fg">
+      <div className="mx-auto max-w-[88rem] px-4 pb-10 pt-20 sm:px-6 sm:pt-28">
+        <div className="max-w-[62rem] space-y-6 text-[clamp(1.3rem,2.3vw,2.1rem)] leading-[1.38] tracking-[-0.02em] text-muted">
+          <p>
+            NeonKit is <In href="/components">{registry.length} components</In>,{" "}
+            <In href="/blocks">{blocks.length} blocks</In> and <In href="/templates">{templates.length} templates</In> for
+            React and Tailwind, made by <Out href={siteConfig.author.site}>{siteConfig.author.name}</Out> and released
+            under the <Out href={`${siteConfig.github}/blob/main/LICENSE`}>MIT license</Out>. Start with the{" "}
+            <In href="/docs">docs</In>, or see what changed in the <In href="/changelog">changelog</In>.
+          </p>
+          <p>
+            Found a bug? <Out href={`${siteConfig.issues}/new?template=bug-report.yml`}>Open an issue</Out>. Missing
+            something? <In href="/request">Request a component</In>. If it saved you a week,{" "}
+            <In href="/sponsor">sponsor it</In> or <Out href={siteConfig.sponsor.coffee}>buy a coffee</Out>. Follow along
+            on <Out href={siteConfig.author.x}>X</Out> and <Out href={siteConfig.github}>GitHub</Out>.
+          </p>
+        </div>
+
+        <div className="mt-20 flex flex-col gap-4 border-t border-line pt-6 text-[13.5px] text-muted sm:mt-28 sm:flex-row sm:items-center sm:justify-between">
+          <Link href="/" aria-label="NeonKit home" className="inline-flex w-fit items-center gap-2.5 rounded-md text-fg">
             <LogoMark className="size-5" />
             <span className="font-semibold tracking-[-0.02em]">NeonKit</span>
           </Link>
-          <p className="mt-4 text-[14px] leading-relaxed text-muted">
-            Neon UI components for React and Tailwind. Free and open source.
+          <p>Set in Mona Sans and Fragment Mono. Signs in Tilt Neon.</p>
+          <p>
+            © {new Date().getFullYear()} · <span className="font-mono text-[12.5px]">v{currentVersion}</span>
           </p>
-          <p className="mt-6 text-[13px] text-dim">
-            Built by{" "}
-            <a href={siteConfig.author.x} target="_blank" rel="noreferrer" className="text-muted transition-colors hover:text-fg">
-              @{siteConfig.author.handle}
-            </a>
-          </p>
-        </div>
-        {columns.map((column) => (
-          <nav key={column.title} aria-label={column.title}>
-            <h2 className="mb-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-dim">{column.title}</h2>
-            <ul className="space-y-2.5 text-[14px]">
-              {column.links.map((link) => {
-                const external = link.href.startsWith("http");
-                return (
-                  <li key={link.label}>
-                    {external ? (
-                      <a href={link.href} target="_blank" rel="noreferrer" className="text-muted transition-colors hover:text-fg">
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link href={link.href} className="text-muted transition-colors hover:text-fg">
-                        {link.label}
-                      </Link>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
-        ))}
-      </div>
-      <div className="border-t border-line">
-        <div className="mx-auto flex max-w-[88rem] flex-wrap items-center justify-between gap-3 px-4 py-5 font-mono text-[11px] uppercase tracking-[0.14em] text-dim sm:px-6">
-          <span>© {new Date().getFullYear()} NeonKit · MIT</span>
-          <span>Calm at rest. Lit when it matters.</span>
         </div>
       </div>
     </footer>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
@@ -147,7 +147,7 @@ function Cover({ art, fig, bright = false, className }: { art: Art; fig: number;
               <Lit>
                 <rect x={70 + 4 * 37 + 4} y={132} width={103} height={14} rx={7} />
               </Lit>
-              <text x={70} y={42} fill="rgb(255 255 255 / 0.35)" stroke="none" fontSize={10} fontFamily="ui-monospace, monospace">WK 39 · PRIMARY</text>
+              <text x={70} y={42} fill="rgb(255 255 255 / 0.35)" stroke="none" fontSize={10} fontFamily="ui-monospace, monospace">wk 39, primary</text>
             </g>
           )}
           {art === "rack" && (
@@ -198,8 +198,8 @@ function Cover({ art, fig, bright = false, className }: { art: Art; fig: number;
             </g>
           )}
         </svg>
-        <span aria-hidden className="absolute bottom-3 left-4 hidden font-mono text-[10px] uppercase tracking-[0.16em] text-white/35 sm:block">
-          Fig. {fig}
+        <span aria-hidden className="absolute bottom-3 left-4 hidden font-mono text-[11px] text-white/35 sm:block">
+          fig. {fig}
         </span>
       </div>
     </Bright.Provider>
@@ -208,9 +208,8 @@ function Cover({ art, fig, bright = false, className }: { art: Art; fig: number;
 
 function Meta({ post }: { post: Post }) {
   return (
-    <p className="flex flex-wrap items-center gap-x-2.5 font-mono text-[10px] uppercase tracking-[0.16em]">
+    <p className="flex flex-wrap items-center gap-x-2 text-[13px]">
       <span className="text-[rgb(var(--neon))]">{post.category}</span>
-      <span aria-hidden className="text-white/20">/</span>
       <span className="text-white/55">{post.minutes} min read</span>
     </p>
   );
@@ -249,40 +248,42 @@ export default function MarketingBlog() {
     >
       <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col gap-8 border-b border-white/[0.08] pb-8 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">
-              Field Manual · Engineering notes, vol. 6
-            </p>
-            <h2
-              id="field-manual-title"
-              className="mt-5 max-w-2xl text-[clamp(2.4rem,5.2vw,4rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
-            >
-              Written by the people who get paged.
-            </h2>
-          </div>
-          <a
-            href="#"
-            className="inline-flex w-fit items-center gap-1.5 rounded-md text-sm text-white/55 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] lg:pb-2"
+          <h2
+            id="field-manual-title"
+            className="text-[clamp(2.1rem,5.6vw,4.75rem)] font-[620] leading-[0.96] tracking-[-0.045em] text-white [font-stretch:112%]"
           >
-            Subscribe by RSS <ArrowUpRight aria-hidden className="size-4" />
-          </a>
+            Written by the people
+            <br />
+            <span className="text-white/50">who get paged.</span>
+          </h2>
+          <div className="flex flex-col gap-2 text-[14px] lg:items-end lg:pb-2 lg:text-right">
+            <p className="text-white/60">
+              <span className="text-white/90">Field Manual</span>, engineering notes, vol. 6
+            </p>
+            <a
+              href="#"
+              className="inline-flex w-fit items-center gap-1.5 rounded-md text-white/55 outline-none transition-colors hover:text-[rgb(var(--neon))] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+            >
+              Subscribe by RSS <ArrowUpRight aria-hidden className="size-4" />
+            </a>
+          </div>
         </div>
 
         <article className="mt-10">
-          <a href="#" className={cn(linkClass, "grid overflow-hidden rounded-[20px] border border-white/10 bg-white/[0.02] lg:grid-cols-12")}>
-            <Cover art={FEATURED.art} fig={FEATURED.fig} bright className="aspect-[16/10] border-b border-white/[0.06] lg:col-span-7 lg:aspect-auto lg:min-h-[400px] lg:border-b-0 lg:border-r" />
-            <div className="flex flex-col p-6 sm:p-9 lg:col-span-5">
-              <div className="flex items-center justify-between gap-4">
-                <Meta post={FEATURED} />
-                <span className="rounded-full border border-[rgb(var(--neon)/0.4)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-[rgb(var(--neon))]">
-                  Featured
-                </span>
-              </div>
-              <h3 className="mt-5 text-[clamp(1.6rem,2.6vw,2.25rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-white transition-colors group-hover/post:text-[color-mix(in_srgb,rgb(var(--neon))_25%,white)]">
+          <a href="#" className={cn(linkClass, "grid gap-8 rounded-[20px] lg:grid-cols-12 lg:gap-10")}>
+            <Cover
+              art={FEATURED.art}
+              fig={FEATURED.fig}
+              bright
+              className="aspect-[16/10] rounded-[20px] border border-white/10 transition-[border-color] duration-300 group-hover/post:border-[rgb(var(--neon)/0.35)] lg:col-span-7 lg:aspect-auto lg:min-h-[440px]"
+            />
+            <div className="flex flex-col lg:col-span-5 lg:py-2">
+              <Meta post={FEATURED} />
+              <h3 className="mt-4 text-[clamp(1.75rem,2.5vw,2.25rem)] font-[620] leading-[1.04] tracking-[-0.035em] text-white transition-colors [font-stretch:108%] group-hover/post:text-[color-mix(in_srgb,rgb(var(--neon))_25%,white)]">
                 {FEATURED.title}
               </h3>
-              <p className="mt-4 text-[15px] leading-relaxed text-white/55">{FEATURED.dek}</p>
-              <div className="mt-8 flex items-end justify-between gap-4 lg:mt-auto lg:pt-10">
+              <p className="mt-5 text-[16px] leading-[1.6] text-white/60">{FEATURED.dek}</p>
+              <div className="mt-8 flex items-end justify-between gap-4 border-t border-white/[0.08] pt-5 lg:mt-auto">
                 <Byline post={FEATURED} size="md" />
                 <ArrowRight aria-hidden className="mb-2 size-5 shrink-0 text-white/35 transition-[color,transform] duration-200 group-hover/post:translate-x-1 group-hover/post:text-[rgb(var(--neon))]" />
               </div>
@@ -291,7 +292,7 @@ export default function MarketingBlog() {
         </article>
 
         <div className="mt-16 flex flex-wrap items-center justify-between gap-4">
-          <h3 className="text-lg font-medium tracking-[-0.01em] text-white/90">Recent</h3>
+          <h3 className="text-[22px] font-[620] tracking-[-0.03em] text-white/90 [font-stretch:108%]">Recent</h3>
           <div className="-mx-6 max-w-[calc(100%+3rem)] overflow-x-auto overscroll-x-contain px-6 sm:mx-0 sm:max-w-full sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <ToggleGroup aria-label="Filter by category" size="sm" value={category} onValueChange={(value) => setCategory(value as typeof category)}>
               <ToggleGroupItem value="all" className={FILTER_ITEM}>All</ToggleGroupItem>
@@ -316,7 +317,7 @@ export default function MarketingBlog() {
                   />
                   <div className="min-w-0 sm:mt-5">
                     <Meta post={post} />
-                    <h4 className="mt-2 text-[17px] sm:mt-3 sm:text-[19px] font-semibold leading-snug tracking-[-0.02em] text-white/90 transition-colors group-hover/post:text-white">
+                    <h4 className="mt-2 text-[17px] font-semibold leading-snug tracking-[-0.02em] text-white/90 transition-colors group-hover/post:text-white sm:mt-2.5 sm:text-[19px]">
                       {post.title}
                     </h4>
                     <div className="mt-3 sm:mt-5">

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { PlaneTakeoff } from "lucide-react";
+import { PlaneTakeoff } from "@/components/ui/icons";
 import { SplitFlap, SplitFlapBoard, type SplitFlapColumn, type SplitFlapRow } from "@/components/ui/split-flap";
 
 // Minutes after 22:00, so the night can run past midnight.
@@ -99,7 +99,7 @@ export default function SplitFlapDemo() {
             <span className="text-[13px] font-semibold uppercase tracking-[0.28em] sm:text-[15px]">Departures</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden font-mono text-[10px] uppercase tracking-[0.16em] text-white/45 sm:inline">Local time</span>
+            <span className="hidden text-xs text-white/50 sm:inline">Local time</span>
             <SplitFlap value={clock(now)} charset="numeric" stagger={40} />
           </div>
         </>

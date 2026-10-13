@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, Check, Download, RotateCcw, Upload } from "lucide-react";
+import { ArrowLeft, Check, Download, RotateCcw, Upload } from "@/components/ui/icons";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
@@ -81,22 +81,32 @@ const INVOICES = [
 
 function Section({ id, title, description, children, className }: { id: string; title: string; description: string; children: React.ReactNode; className?: string }) {
   return (
-    <section aria-labelledby={id} className={cn("grid gap-5 border-t border-white/[0.06] py-8 first:border-t-0 first:pt-2 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10", className)}>
+    <section aria-labelledby={id} className={cn("grid gap-6 border-t border-white/[0.07] py-9 first:border-t-0 first:pt-1 md:grid-cols-[200px_minmax(0,1fr)] md:gap-10 lg:grid-cols-[190px_minmax(0,1fr)] xl:grid-cols-[220px_minmax(0,1fr)] xl:gap-14", className)}>
       <div>
-        <h2 id={id} className="text-[15px] font-semibold tracking-[-0.01em] text-white/90">{title}</h2>
-        <p className="mt-1.5 text-[13px] leading-5 text-white/60">{description}</p>
+        <h2 id={id} className="text-[15px] font-[620] tracking-[-0.015em] text-white/90 [font-stretch:112%]">{title}</h2>
+        <p className="mt-1.5 max-w-[34ch] text-[13px] leading-5 text-white/55">{description}</p>
       </div>
       <div className="min-w-0">{children}</div>
     </section>
   );
 }
 
+// Fields sit straight on the page; a box around every group is noise.
 function Panel({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6", className)}>{children}</div>;
+  return <div className={cn("max-w-[600px]", className)}>{children}</div>;
 }
+
+const WIDE = "(min-width: 1024px)";
+const subscribeWide = (onChange: () => void) => {
+  const media = window.matchMedia(WIDE);
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+};
 
 export default function AppSettings() {
   const [tab, setTab] = React.useState("profile");
+  // Tabs run down the side on wide screens and across the top on narrow ones.
+  const wide = React.useSyncExternalStore(subscribeWide, () => window.matchMedia(WIDE).matches, () => false);
   const [saved, setSaved] = React.useState<Settings>(SAVED);
   const [draft, setDraft] = React.useState<Settings>(SAVED);
   const [errors, setErrors] = React.useState<Partial<Record<"name" | "email" | "slug" | "billingEmail" | "plan", string>>>({});
@@ -196,7 +206,7 @@ export default function AppSettings() {
           <path d="M8 9.5 14 19l6-9.5" fill="none" stroke="rgb(var(--neon))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         <nav aria-label="Breadcrumb" className="min-w-0 truncate text-sm">
-          <a href="#overview" className="py-2 text-white/60 outline-none hover:text-white/85 focus-visible:text-white">Fernhill</a>
+          <a href="#overview" className="py-2 text-white/60 underline decoration-white/20 underline-offset-4 outline-none hover:text-white/85 hover:decoration-white/50 focus-visible:text-white">Fernhill</a>
           <span aria-hidden className="mx-2 text-white/20">/</span>
           <span aria-current="page" className="text-white/85">Settings</span>
         </nav>
@@ -206,13 +216,15 @@ export default function AppSettings() {
         <Avatar alt={saved.name} src={photo} size="sm" className="ml-auto sm:ml-0" />
       </header>
 
-      <form ref={formRef} onSubmit={save} noValidate className="mx-auto w-full max-w-[1000px] px-4 pb-10 pt-10 sm:px-6 lg:pt-14">
-        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55">Workspace · {saved.workspace}</p>
-        <h1 className="mt-2 text-[34px] font-semibold leading-none tracking-[-0.04em] text-white sm:text-[44px]">Settings</h1>
+      <form ref={formRef} onSubmit={save} noValidate className="mx-auto w-full max-w-[1180px] px-4 pb-10 pt-9 sm:px-6 lg:px-10 lg:pt-14">
+        <h1 className="text-[28px] font-[620] leading-none tracking-[-0.03em] text-white [font-stretch:112%] sm:text-[32px]">Settings</h1>
+        <p className="mt-2.5 text-[13px] text-white/55">
+          {saved.workspace} · {currentPlan.name} plan, <span className="tabular-nums">8 of 10</span> seats used
+        </p>
 
-        <Tabs value={tab} onValueChange={setTab} variant="underline" className="mt-8 gap-6">
-          <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0">
-            <TabsList className="min-w-max">
+        <Tabs value={tab} onValueChange={setTab} variant="underline" orientation={wide ? "vertical" : "horizontal"} className="mt-8 gap-6 lg:mt-12 lg:gap-14">
+          <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0 lg:sticky lg:top-6 lg:w-[160px] lg:shrink-0 lg:overflow-visible">
+            <TabsList className="min-w-max lg:min-w-0">
               <TabsTrigger value="profile">{tabLabel("profile", "Profile")}</TabsTrigger>
               <TabsTrigger value="notifications">{tabLabel("notifications", "Notifications")}</TabsTrigger>
               <TabsTrigger value="billing">{tabLabel("billing", "Billing")}</TabsTrigger>
@@ -276,7 +288,7 @@ export default function AppSettings() {
 
           <TabsContent value="notifications" forceMount>
             <Section id="s-email" title="Email alerts" description="Sent to the address on your profile. Teammates choose their own.">
-              <Panel className="divide-y divide-white/[0.06] py-1 sm:py-1">
+              <Panel className="-mt-4 divide-y divide-white/[0.06]">
                 {NOTIFICATIONS.map((n) => (
                   <Field key={n.key} orientation="horizontal" label={n.label} description={n.description} className="py-4">
                     <Switch checked={draft.notify[n.key]} onCheckedChange={(on) => set("notify", { ...draft.notify, [n.key]: on })} />
@@ -293,10 +305,10 @@ export default function AppSettings() {
 
           <TabsContent value="billing" forceMount>
             <Section id="s-plan" title="Plan" description={`You're on ${currentPlan.name}. Changes are prorated to the day.`}>
-              <RadioGroup variant="card" orientation="horizontal" aria-label="Plan" value={draft.plan} onValueChange={(v) => set("plan", v)} className="grid gap-3 sm:grid-cols-3">
+              <RadioGroup variant="card" orientation="horizontal" aria-label="Plan" value={draft.plan} onValueChange={(v) => set("plan", v)} className="grid max-w-[600px] gap-3 sm:grid-cols-3">
                 {PLANS.map((p) => (
                   <RadioGroupItem key={p.value} value={p.value} label={p.name}>
-                    <span className="mt-3 block text-2xl font-semibold tracking-[-0.03em] text-white">
+                    <span className="mt-3 block text-2xl font-[620] tracking-[-0.03em] text-white [font-stretch:112%]">
                       {p.price ? `$${p.price}` : "Free"}
                       {p.price > 0 && <span className="text-[13px] font-normal tracking-normal text-white/60"> / seat / mo</span>}
                     </span>
@@ -304,8 +316,8 @@ export default function AppSettings() {
                   </RadioGroupItem>
                 ))}
               </RadioGroup>
-              {errors.plan && <p className="mt-3 text-xs text-[#ff4d5e]">{errors.plan}</p>}
-              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.06] px-4 py-3 text-[13px]">
+              {errors.plan && <p className="mt-3 max-w-[600px] text-xs text-[#ff4d5e]">{errors.plan}</p>}
+              <div className="mt-5 flex max-w-[600px] flex-wrap items-center justify-between gap-3 border-t border-white/[0.07] pt-4 text-[13px]">
                 <span className="text-white/55">
                   8 seats × ${plan.price} = <span className="font-mono text-white/90">${(plan.price * 8).toLocaleString("en-US")}.00</span> / month
                 </span>
@@ -319,7 +331,7 @@ export default function AppSettings() {
                   {INVOICES.map((inv) => (
                     <li key={inv.id} className="flex items-center gap-3 py-3 text-[13px]">
                       <span className="w-28 shrink-0 text-white/80">{inv.date}</span>
-                      <span className="hidden flex-1 font-mono text-xs text-white/60 sm:block">{inv.id}</span>
+                      <span className="hidden flex-1 font-mono text-xs text-white/55 sm:block">{inv.id}</span>
                       <span className="ml-auto font-mono text-white/80 sm:ml-0">{inv.amount}</span>
                       <Button type="button" size="sm" variant="ghost" aria-label={`Download invoice ${inv.id}`} className="size-8 px-0">
                         <Download />
@@ -333,7 +345,7 @@ export default function AppSettings() {
 
           <TabsContent value="danger" forceMount>
             <Section id="s-danger" title="Delete workspace" description="Removes every report, forecast and teammate. Billing stops at the end of the day.">
-              <div className="overflow-hidden rounded-2xl border border-[rgb(255_77_94/0.28)] bg-[rgb(255_77_94/0.03)]">
+              <div className="max-w-[600px] overflow-hidden rounded-2xl border border-[rgb(255_77_94/0.28)] bg-[rgb(255_77_94/0.03)]">
                 {deleted ? (
                   <div role="status" className="flex flex-wrap items-center justify-between gap-4 p-5 sm:p-6">
                     <div>
@@ -347,10 +359,10 @@ export default function AppSettings() {
                 ) : (
                   <>
                     <div className="grid gap-4 p-5 sm:p-6">
-                      <ul className="grid gap-1.5 text-[13px] text-white/60">
-                        <li>· 1,348 accounts and 26 months of MRR history</li>
-                        <li>· 14 saved reports, 3 forecasts, 8 teammates</li>
-                      </ul>
+                      <p className="text-[13px] leading-5 text-white/65">
+                        That&apos;s <span className="tabular-nums text-white/90">1,348</span> accounts, 26 months of MRR history,
+                        14 saved reports, 3 forecasts and 8 teammates.
+                      </p>
                       <Input
                         color="red"
                         label={<>Type <span className="font-mono text-white">{saved.slug}</span> to confirm</>}

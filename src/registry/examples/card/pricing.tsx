@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -42,7 +42,7 @@ export default function CardPricing() {
           <CardContent>
             <p className="flex items-baseline gap-1.5">
               <span className="text-4xl font-semibold tabular-nums tracking-tight text-white">{plan.price}</span>
-              <span className="text-sm text-white/45">{plan.period}</span>
+              <span className="text-sm text-white/50">{plan.period}</span>
             </p>
             <ul className="mt-6 grid gap-2.5 text-sm text-white/70">
               {plan.features.map((feature) => (

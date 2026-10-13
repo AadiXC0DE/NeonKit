@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { CodeBlock } from "@/components/site/code-block";
 import { CommandBlock } from "@/components/site/install-tabs";
 import { JsonLd } from "@/components/site/json-ld";
 import { PageShell } from "@/components/site/page-shell";
-import { PagerLinks } from "@/components/site/prose";
+import { InlineCode, PageHeader, PagerLinks, Trail, series, textLink } from "@/components/site/prose";
 import { registryUrl, siteConfig } from "@/config/site";
 import { runCommand } from "@/lib/commands";
 import { readSource } from "@/lib/highlight";
@@ -99,122 +100,112 @@ export default async function TemplatePage({ params }: Props) {
   return (
     <PageShell>
       <JsonLd data={structuredData} />
-      <header className="mb-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-3xl">
-          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
-            <Link href="/templates" className="transition-colors hover:text-muted">
-              Templates
-            </Link>
-            <span className="mx-2 text-white/15">/</span>
-            {template.routes.length} {template.routes.length === 1 ? "page" : "pages"}
-            {isNew(template) && <span className="ml-3 text-[rgb(var(--neon-accent))]">new</span>}
-          </p>
-          <h1 className="text-balance text-[clamp(2.25rem,5vw,3.5rem)] font-semibold leading-[1.02] tracking-[-0.04em] text-fg">
-            {template.name}
-          </h1>
-          <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-muted">{template.description}</p>
-        </div>
-        <a
-          href={templatePreviewPath(slug)}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex h-11 shrink-0 items-center gap-2 self-start rounded-lg border border-[rgb(var(--neon-accent)/0.5)] bg-[rgb(var(--neon-accent)/0.1)] px-5 text-[14.5px] text-fg shadow-[0_0_24px_-6px_rgb(var(--neon-accent)/0.5)] transition-[background-color,box-shadow] hover:bg-[rgb(var(--neon-accent)/0.16)] hover:shadow-[0_0_32px_-4px_rgb(var(--neon-accent)/0.6)] lg:self-auto"
-        >
-          Open live preview <ArrowUpRight className="size-4" />
-        </a>
-      </header>
+      <PageHeader
+        meta={<Trail items={[{ title: "Templates", href: "/templates" }, { title: template.name }]} />}
+        title={template.name}
+        action={
+          <Button asChild variant="solid" size="lg" className="shrink-0">
+            <a href={templatePreviewPath(slug)} target="_blank" rel="noreferrer">
+              Open the live preview <ArrowUpRight />
+            </a>
+          </Button>
+        }
+        className="mb-14"
+      >
+        <p>{template.description}</p>
+        <p className="mt-4 text-[14.5px] leading-[1.6]">
+          {isNew(template) && <span className="mr-2 text-[rgb(var(--neon-accent))]">New in {template.addedIn}.</span>}
+          {template.routes.length === 1 ? "One page" : `${template.routes.length} pages`}, {uses.length} components,{" "}
+          {targets.length} files.
+        </p>
+      </PageHeader>
 
       <section aria-labelledby="pages">
         <h2 id="pages" className="sr-only">
           Pages
         </h2>
-        <ul className={template.routes.length > 1 ? "grid gap-5 md:grid-cols-2" : "grid gap-5"}>
+        <ul className={template.routes.length > 1 ? "grid gap-x-6 gap-y-10 md:grid-cols-2" : "grid"}>
           {template.routes.map((route, i) => (
             <li key={route} className={template.routes.length > 2 && i === 0 ? "md:col-span-2" : undefined}>
               <a
                 href={templatePreviewPath(slug, route)}
                 target="_blank"
                 rel="noreferrer"
-                className="group block overflow-hidden rounded-xl border border-line bg-surface outline-none transition-[border-color,box-shadow] duration-200 hover:border-[rgb(var(--neon-accent)/0.4)] hover:shadow-[0_0_32px_-8px_rgb(var(--neon-accent)/0.45)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent)/0.6)]"
+                className="group block rounded-[14px] outline-none"
               >
-                <div className="flex h-9 items-center gap-3 border-b border-line px-3.5">
-                  <span aria-hidden className="flex gap-1.5">
-                    <span className="size-2.5 rounded-full bg-white/10" />
-                    <span className="size-2.5 rounded-full bg-white/10" />
-                    <span className="size-2.5 rounded-full bg-white/10" />
-                  </span>
-                  <span className="truncate font-mono text-[11.5px] text-muted">
+                <span className="block overflow-hidden rounded-[14px] border border-white/[0.07] bg-surface transition-[border-color,box-shadow] duration-200 ease-out-quint group-hover:border-[rgb(var(--neon-accent)/0.4)] group-hover:shadow-[0_0_0_1px_rgb(var(--neon-accent)/0.12),0_24px_64px_-28px_rgb(var(--neon-accent)/0.5)] group-focus-visible:ring-2 group-focus-visible:ring-[rgb(var(--neon-accent)/0.6)] group-focus-visible:ring-offset-4 group-focus-visible:ring-offset-background">
+                  <Image
+                    src={templateThumb(slug, route)}
+                    alt={`The /${slug}${route} page`}
+                    width={960}
+                    height={600}
+                    unoptimized
+                    loading={i === 0 ? "eager" : "lazy"}
+                    fetchPriority={i === 0 ? "high" : undefined}
+                    className="aspect-[8/5] w-full object-cover object-top"
+                  />
+                </span>
+                <span className="mt-3.5 flex items-center justify-between gap-3">
+                  <span className="truncate font-mono text-[13px] text-fg">
                     /{slug}
                     {route}
                   </span>
-                  <ArrowUpRight className="ml-auto size-3.5 text-dim transition-colors group-hover:text-fg" />
-                </div>
-                <Image
-                  src={templateThumb(slug, route)}
-                  alt={`The /${slug}${route} page`}
-                  width={960}
-                  height={600}
-                  unoptimized
-                  priority={i === 0}
-                  className="aspect-[8/5] w-full object-cover object-top"
-                />
+                  <span className="inline-flex shrink-0 items-center gap-1 text-[13.5px] text-muted transition-colors group-hover:text-fg">
+                    Open <ArrowUpRight size={14} />
+                  </span>
+                </span>
               </a>
             </li>
           ))}
         </ul>
       </section>
 
-      <div className="mt-16 grid gap-12 lg:grid-cols-2">
-        <section aria-labelledby="installation">
-          <h2 id="installation" className="mb-4 text-xl font-semibold tracking-[-0.02em] text-fg">
+      <div className="mt-28 grid gap-16 lg:grid-cols-12 lg:gap-8">
+        <section aria-labelledby="installation" className="min-w-0 lg:col-span-6">
+          <h2 id="installation" className="type-display mb-6 text-[1.75rem] text-fg sm:text-[2rem]">
             Installation
           </h2>
           <CommandBlock commands={cli} />
-          <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed text-muted">
-            Writes the pages to <code className="font-mono text-[13px] text-fg">app/{slug}</code>, their sections to{" "}
-            <code className="font-mono text-[13px] text-fg">components/templates/{slug}</code> and adds the{" "}
-            {uses.length} NeonKit components it is built from. Open{" "}
-            <code className="font-mono text-[13px] text-fg">/{slug}</code> in your app.
+          <p className="mt-5 max-w-[34rem] text-[15px] leading-[1.65] text-muted">
+            Writes the pages to <InlineCode>app/{slug}</InlineCode>, their sections to{" "}
+            <InlineCode>components/templates/{slug}</InlineCode> and adds the {uses.length} NeonKit components it&apos;s
+            built from. Then open <InlineCode>/{slug}</InlineCode> in your app.
           </p>
           {uses.length > 0 && (
-            <div className="mt-6 flex flex-wrap items-center gap-2 font-mono text-[11px] text-dim">
-              <span className="uppercase tracking-[0.14em]">Uses</span>
-              {uses.map((dep) => (
-                <Link
-                  key={dep.slug}
-                  href={`/components/${dep.slug}`}
-                  className="rounded-md border border-[rgb(var(--neon-accent)/0.3)] px-2 py-0.5 text-[rgb(var(--neon-accent))] transition-colors hover:border-[rgb(var(--neon-accent)/0.6)]"
-                >
-                  {dep.name}
-                </Link>
-              ))}
-            </div>
+            <p className="mt-4 max-w-[34rem] text-[15px] leading-[1.65] text-muted">
+              Built from{" "}
+              {series(
+                uses.map((dep) => (
+                  <Link key={dep.slug} href={`/components/${dep.slug}`} className={textLink}>
+                    {dep.name}
+                  </Link>
+                )),
+              )}
+              .
+            </p>
           )}
         </section>
-        <section aria-labelledby="make-it-yours">
-          <h2 id="make-it-yours" className="mb-4 text-xl font-semibold tracking-[-0.02em] text-fg">
+        <section aria-labelledby="make-it-yours" className="min-w-0 lg:col-span-6">
+          <h2 id="make-it-yours" className="type-display mb-6 text-[1.75rem] text-fg sm:text-[2rem]">
             Make it yours
           </h2>
           <CodeBlock code={installedConfig} title={`components/templates/${slug}/config.ts`} lang="ts" />
-          <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed text-muted">
-            Change <code className="font-mono text-[13px] text-fg">color</code> and the whole template re-tints. To serve
-            it somewhere else, move <code className="font-mono text-[13px] text-fg">app/{slug}</code> and update{" "}
-            <code className="font-mono text-[13px] text-fg">basePath</code>; every link between its pages starts there.
+          <p className="mt-5 max-w-[34rem] text-[15px] leading-[1.65] text-muted">
+            Change <InlineCode>color</InlineCode> and the whole template re-tints. To serve it somewhere else, move{" "}
+            <InlineCode>app/{slug}</InlineCode> and update <InlineCode>basePath</InlineCode>; every link between its
+            pages starts there.
           </p>
         </section>
       </div>
 
-      <section aria-labelledby="files" className="mt-16">
-        <h2
-          id="files"
-          className="mb-6 flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.16em] text-dim"
-        >
-          {targets.length} files
-          <span className="h-px flex-1 bg-line" />
+      <section aria-labelledby="files" className="mt-28">
+        <h2 id="files" className="type-display text-[1.75rem] text-fg sm:text-[2rem]">
+          What lands in your repo
         </h2>
-        <ul className="columns-1 gap-8 font-mono text-[12.5px] leading-7 text-muted sm:columns-2 lg:columns-3">
+        <p className="mt-3 text-[15px] text-muted">{targets.length} files, all of them yours to edit.</p>
+        <ul className="mt-8 columns-1 gap-10 font-mono text-[12.5px] leading-[1.9] text-muted sm:columns-2 lg:columns-3">
           {targets.map((target) => (
-            <li key={target} className="break-inside-avoid truncate">
+            <li key={target} className="break-inside-avoid truncate" title={target}>
               {target}
             </li>
           ))}

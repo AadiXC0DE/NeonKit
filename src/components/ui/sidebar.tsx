@@ -3,10 +3,16 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { PanelLeft } from "lucide-react";
+import { PanelLeft } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
+
+/** The single element in `node`. Server Components can pass it as a lazy reference, which Children resolves. */
+function resolveElement<P = Record<string, unknown>>(node: React.ReactNode): React.ReactElement<P> | null {
+  const [child] = React.Children.toArray(node);
+  return React.isValidElement<P>(child) ? child : null;
+}
 
 type RenderProp = { asChild?: boolean; render?: React.ReactElement; nativeButton?: boolean; children?: React.ReactNode };
 
@@ -24,6 +30,8 @@ function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }
 const EASE = [0.23, 1, 0.32, 1] as const;
 const GLIDE = { duration: 0.3, ease: EASE };
 const MOBILE_QUERY = "(max-width: 767.98px)";
+// React 19 treats inert as a boolean; React 18 only renders it from a string.
+const INERT = (Number.parseInt(React.version, 10) >= 19 ? { inert: true } : { inert: "" }) as React.HTMLAttributes<HTMLDivElement>;
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -152,6 +160,8 @@ const SidebarProvider = React.forwardRef<HTMLDivElement, SidebarProviderProps>(
     const [uncontrolled, setUncontrolled] = React.useState(defaultCollapsed);
     const [openMobile, setOpenMobile] = React.useState(false);
     const collapsed = collapsedProp ?? uncontrolled;
+    // A drawer left open while the window widens past md shouldn't pop open again on the way back.
+    if (!isMobile && openMobile) setOpenMobile(false);
 
     const setCollapsed = React.useCallback(
       (next: boolean) => {
@@ -328,9 +338,35 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       });
 
       const onKeyDown = (event: KeyboardEvent) => {
-        if (event.key !== "Escape" || event.defaultPrevented) return;
-        event.preventDefault();
-        setOpenMobile(false);
+        if (event.defaultPrevented || !panel) return;
+        if (event.key === "Escape") {
+          event.preventDefault();
+          setOpenMobile(false);
+          return;
+        }
+        // SidebarInset is inert, but the rest of the page may not be: keep Tab inside the drawer.
+        if (event.key !== "Tab") return;
+        const focusable = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+          (element) =>
+            !element.closest("[hidden], [inert]") &&
+            (typeof element.checkVisibility !== "function" || element.checkVisibility()),
+        );
+        if (focusable.length === 0) {
+          event.preventDefault();
+          panel.focus({ preventScroll: true });
+          return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+        const outside = !(active instanceof Node) || !panel.contains(active);
+        if (event.shiftKey && (active === first || active === panel || outside)) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && (active === last || outside)) {
+          event.preventDefault();
+          first.focus();
+        }
       };
       const overflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
@@ -574,7 +610,7 @@ const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
     const { rail } = instance;
 
     const child =
-      asChild && React.isValidElement<React.HTMLAttributes<HTMLElement>>(children) ? children : null;
+      asChild ? resolveElement<React.HTMLAttributes<HTMLElement>>(children) : null;
     const childProps: React.HTMLAttributes<HTMLElement> = child?.props ?? {};
     const label = child ? childProps.children : children;
     const hasBadge = badge != null && badge !== false;
@@ -638,7 +674,7 @@ const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
             "relative grid size-4 shrink-0 place-items-center transition-[color,filter] duration-150 [&_svg]:size-4",
             active
               ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.7))]"
-              : "text-white/45 group-hover/item:text-white/80",
+              : "text-white/50 group-hover/item:text-white/80",
           )}
         >
           {icon}
@@ -808,7 +844,7 @@ const SidebarInset = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
     return (
       <div
         ref={ref}
-        inert={inert || undefined}
+        {...(inert ? INERT : null)}
         className={cn("relative flex min-w-0 flex-1 flex-col", className)}
         {...props}
       />

@@ -268,7 +268,7 @@ const Fader = React.forwardRef<HTMLSpanElement, FaderProps>(
             <span
               aria-hidden
               className={cn(
-                "relative shrink-0 text-[0.62em] leading-none tabular-nums text-white/40",
+                "relative shrink-0 text-[0.62em] leading-none tabular-nums text-white/50",
                 vertical ? "order-first mr-[0.5em] w-[2.6em]" : "order-last mt-[0.55em] h-[1em]",
               )}
             >

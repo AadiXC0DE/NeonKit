@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Bell, CreditCard, KeyRound, Puzzle, ShieldCheck, UserRound, UsersRound, Webhook } from "lucide-react";
+import { Bell, CreditCard, KeyRound, Puzzle, ShieldCheck, UserRound, UsersRound, Webhook } from "@/components/ui/icons";
 import {
   Sidebar,
   SidebarContent,
