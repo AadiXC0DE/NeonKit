@@ -1,5 +1,5 @@
 import * as React from "react";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
@@ -23,10 +23,24 @@ describe("icons", () => {
     void name;
   });
 
-  it("exports every lucide icon the library uses", () => {
-    const used = readFileSync(path.resolve(__dirname, "../../internal/pass/lucide-used.txt"), "utf8").trim().split(/\s+/);
-    const missing = used.filter((name) => !(name in Icons));
-    expect(missing).toEqual([]);
+  it("exports every icon the library, blocks, templates and site import", () => {
+    const root = path.resolve(__dirname, "../..");
+    const walk = (dir: string): string[] =>
+      readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
+        entry.isDirectory() ? walk(path.join(dir, entry.name)) : /\.tsx?$/.test(entry.name) ? [path.join(dir, entry.name)] : [],
+      );
+    const used = new Set<string>();
+    for (const file of [...walk(path.join(root, "src")), ...walk(path.join(root, "app"))]) {
+      for (const match of readFileSync(file, "utf8").matchAll(/import\s*\{([^}]*)\}\s*from\s*"@\/components\/ui\/icons"/g)) {
+        for (const spec of match[1].split(",")) {
+          const name = spec.trim().replace(/^type\s+/, "").split(/\s+as\s+/)[0];
+          // Types (Icon, IconProps, LucideIcon…) have no runtime export to check.
+          if (name && !/^(Icon|IconProps|IconNode|LucideIcon|LucideProps)$/.test(name)) used.add(name);
+        }
+      }
+    }
+    expect(used.size).toBeGreaterThan(100);
+    expect([...used].filter((name) => !(name in Icons))).toEqual([]);
   });
 
   it("exports the extra names the newer components use", () => {
