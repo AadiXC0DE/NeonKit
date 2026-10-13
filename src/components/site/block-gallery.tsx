@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { LiveFrame } from "./live-preview";
 import { cn } from "@/lib/utils";
 import { blockCategoryId } from "@/registry/ids";
 
@@ -71,9 +71,9 @@ export function BlockGallery({ blocks, categories }: { blocks: GalleryBlock[]; c
                 </span>
               </h2>
               <ul className="grid gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
-                {items.map((block, i) => (
+                {items.map((block) => (
                   <li key={block.slug}>
-                    <BlockCard block={block} priority={groups[0] === name && i < 3} />
+                    <BlockCard block={block} />
                   </li>
                 ))}
               </ul>
@@ -85,20 +85,11 @@ export function BlockGallery({ blocks, categories }: { blocks: GalleryBlock[]; c
   );
 }
 
-export function BlockCard({ block, priority = false }: { block: GalleryBlock; priority?: boolean }) {
+export function BlockCard({ block }: { block: GalleryBlock }) {
   return (
     <Link href={`/blocks/${block.slug}`} className="group block rounded-xl outline-none">
       <div className="relative aspect-[8/5] overflow-hidden rounded-xl border border-white/[0.07] bg-surface transition-[border-color,box-shadow] duration-200 ease-out-quint group-hover:border-[rgb(var(--neon-accent)/0.4)] group-hover:shadow-[0_0_0_1px_rgb(var(--neon-accent)/0.12),0_18px_48px_-20px_rgb(var(--neon-accent)/0.45)] group-focus-visible:ring-2 group-focus-visible:ring-[rgb(var(--neon-accent)/0.6)] group-focus-visible:ring-offset-4 group-focus-visible:ring-offset-background">
-        <Image
-          src={`/thumbs/${block.slug}.jpg`}
-          alt=""
-          width={960}
-          height={600}
-          unoptimized
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : undefined}
-          className="size-full object-cover object-top transition-transform duration-500 ease-out-quint group-hover:scale-[1.015] motion-reduce:transition-none"
-        />
+        <LiveFrame src={`/view/${block.slug}`} title={`${block.name} preview`} className="size-full" />
       </div>
       <div className="mt-4 flex items-baseline justify-between gap-3">
         <span className="text-[15.5px] font-medium text-fg">{block.name}</span>

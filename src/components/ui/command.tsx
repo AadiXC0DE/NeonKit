@@ -743,7 +743,9 @@ const CommandList = React.forwardRef<HTMLDivElement, CommandListProps>(
           if (!target.closest("input, textarea, select, button, a, [contenteditable]")) event.preventDefault();
         }}
         className={cn(
-          "flex flex-col overflow-y-auto overscroll-contain p-1.5 scroll-py-1.5",
+          // Inline, the list passes the wheel to the page at its ends; inside a dialog it keeps it.
+          "flex flex-col overflow-y-auto p-1.5 scroll-py-1.5",
+          dialog && "overscroll-contain",
           "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]",
           dialog ? "max-h-[min(400px,calc(85dvh-140px))]" : "max-h-80",
           className,

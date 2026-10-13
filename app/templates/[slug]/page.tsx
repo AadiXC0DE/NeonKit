@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { LiveFrame } from "@/components/site/live-preview";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "@/components/ui/icons";
@@ -134,16 +134,7 @@ export default async function TemplatePage({ params }: Props) {
                 className="group block rounded-[14px] outline-none"
               >
                 <span className="block overflow-hidden rounded-[14px] border border-white/[0.07] bg-surface transition-[border-color,box-shadow] duration-200 ease-out-quint group-hover:border-[rgb(var(--neon-accent)/0.4)] group-hover:shadow-[0_0_0_1px_rgb(var(--neon-accent)/0.12),0_24px_64px_-28px_rgb(var(--neon-accent)/0.5)] group-focus-visible:ring-2 group-focus-visible:ring-[rgb(var(--neon-accent)/0.6)] group-focus-visible:ring-offset-4 group-focus-visible:ring-offset-background">
-                  <Image
-                    src={templateThumb(slug, route)}
-                    alt={`The /${slug}${route} page`}
-                    width={960}
-                    height={600}
-                    unoptimized
-                    loading={i === 0 ? "eager" : "lazy"}
-                    fetchPriority={i === 0 ? "high" : undefined}
-                    className="aspect-[8/5] w-full object-cover object-top"
-                  />
+                  <LiveFrame src={templatePreviewPath(slug, route)} title={`The /${slug}${route} page`} />
                 </span>
                 <span className="mt-3.5 flex items-center justify-between gap-3">
                   <span className="truncate font-mono text-[13px] text-fg">

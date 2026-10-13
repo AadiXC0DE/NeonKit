@@ -13,9 +13,56 @@ import { cn } from "@/lib/utils";
 import { useNearViewport, useReducedMotionPreference } from "./use-near-viewport";
 
 // Canvas and flap displays load with the rack, not with the page.
-const Oscilloscope = dynamic(() => import("@/components/ui/oscilloscope").then((m) => m.Oscilloscope), { ssr: false });
-const LedMatrix = dynamic(() => import("@/components/ui/led-matrix").then((m) => m.LedMatrix), { ssr: false });
-const SplitFlap = dynamic(() => import("@/components/ui/split-flap").then((m) => m.SplitFlap), { ssr: false });
+// Each has a still stand-in at its final size, so the panel is never empty while they load.
+const Oscilloscope = dynamic(() => import("@/components/ui/oscilloscope").then((m) => m.Oscilloscope), {
+  ssr: false,
+  loading: () => <ScopeStill />,
+});
+const LedMatrix = dynamic(() => import("@/components/ui/led-matrix").then((m) => m.LedMatrix), {
+  ssr: false,
+  loading: () => <LedStill />,
+});
+const SplitFlap = dynamic(() => import("@/components/ui/split-flap").then((m) => m.SplitFlap), {
+  ssr: false,
+  loading: () => <FlapStill />,
+});
+
+/** The scope before its canvas arrives: graticule and a resting trace. */
+function ScopeStill() {
+  return (
+    <svg aria-hidden viewBox="0 0 160 100" preserveAspectRatio="none" className="size-full">
+      <g stroke="rgb(var(--neon-accent) / 0.12)" strokeWidth="0.4">
+        {Array.from({ length: 9 }, (_, i) => (
+          <line key={`v${i}`} x1={(i + 1) * 16} y1="0" x2={(i + 1) * 16} y2="100" />
+        ))}
+        {Array.from({ length: 7 }, (_, i) => (
+          <line key={`h${i}`} x1="0" y1={(i + 1) * 12.5} x2="160" y2={(i + 1) * 12.5} />
+        ))}
+      </g>
+      <path
+        d="M0 50 C13 15 27 15 40 50 S67 85 80 50 S107 15 120 50 S147 85 160 50"
+        fill="none"
+        stroke="rgb(var(--neon-accent) / 0.75)"
+        strokeWidth="1.1"
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
+  );
+}
+
+function LedStill() {
+  return <span className="block h-[31px] bg-[radial-gradient(rgb(255_255_255/0.06)_1px,transparent_1.5px)] [background-size:4.5px_4.5px]" />;
+}
+
+function FlapStill() {
+  return (
+    <span className="flex gap-[3px]">
+      {Array.from({ length: 14 }, (_, i) => (
+        <span key={i} className="block h-7 w-[19px] rounded-[3px] bg-[#16181f] shadow-[inset_0_-1px_0_rgb(0_0_0/0.6)]" />
+      ))}
+    </span>
+  );
+}
 
 const waves: { value: OscilloscopeWave; label: string; d: string }[] = [
   { value: "sine", label: "Sine", d: "M1 7C3.5 1 5.5 1 8 7s4.5 6 7 0" },
@@ -219,8 +266,24 @@ export function Rack({ instrumentCount }: { instrumentCount: number }) {
   const clock = remaining.toFixed(2).padStart(5, "0");
 
   return (
-    <section ref={sectionRef} aria-labelledby="rack-title" className="relative overflow-hidden pb-32 pt-8 sm:pb-48">
+    <section ref={sectionRef} aria-labelledby="rack-title" className="relative overflow-hidden pb-6 pt-24 sm:pb-8 sm:pt-32">
       <div className="mx-auto max-w-[96rem] px-3 sm:px-4">
+        <div className="mb-10 px-1 sm:mb-14">
+          <h2 id="rack-title" className="type-display max-w-[16ch] text-balance text-[clamp(2.4rem,5.2vw,5rem)] text-fg">
+            Knobs, faders and a working oscilloscope.
+          </h2>
+          <p className="mt-5 max-w-[44rem] text-[16.5px] leading-[1.6] text-muted">
+            {instrumentCount} instruments that set, measure and count, wired together below. Turn the knob, push the fader,
+            flip the cover and arm it.{" "}
+            <Link
+              href="/components#instruments"
+              className="whitespace-nowrap font-medium text-fg underline decoration-white/25 underline-offset-[5px] transition-colors hover:decoration-[rgb(var(--neon-accent))]"
+            >
+              All {instrumentCount} instruments
+            </Link>
+          </p>
+        </div>
+
         {/* The rack */}
         <div ref={panelRef} className="nk-panel relative rounded-[14px] lg:mx-0">
           {near && <Cables points={points} active={{ osc: visible, gain: gain > 0, arm: armed && !done }} reduced={reduced} />}
@@ -245,20 +308,18 @@ export function Rack({ instrumentCount }: { instrumentCount: number }) {
               </div>
               <div className="min-w-0" aria-live="polite">
                 <span className="sr-only">Readout: {readout}</span>
-                {near ? (
-                  <SplitFlap aria-hidden value={readout} length={14} size="sm" className="max-w-full" />
-                ) : (
-                  <span aria-hidden className="block h-7" />
-                )}
+                {near ? <SplitFlap aria-hidden value={readout} length={14} size="sm" className="max-w-full" /> : <FlapStill />}
               </div>
               <div aria-hidden className="hidden min-w-0 flex-1 rounded-md bg-[#040507] px-3 py-2 shadow-[inset_0_1px_3px_rgb(0_0_0/0.9),0_1px_0_rgb(255_255_255/0.05)] lg:block">
-                {near && (
+                {near ? (
                   <LedMatrix
                     text={done ? "LIFTOFF   LIFTOFF   " : "KNOB  FADER  METER  OSCILLOSCOPE  HARDWARE SWITCH  SEVEN SEGMENT  SPLIT FLAP  LED MATRIX    "}
                     dotSize={3}
                     gap={1.5}
                     speed={reduced ? 0 : 42}
                   />
+                ) : (
+                  <LedStill />
                 )}
               </div>
             </div>
@@ -271,7 +332,9 @@ export function Rack({ instrumentCount }: { instrumentCount: number }) {
                 <div className="mt-6 flex flex-col gap-7 sm:flex-row sm:items-start">
                   <div className="relative min-w-0 flex-1">
                     <div className="aspect-[16/10] w-full overflow-hidden rounded-[10px] bg-black shadow-[0_0_0_1px_rgb(0_0_0/0.8),0_0_0_5px_#191c24,0_0_0_6px_rgb(255_255_255/0.05)]">
-                      {near && (
+                      {!near ? (
+                        <ScopeStill />
+                      ) : (
                         <Oscilloscope
                           aria-label={`Oscilloscope showing a ${wave} wave at ${hz} hertz`}
                           wave={wave}
@@ -449,24 +512,6 @@ export function Rack({ instrumentCount }: { instrumentCount: number }) {
           <Screw className="right-[13px] top-1/2 hidden -translate-y-1/2 lg:block" />
         </div>
 
-        {/* The words, under the hardware */}
-        <div className="mt-16 px-1 sm:mt-24 lg:grid lg:grid-cols-12">
-          <h2 id="rack-title" className="type-display text-balance text-[clamp(2.4rem,5.6vw,5.5rem)] text-fg lg:col-span-10">
-            Knobs, faders and a working oscilloscope.
-          </h2>
-          <div className="mt-8 max-w-[34rem] lg:col-span-5 lg:col-start-6 lg:mt-12">
-            <p className="text-[16.5px] leading-[1.6] text-muted">
-              {instrumentCount} instruments for the parts of an interface that set, measure and count. Drag them, scroll
-              them or use the arrow keys: underneath, a knob is a slider and a rocker is a switch.
-            </p>
-            <Link
-              href="/components#instruments"
-              className="mt-5 inline-block text-[15px] font-medium text-fg underline decoration-white/25 underline-offset-[5px] transition-colors hover:decoration-[rgb(var(--neon-accent))]"
-            >
-              All {instrumentCount} instruments
-            </Link>
-          </div>
-        </div>
       </div>
     </section>
   );

@@ -203,9 +203,9 @@ export function Anatomy() {
       aria-labelledby="anatomy-title"
       className="relative px-4 sm:px-6 lg:h-[260vh]"
     >
-      <div className="mx-auto max-w-[88rem] lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:justify-center">
-        <div className="grid gap-8 pt-24 lg:grid-cols-12 lg:gap-6 lg:pt-14">
-          <div className="lg:col-span-4 lg:self-center">
+      <div className="mx-auto max-w-[88rem] lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:justify-start">
+        <div className="grid gap-8 pt-16 lg:grid-cols-12 lg:gap-6 lg:pt-[max(4.5rem,calc(50vh-21rem))]">
+          <div className="lg:col-span-4 lg:pt-12">
             <h2 id="anatomy-title" className="type-display text-balance text-[clamp(2.4rem,4.6vw,4.5rem)] text-fg">
               Six layers in a 44 by 24 switch.
             </h2>

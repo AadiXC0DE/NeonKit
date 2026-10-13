@@ -231,7 +231,7 @@ const Conversation = React.forwardRef<HTMLDivElement, ConversationProps>(
           tabIndex={0}
           data-scrolled={scrolled || undefined}
           className={cn(
-            "min-h-0 flex-1 overflow-y-auto overscroll-contain outline-none",
+            "min-h-0 flex-1 overflow-y-auto outline-none",
             "[scrollbar-color:rgb(255_255_255/0.12)_transparent] [scrollbar-width:thin]",
             "data-[scrolled]:[mask-image:linear-gradient(to_bottom,transparent,black_32px)]",
             "focus-visible:shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.5)]",

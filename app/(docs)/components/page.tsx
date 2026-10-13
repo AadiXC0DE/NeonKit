@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ComponentGallery } from "@/components/site/component-gallery";
 import { PageHeader } from "@/components/site/prose";
 import { categories, isNew, registry } from "@/registry";
-import { docs } from "@/registry/docs";
 
 export const metadata: Metadata = {
   title: "Components",
@@ -11,12 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function ComponentsIndexPage() {
-  const previews = Object.fromEntries(
-    registry.map((item) => {
-      const Demo = docs[item.slug]?.examples[0]?.component;
-      return [item.slug, Demo ? <Demo /> : null];
-    }),
-  );
   const groups = categories.filter((category) => registry.some((item) => item.category === category));
 
   return (
@@ -27,7 +20,6 @@ export default function ComponentsIndexPage() {
       </PageHeader>
       <ComponentGallery
         categories={groups}
-        previews={previews}
         items={registry.map((item) => ({
           slug: item.slug,
           name: item.name,

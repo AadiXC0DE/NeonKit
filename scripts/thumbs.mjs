@@ -1,6 +1,7 @@
-// Gallery thumbnails: shoots blocks and template pages at 1440x900 and writes JPEGs to public/thumbs/.
+// Social-card images: shoots blocks and template pages and writes JPEGs to public/thumbs/. The site itself
+// never shows these; every preview on it renders live.
 //
-//   node scripts/thumbs.mjs                     every block and every template page
+//   node scripts/thumbs.mjs                     everything
 //   node scripts/thumbs.mjs hero-sign saas ...  just these (block or template slugs)
 //
 // Blocks come from /view/<slug> and land at public/thumbs/<slug>.jpg. Template pages come from

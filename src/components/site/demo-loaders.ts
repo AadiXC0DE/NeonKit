@@ -1,8 +1,8 @@
 import type * as React from "react";
 
 /**
- * One lazy loader per component demo, so the catalog fetches a preview only when its name is hovered.
- * tests/landing.test.ts checks this covers every registry item.
+ * One lazy loader per component demo, so the gallery fetches a live preview only when a tile is hovered.
+ * tests/site.test.tsx checks this covers every registry item.
  */
 export const demoLoaders: Record<string, () => Promise<{ default: React.ComponentType }>> = {
   "button": () => import("@/registry/examples/button/demo"),

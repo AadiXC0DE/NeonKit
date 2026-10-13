@@ -48,7 +48,7 @@ describe("ComponentGallery", () => {
   const used = categories.filter((category) => items.some((item) => item.category === category));
 
   it("renders a section per group at its anchor, with a jump link to it", () => {
-    const { container } = render(<ComponentGallery items={items} categories={used} previews={{}} />);
+    const { container } = render(<ComponentGallery items={items} categories={used} />);
     for (const category of used) {
       const id = componentCategoryId(category);
       expect(container.querySelector(`section#${id}`)).not.toBeNull();
@@ -60,13 +60,13 @@ describe("ComponentGallery", () => {
   });
 
   it("links each card once and never nests a link inside another", () => {
-    const { container } = render(<ComponentGallery items={items} categories={used} previews={{}} />);
+    const { container } = render(<ComponentGallery items={items} categories={used} />);
     expect(container.querySelectorAll("a a")).toHaveLength(0);
     for (const item of items) expect(container.querySelectorAll(`a[href="/components/${item.slug}"]`)).toHaveLength(1);
   });
 
   it("filters by name and says when nothing matches", () => {
-    render(<ComponentGallery items={items} categories={used} previews={{}} />);
+    render(<ComponentGallery items={items} categories={used} />);
     const input = screen.getByRole("searchbox", { name: "Filter components" });
     fireEvent.change(input, { target: { value: items[0].name } });
     expect(screen.getByRole("link", { name: items[0].name })).toBeInTheDocument();
@@ -148,5 +148,13 @@ describe("AccentScript", () => {
     } finally {
       vi.unstubAllGlobals();
     }
+  });
+});
+
+describe("demo loaders", () => {
+  it("has a lazy demo for every component and nothing else", async () => {
+    const { demoLoaders } = await import("@/components/site/demo-loaders");
+    const { registry } = await import("@/registry");
+    expect(Object.keys(demoLoaders).sort()).toEqual(registry.map((item) => item.slug).sort());
   });
 });

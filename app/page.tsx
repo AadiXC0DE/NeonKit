@@ -3,15 +3,16 @@ import { Anatomy } from "@/components/landing/anatomy";
 import { Closing } from "@/components/landing/closing";
 import { Hero } from "@/components/landing/hero";
 import { Install } from "@/components/landing/install";
-import { Library } from "@/components/landing/library";
 import { Lights } from "@/components/landing/lights";
 import { Rack } from "@/components/landing/rack";
+import { shelfPicks, type Reel } from "@/components/landing/shelf-data";
+import { Shelves } from "@/components/landing/shelves";
 import "@/components/landing/landing.css";
 import { JsonLd } from "@/components/site/json-ld";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { siteConfig } from "@/config/site";
-import { blocks, currentVersion, registry, templates } from "@/registry";
+import { blocks, categories, currentVersion, getBlock, registry, templatePreviewPath, templates } from "@/registry";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -63,6 +64,23 @@ const structuredData = [
   },
 ];
 
+const lookup = Object.fromEntries(
+  registry.map(({ slug, name, description, category }) => [slug, { slug, name, description, category }]),
+);
+const shelves = categories
+  .filter((category) => shelfPicks[category])
+  .map((category) => ({ category, count: registry.filter((item) => item.category === category).length }));
+
+// Templates and blocks, alternating, strongest first.
+const reelBlocks = ["hero-sign", "pricing-tiers", "app-dashboard", "features-bento", "hero-city"];
+const reels: Reel[] = templates.flatMap((template, i) => {
+  const block = getBlock(reelBlocks[i] ?? "");
+  return [
+    { href: `/templates/${template.slug}`, src: templatePreviewPath(template.slug), name: template.name, meta: "Template" },
+    ...(block ? [{ href: `/blocks/${block.slug}`, src: `/view/${block.slug}`, name: block.name, meta: block.category }] : []),
+  ];
+});
+
 export default function HomePage() {
   return (
     <>
@@ -78,7 +96,14 @@ export default function HomePage() {
         <Lights />
         <Rack instrumentCount={registry.filter((item) => item.category === "Instruments").length} />
         <Anatomy />
-        <Library />
+        <Shelves
+          total={registry.length}
+          shelves={shelves}
+          lookup={lookup}
+          reels={reels}
+          blockCount={blocks.length}
+          templateCount={templates.length}
+        />
         <Install />
         <Closing />
       </main>

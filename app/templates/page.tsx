@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { LiveFrame } from "@/components/site/live-preview";
 import { ArrowUpRight } from "@/components/ui/icons";
 import { PageShell } from "@/components/site/page-shell";
 import { PageHeader, textLink } from "@/components/site/prose";
 import { cn } from "@/lib/utils";
-import { isNew, templatePreviewPath, templateThumb, templates } from "@/registry";
+import { isNew, templatePreviewPath, templates } from "@/registry";
 
 export const metadata: Metadata = {
   title: "Templates",
@@ -33,16 +33,7 @@ function TemplateEntry({
           featured && "lg:col-span-8",
         )}
       >
-        <Image
-          src={templateThumb(template.slug)}
-          alt=""
-          width={960}
-          height={600}
-          unoptimized
-          loading={featured ? "eager" : "lazy"}
-          fetchPriority={featured ? "high" : undefined}
-          className="size-full object-cover object-top transition-transform duration-500 ease-out-quint group-hover:scale-[1.012] motion-reduce:transition-none"
-        />
+        <LiveFrame src={templatePreviewPath(template.slug)} title={`${template.name} template preview`} className="size-full" />
       </Link>
       <div className={cn("mt-6", featured && "lg:col-span-4 lg:mt-0 lg:flex lg:flex-col lg:justify-end lg:pb-1")}>
         <p className="text-[13.5px] text-muted">

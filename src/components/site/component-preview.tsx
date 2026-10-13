@@ -34,6 +34,34 @@ export function ComponentPreview({
   const [replay, setReplay] = React.useState(0);
   const id = React.useId();
 
+  // The hero preview mounts at once. The others mount as they come within 600px of the viewport and unmount
+  // once they're 2000px away, keeping their height, so a fast scroll never has dozens of live demos running.
+  const stageRef = React.useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = React.useState(size === "lg");
+  const [reserved, setReserved] = React.useState<number>();
+  React.useEffect(() => {
+    if (size === "lg" || tab !== "preview") return;
+    const node = stageRef.current;
+    if (!node) return;
+    const near = new IntersectionObserver(([entry]) => entry.isIntersecting && setMounted(true), {
+      rootMargin: "600px 0px",
+    });
+    const far = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) return;
+        setReserved(node.offsetHeight);
+        setMounted(false);
+      },
+      { rootMargin: "2000px 0px" },
+    );
+    near.observe(node);
+    far.observe(node);
+    return () => {
+      near.disconnect();
+      far.disconnect();
+    };
+  }, [size, tab]);
+
   return (
     <figure className={cn("min-w-0", className)}>
       <div className="flex h-11 items-center justify-between gap-3">
@@ -83,7 +111,8 @@ export function ComponentPreview({
       <div id={`${id}-panel`} role="tabpanel" aria-labelledby={`${id}-${tab}-tab`} className="mt-2">
         {tab === "preview" ? (
           <div
-            style={neonVars(accent ?? undefined)}
+            ref={stageRef}
+            style={neonVars(accent ?? undefined, mounted ? undefined : { minHeight: reserved })}
             className={cn(
               // Examples may style with var(--neon) directly; resolve it from the accent here.
               "[--neon:var(--neon-accent,34_211_238)]",
@@ -93,7 +122,7 @@ export function ComponentPreview({
             )}
           >
             <div key={replay} className="flex w-full items-center justify-center">
-              {children}
+              {mounted ? children : null}
             </div>
           </div>
         ) : (

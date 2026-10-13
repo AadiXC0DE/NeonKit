@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Search } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { componentCategoryId } from "./category-id";
+import { LiveDemo } from "./live-preview";
 
 export type GalleryItem = {
   slug: string;
@@ -13,8 +14,6 @@ export type GalleryItem = {
   description: string;
   isNew: boolean;
 };
-
-const STAGE_WIDTH = 720;
 
 /** One dry line per group. Groups added later simply go without. */
 const blurbs: Record<string, string> = {
@@ -32,70 +31,6 @@ const blurbs: Record<string, string> = {
   Effects: "Light you put on something else: beams, frames, a cursor, CRT glass.",
   Backgrounds: "Full-bleed scenery for behind a section.",
 };
-
-/** Mounts its demo only once scrolled near, scaled to fit the tile, and inert. */
-function LivePreview({ children }: { children: React.ReactNode }) {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const stageRef = React.useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = React.useState(false);
-  const [scale, setScale] = React.useState(0.5);
-
-  React.useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: "300px" },
-    );
-    io.observe(node);
-    return () => io.disconnect();
-  }, []);
-
-  // Fit both ways: offsetWidth/Height ignore the transform, so they're the demo's natural size.
-  React.useEffect(() => {
-    const node = ref.current;
-    const stage = stageRef.current;
-    if (!node || !stage) return;
-    const fit = () => {
-      const pad = 36;
-      setScale(
-        Math.min(
-          1,
-          (node.clientWidth - pad) / STAGE_WIDTH,
-          (node.clientHeight - pad) / Math.max(stage.offsetHeight, 1),
-        ),
-      );
-    };
-    const ro = new ResizeObserver(fit);
-    ro.observe(node);
-    ro.observe(stage);
-    return () => ro.disconnect();
-  }, [visible]);
-
-  return (
-    <div
-      ref={ref}
-      className="nk-stage relative h-56 overflow-hidden rounded-xl border border-white/[0.06] transition-[border-color] duration-200 group-hover:border-[rgb(var(--neon-accent)/0.35)] [--neon:var(--neon-accent)]"
-    >
-      {visible && (
-        <div
-          ref={stageRef}
-          inert
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 flex items-center justify-center"
-          style={{ width: STAGE_WIDTH, transform: `translate(-50%, -50%) scale(${scale})` }}
-        >
-          {children}
-        </div>
-      )}
-    </div>
-  );
-}
 
 /** Keeps the jump link for the group in view lit while you scroll. */
 function useCurrentSection(ids: string[]) {
@@ -120,15 +55,7 @@ function useCurrentSection(ids: string[]) {
   return current;
 }
 
-export function ComponentGallery({
-  items,
-  categories,
-  previews,
-}: {
-  items: GalleryItem[];
-  categories: string[];
-  previews: Record<string, React.ReactNode>;
-}) {
+export function ComponentGallery({ items, categories }: { items: GalleryItem[]; categories: string[] }) {
   const [query, setQuery] = React.useState("");
   const q = query.trim().toLowerCase();
   const matches = (item: GalleryItem) =>
@@ -221,7 +148,10 @@ export function ComponentGallery({
                 <ul className="grid gap-x-5 gap-y-10 sm:grid-cols-2 2xl:grid-cols-3">
                   {groupItems.map((item) => (
                     <li key={item.slug} className="group relative">
-                      <LivePreview>{previews[item.slug]}</LivePreview>
+                      <LiveDemo
+                        slug={item.slug}
+                        className="rounded-xl border border-white/[0.06] transition-[border-color] duration-200 group-hover:border-[rgb(var(--neon-accent)/0.35)]"
+                      />
                       <div className="mt-4 flex items-baseline justify-between gap-3">
                         <Link
                           href={`/components/${item.slug}`}

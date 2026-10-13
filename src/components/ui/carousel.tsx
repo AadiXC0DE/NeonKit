@@ -413,8 +413,11 @@ const CarouselContent = React.forwardRef<HTMLDivElement, CarouselContentProps>(
         onPointerDown={onDragStart}
         onDragStart={(event) => event.preventDefault()}
         className={cn(
-          "min-h-0 min-w-0 overscroll-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-          horizontal ? "snap-x snap-mandatory overflow-x-auto overflow-y-hidden" : "snap-y snap-mandatory overflow-y-auto overflow-x-hidden",
+          "min-h-0 min-w-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          // Only the scrolling axis is contained, so a vertical wheel over a horizontal carousel still moves the page.
+          horizontal
+            ? "snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-x-contain"
+            : "snap-y snap-mandatory overflow-y-auto overflow-x-hidden overscroll-y-contain",
           "cursor-grab data-[dragging]:cursor-grabbing data-[dragging]:select-none",
           viewportClassName,
         )}
