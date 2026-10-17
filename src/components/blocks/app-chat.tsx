@@ -338,7 +338,7 @@ export default function AppChat() {
                       )}
                       {m.text && <p className="whitespace-pre-wrap break-words text-[14.5px] leading-6 text-white/80">{m.text}</p>}
                       {m.code && (
-                        <pre className="mt-1.5 overflow-x-auto rounded-lg border border-white/[0.08] bg-[#0a0b11] px-3.5 py-3 font-mono text-[12.5px] leading-5 text-white/80 [font-variant-ligatures:none]"><code>{m.code}</code></pre>
+                        <pre tabIndex={0} className="mt-1.5 overflow-x-auto rounded-lg border border-white/[0.08] bg-[#0a0b11] px-3.5 py-3 font-mono text-[12.5px] leading-5 text-white/80 [font-variant-ligatures:none] outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]"><code>{m.code}</code></pre>
                       )}
                       {m.file && (
                         <a href="#file" onClick={(e) => e.preventDefault()} className="mt-2 flex w-fit max-w-full items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] py-2 pl-2.5 pr-4 outline-none transition-colors hover:border-[rgb(var(--neon)/0.4)] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]">

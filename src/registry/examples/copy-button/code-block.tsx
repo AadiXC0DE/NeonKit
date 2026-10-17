@@ -13,7 +13,10 @@ export default function CopyButtonCodeBlock() {
         <span className="font-mono text-xs text-white/50">api-key.tsx</span>
         <CopyButton value={code} size="sm" side="left" aria-label="Copy code" />
       </div>
-      <pre className="overflow-x-auto p-4 font-mono text-[12.5px] leading-5 text-white/75">
+      <pre
+        tabIndex={0}
+        className="overflow-x-auto p-4 font-mono text-[12.5px] leading-5 text-white/75 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]"
+      >
         <code>{code}</code>
       </pre>
     </div>

@@ -18,7 +18,7 @@ export default function SuggestionsScroll() {
 
   return (
     <div className="w-full max-w-[22rem] overflow-hidden rounded-xl border border-white/10 bg-[#0a0c12]">
-      <pre className="overflow-x-auto border-b border-white/[0.06] px-4 py-3 font-mono text-[12px] leading-5 text-white/70">
+      <pre tabIndex={0} className="overflow-x-auto border-b border-white/[0.06] px-4 py-3 font-mono text-[12px] leading-5 text-white/70 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon)/0.6)]">
         <span className="text-white/55">{"// src/lib/billing.ts:41"}</span>
         {"\n"}
         <span className="text-[rgb(var(--neon))]">export function</span> prorate(plan, days) {"{"}
