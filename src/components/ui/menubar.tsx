@@ -310,7 +310,7 @@ const MenubarTrigger = React.forwardRef<HTMLButtonElement, MenubarTriggerProps>(
             aria-hidden
             layoutId={reduceMotion ? undefined : `${bar.barId}-filament`}
             transition={{ duration: 0.22, ease: EASE }}
-            className="pointer-events-none absolute inset-x-2.5 bottom-[3px] h-px rounded-full bg-[rgb(var(--neon))] shadow-[0_0_4px_rgb(var(--neon)),0_0_12px_rgb(var(--neon)/0.6)]"
+            className="pointer-events-none absolute inset-x-2.5 bottom-[3px] h-px rounded-full bg-[rgb(var(--neon))] shadow-[0_0_4px_rgb(var(--neon)/var(--neon-glow,1)),0_0_12px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
           />
         )}
         <span className="relative">{children}</span>

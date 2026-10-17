@@ -14,7 +14,7 @@ export default function RatingHalfSteps() {
       </div>
       <div className="flex shrink-0 items-center gap-2.5">
         <Rating allowHalf size="sm" value={score} onValueChange={setScore} aria-label="Your score for Past Lives" />
-        <span className="w-6 text-right font-mono text-xs tabular-nums text-white/70">
+        <span className="w-6 text-right text-xs tabular-nums text-white/70">
           {score ? score.toFixed(1) : "–"}
         </span>
       </div>

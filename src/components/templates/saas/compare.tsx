@@ -79,12 +79,12 @@ export function Compare({ billing }: { billing: Billing }) {
         <Table
           stickyHeader
           aria-label="Plan comparison"
-          className="min-w-[680px] table-fixed"
+          className="min-w-[600px] table-fixed normal-nums sm:min-w-[680px]"
           // Scrolls sideways inside its own frame on small screens; on desktop the header sticks to the page.
           containerClassName="mt-3 md:mt-12 bg-[#07080c] lg:overflow-visible"
         >
           <colgroup>
-            <col className="w-48 lg:w-[34%]" />
+            <col className="w-40 sm:w-48 lg:w-[34%]" />
             <col />
             <col />
             <col />
@@ -104,7 +104,8 @@ export function Compare({ billing }: { billing: Billing }) {
                     key={plan.name}
                     align="center"
                     className={cn(
-                      "h-auto py-5 align-top lg:top-16",
+                      // Narrower on phones so the next plan peeks in and says the table scrolls.
+                      "h-auto px-2 py-5 align-top sm:px-4 lg:top-16",
                       i === plans.length - 1 && "rounded-tr-xl",
                       featured && "bg-[#120f1a]",
                     )}

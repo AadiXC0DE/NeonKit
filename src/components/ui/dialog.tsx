@@ -272,7 +272,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
                   transition={enter}
                   className={cn(
                     "pointer-events-auto relative w-full rounded-[14px] border border-[rgb(var(--neon)/0.18)] bg-[#0a0b11] p-6 text-white/90",
-                    "shadow-[0_0_0_1px_rgb(0_0_0/0.5),0_24px_64px_-16px_rgb(0_0_0/0.9),0_0_80px_-24px_rgb(var(--neon)/0.35)]",
+                    "shadow-[0_0_0_1px_rgb(0_0_0/0.5),0_24px_64px_-16px_rgb(0_0_0/0.9),0_0_80px_-24px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]",
                     sizes[size],
                     className,
                   )}

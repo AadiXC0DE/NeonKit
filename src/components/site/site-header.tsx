@@ -17,6 +17,7 @@ const links = [
   // Advertised once there's a real gallery, not a single pilot block.
   ...(blocks.length >= 6 ? [{ title: "Blocks", href: "/blocks" }] : []),
   ...(templates.length > 0 ? [{ title: "Templates", href: "/templates" }] : []),
+  { title: "Theme", href: "/theme" },
   { title: "Use with AI", href: "/docs/ai" },
   { title: "Sponsor", href: "/sponsor" },
 ];

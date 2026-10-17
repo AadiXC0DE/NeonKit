@@ -45,6 +45,13 @@ function readRgb(node: Element | null): Rgb {
   return parts && parts.length >= 3 ? [+parts[0], +parts[1], +parts[2]] : FALLBACK;
 }
 
+/** The theme's glow multiplier. A finite check, not `|| 1`, so 0 stays 0. */
+function readGlow(node: Element | null) {
+  if (!node || typeof getComputedStyle === "undefined") return 1;
+  const value = parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"));
+  return Number.isFinite(value) ? Math.max(0, value) : 1;
+}
+
 function rgba([r, g, b]: Rgb, alpha: number) {
   return `rgba(${r | 0},${g | 0},${b | 0},${Math.min(1, Math.max(0, alpha)).toFixed(4)})`;
 }
@@ -193,6 +200,7 @@ const Equalizer = React.forwardRef<HTMLDivElement, EqualizerProps>(
       let h = 0;
       let dpr = 1;
       let rgb = readRgb(probe);
+      let glowK = readGlow(probe);
       let raf = 0;
       let last = 0;
       let clock = 0;
@@ -295,7 +303,7 @@ const Equalizer = React.forwardRef<HTMLDivElement, EqualizerProps>(
         // Two half-ellipses meeting at the baseline: tall behind the bars,
         // short below them, both fading out before the canvas edge.
         const wash = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
-        wash.addColorStop(0, rgba(rgb, 0.3 * average));
+        wash.addColorStop(0, rgba(rgb, 0.3 * average * glowK));
         wash.addColorStop(1, rgba(rgb, 0));
         for (const [reach, from] of [[h, -1], [BLEED, 0]]) {
           ctx.save();
@@ -336,16 +344,18 @@ const Equalizer = React.forwardRef<HTMLDivElement, EqualizerProps>(
         lit.addColorStop(0, rgba(rgb, 0.7));
         lit.addColorStop(1, rgba(rgb, 1));
         ctx.save();
-        ctx.shadowColor = rgba(rgb, 0.9);
-        ctx.shadowBlur = glow * dpr;
+        ctx.shadowColor = rgba(rgb, 0.9 * glowK);
+        ctx.shadowBlur = glowK > 0 ? glow * dpr : 0;
         ctx.fillStyle = lit;
         ctx.fill();
         // A second, wider and fainter pass blooms the whole display.
-        ctx.globalCompositeOperation = "lighter";
-        ctx.shadowColor = rgba(rgb, 0.55);
-        ctx.shadowBlur = glow * 2.25 * dpr;
-        ctx.fillStyle = rgba(rgb, 0.12);
-        ctx.fill();
+        if (glowK > 0) {
+          ctx.globalCompositeOperation = "lighter";
+          ctx.shadowColor = rgba(rgb, 0.55 * glowK);
+          ctx.shadowBlur = glow * 2.25 * dpr;
+          ctx.fillStyle = rgba(rgb, 0.12 * glowK);
+          ctx.fill();
+        }
         ctx.restore();
 
         // A white-hot filament down the middle of each bar, like a tube's core.
@@ -384,8 +394,8 @@ const Equalizer = React.forwardRef<HTMLDivElement, EqualizerProps>(
           }
         }
         ctx.save();
-        ctx.shadowColor = rgba(rgb, 0.9);
-        ctx.shadowBlur = glow * 0.65 * dpr;
+        ctx.shadowColor = rgba(rgb, 0.9 * glowK);
+        ctx.shadowBlur = glowK > 0 ? glow * 0.65 * dpr : 0;
         ctx.fillStyle = rgba(core, 1);
         ctx.fill();
         ctx.restore();
@@ -458,6 +468,7 @@ const Equalizer = React.forwardRef<HTMLDivElement, EqualizerProps>(
 
       const recolor = () => {
         rgb = readRgb(probe);
+        glowK = readGlow(probe);
         if (!raf) paint();
       };
 
@@ -520,7 +531,8 @@ const Equalizer = React.forwardRef<HTMLDivElement, EqualizerProps>(
         <span
           ref={probeRef}
           aria-hidden
-          className="pointer-events-none absolute size-0 text-[rgb(var(--neon))] [transition:color_1ms_linear]"
+          // Color and --neon-glow both transition here, so a change on any ancestor repaints the canvas.
+          className="pointer-events-none absolute size-0 text-[rgb(var(--neon))] [letter-spacing:CALC(var(--neon-glow,1)*1px)] [transition:color_1ms_linear,letter-spacing_1ms_linear]"
         />
         <canvas
           ref={canvasRef}

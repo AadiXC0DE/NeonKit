@@ -23,13 +23,13 @@ const lines = {
 const caps = {
   horizontal: {
     base: "h-1.5 w-[5px] rounded-[1.5px] bg-[linear-gradient(180deg,#4a4e5a,#1d1f26)]",
-    start: "shadow-[inset_0_1px_0_rgb(255_255_255/0.18),3px_0_6px_-2px_rgb(var(--neon)/0.7)]",
-    end: "shadow-[inset_0_1px_0_rgb(255_255_255/0.18),-3px_0_6px_-2px_rgb(var(--neon)/0.7)]",
+    start: "shadow-[inset_0_1px_0_rgb(255_255_255/0.18),3px_0_6px_-2px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]",
+    end: "shadow-[inset_0_1px_0_rgb(255_255_255/0.18),-3px_0_6px_-2px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]",
   },
   vertical: {
     base: "h-[5px] w-1.5 rounded-[1.5px] bg-[linear-gradient(90deg,#4a4e5a,#1d1f26)]",
-    start: "shadow-[inset_1px_0_0_rgb(255_255_255/0.18),0_3px_6px_-2px_rgb(var(--neon)/0.7)]",
-    end: "shadow-[inset_1px_0_0_rgb(255_255_255/0.18),0_-3px_6px_-2px_rgb(var(--neon)/0.7)]",
+    start: "shadow-[inset_1px_0_0_rgb(255_255_255/0.18),0_3px_6px_-2px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]",
+    end: "shadow-[inset_1px_0_0_rgb(255_255_255/0.18),0_-3px_6px_-2px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]",
   },
 } as const;
 
@@ -66,7 +66,7 @@ function Tube({ orientation }: { orientation: Orientation }) {
       <span
         className={cn(
           "flex-1 rounded-full bg-[rgb(var(--neon))]",
-          "shadow-[0_0_2px_rgb(var(--neon)),0_0_8px_rgb(var(--neon)/0.55),0_0_18px_rgb(var(--neon)/0.22)]",
+          "shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_8px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),0_0_18px_rgb(var(--neon)/CALC(0.22*var(--neon-glow,1)))]",
           glass[orientation],
         )}
       />
@@ -157,7 +157,7 @@ const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
               className={cn(
                 "shrink-0 text-xs leading-4",
                 variant === "tube"
-                  ? "font-medium text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.55)]"
+                  ? "font-medium text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]"
                   : "text-white/50",
               )}
             >

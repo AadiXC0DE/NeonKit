@@ -874,7 +874,7 @@
       "slug": "neon-icon",
       "name": "Neon Icon",
       "category": "Effects",
-      "description": "Status icons whose bars and segments light up in sequence.",
+      "description": "Status icons whose bars light in sequence, and any NeonKit icon drawn as a lit tube.",
       "dependencies": [],
       "addedIn": "1.2",
       "registryDependencies": []
@@ -1040,7 +1040,9 @@
       "registryDependencies": [
         "code-block",
         "copy-button",
-        "icons"
+        "icons",
+        "reasoning",
+        "tool-call"
       ],
       "addedIn": "1.5"
     },
@@ -1065,6 +1067,89 @@
         "icons"
       ],
       "addedIn": "1.5"
+    },
+    {
+      "slug": "reasoning",
+      "name": "Reasoning",
+      "category": "AI",
+      "description": "A thinking trace with a live line and timer. Its filament glows while it thinks and cools to a dim wire when done.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "tool-call",
+      "name": "Tool Call",
+      "category": "AI",
+      "description": "One tool invocation with a status lamp, live timer, arguments, result and Approve/Deny. Groups into a run log.",
+      "dependencies": [],
+      "registryDependencies": [
+        "code-block",
+        "icons"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "agent-plan",
+      "name": "Agent Plan",
+      "category": "AI",
+      "description": "An agent's steps on a glass tube that fills to the one running. Done, failed and skipped steps, substeps, findings.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "sources",
+      "name": "Sources",
+      "category": "AI",
+      "description": "Inline citation markers and a source list that light each other, with hover previews of the cited passage.",
+      "dependencies": [],
+      "registryDependencies": [
+        "hover-card",
+        "icons"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "context-meter",
+      "name": "Context Meter",
+      "category": "AI",
+      "description": "Context-window usage as an LED bar split by system, conversation, files and tools, with zones and a breakdown.",
+      "dependencies": [],
+      "registryDependencies": [
+        "popover"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "voice-input",
+      "name": "Voice Input",
+      "category": "AI",
+      "description": "Toggle or push-to-talk dictation with a live LED tape from the mic, a timer, cancel and a transcribing state.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "icons",
+        "meter"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "model-select",
+      "name": "Model Select",
+      "category": "AI",
+      "description": "A model picker that prints context, speed and price as LED readouts in columns you can compare.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "popover"
+      ],
+      "addedIn": "1.6"
     },
     {
       "slug": "icons",
@@ -1128,7 +1213,7 @@
       "slug": "stat",
       "name": "Stat",
       "category": "Data Display",
-      "description": "KPI with a count-up value, a delta colored by which way is good, a sparkline and a live heartbeat.",
+      "description": "KPI with a count-up value, a tube-drawn icon that lights when live, a delta judged by direction, a sparkline or goal.",
       "dependencies": [],
       "registryDependencies": [
         "glow-chart",

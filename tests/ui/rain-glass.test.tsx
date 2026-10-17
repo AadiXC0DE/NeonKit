@@ -202,7 +202,7 @@ describe("RainGlass", () => {
     reducedMotion = true;
     const { container, rerender } = render(<RainGlass />);
     resize();
-    vi.spyOn(window, "getComputedStyle").mockReturnValue({ color: "rgb(255, 95, 162)" } as CSSStyleDeclaration);
+    vi.spyOn(window, "getComputedStyle").mockReturnValue({ color: "rgb(255, 95, 162)", getPropertyValue: () => "" } as unknown as CSSStyleDeclaration);
     rerender(<RainGlass color="pink" />);
     const stops = canvases(container).backCalls.filter((call) => call.name === "addColorStop");
     expect(stops.some((stop) => String(stop.args[1]).includes("255 95 162"))).toBe(true);

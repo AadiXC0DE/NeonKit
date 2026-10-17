@@ -17,7 +17,7 @@ export default function OscilloscopePersistence() {
             speed={0.3}
             persistence={persistence}
             grid={false}
-            className="aspect-square rounded-xl"
+            className="aspect-[2/1] rounded-xl sm:aspect-square"
           />
           <figcaption className="flex items-baseline justify-between gap-3 text-[13px] text-white/55">
             {label}

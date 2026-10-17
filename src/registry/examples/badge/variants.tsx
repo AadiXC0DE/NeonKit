@@ -8,7 +8,7 @@ export default function BadgeVariants() {
     <div className="grid w-full max-w-lg gap-4">
       {variants.map((variant) => (
         <div key={variant} className="flex flex-wrap items-center gap-2">
-          <span className="w-16 font-mono text-xs text-white/40">{variant}</span>
+          <span className="w-16 font-mono text-xs text-white/50">{variant}</span>
           {colors.map((color) => (
             <Badge key={color} variant={variant} color={color} className="capitalize">
               {color}
@@ -17,7 +17,7 @@ export default function BadgeVariants() {
         </div>
       ))}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="w-16 font-mono text-xs text-white/40">sizes</span>
+        <span className="w-16 font-mono text-xs text-white/50">sizes</span>
         <Badge size="sm" dot>
           v2.0.0
         </Badge>

@@ -8,6 +8,15 @@ import { neonVars, type NeonColor } from "@/lib/neon";
 
 const icons = { star: Star, bolt: Zap, heart: Heart } as const;
 
+// The star glyph sits small in its 24px box (about 13px across). Cropping the view box to it
+// brings it level with the bolt and heart; the stroke is divided by the same factor so the tube
+// keeps its weight.
+const frames: Record<keyof typeof icons, { viewBox: string; scale: number }> = {
+  star: { viewBox: "3 3 18 18", scale: 24 / 18 },
+  bolt: { viewBox: "0 0 24 24", scale: 1 },
+  heart: { viewBox: "0 0 24 24", scale: 1 },
+};
+
 // Cells touch, so the padding is the visual gap and there are no dead zones.
 const sizes = {
   sm: { cell: "p-0.5", icon: "size-4", stroke: 2, label: "text-xs" },
@@ -120,6 +129,7 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
     const interactive = !readOnly && !disabled;
     const display = interactive && hover !== null ? hover : value;
     const Icon = icons[icon];
+    const frame = frames[icon];
     const s = sizes[size];
     const valueText = formatValue(value, max);
 
@@ -300,7 +310,8 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
               {/* The unlit tube: dark glass that catches a little light on its edge */}
               <Icon
                 aria-hidden
-                strokeWidth={s.stroke}
+                viewBox={frame.viewBox}
+                strokeWidth={s.stroke / frame.scale}
                 className={cn(
                   "fill-white/[0.03] text-white/[0.16] [filter:drop-shadow(0_1px_0_rgb(255_255_255/0.04))]",
                   "transition-colors duration-150",
@@ -312,7 +323,7 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
                 aria-hidden
                 style={key > 0 ? { animationDelay: `${ignition.delays[i] ?? 0}ms` } : undefined}
                 className={cn(
-                  "pointer-events-none absolute inset-0 grid place-items-center [filter:drop-shadow(0_0_3px_rgb(var(--neon)/0.9))_drop-shadow(0_0_10px_rgb(var(--neon)/0.45))]",
+                  "pointer-events-none absolute inset-0 grid place-items-center [filter:drop-shadow(0_0_3px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))))_drop-shadow(0_0_10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))))]",
                   fill > 0 ? "opacity-100" : "opacity-0 transition-opacity duration-150 ease-out",
                   fill > 0 &&
                     key > 0 &&
@@ -321,7 +332,8 @@ const Rating = React.forwardRef<HTMLDivElement, RatingProps>(
                 )}
               >
                 <Icon
-                  strokeWidth={s.stroke}
+                  viewBox={frame.viewBox}
+                  strokeWidth={s.stroke / frame.scale}
                   style={{ "--rating-cut": `${(1 - shownFill) * 100}%` } as React.CSSProperties}
                   className={cn(
                     "fill-[rgb(var(--neon)/0.22)] text-[rgb(var(--neon))]",

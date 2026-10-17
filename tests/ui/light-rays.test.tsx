@@ -195,7 +195,7 @@ describe("LightRays", () => {
     reducedMotion = true;
     const { container, rerender } = render(<LightRays />);
     resize();
-    vi.spyOn(window, "getComputedStyle").mockReturnValue({ color: "rgb(251, 191, 36)" } as CSSStyleDeclaration);
+    vi.spyOn(window, "getComputedStyle").mockReturnValue({ color: "rgb(251, 191, 36)", getPropertyValue: () => "" } as unknown as CSSStyleDeclaration);
     rerender(<LightRays color="amber" />);
     const stops = canvases(container).beamCalls.filter((call) => call.name === "addColorStop");
     expect(stops.some((stop) => String(stop.args[1]).includes("251 191 36"))).toBe(true);

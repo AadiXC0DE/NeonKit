@@ -66,7 +66,7 @@ export const doc: ComponentDoc = {
     {
       name: "ItemDescription",
       description: "Secondary text under the title.",
-      props: [{ prop: "lines", type: "1 | 2", default: "2", description: "Clamp to one line with an ellipsis, or two. Two lines pin the media to the top." }],
+      props: [{ prop: "lines", type: '1 | 2 | "none"', default: "2", description: 'Clamp to one line with an ellipsis or two, or "none" to wrap in full. Two or more lines pin the media to the top.' }],
     },
     {
       name: "ItemGroup, ItemSeparator",

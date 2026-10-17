@@ -343,7 +343,7 @@ const Fader = React.forwardRef<HTMLSpanElement, FaderProps>(
                 <span
                   aria-hidden
                   className={cn(
-                    "absolute rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/0.24),rgb(var(--neon)/0.06)_55%,transparent)] transition-opacity duration-200",
+                    "absolute rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/CALC(0.24*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.06*var(--neon-glow,1)))_55%,transparent)] transition-opacity duration-200",
                     vertical
                       ? "left-1/2 top-0 h-[3.4em] w-[6em] -translate-x-1/2 -translate-y-1/2"
                       : "left-0 top-1/2 h-[6em] w-[3.4em] -translate-x-1/2 -translate-y-1/2",
@@ -413,8 +413,8 @@ const Fader = React.forwardRef<HTMLSpanElement, FaderProps>(
                         : "inset-y-[7%] left-1/2 w-[0.13em] min-w-[1.5px] -translate-x-1/2",
                       lit
                         ? dragging
-                          ? "shadow-[0_0_0.2em_rgb(var(--neon)),0_0_0.6em_rgb(var(--neon)/0.9)]"
-                          : "shadow-[0_0_0.15em_rgb(var(--neon)),0_0_0.45em_rgb(var(--neon)/0.7)]"
+                          ? "shadow-[0_0_0.2em_rgb(var(--neon)/var(--neon-glow,1)),0_0_0.6em_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]"
+                          : "shadow-[0_0_0.15em_rgb(var(--neon)/var(--neon-glow,1)),0_0_0.45em_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]"
                         : "bg-[rgb(var(--neon)/0.16)]",
                     )}
                     style={lit ? { backgroundColor: CORE } : undefined}
@@ -445,7 +445,7 @@ const Fader = React.forwardRef<HTMLSpanElement, FaderProps>(
                   >
                     <span
                       className={cn(
-                        "absolute inset-0 rounded-[1px] bg-[rgb(var(--seg))] shadow-[0_0_0.35em_rgb(var(--seg)/0.75)]",
+                        "absolute inset-0 rounded-[1px] bg-[rgb(var(--seg))] shadow-[0_0_0.35em_rgb(var(--seg)/CALC(0.75*var(--neon-glow,1)))]",
                         on ? "opacity-100" : "opacity-0 transition-opacity duration-300 ease-out",
                       )}
                     />
@@ -472,7 +472,7 @@ const Fader = React.forwardRef<HTMLSpanElement, FaderProps>(
             aria-hidden
             className={cn(
               "leading-none tabular-nums transition-[color,text-shadow] duration-150",
-              dragging ? "text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.6)]" : "text-white/80",
+              dragging ? "text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]" : "text-white/80",
               s.value,
             )}
           >

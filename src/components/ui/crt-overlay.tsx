@@ -140,7 +140,7 @@ const CrtOverlay = React.forwardRef<HTMLDivElement, CrtOverlayProps>(
     const textShadow =
       [
         chromatic && "-0.6px 0 rgb(255 40 90 / 0.5), 0.6px 0 rgb(40 190 255 / 0.5)",
-        glow && "0 0 1px rgb(255 255 255 / 0.4), 0 0 12px rgb(var(--neon) / 0.6)",
+        glow && "0 0 1px rgb(255 255 255 / calc(0.4 * var(--neon-glow, 1))), 0 0 12px rgb(var(--neon) / calc(0.6 * var(--neon-glow, 1)))",
       ]
         .filter(Boolean)
         .join(", ") || undefined;
@@ -156,7 +156,7 @@ const CrtOverlay = React.forwardRef<HTMLDivElement, CrtOverlayProps>(
           "transition-shadow duration-700 ease-out",
           curvature ? "rounded-[2.25rem/1.75rem]" : "rounded-xl",
           lit
-            ? "shadow-[0_0_0_1px_rgb(255_255_255/0.06),0_0_70px_-18px_rgb(var(--neon)/0.55)]"
+            ? "shadow-[0_0_0_1px_rgb(255_255_255/0.06),0_0_70px_-18px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]"
             : "shadow-[0_0_0_1px_rgb(255_255_255/0.06),0_0_70px_-18px_rgb(var(--neon)/0)]",
           className,
         )}
@@ -173,7 +173,7 @@ const CrtOverlay = React.forwardRef<HTMLDivElement, CrtOverlayProps>(
           {/* The raster: a lit tube glows faintly even where the picture is black */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgb(var(--neon)/0.1),rgb(var(--neon)/0.035)_55%,transparent_85%)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgb(var(--neon)/CALC(0.1*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.035*var(--neon-glow,1)))_55%,transparent_85%)]"
           />
           <div
             ref={contentRef}
@@ -207,7 +207,7 @@ const CrtOverlay = React.forwardRef<HTMLDivElement, CrtOverlayProps>(
           {shutdowns > 0 && !on && (
             <div
               key={shutdowns}
-              className="nk-crt-overlay-afterglow absolute left-1/2 top-1/2 -ml-1 -mt-1 size-2 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_25%,white)] opacity-0 shadow-[0_0_8px_2px_rgb(var(--neon)),0_0_28px_6px_rgb(var(--neon)/0.6)]"
+              className="nk-crt-overlay-afterglow absolute left-1/2 top-1/2 -ml-1 -mt-1 size-2 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_25%,white)] opacity-0 shadow-[0_0_8px_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_28px_6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
             />
           )}
           <div

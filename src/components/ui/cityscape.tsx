@@ -524,7 +524,7 @@ const Cityscape = React.forwardRef<HTMLDivElement, CityscapeProps>(
       >
         <style>{css}</style>
         {/* Light pollution: the city's own glow on low cloud, tinted by the neon and sodium streetlights. */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_100%,rgb(var(--neon)/0.16),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_100%,rgb(var(--neon)/CALC(0.16*var(--neon-glow,1))),transparent_70%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_35%_at_50%_100%,rgb(255_150_70/0.1),transparent_75%)]" />
 
         {city && (
@@ -577,7 +577,7 @@ const Cityscape = React.forwardRef<HTMLDivElement, CityscapeProps>(
                 <g data-sign="" className="nk-cityscape-sign">
                   <linearGradient id={id("flood")} x1="0" y1="1" x2="0" y2="0">
                     <stop offset="0" style={{ stopColor: "rgb(var(--neon))", stopOpacity: 0 }} />
-                    <stop offset="1" style={{ stopColor: "rgb(var(--neon))", stopOpacity: 0.32 }} />
+                    <stop offset="1" style={{ stopColor: "rgb(var(--neon))", stopOpacity: "calc(0.32 * var(--neon-glow, 1))" }} />
                   </linearGradient>
                   <rect x={city.crown.x} y={city.crown.y} width={city.crown.w} height={22} fill={`url(#${id("flood")})`} />
                   <path
@@ -608,22 +608,28 @@ const Cityscape = React.forwardRef<HTMLDivElement, CityscapeProps>(
                 <Glass id={id("glass-near")} spec={layerSpecs.near} alpha={0.03} />
                 <linearGradient id={id("haze-near")} x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0" style={{ stopColor: "rgb(var(--neon))", stopOpacity: 0 }} />
-                  <stop offset="1" style={{ stopColor: "rgb(var(--neon))", stopOpacity: 0.06 }} />
+                  <stop offset="1" style={{ stopColor: "rgb(var(--neon))", stopOpacity: "calc(0.06 * var(--neon-glow, 1))" }} />
                 </linearGradient>
+                {/* Filter attributes can't read CSS variables, but flood-opacity can: a white flood at
+                    --neon-glow, multiplied into the blur, scales the halo and leaves 0 flat. */}
                 <filter id={id("bloom")} x="-20%" y="-20%" width="140%" height="140%">
                   <feGaussianBlur stdDeviation="1.6" result="blur" />
+                  <feFlood floodColor="#fff" style={{ floodOpacity: "var(--neon-glow, 1)" }} result="glow" />
+                  <feComposite in="blur" in2="glow" operator="arithmetic" k1={1} result="halo" />
                   <feMerge>
-                    <feMergeNode in="blur" />
+                    <feMergeNode in="halo" />
                     <feMergeNode in="SourceGraphic" />
                   </feMerge>
                 </filter>
                 <filter id={id("tube")} x="-40%" y="-80%" width="180%" height="260%">
                   <feGaussianBlur stdDeviation="1.4" result="tight" />
                   <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="wide" />
-                  <feMerge>
+                  <feMerge result="lit">
                     <feMergeNode in="wide" />
                     <feMergeNode in="tight" />
                   </feMerge>
+                  <feFlood floodColor="#fff" style={{ floodOpacity: "var(--neon-glow, 1)" }} result="glow" />
+                  <feComposite in="lit" in2="glow" operator="arithmetic" k1={1} />
                 </filter>
               </defs>
               <rect x={-W} y={H * 0.62} width={W * 3} height={H * 0.38} fill={`url(#${id("haze-near")})`} />
@@ -641,7 +647,7 @@ const Cityscape = React.forwardRef<HTMLDivElement, CityscapeProps>(
                     style={{ "--nk-sign": sign.color ? `rgb(${toNeonRgb(sign.color)})` : sign.alt ? undefined : "rgb(var(--neon))" } as React.CSSProperties}
                   >
                     <radialGradient id={id(`spill-${i}`)}>
-                      <stop offset="0" style={{ stopColor: "var(--nk-sign)", stopOpacity: 0.35 }} />
+                      <stop offset="0" style={{ stopColor: "var(--nk-sign)", stopOpacity: "calc(0.35 * var(--neon-glow, 1))" }} />
                       <stop offset="1" style={{ stopColor: "var(--nk-sign)", stopOpacity: 0 }} />
                     </radialGradient>
                     {/* Scaffold the letters stand on, catching a little of their light. */}

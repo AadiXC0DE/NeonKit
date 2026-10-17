@@ -160,7 +160,7 @@ function SegmentDigit({ digit }: { digit: string }) {
         ...(lit
           ? {
               fill: "color-mix(in srgb, rgb(var(--neon)) 72%, white)",
-              filter: `drop-shadow(0 0 ${times(0.03)} rgb(var(--neon))) drop-shadow(0 0 ${times(0.14)} rgb(var(--neon) / 0.55))`,
+              filter: `drop-shadow(0 0 ${times(0.03)} rgb(var(--neon) / var(--neon-glow, 1))) drop-shadow(0 0 ${times(0.14)} rgb(var(--neon) / calc(0.55 * var(--neon-glow, 1))))`,
             }
           : { fill: "rgb(var(--neon) / 0.08)" }),
       }}
@@ -209,7 +209,7 @@ function TubeDigit({ digit, lit }: { digit: string; lit: boolean }) {
         width: times(44 / 68),
         height: H,
         filter: lit
-          ? `drop-shadow(0 0 ${times(0.03)} rgb(var(--neon))) drop-shadow(0 0 ${times(0.12)} rgb(var(--neon) / 0.75)) drop-shadow(0 0 ${times(0.3)} rgb(var(--neon) / 0.4))`
+          ? `drop-shadow(0 0 ${times(0.03)} rgb(var(--neon) / var(--neon-glow, 1))) drop-shadow(0 0 ${times(0.12)} rgb(var(--neon) / calc(0.75 * var(--neon-glow, 1)))) drop-shadow(0 0 ${times(0.3)} rgb(var(--neon) / calc(0.4 * var(--neon-glow, 1))))`
           : undefined,
       }}
     >
@@ -330,9 +330,9 @@ const Countdown = React.forwardRef<HTMLDivElement, CountdownProps>(
               className={cn(
                 "block size-[1em] rounded-full",
                 variant === "digital"
-                  ? "bg-[color-mix(in_srgb,rgb(var(--neon))_72%,white)] shadow-[0_0_6px_rgb(var(--neon)/0.8)]"
+                  ? "bg-[color-mix(in_srgb,rgb(var(--neon))_72%,white)] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))]"
                   : ready
-                    ? "bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_12px_rgb(var(--neon)/0.7)]"
+                    ? "bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_4px_rgb(var(--neon)/var(--neon-glow,1)),0_0_12px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]"
                     : "bg-[rgb(var(--neon)/0.16)]",
               )}
             />

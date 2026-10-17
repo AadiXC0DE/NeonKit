@@ -73,6 +73,19 @@ describe("LedMatrix", () => {
     expect(paths.slice(-2).map((path) => path.arcs)).toEqual([0, 0]);
   });
 
+  it("runs a held message that doesn't fit, unless overflowSpeed is 0", () => {
+    stubCanvas();
+    const raf = vi.spyOn(window, "requestAnimationFrame").mockImplementation(() => 1);
+    const { unmount } = render(<LedMatrix text="HARBOUR VIEW" columns={20} speed={0} />);
+    expect(raf).toHaveBeenCalled();
+    unmount();
+    raf.mockClear();
+    render(<LedMatrix text="HARBOUR VIEW" columns={20} speed={0} overflowSpeed={0} />);
+    render(<LedMatrix text="42" columns={20} speed={0} />);
+    expect(raf).not.toHaveBeenCalled();
+    raf.mockRestore();
+  });
+
   it("fixes the width in dots with columns", () => {
     stubCanvas();
     const { container } = render(<LedMatrix text="42" columns={13} dotSize={5} gap={1} />);

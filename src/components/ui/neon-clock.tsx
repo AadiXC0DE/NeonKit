@@ -13,7 +13,7 @@ const css = `
 .nk-neon-clock-face { color: rgb(var(--neon) / 0.16); text-shadow: 0 1px 0 rgb(255 255 255 / 0.05); }
 .nk-neon-clock-face[data-lit] {
   color: color-mix(in srgb, rgb(var(--neon)) 30%, white);
-  text-shadow: 0 0 1px rgb(255 255 255 / 0.9), 0 0 0.06em rgb(var(--neon)), 0 0 0.16em rgb(var(--neon)), 0 0 0.4em rgb(var(--neon) / 0.75), 0 0 0.9em rgb(var(--neon) / 0.4);
+  text-shadow: 0 0 1px rgb(255 255 255 / calc(0.9 * var(--neon-glow, 1))), 0 0 0.06em rgb(var(--neon) / var(--neon-glow, 1)), 0 0 0.16em rgb(var(--neon) / var(--neon-glow, 1)), 0 0 0.4em rgb(var(--neon) / calc(0.75 * var(--neon-glow, 1))), 0 0 0.9em rgb(var(--neon) / calc(0.4 * var(--neon-glow, 1)));
 }
 .nk-neon-clock-face[data-lit] .nk-neon-clock-tube { animation: nk-neon-clock-ignite 700ms linear both; }
 .nk-neon-clock-colon { transition: background-color 120ms ease-out, box-shadow 120ms ease-out; }
@@ -269,7 +269,7 @@ const NeonClock = React.forwardRef<HTMLDivElement, NeonClockProps>(
                           colons.current[(group - 1) * 2 + dot] = node;
                         }}
                         data-off=""
-                        className="nk-neon-clock-colon nk-neon-clock-tube block size-[0.11em] rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_12px_rgb(var(--neon)/0.8)]"
+                        className="nk-neon-clock-colon nk-neon-clock-tube block size-[0.11em] rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_4px_rgb(var(--neon)/var(--neon-glow,1)),0_0_12px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))]"
                       />
                     ))}
                   </span>
@@ -323,17 +323,22 @@ const NeonClock = React.forwardRef<HTMLDivElement, NeonClockProps>(
           style={{ width: "var(--clock-size,184px)", height: "var(--clock-size,184px)" }}
         >
           {/* The hands light the dial they sit on */}
-          <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgb(var(--neon)/0.13),transparent_62%)]" />
+          <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgb(var(--neon)/CALC(0.13*var(--neon-glow,1))),transparent_62%)]" />
           <svg viewBox="0 0 200 200" className="absolute inset-0 size-full overflow-visible" fill="none" strokeLinecap="round">
             <defs>
               {/* User-space bounds: a straight hand has a zero-width box, which would clip the glow. */}
               <filter id={glowId} filterUnits="userSpaceOnUse" x={-20} y={-20} width={240} height={240}>
                 <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="near" />
                 <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="far" />
+                {/* Filter attributes can't read CSS variables, but flood-opacity can: a white flood at
+                    --neon-glow, multiplied into each blur, scales the halo and leaves 0 flat. */}
+                <feFlood floodColor="#fff" style={{ floodOpacity: "var(--neon-glow, 1)" }} result="glow" />
+                <feComposite in="near" in2="glow" operator="arithmetic" k1={1} result="nearLit" />
+                <feComposite in="far" in2="glow" operator="arithmetic" k1={1} result="farLit" />
                 <feMerge>
-                  <feMergeNode in="far" />
-                  <feMergeNode in="far" />
-                  <feMergeNode in="near" />
+                  <feMergeNode in="farLit" />
+                  <feMergeNode in="farLit" />
+                  <feMergeNode in="nearLit" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>

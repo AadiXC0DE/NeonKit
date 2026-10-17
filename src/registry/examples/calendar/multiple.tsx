@@ -5,8 +5,15 @@ import { Calendar } from "@/components/ui/calendar";
 
 const formatDay = new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric" });
 
+// Your rota so far: a few days in the month the calendar opens on.
+function rota() {
+  const today = new Date();
+  return [5, 6, 14, 22, 23].map((day) => new Date(today.getFullYear(), today.getMonth(), day));
+}
+
 export default function CalendarMultiple() {
-  const [shifts, setShifts] = React.useState<Date[]>([]);
+  const [shifts, setShifts] = React.useState<Date[]>(rota);
+  const sorted = [...shifts].sort((a, b) => a.getTime() - b.getTime());
 
   return (
     <div className="flex w-fit flex-col gap-4 sm:flex-row sm:items-start">
@@ -24,7 +31,7 @@ export default function CalendarMultiple() {
             : "Click days to take the pager. Click again to hand it back."}
         </p>
         <ul className="flex flex-wrap gap-1.5">
-          {shifts.map((day) => (
+          {sorted.map((day) => (
             <li
               key={day.toISOString()}
               className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-xs tabular-nums text-white/75"

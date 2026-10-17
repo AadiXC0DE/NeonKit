@@ -107,6 +107,7 @@ export default function TableDemo() {
           <TableRow>
             <TableHead className="w-12 pr-0">
               <Checkbox
+                className="flex w-fit"
                 aria-label="Select all deployments"
                 checked={allSelected}
                 indeterminate={selected.size > 0 && !allSelected}
@@ -144,16 +145,19 @@ export default function TableDemo() {
               >
                 <TableCell className="pr-0">
                   <Checkbox
+                    className="flex w-fit"
                     aria-label={`Select ${deployment.sha}`}
                     checked={isSelected}
                     onCheckedChange={(on) => toggle(deployment.id, on)}
                   />
                 </TableCell>
                 <TableCell>
-                  <div className="grid max-w-[18rem] gap-0.5">
+                  {/* A floor on the width: on a phone the table scrolls instead of cutting every message to a word. */}
+                  <div className="grid min-w-[13.5rem] max-w-[18rem] gap-0.5">
                     <span className="truncate font-medium text-white/90">{deployment.message}</span>
-                    <span className="truncate font-mono text-xs text-white/40">
-                      {deployment.branch} · {deployment.sha}
+                    <span className="flex min-w-0 whitespace-nowrap font-mono text-xs text-white/50">
+                      <span className="truncate">{deployment.branch}</span>
+                      <span className="shrink-0">&nbsp;· {deployment.sha}</span>
                     </span>
                   </div>
                 </TableCell>
@@ -162,7 +166,7 @@ export default function TableDemo() {
                     {status.label}
                   </Badge>
                 </TableCell>
-                <TableCell align="right" className="font-mono text-xs text-white/60">
+                <TableCell align="right" className="whitespace-nowrap font-mono text-xs text-white/60">
                   {formatDuration(deployment.duration)}
                 </TableCell>
                 <TableCell align="right" className="whitespace-nowrap text-white/50">

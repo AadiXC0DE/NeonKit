@@ -79,11 +79,11 @@ const EmptyMedia = React.forwardRef<HTMLDivElement, EmptyMediaProps>(
           <span data-nk-tube-lit="" className="grid opacity-0 [&>*]:col-start-1 [&>*]:row-start-1">
             <span
               data-nk-tube-halo=""
-              className="text-[rgb(var(--neon))] opacity-0 blur-[10px] transition-opacity duration-300 [&_svg]:[stroke-width:4]"
+              className="text-[rgb(var(--neon))] opacity-0 [filter:blur(10px)_opacity(var(--neon-glow,1))] transition-opacity duration-300 [&_svg]:[stroke-width:4]"
             >
               {children}
             </span>
-            <span className="text-[rgb(var(--neon))] [filter:drop-shadow(0_0_2px_rgb(var(--neon)))_drop-shadow(0_0_10px_rgb(var(--neon)/0.6))] [&_svg]:[stroke-width:2]">
+            <span className="text-[rgb(var(--neon))] [filter:drop-shadow(0_0_2px_rgb(var(--neon)/var(--neon-glow,1)))_drop-shadow(0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))] [&_svg]:[stroke-width:2]">
               {children}
             </span>
             <span className="text-white/80 [&_svg]:[stroke-width:0.6]">{children}</span>
@@ -100,7 +100,7 @@ const EmptyMedia = React.forwardRef<HTMLDivElement, EmptyMediaProps>(
         className={cn(
           "relative mb-5 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
           variant === "icon" &&
-            "size-12 rounded-xl border border-white/[0.08] bg-white/[0.03] text-white/55 shadow-[inset_0_1px_0_rgb(255_255_255/0.04)] [&_svg]:size-5",
+            "size-12 rounded-xl border border-white/[0.08] bg-white/[0.03] text-white/55 shadow-[inset_0_1px_0_rgb(255_255_255/0.04)] [&_svg]:size-6",
           className,
         )}
         {...props}

@@ -478,7 +478,7 @@ const NavigationMenuList = React.forwardRef<HTMLUListElement, React.HTMLAttribut
           style={{ x, y, scaleX, opacity, originX: 0, width: INDICATOR_BASE }}
           className="pointer-events-none absolute left-0 top-0 h-px"
         >
-          <span className="absolute inset-x-0 -top-1.5 h-3 bg-[radial-gradient(closest-side,rgb(var(--neon)/0.55),transparent)]" />
+          <span className="absolute inset-x-0 -top-1.5 h-3 bg-[radial-gradient(closest-side,rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),transparent)]" />
           <span className="absolute inset-0 rounded-full bg-[rgb(var(--neon))]" />
         </motion.span>
       </div>
@@ -762,7 +762,7 @@ function Panel({ value, entry }: { value: string; entry: ContentEntry }) {
       style={{ ...floatingStyles, borderRadius: 12, transformOrigin: origin }}
       className={cn(
         "z-50 overflow-hidden border border-white/10 bg-[#0a0b11] text-white/90",
-        "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+        "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
         !isPresent && "pointer-events-none",
       )}
       onPointerEnter={(event) => {
@@ -831,7 +831,7 @@ const NavigationMenuLink = React.forwardRef<HTMLAnchorElement, NavigationMenuLin
           ? cn(
               topItem,
               active
-                ? "text-[rgb(var(--neon))] [text-shadow:0_0_12px_rgb(var(--neon)/0.45)]"
+                ? "text-[rgb(var(--neon))] [text-shadow:0_0_12px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]"
                 : "text-white/60 hover:bg-white/[0.04] hover:text-white/95",
             )
           : cn(

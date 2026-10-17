@@ -18,7 +18,14 @@ const statuses = [
 export default function CommandStatusPicker() {
   const [open, setOpen] = React.useState(false);
   const [status, setStatus] = React.useState("In progress");
+  // The highlight opens on the current status, so Enter keeps it and arrows step from it.
+  const [highlight, setHighlight] = React.useState(status);
   const current = statuses.find((item) => item.value === status)!;
+
+  function toggle(next: boolean) {
+    if (next) setHighlight(status);
+    setOpen(next);
+  }
 
   function choose(value: string) {
     setStatus(value);
@@ -29,7 +36,7 @@ export default function CommandStatusPicker() {
     <div className="flex w-full max-w-md items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] py-2 pl-4 pr-2">
       <span className="shrink-0 font-mono text-xs text-white/40">ACME-142</span>
       <span className="min-w-0 flex-1 truncate text-sm text-white/85">Popover loses focus inside a sheet</span>
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={toggle}>
         <PopoverTrigger asChild>
           <Button size="sm" variant="ghost" aria-label={`Status: ${status}`} className="shrink-0">
             <current.icon />
@@ -39,6 +46,8 @@ export default function CommandStatusPicker() {
         <PopoverContent align="end" className="w-56 p-0">
           <Command
             label="Change status"
+            value={highlight}
+            onValueChange={setHighlight}
             className="rounded-[11px] border-0 bg-transparent shadow-none"
             onKeyDown={(event) => {
               // Number keys pick a status, as long as nothing has been typed.

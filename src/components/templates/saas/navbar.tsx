@@ -107,7 +107,13 @@ export function Navbar() {
           <Button asChild variant="ghost" size="sm" className="hidden rounded-full px-3 lg:inline-flex">
             <Link href="#">Sign in</Link>
           </Button>
-          <Button asChild size="sm" variant={scrolled ? "solid" : "outline"} className="rounded-full px-3.5">
+          {/* Below md the sticky mobile bar carries "Get started" once you scroll, so the navbar drops its copy. */}
+          <Button
+            asChild
+            size="sm"
+            variant={scrolled ? "solid" : "outline"}
+            className={cn("rounded-full px-3.5", scrolled && "max-md:hidden")}
+          >
             <Link href={`${basePath}/pricing`}>
               Get started <ArrowRight aria-hidden className="hidden sm:block" />
             </Link>

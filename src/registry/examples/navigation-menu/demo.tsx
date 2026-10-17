@@ -177,8 +177,8 @@ export default function NavigationMenuDemo() {
         <h2 className="mx-auto max-w-md text-2xl font-semibold tracking-tight text-white/90 sm:text-3xl">
           Ship to every region in one push.
         </h2>
-        <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-white/50">
-          Functions, storage and observability on one network, 50 ms from every user.
+        <p className="mx-auto mt-3 max-w-sm text-balance text-sm leading-6 text-white/50">
+          Functions, storage and observability on one network, 50{"\u00a0"}ms from every user.
         </p>
       </div>
     </div>

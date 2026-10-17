@@ -180,7 +180,7 @@ export function Projects() {
           <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0">
             <ToggleGroup size="sm" aria-label="Status" value={status} onValueChange={(v) => v && setStatus(v as StatusFilter)}>
               {STATUSES.map((s) => (
-                <ToggleGroupItem key={s.value} value={s.value}>
+                <ToggleGroupItem key={s.value} value={s.value} className="max-sm:px-2">
                   {s.label}
                   <span className={cn("font-mono text-[11px] tabular-nums", s.value === "failed" && counts.failed ? "text-[rgb(255_107_120)]" : "text-white/55")}>{counts[s.value] ?? 0}</span>
                 </ToggleGroupItem>

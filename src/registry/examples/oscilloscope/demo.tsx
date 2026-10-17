@@ -41,15 +41,14 @@ export default function OscilloscopeDemo() {
         <div className="grid gap-2">
           <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">Waveform</span>
           <ToggleGroup
-            size="sm"
             aria-label="Waveform"
             value={wave}
             onValueChange={(value) => value && setWave(value as OscilloscopeWave)}
           >
             {waves.map((item) => (
               <ToggleGroupItem key={item.value} value={item.value} aria-label={item.label} title={item.label}>
-                <svg viewBox="0 0 16 12" className="h-3 w-4" fill="none" aria-hidden>
-                  <path d={item.path} stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                <svg viewBox="0 0 16 12" fill="none" aria-hidden>
+                  <path d={item.path} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </ToggleGroupItem>
             ))}

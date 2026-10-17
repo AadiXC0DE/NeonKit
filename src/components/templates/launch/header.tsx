@@ -63,12 +63,10 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const actionLink = (
-    <a href={action.href} {...(action.external ? { target: "_blank", rel: "noreferrer" } : {})}>
-      {action.label}
-      {action.external ? <ArrowUpRight aria-hidden /> : <ArrowRight aria-hidden />}
-    </a>
-  );
+  // The link is written out inline under each Button: the shadcn CLI turns `asChild` into Base UI's
+  // `render={<a />}` in base-* projects, and it only can when the child is a JSX element, not a variable.
+  const linkProps = { href: action.href, ...(action.external ? { target: "_blank", rel: "noreferrer" } : {}) };
+  const linkIcon = action.external ? <ArrowUpRight aria-hidden /> : <ArrowRight aria-hidden />;
 
   return (
     <header
@@ -120,7 +118,10 @@ export function Header() {
 
         <div className="ml-auto flex items-center gap-2 md:ml-0">
           <Button asChild variant="solid" size="sm" className="hidden px-3.5 sm:inline-flex">
-            {actionLink}
+            <a {...linkProps}>
+              {action.label}
+              {linkIcon}
+            </a>
           </Button>
 
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
@@ -156,7 +157,10 @@ export function Header() {
                   {event.venue}, {event.address}
                 </p>
                 <Button asChild variant="solid" size="lg" className="w-full" onClick={() => setMenuOpen(false)}>
-                  {actionLink}
+                  <a {...linkProps}>
+                    {action.label}
+                    {linkIcon}
+                  </a>
                 </Button>
               </div>
             </SheetContent>

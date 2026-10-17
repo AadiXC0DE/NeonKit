@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 
 import { TabChoiceProvider } from "./code";
 import { color, repoStars, repoUrl, version } from "./config";
+import { fonts } from "./fonts";
 import { docHref, findDoc, slugFromPathname } from "./docs";
 import { GitHubIcon, Wordmark } from "./logo";
 import { DocsSidebar, MobileNav } from "./nav";
@@ -61,7 +62,7 @@ export function DocsShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div style={neonVars(color)} className="min-h-screen bg-[#05060a] text-white antialiased">
+    <div style={neonVars(color)} className={`${fonts} min-h-screen bg-[#05060a] text-white antialiased`}>
       <a
         href="#content"
         className={cn(

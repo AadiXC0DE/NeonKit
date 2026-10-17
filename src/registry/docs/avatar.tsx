@@ -46,6 +46,7 @@ export const doc: ComponentDoc = {
         { prop: "shape", type: '"circle" | "square"', default: '"circle"', description: "Outline shape." },
         { prop: "status", type: '"online" | "away" | "busy" | "offline"', description: "Status light in the bottom-right corner." },
         { prop: "ring", type: "boolean", default: "false", description: "Neon ring with a glow, set off by a thin dark gap." },
+        { prop: "decorative", type: "boolean", default: "false", description: "Hidden from screen readers; alt still sets the initials. Use it when the name is printed beside the avatar." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex. Falls back to --neon-accent, then cyan." },
       ],
     },
@@ -61,7 +62,7 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
-    "Each avatar is a single image to assistive tech, named by alt, with the status appended, e.g. \"Maya Okafor (online)\".",
+    "Each avatar is a single image to assistive tech, named by alt, with the status appended, e.g. \"Maya Okafor (online)\". Next to a visible name, pass decorative so the name isn't read twice.",
     "The +N chip is announced as \"N more\".",
     "The status light is cut out with #05060a; change it with className if your surface is a different color.",
   ],

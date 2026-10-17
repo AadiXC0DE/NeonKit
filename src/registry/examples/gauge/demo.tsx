@@ -103,8 +103,8 @@ export default function GaugeDemo() {
           unit="km/h"
           value={car.speed}
           min={0}
-          max={260}
-          ticks={13}
+          max={240}
+          ticks={12}
           formatValue={(v) => String(Math.round(v))}
         />
       </div>

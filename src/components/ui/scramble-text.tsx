@@ -19,12 +19,12 @@ const css = `
 }
 .nk-scramble-text-c[data-s="h"]::after {
   color: color-mix(in srgb, rgb(var(--neon)) 40%, white);
-  text-shadow: 0 0 0.1em rgb(var(--neon)), 0 0 0.35em rgb(var(--neon) / 0.7);
+  text-shadow: 0 0 0.1em rgb(var(--neon) / var(--neon-glow, 1)), 0 0 0.35em rgb(var(--neon) / calc(0.7 * var(--neon-glow, 1)));
 }
 .nk-scramble-text-c[data-s="l"] { color: inherit; animation: nk-scramble-text-lock 0.7s cubic-bezier(0.23, 1, 0.32, 1) both; }
 .nk-scramble-text-c[data-s="l"]::after { content: none; }
 @keyframes nk-scramble-text-lock {
-  from { color: color-mix(in srgb, rgb(var(--neon)) 40%, white); text-shadow: 0 0 0.1em rgb(var(--neon)), 0 0 0.4em rgb(var(--neon) / 0.6); }
+  from { color: color-mix(in srgb, rgb(var(--neon)) 40%, white); text-shadow: 0 0 0.1em rgb(var(--neon) / var(--neon-glow, 1)), 0 0 0.4em rgb(var(--neon) / calc(0.6 * var(--neon-glow, 1))); }
 }
 @media (prefers-reduced-motion: reduce) { .nk-scramble-text-c[data-s="l"] { animation: none; } }
 `;

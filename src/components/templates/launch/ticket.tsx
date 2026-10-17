@@ -336,7 +336,7 @@ function TicketBody({ phase }: { phase: Phase }) {
         <div className="mx-auto max-w-[640px] lg:rotate-[-2.5deg]">
           <TicketArt tier={tier} holder={name} admitted={phase === "after"} />
         </div>
-        <p className="mx-auto mt-8 max-w-[640px] text-center text-[13px] text-white/60 lg:mt-12">
+        <p className="mx-auto mt-8 max-w-[640px] text-balance text-center text-[13px] text-white/60 lg:mt-12">
           {phase === "after"
             ? "Keep it. It's the only merch we made."
             : tier.id === "stream"

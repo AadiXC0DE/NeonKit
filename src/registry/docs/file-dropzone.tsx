@@ -77,7 +77,7 @@ export const doc: ComponentDoc = {
       props: [
         { prop: "files", type: "FileListItem[]", description: "The rows, in order." },
         { prop: "onRemove", type: "(id: string) => void", description: "Shows a remove button on every row (labelled Cancel while uploading)." },
-        { prop: "onRetry", type: "(id: string) => void", description: "Shows a retry button on rows that failed." },
+        { prop: "onRetry", type: "(id: string) => void", description: "Shows a retry button on rows that failed. Other rows keep the slot empty, so the tubes end in one column." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex for the progress tubes." },
       ],
     },

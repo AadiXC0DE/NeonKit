@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, ArrowRight, CircleCheck, CreditCard, RotateCcw, Truck } from "@/components/ui/icons";
+import { ArrowLeft, ArrowRight, CircleCheck, CreditCard, RotateCcw, Truck, Zap } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Step, Stepper } from "@/components/ui/stepper";
 
@@ -13,6 +13,43 @@ const steps = [
 ];
 
 const row = "flex items-baseline justify-between gap-4 text-sm";
+
+const deliveries = [
+  { id: "standard", icon: Truck, title: "Standard delivery", detail: "3–5 business days, by Fri 24", price: "Free" },
+  { id: "next-day", icon: Zap, title: "Next day", detail: "Order by 16:00 for Tuesday", price: "$12.00" },
+];
+
+function DeliveryOptions() {
+  const [speed, setSpeed] = React.useState("standard");
+  return (
+    <div role="radiogroup" aria-label="Delivery speed" className="grid content-start gap-2">
+      {deliveries.map(({ id, icon: Icon, title, detail, price }) => {
+        const on = speed === id;
+        return (
+          <button
+            key={id}
+            type="button"
+            role="radio"
+            aria-checked={on}
+            onClick={() => setSpeed(id)}
+            className={
+              on
+                ? "flex items-start gap-3 rounded-lg border border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.06)] p-3 text-left text-sm outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+                : "flex items-start gap-3 rounded-lg border border-white/10 p-3 text-left text-sm outline-none transition-colors hover:border-white/20 focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
+            }
+          >
+            <Icon aria-hidden className={on ? "mt-0.5 size-4 shrink-0 text-[rgb(var(--neon))]" : "mt-0.5 size-4 shrink-0 text-white/45"} />
+            <span className="grid flex-1 gap-0.5">
+              <span className={on ? "text-white/90" : "text-white/75"}>{title}</span>
+              <span className="text-xs text-white/50">{detail}</span>
+            </span>
+            <span className="text-xs tabular-nums text-white/60">{price}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 function Panel({ step }: { step: number }) {
   if (step === 0) {
@@ -49,13 +86,7 @@ function Panel({ step }: { step: number }) {
           <span className="text-white/60">18 Harbour Street, Leith</span>
           <span className="text-white/60">Edinburgh EH6 6PZ</span>
         </div>
-        <div className="flex items-start gap-3 self-start rounded-lg border border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.06)] p-3 text-sm">
-          <Truck aria-hidden className="mt-0.5 size-4 shrink-0 text-[rgb(var(--neon))]" />
-          <span className="grid gap-0.5">
-            <span className="text-white/90">Standard delivery</span>
-            <span className="text-xs text-white/50">3–5 business days · Free</span>
-          </span>
-        </div>
+        <DeliveryOptions />
       </div>
     );
   }

@@ -22,6 +22,12 @@ type Mote = {
 const MAX_PARTICLES = 420;
 const LINK_LEVELS = 6;
 
+/** The theme's glow multiplier. A finite check, not `|| 1`, so 0 stays 0. */
+function readGlow(node: Element) {
+  const value = parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"));
+  return Number.isFinite(value) ? Math.max(0, value) : 1;
+}
+
 // The canvas carries `color: rgb(var(--neon))`, so the resolved channels are one read away.
 function readRgb(node: HTMLElement): Rgb {
   const parts = getComputedStyle(node).color.match(/[\d.]+/g);
@@ -111,6 +117,7 @@ const Particles = React.forwardRef<HTMLDivElement, ParticlesProps>(
       let width = 0;
       let height = 0;
       let rgb = readRgb(canvas);
+      let glow = readGlow(canvas);
       let sprite = glowSprite(rgb);
       let raf = 0;
       let last = 0;
@@ -187,8 +194,10 @@ const Particles = React.forwardRef<HTMLDivElement, ParticlesProps>(
           const alpha = (0.25 + mote.depth * 0.75) * flicker;
           const size = 0.6 + mote.depth * mote.depth * 1.9;
           const halo = size * 9;
-          ctx.globalAlpha = alpha * 0.85;
-          ctx.drawImage(sprite, mote.x - halo / 2, mote.y - halo / 2, halo, halo);
+          if (glow > 0) {
+            ctx.globalAlpha = Math.min(1, alpha * 0.85 * glow);
+            ctx.drawImage(sprite, mote.x - halo / 2, mote.y - halo / 2, halo, halo);
+          }
           ctx.globalAlpha = alpha;
           ctx.fillStyle = core;
           ctx.beginPath();
@@ -296,6 +305,7 @@ const Particles = React.forwardRef<HTMLDivElement, ParticlesProps>(
 
       recolor.current = () => {
         rgb = readRgb(canvas);
+        glow = readGlow(canvas);
         sprite = glowSprite(rgb);
         if (!raf && width > 0) draw();
       };
@@ -368,11 +378,15 @@ const Particles = React.forwardRef<HTMLDivElement, ParticlesProps>(
         )}
         {...props}
       >
-        {/* The color transition is a change detector: when --neon changes upstream, transitionend fires. */}
+        {/* The color and letter-spacing transitions are change detectors: when --neon or --neon-glow changes upstream, transitionend fires. */}
         <canvas
           ref={canvasRef}
           className="absolute inset-0 size-full"
-          style={{ color: "rgb(var(--neon))", transition: "color 1ms linear" }}
+          style={{
+            color: "rgb(var(--neon))",
+            letterSpacing: "calc(var(--neon-glow, 1) * 1px)",
+            transition: "color 1ms linear, letter-spacing 1ms linear",
+          }}
         />
       </div>
     );

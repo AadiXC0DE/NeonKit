@@ -51,6 +51,13 @@ function readRgb(node: Element | null): Rgb {
   return parts && parts.length >= 3 ? [+parts[0], +parts[1], +parts[2]] : FALLBACK;
 }
 
+/** The theme's glow multiplier. A finite check, not `|| 1`, so 0 stays 0. */
+function readGlow(node: Element | null) {
+  if (!node || typeof getComputedStyle === "undefined") return 1;
+  const value = parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"));
+  return Number.isFinite(value) ? Math.max(0, value) : 1;
+}
+
 function rgba([r, g, b]: Rgb, alpha: number) {
   return `rgba(${r | 0},${g | 0},${b | 0},${Math.min(1, Math.max(0, alpha)).toFixed(4)})`;
 }
@@ -140,6 +147,7 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
       let height = 0;
       let dpr = 1;
       let rgb = readRgb(probe);
+      let glow = readGlow(probe);
       let raf = 0;
       let last = 0;
       let phase = 0;
@@ -163,8 +171,8 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
         const cx = x + w / 2;
         const cy = y + h / 2;
         gridCtx.lineWidth = 1 / dpr;
-        gridCtx.shadowColor = rgba(rgb, 0.6);
-        gridCtx.shadowBlur = 3;
+        gridCtx.shadowColor = rgba(rgb, 0.6 * glow);
+        gridCtx.shadowBlur = glow > 0 ? 3 : 0;
         gridCtx.beginPath();
         for (let i = 0; i <= COLUMNS; i++) {
           const lx = crisp(x + (w * i) / COLUMNS, dpr);
@@ -253,10 +261,13 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
         }
         const core: Rgb = [rgb[0] * 0.3 + 178.5, rgb[1] * 0.3 + 178.5, rgb[2] * 0.3 + 178.5];
         for (const [lineWidth, alpha, isCore] of passes) {
+          // The wide passes are the bloom; the core is the trace itself and stays.
+          const lit = isCore ? 1 : glow;
+          if (lit === 0) continue;
           ctx.lineWidth = lineWidth;
           for (let level = 0; level < LEVELS; level++) {
             const intensity = 0.12 + (0.88 * level) / (LEVELS - 1);
-            ctx.strokeStyle = rgba(isCore ? core : rgb, alpha * intensity * gain);
+            ctx.strokeStyle = rgba(isCore ? core : rgb, alpha * intensity * gain * lit);
             ctx.beginPath();
             let open = false;
             for (let i = 0; i < count - 1; i++) {
@@ -380,6 +391,7 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
 
       const recolor = () => {
         rgb = readRgb(probe);
+        glow = readGlow(probe);
         drawGrid();
         redraw();
       };
@@ -444,7 +456,7 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
           "relative isolate aspect-[16/10] w-full overflow-hidden rounded-2xl border border-white/10 bg-[#030405]",
-          "shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_24px_60px_-28px_rgb(var(--neon)/0.35)]",
+          "shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_24px_60px_-28px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]",
           className,
         )}
         {...props}
@@ -452,12 +464,13 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
         <span
           ref={probeRef}
           aria-hidden
-          className="pointer-events-none absolute size-0 text-[rgb(var(--neon))] [transition:color_1ms_linear]"
+          // Color and --neon-glow both transition here, so a change on any ancestor repaints the canvases.
+          className="pointer-events-none absolute size-0 text-[rgb(var(--neon))] [letter-spacing:CALC(var(--neon-glow,1)*1px)] [transition:color_1ms_linear,letter-spacing_1ms_linear]"
         />
         {/* Phosphor never reads as pure black: a faint tint and a hotter center. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_65%_at_50%_50%,rgb(var(--neon)/0.075),rgb(var(--neon)/0.02)_60%,transparent_100%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_65%_at_50%_50%,rgb(var(--neon)/CALC(0.075*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.02*var(--neon-glow,1)))_60%,transparent_100%)]"
         />
         <canvas
           ref={gridRef}
@@ -472,7 +485,7 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
         <canvas
           ref={bloomRef}
           aria-hidden
-          className="pointer-events-none absolute inset-0 size-full opacity-90 mix-blend-screen [filter:blur(5px)]"
+          className="pointer-events-none absolute inset-0 size-full opacity-90 mix-blend-screen [filter:blur(5px)_opacity(var(--neon-glow,1))]"
         />
         {/* Curved glass: darker corners, an inner rim and a soft reflection. */}
         <div
@@ -484,7 +497,7 @@ const Oscilloscope = React.forwardRef<HTMLDivElement, OscilloscopeProps>(
           className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(ellipse_55%_38%_at_22%_8%,rgb(255_255_255/0.07),transparent_70%)]"
         />
         {children != null && (
-          <div className="pointer-events-none absolute inset-0 font-mono text-[11px] leading-none tracking-[0.04em] text-[rgb(var(--neon)/0.85)] [text-shadow:0_0_8px_rgb(var(--neon)/0.65)]">
+          <div className="pointer-events-none absolute inset-0 font-mono text-[11px] leading-none tracking-[0.04em] text-[rgb(var(--neon)/0.85)] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.65*var(--neon-glow,1)))]">
             {children}
           </div>
         )}

@@ -84,5 +84,6 @@ toast.success("Invite sent to ana@acme.dev")`,
     "Hovering the stack or tabbing into it expands it and pauses every timer; timers also pause while the tab is hidden.",
     "Swipe a toast sideways to dismiss it. On touch screens the close button stays visible.",
     "Toasts disappear, so never make one the only way to reach an action.",
+    "The stack renders into document.body (or the modal dialog the Toaster sits in), so a transformed or z-indexed parent can't clip or bury it. Without a color it takes --neon-accent from where it's mounted.",
   ],
 };

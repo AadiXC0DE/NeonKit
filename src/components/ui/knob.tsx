@@ -338,7 +338,7 @@ const Knob = React.forwardRef<HTMLDivElement, KnobProps>(
           {/* Light from the ring falling on the panel around the knob */}
           <span
             aria-hidden
-            className="pointer-events-none absolute -inset-[22%] rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/0.2),rgb(var(--neon)/0.06)_60%,transparent)] transition-opacity duration-200"
+            className="pointer-events-none absolute -inset-[22%] rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/CALC(0.2*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.06*var(--neon-glow,1)))_60%,transparent)] transition-opacity duration-200"
             style={{ opacity: lit ? 0.25 + litFraction * 0.75 : 0 }}
           />
 
@@ -395,10 +395,10 @@ const Knob = React.forwardRef<HTMLDivElement, KnobProps>(
               viewBox="0 0 100 100"
               className={cn(
                 "pointer-events-none absolute inset-0 size-full overflow-visible transition-[filter] duration-200",
-                "[filter:drop-shadow(0_0_1.5px_rgb(var(--neon)))_drop-shadow(0_0_5px_rgb(var(--neon)/0.55))]",
-                "group-hover/knob:[filter:drop-shadow(0_0_2px_rgb(var(--neon)))_drop-shadow(0_0_8px_rgb(var(--neon)/0.75))]",
-                "group-focus-visible/knob:[filter:drop-shadow(0_0_2px_rgb(var(--neon)))_drop-shadow(0_0_8px_rgb(var(--neon)/0.75))]",
-                "group-data-[state=dragging]/knob:[filter:drop-shadow(0_0_2px_rgb(var(--neon)))_drop-shadow(0_0_9px_rgb(var(--neon)/0.85))]",
+                "[filter:drop-shadow(0_0_1.5px_rgb(var(--neon)/var(--neon-glow,1)))_drop-shadow(0_0_5px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))))]",
+                "group-hover/knob:[filter:drop-shadow(0_0_2px_rgb(var(--neon)/var(--neon-glow,1)))_drop-shadow(0_0_8px_rgb(var(--neon)/CALC(0.75*var(--neon-glow,1))))]",
+                "group-focus-visible/knob:[filter:drop-shadow(0_0_2px_rgb(var(--neon)/var(--neon-glow,1)))_drop-shadow(0_0_8px_rgb(var(--neon)/CALC(0.75*var(--neon-glow,1))))]",
+                "group-data-[state=dragging]/knob:[filter:drop-shadow(0_0_2px_rgb(var(--neon)/var(--neon-glow,1)))_drop-shadow(0_0_9px_rgb(var(--neon)/CALC(0.85*var(--neon-glow,1))))]",
               )}
             >
               <path
@@ -439,7 +439,7 @@ const Knob = React.forwardRef<HTMLDivElement, KnobProps>(
                 className={cn(
                   "absolute left-1/2 top-[15%] h-[27%] w-[0.14em] min-w-[1.5px] -translate-x-1/2 rounded-full transition-[background-color,box-shadow] duration-200",
                   lit
-                    ? "shadow-[0_0_0.15em_rgb(var(--neon)),0_0_0.45em_rgb(var(--neon)/0.7)]"
+                    ? "shadow-[0_0_0.15em_rgb(var(--neon)/var(--neon-glow,1)),0_0_0.45em_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]"
                     : "bg-[rgb(var(--neon)/0.16)]",
                 )}
                 style={lit ? { backgroundColor: CORE } : undefined}
@@ -465,7 +465,7 @@ const Knob = React.forwardRef<HTMLDivElement, KnobProps>(
             className={cn(
               "leading-none tabular-nums transition-[color,text-shadow] duration-150",
               dragging
-                ? "text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.6)]"
+                ? "text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
                 : "text-white/80",
               s.value,
             )}

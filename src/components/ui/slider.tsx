@@ -13,7 +13,7 @@ const sizes = {
   lg: { root: "h-6", track: "h-2", thumb: "size-[22px]", rail: "inset-x-[11px]", radius: 11 },
 } as const;
 
-const thumbGlow = "shadow-[0_0_18px_rgb(var(--neon)/0.8),0_1px_3px_rgb(0_0_0/0.5)]";
+const thumbGlow = "shadow-[0_0_18px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_1px_3px_rgb(0_0_0/0.5)]";
 
 function clamp(value: number, lower: number, upper: number) {
   return Math.min(upper, Math.max(lower, value));
@@ -277,7 +277,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
               right: `${100 - last}%`,
             }}
             className={cn(
-              "pointer-events-none absolute top-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.55)]",
+              "pointer-events-none absolute top-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]",
               s.track,
             )}
           />
@@ -314,14 +314,14 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
                     "peer absolute left-0 top-1/2 block -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[rgb(var(--neon))] bg-[#eef3fa] outline-none",
                     // A larger invisible grip, so the thumb is easy to catch with a finger.
                     "before:absolute before:-inset-3 before:rounded-full before:content-['']",
-                    "shadow-[0_0_8px_rgb(var(--neon)/0.4),0_1px_3px_rgb(0_0_0/0.5)]",
+                    "shadow-[0_0_8px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1))),0_1px_3px_rgb(0_0_0/0.5)]",
                     "transition-[transform,scale,box-shadow] duration-150 ease-out motion-reduce:transition-none",
-                    "focus-visible:scale-110 focus-visible:shadow-[0_0_18px_rgb(var(--neon)/0.8),0_1px_3px_rgb(0_0_0/0.5)]",
+                    "focus-visible:scale-110 focus-visible:shadow-[0_0_18px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_1px_3px_rgb(0_0_0/0.5)]",
                     "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
                     dragging
                       ? cn("scale-110", thumbGlow)
                       : !disabled &&
-                          "hover:shadow-[0_0_12px_rgb(var(--neon)/0.6),0_1px_3px_rgb(0_0_0/0.5)]",
+                          "hover:shadow-[0_0_12px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),0_1px_3px_rgb(0_0_0/0.5)]",
                     s.thumb,
                   )}
                 />

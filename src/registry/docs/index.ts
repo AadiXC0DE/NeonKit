@@ -103,6 +103,13 @@ import { doc as codeBlockDoc } from "./code-block";
 import { doc as chatMessageDoc } from "./chat-message";
 import { doc as promptInputDoc } from "./prompt-input";
 import { doc as conversationDoc } from "./conversation";
+import { doc as reasoningDoc } from "./reasoning";
+import { doc as toolCallDoc } from "./tool-call";
+import { doc as agentPlanDoc } from "./agent-plan";
+import { doc as sourcesDoc } from "./sources";
+import { doc as contextMeterDoc } from "./context-meter";
+import { doc as voiceInputDoc } from "./voice-input";
+import { doc as modelSelectDoc } from "./model-select";
 import { doc as iconsDoc } from "./icons";
 import { doc as dataTableDoc } from "./data-table";
 import { doc as treeViewDoc } from "./tree-view";
@@ -220,6 +227,13 @@ export const docs: Record<string, ComponentDoc> = {
   "chat-message": chatMessageDoc,
   "prompt-input": promptInputDoc,
   "conversation": conversationDoc,
+  "reasoning": reasoningDoc,
+  "tool-call": toolCallDoc,
+  "agent-plan": agentPlanDoc,
+  "sources": sourcesDoc,
+  "context-meter": contextMeterDoc,
+  "voice-input": voiceInputDoc,
+  "model-select": modelSelectDoc,
   "icons": iconsDoc,
   "data-table": dataTableDoc,
   "tree-view": treeViewDoc,

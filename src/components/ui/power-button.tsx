@@ -25,7 +25,8 @@ const sizes = {
     ring: "inset-[3px] border-[1.5px]",
     cap: "inset-[7px]",
     glyph: "size-3",
-    spill: "shadow-[0_0_16px_4px_rgb(var(--neon)/0.16),0_0_44px_14px_rgb(var(--neon)/0.07)]",
+    icon: "size-3.5",
+    spill: "shadow-[0_0_16px_4px_rgb(var(--neon)/CALC(0.16*var(--neon-glow,1))),0_0_44px_14px_rgb(var(--neon)/CALC(0.07*var(--neon-glow,1)))]",
   },
   md: {
     root: "size-10",
@@ -33,7 +34,8 @@ const sizes = {
     ring: "inset-[4px] border-2",
     cap: "inset-[9px]",
     glyph: "size-3.5",
-    spill: "shadow-[0_0_20px_5px_rgb(var(--neon)/0.16),0_0_54px_18px_rgb(var(--neon)/0.07)]",
+    icon: "size-4",
+    spill: "shadow-[0_0_20px_5px_rgb(var(--neon)/CALC(0.16*var(--neon-glow,1))),0_0_54px_18px_rgb(var(--neon)/CALC(0.07*var(--neon-glow,1)))]",
   },
   lg: {
     root: "size-12",
@@ -41,7 +43,8 @@ const sizes = {
     ring: "inset-[4px] border-2",
     cap: "inset-[10px]",
     glyph: "size-4",
-    spill: "shadow-[0_0_24px_6px_rgb(var(--neon)/0.16),0_0_64px_22px_rgb(var(--neon)/0.07)]",
+    icon: "size-[18px]",
+    spill: "shadow-[0_0_24px_6px_rgb(var(--neon)/CALC(0.16*var(--neon-glow,1))),0_0_64px_22px_rgb(var(--neon)/CALC(0.07*var(--neon-glow,1)))]",
   },
   xl: {
     root: "size-[72px]",
@@ -49,7 +52,8 @@ const sizes = {
     ring: "inset-[7px] border-[3px]",
     cap: "inset-[15px]",
     glyph: "size-6",
-    spill: "shadow-[0_0_36px_10px_rgb(var(--neon)/0.16),0_0_96px_34px_rgb(var(--neon)/0.07)]",
+    icon: "size-6",
+    spill: "shadow-[0_0_36px_10px_rgb(var(--neon)/CALC(0.16*var(--neon-glow,1))),0_0_96px_34px_rgb(var(--neon)/CALC(0.07*var(--neon-glow,1)))]",
   },
 } as const;
 
@@ -200,7 +204,7 @@ const PowerButton = React.forwardRef<HTMLButtonElement, PowerButtonProps>(
             aria-hidden
             className={cn(
               "pointer-events-none absolute rounded-full [border-color:color-mix(in_srgb,rgb(var(--neon))_45%,white)]",
-              "shadow-[0_0_2px_rgb(var(--neon)),0_0_8px_rgb(var(--neon)/0.9),0_0_20px_rgb(var(--neon)/0.5),inset_0_0_3px_rgb(var(--neon)),inset_0_0_8px_rgb(var(--neon)/0.6)]",
+              "shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_8px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_20px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_3px_rgb(var(--neon)/var(--neon-glow,1)),inset_0_0_8px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]",
               "transition-opacity duration-200 ease-out",
               pressed ? "opacity-100" : "opacity-0",
               igniting && "nk-power-button-ring",
@@ -216,12 +220,18 @@ const PowerButton = React.forwardRef<HTMLButtonElement, PowerButtonProps>(
               "bg-[radial-gradient(circle_at_50%_30%,#22252e,#12141a_55%,#0b0c11)]",
               "transition-[transform,scale,box-shadow] duration-150 ease-out group-active/power:scale-[0.94] group-active/power:duration-75",
               pressed
-                ? "scale-[0.975] shadow-[0_0_0_1px_rgb(var(--neon)/0.3),0_0_10px_rgb(var(--neon)/0.35),inset_0_1px_0_rgb(255_255_255/0.08),inset_0_-2px_4px_rgb(0_0_0/0.5)]"
+                ? "scale-[0.975] shadow-[0_0_0_1px_rgb(var(--neon)/0.3),0_0_10px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.08),inset_0_-2px_4px_rgb(0_0_0/0.5)]"
                 : "shadow-[0_0_0_1px_rgb(0_0_0/0.6),0_2px_3px_rgb(0_0_0/0.7),inset_0_1px_0_rgb(255_255_255/0.09),inset_0_-2px_4px_rgb(0_0_0/0.5)]",
               s.cap,
             )}
           >
-            <span className={cn("relative grid place-items-center [&_svg]:size-full", s.glyph)}>
+            <span
+              className={cn(
+                "relative grid place-items-center [&_svg]:size-full",
+                // A custom icon is drawn for 24px; it gets a little more room and a heavier tube to read inside the cap.
+                icon ? cn(s.icon, "[&_svg]:[stroke-width:2.25]") : s.glyph,
+              )}
+            >
               <span
                 className={cn(
                   "absolute inset-0 grid place-items-center text-[rgb(var(--neon)/0.2)] [filter:drop-shadow(0_1px_0_rgb(255_255_255/0.06))] transition-colors duration-200",
@@ -234,7 +244,7 @@ const PowerButton = React.forwardRef<HTMLButtonElement, PowerButtonProps>(
                 key={`glyph-${ignitions}`}
                 className={cn(
                   "absolute inset-0 grid place-items-center [color:color-mix(in_srgb,rgb(var(--neon))_35%,white)]",
-                  "[filter:drop-shadow(0_0_1.5px_rgb(var(--neon)))_drop-shadow(0_0_5px_rgb(var(--neon)/0.8))]",
+                  "[filter:drop-shadow(0_0_1.5px_rgb(var(--neon)/var(--neon-glow,1)))_drop-shadow(0_0_5px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))))]",
                   "transition-opacity duration-150 ease-out",
                   pressed ? "opacity-100" : "opacity-0",
                   igniting && "nk-power-button-glyph",

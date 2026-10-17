@@ -106,7 +106,7 @@ export function Testimonials() {
               aria-expanded={expanded}
               aria-controls="customers-wall"
               onClick={() => setExpanded((value) => !value)}
-              className="-ml-3 text-white/85"
+              className="-ml-4 text-white/85"
             >
               {expanded ? "Show fewer" : `Read all ${quotes.length}`}
               <ChevronDown

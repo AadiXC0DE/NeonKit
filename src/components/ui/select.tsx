@@ -390,7 +390,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
               <span
                 aria-hidden
                 title="Required"
-                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
               />
             )}
           </label>
@@ -420,14 +420,14 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             className={cn(
               "flex w-full cursor-pointer select-none items-center border border-white/10 bg-white/[0.03] text-left text-white/90 outline-none",
               "transition-[border-color,background-color,box-shadow] ease-[cubic-bezier(0.23,1,0.32,1)] duration-[150ms,150ms,320ms]",
-              "focus-visible:border-[rgb(var(--neon)/0.8)] focus-visible:bg-[rgb(var(--neon)/0.04)] focus-visible:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+              "focus-visible:border-[rgb(var(--neon)/0.8)] focus-visible:bg-[rgb(var(--neon)/0.04)] focus-visible:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
               "disabled:cursor-not-allowed disabled:opacity-50",
               "[&_svg]:pointer-events-none [&_svg]:shrink-0",
               !isOpen && "hover:border-white/20",
               invalid && "border-[rgb(var(--neon)/0.55)]",
               invalid && !isOpen && "hover:border-[rgb(var(--neon)/0.75)]",
               isOpen &&
-                "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.04)] shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+                "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.04)] shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
               s.trigger,
               className,
             )}
@@ -512,7 +512,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                     }
                     className={cn(
                       "[--neon:var(--neon-accent,34_211_238)] z-50 overflow-y-auto overscroll-contain border border-white/10 bg-[#0a0b11] p-1",
-                      "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+                      "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
                       "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]",
                       above ? "origin-bottom" : "origin-top",
                       s.list,
@@ -570,7 +570,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                           <Check
                             aria-hidden
                             className={cn(
-                              "shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.7))]",
+                              "shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))))]",
                               !isSelected && "invisible",
                             )}
                           />

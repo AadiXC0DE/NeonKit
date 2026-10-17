@@ -232,7 +232,7 @@ function Highlight({ text, range }: { text: string; range?: Range }) {
   return (
     <>
       {text.slice(0, range[0])}
-      <mark className="bg-transparent text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.55)]">
+      <mark className="bg-transparent text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]">
         {text.slice(range[0], range[1])}
       </mark>
       {text.slice(range[1])}
@@ -703,7 +703,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
         <Check
           aria-hidden
           className={cn(
-            "relative shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.7))]",
+            "relative shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))))]",
             !isSelected && "invisible",
           )}
         />
@@ -768,7 +768,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
             <span
               aria-hidden
               title="Required"
-              className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+              className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
             />
           )}
         </label>
@@ -783,7 +783,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
           "[--neon-field:var(--neon)]",
           "group/field relative flex w-full cursor-text border border-white/10 bg-white/[0.03] text-white/90",
           "transition-[border-color,background-color,box-shadow] ease-[cubic-bezier(0.23,1,0.32,1)] duration-[150ms,150ms,320ms]",
-          "focus-within:border-[rgb(var(--neon-field)/0.8)] focus-within:bg-[rgb(var(--neon-field)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon-field)/0.2),0_0_20px_-4px_rgb(var(--neon-field)/0.5),inset_0_0_12px_-2px_rgb(var(--neon-field)/0.14)]",
+          "focus-within:border-[rgb(var(--neon-field)/0.8)] focus-within:bg-[rgb(var(--neon-field)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon-field)/0.2),0_0_20px_-4px_rgb(var(--neon-field)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon-field)/CALC(0.14*var(--neon-glow,1)))]",
           !disabled && "hover:[&:not(:focus-within)]:border-white/20",
           invalid &&
             "border-[rgb(var(--neon-field)/0.55)] hover:[&:not(:focus-within)]:border-[rgb(var(--neon-field)/0.75)]",
@@ -806,7 +806,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
                     transition={{ duration: 0.16, ease: EASE }}
                     className={cn(
                       "inline-flex min-w-0 max-w-full items-center border border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.08)] text-white/90",
-                      "shadow-[0_0_12px_-6px_rgb(var(--neon)/0.8)]",
+                      "shadow-[0_0_12px_-6px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))]",
                       s.chip,
                       disabled && "pr-2",
                     )}
@@ -909,7 +909,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
           >
             <span
               className={cn(
-                "absolute left-0 top-[2px] h-px w-1/4 rounded-full bg-[linear-gradient(90deg,transparent,rgb(var(--neon)),transparent)] shadow-[0_0_6px_rgb(var(--neon)/0.9)]",
+                "absolute left-0 top-[2px] h-px w-1/4 rounded-full bg-[linear-gradient(90deg,transparent,rgb(var(--neon)),transparent)] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]",
                 "[animation:neonkit-combobox-scan_1.1s_cubic-bezier(0.45,0,0.55,1)_infinite]",
                 "motion-reduce:w-full motion-reduce:[animation:neonkit-combobox-breathe_1.8s_ease-in-out_infinite]",
               )}
@@ -963,7 +963,7 @@ const Combobox = React.forwardRef<HTMLInputElement, ComboboxProps>((props, ref) 
                   style={{ transformOrigin: above ? "50% 100%" : "50% 0%" }}
                   className={cn(
                     "overflow-hidden border border-white/10 bg-[#0a0b11] text-white/90",
-                    "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+                    "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
                     s.panel,
                   )}
                 >

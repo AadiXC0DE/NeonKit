@@ -12,7 +12,7 @@ import { useLights } from "./lights";
 import { SectionHeading, display } from "./section-heading";
 
 const stretched =
-  "text-left outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:rounded-xl focus-visible:after:ring-2 focus-visible:after:ring-[rgb(var(--neon)/0.6)]";
+  "text-left outline-none after:absolute after:-inset-3 after:content-[''] focus-visible:after:rounded-xl focus-visible:after:ring-2 focus-visible:after:ring-[rgb(var(--neon)/0.6)]";
 
 function Meta({ post }: { post: Post }) {
   return (

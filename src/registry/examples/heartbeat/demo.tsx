@@ -26,7 +26,7 @@ export default function HeartbeatDemo() {
           <Heartbeat bpm={72} height={132} onBeat={thump} />
         </div>
         <dl className="grid grid-cols-3 gap-px border-t border-white/[0.07] bg-white/[0.07] sm:w-44 sm:grid-cols-1 sm:border-l sm:border-t-0">
-          <div className="bg-[#06070b] px-4 py-3">
+          <div className="min-w-0 bg-[#06070b] px-3 py-3 sm:px-4">
             <dt className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">
               HR
               <Heart
@@ -39,13 +39,13 @@ export default function HeartbeatDemo() {
               72
             </dd>
           </div>
-          <div className="bg-[#06070b] px-4 py-3">
+          <div className="min-w-0 bg-[#06070b] px-3 py-3 sm:px-4">
             <dt className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">SpO₂ %</dt>
-            <dd className="mt-1 font-mono text-2xl tabular-nums leading-none text-white/80">98</dd>
+            <dd className="mt-1 font-mono text-xl tabular-nums leading-none text-white/80 sm:text-2xl">98</dd>
           </div>
-          <div className="bg-[#06070b] px-4 py-3">
+          <div className="min-w-0 bg-[#06070b] px-3 py-3 sm:px-4">
             <dt className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">NIBP</dt>
-            <dd className="mt-1 font-mono text-2xl tabular-nums leading-none text-white/80">
+            <dd className="mt-1 whitespace-nowrap font-mono text-xl tabular-nums leading-none text-white/80 sm:text-2xl">
               118<span className="text-white/50">/</span>76
             </dd>
           </div>

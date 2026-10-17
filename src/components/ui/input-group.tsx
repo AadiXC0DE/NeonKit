@@ -53,7 +53,7 @@ const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
           "group/input-group relative flex w-full min-w-0 cursor-text flex-wrap items-center border border-white/10 bg-white/[0.03] text-white/90",
           "transition-[border-color,background-color,box-shadow] ease-[cubic-bezier(0.23,1,0.32,1)] duration-[150ms,150ms,320ms]",
           "hover:[&:not(:focus-within)]:border-white/20",
-          "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+          "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
           // Invalid: the whole group turns red, and so does its glow when focused.
           "has-[[aria-invalid=true]]:border-[rgb(var(--neon)/0.55)] has-[[aria-invalid=true]]:[--neon:255_77_94]",
           "has-[[data-nk-input-group-control]:disabled]:cursor-not-allowed has-[[data-nk-input-group-control]:disabled]:opacity-50",
@@ -180,7 +180,7 @@ InputGroupTextarea.displayName = "InputGroupTextarea";
 
 const buttonSizes = {
   sm: "h-7 gap-1.5 rounded-md px-2.5 text-xs",
-  icon: "size-7 rounded-md px-0 [&_svg]:size-3.5",
+  icon: "size-7 rounded-md px-0 [&_svg]:size-4",
 } as const;
 
 export interface InputGroupButtonProps extends Omit<ButtonProps, "size"> {

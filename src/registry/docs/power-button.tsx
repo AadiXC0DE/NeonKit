@@ -43,7 +43,7 @@ export const doc: ComponentDoc = {
         { prop: "defaultPressed", type: "boolean", default: "false", description: "Initial state when uncontrolled." },
         { prop: "onPressedChange", type: "(pressed: boolean) => void", description: "Called with the new state when the key is pressed." },
         { prop: "size", type: '"sm" | "md" | "lg" | "xl"', default: '"md"', description: "Diameter: 32, 40, 48 or 72px." },
-        { prop: "icon", type: "ReactNode", default: "power glyph", description: "Replaces the glyph on the cap. It inherits the tube color through currentColor." },
+        { prop: "icon", type: "ReactNode", default: "power glyph", description: "Replaces the glyph on the cap. It inherits the tube color through currentColor and is drawn a step larger with a 2.25 stroke so it reads inside the cap." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex. Falls back to --neon-accent, then cyan." },
         { prop: "name", type: "string", description: "Submits value under this name while on, like a native checkbox." },
         { prop: "value", type: "string", default: '"on"', description: "Submitted with name while on." },

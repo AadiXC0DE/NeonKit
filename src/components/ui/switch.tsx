@@ -131,9 +131,9 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           aria-hidden
           className={cn(
             "pointer-events-none absolute -inset-px rounded-full border border-[rgb(var(--neon)/0.75)] bg-[rgb(var(--neon)/0.2)]",
-            "shadow-[0_0_14px_rgb(var(--neon)/0.45),inset_0_0_8px_rgb(var(--neon)/0.3)] transition-shadow duration-200 ease-out",
+            "shadow-[0_0_14px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_0_8px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1)))] transition-shadow duration-200 ease-out",
             !disabled &&
-              "group-hover/switch:shadow-[0_0_20px_rgb(var(--neon)/0.6),inset_0_0_8px_rgb(var(--neon)/0.3)]",
+              "group-hover/switch:shadow-[0_0_20px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),inset_0_0_8px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1)))]",
             checked ? "opacity-100" : "opacity-0",
             checked &&
               ignitions > 0 &&
@@ -146,7 +146,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
             "pointer-events-none relative block rounded-full",
             "transition-[transform,translate,background-color,box-shadow] duration-[180ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
             checked
-              ? cn(s.on, "bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.9),inset_0_1px_0_rgb(255_255_255/0.5)]")
+              ? cn(s.on, "bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.5)]")
               : "translate-x-0 bg-white/60 shadow-[0_1px_2px_rgb(0_0_0/0.4)]",
             s.thumb,
           )}

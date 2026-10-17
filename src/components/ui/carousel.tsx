@@ -456,9 +456,9 @@ CarouselItem.displayName = "CarouselItem";
 const arrowClass = cn(
   "inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-[#0a0c12]/80 text-white/70 outline-none",
   "transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out active:scale-[0.94]",
-  "hover:border-[rgb(var(--neon)/0.55)] hover:text-[rgb(var(--neon))] hover:shadow-[0_0_14px_rgb(var(--neon)/0.25)]",
+  "hover:border-[rgb(var(--neon)/0.55)] hover:text-[rgb(var(--neon))] hover:shadow-[0_0_14px_rgb(var(--neon)/CALC(0.25*var(--neon-glow,1)))]",
   "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
-  "disabled:pointer-events-none disabled:opacity-30 [&_svg]:size-4",
+  "disabled:pointer-events-none disabled:opacity-30 [&_svg]:size-[18px]",
 );
 
 type ArrowProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -553,7 +553,7 @@ const CarouselDots = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
                 {active && (
                   <span
                     className={cn(
-                      "absolute inset-0 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/0.9),0_0_14px_rgb(var(--neon)/0.5)]",
+                      "absolute inset-0 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_14px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]",
                       vertical
                         ? "origin-top scale-y-[var(--carousel-autoplay,1)]"
                         : "origin-left scale-x-[var(--carousel-autoplay,1)]",
@@ -584,7 +584,7 @@ const CarouselProgress = React.forwardRef<HTMLDivElement, React.HTMLAttributes<H
       >
         <span
           className={cn(
-            "absolute rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/0.9)]",
+            "absolute rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]",
             vertical
               ? "inset-x-0 top-0 h-[calc(var(--carousel-visible,1)*100%)] translate-y-[calc(var(--carousel-progress,0)*(1/var(--carousel-visible,1)-1)*100%)]"
               : "inset-y-0 left-0 w-[calc(var(--carousel-visible,1)*100%)] translate-x-[calc(var(--carousel-progress,0)*(1/var(--carousel-visible,1)-1)*100%)]",

@@ -81,6 +81,21 @@ describe("Gauge", () => {
     expect(Number(legend?.getAttribute("y"))).toBeGreaterThan(110);
   });
 
+  it("numbers fewer ticks rather than printing unreadably small numerals", () => {
+    const numerals = (container: HTMLElement) =>
+      Array.from(container.querySelectorAll("svg:first-of-type text"))
+        .map((t) => t.textContent ?? "")
+        .filter((t) => /^\d+$/.test(t));
+    const lg = render(<Gauge size="lg" value={50} />);
+    expect(numerals(lg.container)).toEqual(["0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"]);
+    lg.unmount();
+    // A small dial can't fit eleven readable numerals, so it numbers every other one, ends included.
+    const sm = render(<Gauge size="sm" value={50} />);
+    expect(numerals(sm.container)).toEqual(["0", "20", "40", "60", "80", "100"]);
+    const size = Number(sm.container.querySelector("svg:first-of-type text")?.getAttribute("font-size"));
+    expect(size * 0.8).toBeGreaterThanOrEqual(7.5);
+  });
+
   it("uses a true minus sign on the scale and readout", () => {
     const { container } = render(<Gauge value={-62} min={-100} max={-30} />);
     const texts = Array.from(container.querySelectorAll("text")).map((t) => t.textContent);

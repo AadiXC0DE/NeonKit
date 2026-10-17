@@ -1,81 +1,95 @@
 "use client";
 
 import * as React from "react";
-import { NeonIcon, type NeonIconName } from "@/components/ui/neon-icon";
-import { Slider } from "@/components/ui/slider";
+import { NeonIcon } from "@/components/ui/neon-icon";
+import { Headphones, Lamp, Lock, Mic, Radio, Rss, Video, type Icon } from "@/components/ui/icons";
 
-function Screw({ className }: { className: string }) {
-  return (
-    <span
-      aria-hidden
-      className={`absolute size-[7px] rounded-full bg-[radial-gradient(circle_at_30%_30%,#3b404d,#101219)] shadow-[0_0_0_1px_rgb(255_255_255/0.05)] after:absolute after:left-1/2 after:top-1/2 after:h-px after:w-[5px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:bg-black/70 ${className}`}
-    />
-  );
+type Channel = { id: string; icon: Icon; name: string; on: string; off: string };
+
+const channels: Channel[] = [
+  { id: "mic", icon: Mic, name: "Mic 1", on: "Live", off: "Muted" },
+  { id: "cam", icon: Video, name: "Cam A", on: "Recording", off: "Standby" },
+  { id: "stream", icon: Rss, name: "Stream", on: "6 Mb/s", off: "Offline" },
+  { id: "talkback", icon: Headphones, name: "Talkback", on: "Open", off: "Closed" },
+  { id: "lights", icon: Lamp, name: "House lights", on: "80%", off: "Off" },
+  { id: "door", icon: Lock, name: "Door", on: "Locked", off: "Open" },
+];
+
+// On air is a status, so it keeps its red whatever accent the rest of the panel takes.
+const onAirColor = "red";
+
+// Switched on one after another when the panel powers up.
+const startup = ["door", "lights", "mic", "cam", "stream"];
+
+function clock(seconds: number) {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  return [h, m, s].map((n) => String(n).padStart(2, "0")).join(":");
 }
 
-type Readout = { icon: NeonIconName; name: string; value: number; animated?: boolean; reading: string };
-
 export default function NeonIconDemo() {
-  const [link, setLink] = React.useState(72);
-  const quality = link / 100;
-  const dbm = `${Math.round(-112 + link * 0.62)}`.replace("-", "−");
-  const arcs = link === 0 ? 0 : Math.max(1, Math.round(quality * 3));
+  const [on, setOn] = React.useState<Record<string, boolean>>({});
+  const [elapsed, setElapsed] = React.useState(2537);
+  const onAir = Boolean(on.mic && on.stream);
 
-  const readouts: Readout[] = [
-    { icon: "signal", name: "Signal", value: quality, reading: link === 0 ? "No link" : `${dbm} dBm` },
-    { icon: "wifi", name: "Mesh", value: quality, reading: arcs === 0 ? "Off" : `${arcs} of 3` },
-    { icon: "battery", name: "Cell", value: 0.64, animated: true, reading: "64%" },
-    { icon: "bolt", name: "Supply", value: 1, animated: true, reading: "48 W" },
-    { icon: "power", name: "Radio", value: 1, reading: "On" },
-    { icon: "heart", name: "Watchdog", value: 1, animated: true, reading: "1.1 s" },
-    { icon: "bell", name: "Alerts", value: 1, animated: true, reading: "3 new" },
-  ];
+  React.useEffect(() => {
+    const timers = startup.map((id, i) =>
+      setTimeout(() => setOn((state) => ({ ...state, [id]: true })), 350 + i * 220),
+    );
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  React.useEffect(() => {
+    if (!onAir) return;
+    const interval = setInterval(() => setElapsed((value) => value + 1), 1000);
+    return () => clearInterval(interval);
+  }, [onAir]);
 
   return (
-    <div className="relative w-full max-w-2xl rounded-[22px] border border-white/[0.07] bg-[linear-gradient(180deg,#12141b,#0a0b10)] px-6 pb-6 pt-7 shadow-[inset_0_1px_0_rgb(255_255_255/0.05),0_30px_60px_-30px_rgb(0_0_0/0.9)] sm:px-9 sm:pb-8">
-      <Screw className="left-3 top-3" />
-      <Screw className="right-3 top-3" />
-      <Screw className="bottom-3 left-3" />
-      <Screw className="bottom-3 right-3" />
-
-      <div className="flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">
-        <span>Relay KX-7 · field unit</span>
-        <span>Ch 04</span>
-      </div>
-
-      <ul className="mt-7 grid grid-cols-4 gap-x-2 gap-y-7 sm:grid-cols-7">
-        {readouts.map((readout) => (
-          <li key={readout.name} className="flex flex-col items-center gap-3 text-center">
-            <span className="relative grid place-items-center">
-              {/* The light each icon throws on the panel */}
-              <span
-                aria-hidden
-                className="absolute -inset-5 rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon-accent,34_211_238)/0.13),transparent)] transition-opacity duration-300"
-                style={{ opacity: readout.value > 0 ? 1 : 0 }}
-              />
-              <NeonIcon icon={readout.icon} value={readout.value} animated={readout.animated} size={36} />
+    <div className="w-full max-w-[44rem] rounded-[18px] border border-white/[0.07] bg-[linear-gradient(180deg,#101218,#08090d)] shadow-[inset_0_1px_0_rgb(255_255_255/0.05),0_40px_80px_-40px_rgb(0_0_0/0.95)]">
+      <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] px-5 py-4 sm:px-7">
+        <div>
+          <p className="text-[15px] font-medium text-white/90">Studio B</p>
+          <p className="text-[13px] text-white/55">Late show, Thursday</p>
+        </div>
+        <div className="flex items-center gap-3" aria-live="polite">
+          <span className="text-right">
+            <span className={`block text-[13px] ${onAir ? "text-[rgb(255_77_94)]" : "text-white/55"}`}>
+              {onAir ? "On air" : "Off air"}
             </span>
-            <div className="grid gap-0.5">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">{readout.name}</span>
-              <span className="text-xs tabular-nums text-white/80">{readout.reading}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-8 flex items-center gap-4 border-t border-white/[0.06] pt-5">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">Link</span>
-        <Slider
-          value={[link]}
-          onValueChange={([value]) => setLink(value)}
-          aria-label="Link quality"
-          formatValue={(value) => `${value}%`}
-          size="sm"
-        />
-        <span className="w-16 shrink-0 text-right font-mono text-xs tabular-nums text-white/70">
-          {link === 0 ? "—" : `${dbm} dBm`}
-        </span>
+            <span className="block font-mono text-xs tabular-nums text-white/70">{clock(elapsed)}</span>
+          </span>
+          <NeonIcon icon={Radio} value={onAir ? 1 : 0} color={onAirColor} size={34} label={onAir ? "On air" : "Off air"} />
+        </div>
       </div>
+
+      <ul className="grid grid-cols-3 sm:grid-cols-6">
+        {channels.map((channel, i) => {
+          const lit = Boolean(on[channel.id]);
+          return (
+            <li
+              key={channel.id}
+              className={`border-white/[0.06] ${i % 3 !== 2 ? "border-r" : ""} ${i < 3 ? "border-b sm:border-b-0" : ""} sm:border-r sm:last:border-r-0`}
+            >
+              <button
+                type="button"
+                aria-pressed={lit}
+                onClick={() => setOn((state) => ({ ...state, [channel.id]: !state[channel.id] }))}
+                className="group flex w-full cursor-pointer flex-col items-center gap-4 px-2 pb-5 pt-7 outline-none transition-colors duration-150 hover:bg-white/[0.025] focus-visible:bg-white/[0.03] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[rgb(var(--neon-accent,34_211_238)/0.6)] active:bg-white/[0.04] sm:pt-8"
+              >
+                <NeonIcon icon={channel.icon} value={lit ? 1 : 0} size={40} aria-hidden />
+                <span className="grid gap-0.5 text-center">
+                  <span className="text-[13px] text-white/90">{channel.name}</span>
+                  <span className={`text-[13px] tabular-nums ${lit ? "text-white/70" : "text-white/50"}`}>
+                    {lit ? channel.on : channel.off}
+                  </span>
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

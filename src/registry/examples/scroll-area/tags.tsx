@@ -18,10 +18,16 @@ const topics = [
 
 export default function ScrollAreaTags() {
   return (
-    <div className="grid w-full max-w-sm gap-2">
-      <span className="text-xs font-medium text-white/55">Topics</span>
-      <ScrollArea orientation="horizontal" aria-label="Topics">
-        <ul className="flex w-max gap-2 pb-4">
+    <article className="w-full max-w-md rounded-xl border border-white/10 bg-white/[0.02] p-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <h3 className="truncate text-sm font-medium text-white/90">halcyon/ui</h3>
+        <span className="shrink-0 text-xs tabular-nums text-white/50">2.4k stars</span>
+      </div>
+      <p className="mt-1 text-[13px] leading-5 text-white/55">
+        React components for the Halcyon dashboard, published from the monorepo on every tag.
+      </p>
+      <ScrollArea orientation="horizontal" aria-label="Topics" className="mt-4">
+        <ul className="flex w-max gap-2 pb-3">
           {topics.map((topic) => (
             <li
               key={topic}
@@ -32,6 +38,6 @@ export default function ScrollAreaTags() {
           ))}
         </ul>
       </ScrollArea>
-    </div>
+    </article>
   );
 }

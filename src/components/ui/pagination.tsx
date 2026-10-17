@@ -13,9 +13,9 @@ const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
 
 const sizes = {
-  sm: { control: "h-8 min-w-8 rounded-md px-1.5 text-xs [&_svg]:size-3.5", gap: "gap-1", radius: 6, status: "text-xs" },
-  md: { control: "h-10 min-w-10 rounded-lg px-2 text-sm [&_svg]:size-4", gap: "gap-1", radius: 8, status: "text-sm" },
-  lg: { control: "h-12 min-w-12 rounded-xl px-2.5 text-base [&_svg]:size-[18px]", gap: "gap-1.5", radius: 12, status: "text-base" },
+  sm: { control: "h-8 min-w-8 rounded-md px-1.5 text-xs [&_svg]:size-4", gap: "gap-1", radius: 6, status: "text-xs" },
+  md: { control: "h-10 min-w-10 rounded-lg px-2 text-sm [&_svg]:size-[18px]", gap: "gap-1", radius: 8, status: "text-sm" },
+  lg: { control: "h-12 min-w-12 rounded-xl px-2.5 text-base [&_svg]:size-5", gap: "gap-1.5", radius: 12, status: "text-base" },
 } as const;
 
 type PageItem = number | "ellipsis";
@@ -293,7 +293,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
                   controlBase,
                   s.control,
                   item === current
-                    ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]"
+                    ? "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
                     : "text-white/60 hover:bg-white/[0.05] hover:text-white/90",
                 )}
               >
@@ -305,7 +305,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
                     transition={{ duration: 0.3, ease: EASE }}
                     // Inline so motion keeps the corners round while the pill moves.
                     style={{ borderRadius: s.radius }}
-                    className="absolute inset-0 border border-[rgb(var(--neon)/0.55)] bg-[rgb(var(--neon)/0.12)] shadow-[0_0_16px_rgb(var(--neon)/0.28),inset_0_0_10px_rgb(var(--neon)/0.12)]"
+                    className="absolute inset-0 border border-[rgb(var(--neon)/0.55)] bg-[rgb(var(--neon)/0.12)] shadow-[0_0_16px_rgb(var(--neon)/CALC(0.28*var(--neon-glow,1))),inset_0_0_10px_rgb(var(--neon)/CALC(0.12*var(--neon-glow,1)))]"
                   />
                 )}
                 <Rolling value={item} direction={direction} axis="x" reduceMotion={reduceMotion} />
@@ -322,7 +322,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
         {previousControl}
         <span aria-hidden className={cn("flex items-center gap-1.5 px-2 text-white/55", s.status)}>
           Page
-          <span className="font-medium tabular-nums text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]">
+          <span className="font-medium tabular-nums text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]">
             <Rolling value={current} direction={direction} axis="y" reduceMotion={reduceMotion} />
           </span>
           of <span className="tabular-nums text-white/80">{count}</span>

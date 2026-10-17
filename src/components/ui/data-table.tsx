@@ -193,7 +193,7 @@ function Highlight({ text, query }: { text: string; query: string }) {
     parts.push(
       <mark
         key={at}
-        className="rounded-[3px] bg-[rgb(var(--neon)/0.14)] text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.6)]"
+        className="rounded-[3px] bg-[rgb(var(--neon)/0.14)] text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
       >
         {text.slice(at, at + query.length)}
       </mark>,
@@ -873,7 +873,7 @@ function DataTableInner<T>(
                   indeterminate={selectedOnPage > 0 && !allOnPage}
                   disabled={loading || pageIds.length === 0}
                   onCheckedChange={() => table.setRowsSelected(pageIds, !allOnPage)}
-                  className="align-middle"
+                  className="flex w-fit"
                 />
               </TableHead>
             )}
@@ -920,7 +920,7 @@ function DataTableInner<T>(
                         align === "center" && "left-1/2 -ml-2.5 origin-center",
                         sort ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0",
                         sort && !secondary
-                          ? "shadow-[0_0_2px_rgb(var(--neon)),0_0_8px_rgb(var(--neon)/0.9),0_0_18px_rgb(var(--neon)/0.5)]"
+                          ? "shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_8px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_18px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
                           : "opacity-45",
                         !sort && "opacity-0",
                       )}
@@ -1022,7 +1022,7 @@ function DataTableInner<T>(
                           table.toggleRow(id, next, shift.current);
                           shift.current = false;
                         }}
-                        className="align-middle"
+                        className="flex w-fit"
                       />
                     </TableCell>
                   )}

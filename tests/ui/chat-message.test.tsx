@@ -132,8 +132,8 @@ describe("ChatToolCall", () => {
     expect(row).toHaveAttribute("aria-expanded", "false");
     fireEvent.click(row);
     expect(row).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByText("Input")).toBeInTheDocument();
-    expect(screen.getByText("Output")).toBeInTheDocument();
+    expect(screen.getByText("Arguments")).toBeInTheDocument();
+    expect(screen.getByText("Result")).toBeInTheDocument();
   });
 
   it("names its state for screen readers", () => {

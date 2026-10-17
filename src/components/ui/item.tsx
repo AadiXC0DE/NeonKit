@@ -94,7 +94,7 @@ const Item = React.forwardRef<HTMLDivElement, ItemProps>((raw, ref) => {
         active &&
           (variant === "default"
             ? "bg-[rgb(var(--neon)/0.06)]"
-            : "border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.05)] shadow-[inset_0_0_24px_-12px_rgb(var(--neon)/0.5)]"),
+            : "border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.05)] shadow-[inset_0_0_24px_-12px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"),
         className,
       )}
       {...props}
@@ -125,7 +125,7 @@ function Filament() {
         "pointer-events-none absolute bottom-3 left-0 top-3 w-0.5 rounded-full bg-[rgb(var(--neon))] opacity-0",
         "transition-[opacity,box-shadow] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]",
         "group-[:is(a,button,[tabindex]):hover]/item:opacity-40",
-        "group-data-[active]/item:opacity-100 group-data-[active]/item:shadow-[0_0_6px_rgb(var(--neon)/0.9),0_0_16px_rgb(var(--neon)/0.45)]",
+        "group-data-[active]/item:opacity-100 group-data-[active]/item:shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_16px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
       )}
     />
   );
@@ -136,8 +136,8 @@ const mediaVariants = {
   icon: cn(
     "size-10 rounded-[10px] border border-white/[0.08] bg-white/[0.03] text-white/60 [&_svg]:size-[18px]",
     "transition-[color,border-color,box-shadow,background-color] duration-200",
-    "group-[:is(a,button,[tabindex]):hover]/item:text-[rgb(var(--neon))] group-[:is(a,button,[tabindex]):hover]/item:[&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/0.6))]",
-    "group-data-[active]/item:border-[rgb(var(--neon)/0.35)] group-data-[active]/item:text-[rgb(var(--neon))] group-data-[active]/item:[&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/0.6))]",
+    "group-[:is(a,button,[tabindex]):hover]/item:text-[rgb(var(--neon))] group-[:is(a,button,[tabindex]):hover]/item:[&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]",
+    "group-data-[active]/item:border-[rgb(var(--neon)/0.35)] group-data-[active]/item:text-[rgb(var(--neon))] group-data-[active]/item:[&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]",
   ),
   image: "size-10 overflow-hidden rounded-full bg-white/[0.04] [&_img]:size-full [&_img]:object-cover",
 } as const;
@@ -155,7 +155,7 @@ const ItemMedia = React.forwardRef<HTMLDivElement, ItemMediaProps>(
       className={cn(
         "relative flex shrink-0 items-center justify-center self-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
         // Rows with two lines of description pin the media to the top instead.
-        "group-has-[[data-item-description][data-lines='2']]/item:self-start",
+        "group-has-[[data-item-description][data-lines='2']]/item:self-start group-has-[[data-item-description][data-lines='none']]/item:self-start",
         mediaVariants[variant],
         className,
       )}
@@ -187,8 +187,8 @@ const ItemTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
 ItemTitle.displayName = "ItemTitle";
 
 export interface ItemDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
-  /** Clamp to this many lines. */
-  lines?: 1 | 2;
+  /** Clamp to this many lines, or `"none"` to let it wrap in full. */
+  lines?: 1 | 2 | "none";
 }
 
 const ItemDescription = React.forwardRef<HTMLParagraphElement, ItemDescriptionProps>(
@@ -199,7 +199,7 @@ const ItemDescription = React.forwardRef<HTMLParagraphElement, ItemDescriptionPr
       data-lines={lines}
       className={cn(
         "text-[13px] leading-5 text-white/55 [&_a]:text-white/80 [&_a]:underline [&_a]:decoration-white/25 [&_a]:underline-offset-2",
-        lines === 1 ? "truncate" : "line-clamp-2",
+        lines === 1 ? "truncate" : lines === 2 ? "line-clamp-2" : "text-pretty",
         className,
       )}
       {...props}

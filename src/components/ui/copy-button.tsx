@@ -16,11 +16,11 @@ const css = `
 const variants = {
   ghost: "text-white/55 hover:bg-white/[0.06] hover:text-white/90 data-[state=copied]:text-white/90",
   outline:
-    "border border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.05)] text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.45)] hover:border-[rgb(var(--neon)/0.6)] hover:bg-[rgb(var(--neon)/0.1)] hover:shadow-[0_0_18px_-2px_rgb(var(--neon)/0.45)]",
+    "border border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.05)] text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))] hover:border-[rgb(var(--neon)/0.6)] hover:bg-[rgb(var(--neon)/0.1)] hover:shadow-[0_0_18px_-2px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
 } as const;
 
 const sizes = {
-  sm: { icon: "size-8 rounded-md", text: "h-8 gap-1.5 rounded-md px-3 text-xs", glyph: "size-3.5" },
+  sm: { icon: "size-8 rounded-md", text: "h-8 gap-1.5 rounded-md px-3 text-xs", glyph: "size-4" },
   md: { icon: "size-10 rounded-lg", text: "h-10 gap-2 rounded-lg px-4 text-sm", glyph: "size-4" },
   lg: { icon: "size-12 rounded-xl", text: "h-12 gap-2.5 rounded-xl px-6 text-base", glyph: "size-[18px]" },
 } as const;
@@ -197,7 +197,7 @@ const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
                 strokeLinejoin="round"
                 className={cn(
                   "absolute inset-0 size-full overflow-visible transition-opacity duration-200 ease-out",
-                  "[filter:drop-shadow(0_0_2px_rgb(var(--neon)))_drop-shadow(0_0_6px_rgb(var(--neon)/0.6))]",
+                  "[filter:drop-shadow(0_0_2px_rgb(var(--neon)/var(--neon-glow,1)))_drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]",
                   state === "copied" ? "opacity-100" : "opacity-0",
                 )}
               >
@@ -223,7 +223,7 @@ const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
               aria-hidden
               className={cn(
                 "pointer-events-none absolute z-10 whitespace-nowrap rounded-md border border-white/10 bg-[#0a0b11] px-2 py-1 text-[11px] font-medium leading-4 [text-shadow:none]",
-                "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+                "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
                 "transition-[opacity,transform,translate,scale] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
                 sides[side],
                 state === "idle"

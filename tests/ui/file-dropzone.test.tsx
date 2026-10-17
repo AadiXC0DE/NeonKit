@@ -193,6 +193,25 @@ describe("FileList", () => {
     expect(onRemove.mock.calls).toEqual([["2"], ["4"]]);
   });
 
+  it("gives the name its own line, with status and size under the tube", () => {
+    render(<FileList files={files} />);
+    const name = screen.getByText("interview.m4a");
+    const row = name.closest("li") as HTMLElement;
+    expect(name).toHaveTextContent(/^interview\.m4a$/);
+    const status = screen.getByText("Storage quota reached").closest("div") as HTMLElement;
+    expect(status).toHaveTextContent("30 MB");
+    expect(row).toContainElement(status);
+  });
+
+  it("reserves the retry slot on every row when retry is on, so the tubes line up", () => {
+    render(<FileList files={files} onRetry={() => {}} />);
+    const rows = screen.getAllByRole("listitem");
+    rows.forEach((row) => {
+      const actions = row.lastElementChild as HTMLElement;
+      expect(actions.children).toHaveLength(1);
+    });
+  });
+
   it("has no action buttons without handlers", () => {
     render(<FileList files={files} />);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();

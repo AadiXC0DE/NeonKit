@@ -256,7 +256,7 @@ const HologramCard = React.forwardRef<HTMLDivElement, HologramCardProps>(
         <motion.div
           aria-hidden
           style={{ opacity: spillOpacity }}
-          className="pointer-events-none absolute -inset-px -z-10 rounded-[inherit] shadow-[0_0_32px_-8px_rgb(var(--neon)/0.45),0_20px_80px_-28px_rgb(var(--neon)/0.4)]"
+          className="pointer-events-none absolute -inset-px -z-10 rounded-[inherit] shadow-[0_0_32px_-8px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),0_20px_80px_-28px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1)))]"
         />
         {children}
         <div
@@ -306,7 +306,7 @@ const HologramCard = React.forwardRef<HTMLDivElement, HologramCardProps>(
         >
           <motion.div
             style={{ x: glareX, y: glareY }}
-            className="absolute -left-full -top-full h-[200%] w-[200%] [background:radial-gradient(circle_at_50%_50%,color-mix(in_srgb,rgb(var(--neon))_40%,white),rgb(var(--neon)/0.6)_12%,transparent_32%)]"
+            className="absolute -left-full -top-full h-[200%] w-[200%] [background:radial-gradient(circle_at_50%_50%,color-mix(in_srgb,rgb(var(--neon)/var(--neon-glow,1))_40%,white),rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))_12%,transparent_32%)]"
           />
         </motion.div>
       </div>

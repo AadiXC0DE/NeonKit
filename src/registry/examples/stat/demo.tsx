@@ -1,10 +1,12 @@
 "use client";
 
+import { Gauge, LayoutGrid, LogOut, Wallet } from "@/components/ui/icons";
 import { Stat, StatGroup } from "@/components/ui/stat";
 
 const kpis = [
   {
-    label: "Monthly recurring revenue",
+    label: "Recurring revenue",
+    icon: Wallet,
     value: 48210,
     formatOptions: { style: "currency", currency: "USD", maximumFractionDigits: 0 } as const,
     delta: 8.2,
@@ -12,12 +14,14 @@ const kpis = [
   },
   {
     label: "Active workspaces",
+    icon: LayoutGrid,
     value: 1284,
     delta: 3.1,
     trend: [1102, 1131, 1150, 1162, 1190, 1201, 1222, 1236, 1251, 1260, 1277, 1284],
   },
   {
     label: "p95 API latency",
+    icon: Gauge,
     value: 182,
     unit: "ms",
     delta: -12.4,
@@ -26,6 +30,7 @@ const kpis = [
   },
   {
     label: "Logo churn",
+    icon: LogOut,
     value: 1.9,
     unit: "%",
     delta: 0.3,
@@ -37,9 +42,9 @@ const kpis = [
 
 export default function StatDemo() {
   return (
-    <StatGroup className="w-full max-w-5xl">
+    <StatGroup variant="framed" className="w-full max-w-5xl">
       {kpis.map((kpi) => (
-        <Stat key={kpi.label} {...kpi} helper="Last 30 days, vs. the 30 before" />
+        <Stat key={kpi.label} {...kpi} helper="vs. the previous 30 days" />
       ))}
     </StatGroup>
   );

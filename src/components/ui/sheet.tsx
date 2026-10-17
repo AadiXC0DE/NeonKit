@@ -410,7 +410,7 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
                   aria-hidden
                   className={cn(
                     "pointer-events-none absolute z-10",
-                    "shadow-[0_0_6px_rgb(var(--neon)/0.9),0_0_18px_rgb(var(--neon)/0.55),0_0_44px_rgb(var(--neon)/0.25)]",
+                    "shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_18px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),0_0_44px_rgb(var(--neon)/CALC(0.25*var(--neon-glow,1)))]",
                     "[animation:neonkit-sheet-ignite_380ms_linear_160ms_both] motion-reduce:[animation:none]",
                     tubes[side],
                   )}
@@ -427,7 +427,7 @@ const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
                       className={cn(
                         "h-1 w-10 rounded-full transition-[background-color,box-shadow] duration-150",
                         dragging
-                          ? "bg-[rgb(var(--neon)/0.85)] shadow-[0_0_10px_rgb(var(--neon)/0.7)]"
+                          ? "bg-[rgb(var(--neon)/0.85)] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]"
                           : "bg-white/20",
                       )}
                     />

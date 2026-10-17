@@ -495,7 +495,7 @@ const SplitFlapBoard = React.forwardRef<HTMLDivElement, SplitFlapBoardProps>(
         {/* Light from the characters washing over the housing */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgb(var(--neon)/0.07),transparent_75%)]"
+          className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] bg-[radial-gradient(ellipse_80%_60%_at_50%_40%,rgb(var(--neon)/CALC(0.07*var(--neon-glow,1))),transparent_75%)]"
         />
         {header && (
           <div className="mb-[calc(var(--flap-h,40px)*0.35)] flex items-center justify-between gap-4 border-b border-white/[0.06] pb-[calc(var(--flap-h,40px)*0.3)]">

@@ -131,7 +131,7 @@ export default function EqualizerAudio() {
           }}
           className="grid size-9 shrink-0 cursor-pointer place-items-center rounded-full border border-white/15 bg-white/[0.05] text-white/85 transition-colors hover:bg-white/[0.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent,34_211_238)/0.6)] disabled:cursor-wait disabled:opacity-50"
         >
-          {playing ? <Pause className="size-3.5 fill-current" /> : <Play className="size-3.5 translate-x-px fill-current" />}
+          {playing ? <Pause className="size-4 fill-current" /> : <Play className="size-4 translate-x-px fill-current" />}
         </button>
         <div className="min-w-0">
           <p className="text-sm text-white/85">Synth loop, 112 bpm</p>

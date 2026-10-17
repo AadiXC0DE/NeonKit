@@ -561,7 +561,7 @@ const PopoverPanel = React.forwardRef<HTMLDivElement, PopoverContentProps>(
           className={cn(
             "[--neon:var(--neon-accent,34_211_238)]",
             "relative w-72 max-w-full rounded-xl border border-white/10 bg-[#0a0b11] p-4 text-sm text-white/90 outline-none",
-            "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+            "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
             !open && "pointer-events-none",
             className,
           )}
@@ -577,7 +577,7 @@ const PopoverPanel = React.forwardRef<HTMLDivElement, PopoverContentProps>(
               <span className={cn("absolute", leakLines[placedSide])} />
               <span
                 className={cn(
-                  "absolute bg-[radial-gradient(closest-side,rgb(var(--neon)/0.13),transparent)]",
+                  "absolute bg-[radial-gradient(closest-side,rgb(var(--neon)/CALC(0.13*var(--neon-glow,1))),transparent)]",
                   leakGlows[placedSide],
                 )}
               />

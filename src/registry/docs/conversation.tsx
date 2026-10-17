@@ -1,5 +1,6 @@
 import type { ComponentDoc } from "../types";
 import ConversationDemo from "../examples/conversation/demo";
+import ConversationChat from "../examples/conversation/chat";
 import ConversationLongThread from "../examples/conversation/long-thread";
 import ConversationEmpty from "../examples/conversation/empty";
 import ConversationDividers from "../examples/conversation/dividers";
@@ -14,10 +15,17 @@ export const doc: ComponentDoc = {
   examples: [
     {
       name: "demo",
-      title: "A debugging session",
+      title: "An agent session",
+      description:
+        "All six AI components in one session. The agent thinks, lays out a plan, runs the failing suite, reads the file and stops to ask before it edits. Approve it and watch the plan fill to the end; Deny it and it explains what it left alone.",
+      component: ConversationDemo,
+    },
+    {
+      name: "chat",
+      title: "A debugging chat",
       description:
         "Conversation, ChatMessage, PromptInput and CodeBlock together. The reply thinks, searches, reads a file and streams a fix as a diff; send a follow-up to get a test.",
-      component: ConversationDemo,
+      component: ConversationChat,
     },
     {
       name: "long-thread",

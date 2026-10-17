@@ -316,7 +316,7 @@ function HueKnob({ hue, onChange, size, disabled }: HueKnobProps) {
         <span
           style={{
             background: `hsl(${hue} 95% 62%)`,
-            boxShadow: `0 0 6px hsl(${hue} 95% 62%), 0 0 12px hsl(${hue} 95% 62% / 0.8)`,
+            boxShadow: `0 0 6px hsl(${hue} 95% 62% / var(--neon-glow, 1)), 0 0 12px hsl(${hue} 95% 62% / calc(0.8 * var(--neon-glow, 1)))`,
           }}
           className="absolute left-1/2 top-[9%] h-[22%] w-[2px] -translate-x-1/2 rounded-full"
         />
@@ -670,11 +670,11 @@ const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                 ignitions > 0 && "[animation:neonkit-color-ignite_420ms_linear] motion-reduce:[animation:none]",
               )}
             >
-              <div className="absolute inset-0 bg-[radial-gradient(60%_110%_at_50%_50%,rgb(var(--swatch)/0.24),transparent_72%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(60%_110%_at_50%_50%,rgb(var(--swatch)/CALC(0.24*var(--neon-glow,1))),transparent_72%)]" />
               <div
                 className={cn(
                   "absolute top-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--swatch))]",
-                  "shadow-[0_0_4px_rgb(var(--swatch)),0_0_14px_rgb(var(--swatch)/0.75),0_0_36px_rgb(var(--swatch)/0.4)]",
+                  "shadow-[0_0_4px_rgb(var(--swatch)/var(--neon-glow,1)),0_0_14px_rgb(var(--swatch)/CALC(0.75*var(--neon-glow,1))),0_0_36px_rgb(var(--swatch)/CALC(0.4*var(--neon-glow,1)))]",
                   "transition-[background-color,box-shadow] duration-150 ease-out",
                   s.tube,
                 )}
@@ -773,7 +773,7 @@ const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                         style={{
                           background: `rgb(${swatch.rgb})`,
                           boxShadow: checked
-                            ? `0 0 8px rgb(${swatch.rgb}), 0 0 16px rgb(${swatch.rgb} / 0.6)`
+                            ? `0 0 8px rgb(${swatch.rgb} / var(--neon-glow, 1)), 0 0 16px rgb(${swatch.rgb} / calc(0.6 * var(--neon-glow, 1)))`
                             : "inset 0 0 0 1px rgb(255 255 255 / 0.12)",
                         }}
                         className={cn(
@@ -798,7 +798,7 @@ const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                   className={cn(
                     "flex min-w-0 flex-1 cursor-text items-center border border-white/10 bg-white/[0.03] text-white/90",
                     "transition-[border-color,background-color,box-shadow] ease-[cubic-bezier(0.23,1,0.32,1)] duration-[150ms,150ms,320ms]",
-                    "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+                    "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
                     "hover:[&:not(:focus-within)]:border-white/20",
                     hexInvalid && "border-[rgb(var(--neon)/0.55)]",
                     s.field,

@@ -249,17 +249,21 @@ export function ReportInstrument({ night }: { night: NightRun }) {
           </p>
           <dl className="mt-4 grid gap-2.5">
             {report.rows.map((row) => (
-              <div key={row.k} className="grid grid-cols-[2rem_6.5rem_minmax(0,1fr)] items-baseline gap-2 sm:grid-cols-[2.25rem_7rem_minmax(0,1fr)]">
+              // Below lg the note drops under its label instead of being cut off.
+              <div
+                key={row.k}
+                className="grid grid-cols-[2rem_minmax(0,1fr)] items-baseline gap-x-2 gap-y-0.5 sm:grid-cols-[2.25rem_minmax(0,1fr)] lg:grid-cols-[2.25rem_7rem_minmax(0,1fr)]"
+              >
+                <dt className="col-start-2 row-start-1 text-[14px] text-white/70">{row.k.toLowerCase()}</dt>
                 <dd
                   className={cn(
-                    "text-[22px] font-[620] leading-none tracking-[-0.02em] [font-stretch:112%]",
+                    "col-start-1 row-start-1 text-[22px] font-[620] leading-none tracking-[-0.02em] [font-stretch:112%]",
                     row.n && row.k !== "Landed" ? "text-[rgb(255_77_94)]" : "text-white",
                   )}
                 >
                   {row.n}
                 </dd>
-                <dt className="text-[14px] text-white/70">{row.k.toLowerCase()}</dt>
-                <dd className="truncate text-[13px] text-white/50">{row.note}</dd>
+                <dd className="col-start-2 text-pretty text-[13px] text-white/50 lg:col-start-3 lg:row-start-1">{row.note}</dd>
               </div>
             ))}
           </dl>

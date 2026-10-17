@@ -17,7 +17,7 @@ const keyframes = `@keyframes nk-hardware-switch-ignite{0%{opacity:0}12%{opacity
 const ignite = "[animation:nk-hardware-switch-ignite_360ms_linear_both] motion-reduce:[animation:none]";
 
 const CORE = "color-mix(in srgb, rgb(var(--neon)) 30%, white)";
-const glow = "shadow-[0_0_0.2em_rgb(var(--neon)),0_0_0.6em_rgb(var(--neon)/0.75),0_0_1.3em_rgb(var(--neon)/0.35)]";
+const glow = "shadow-[0_0_0.2em_rgb(var(--neon)/var(--neon-glow,1)),0_0_0.6em_rgb(var(--neon)/CALC(0.75*var(--neon-glow,1))),0_0_1.3em_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]";
 const glass = "bg-[rgb(var(--neon)/0.15)] shadow-[inset_0_1px_1px_rgb(0_0_0/0.6),0_1px_0_rgb(255_255_255/0.06)]";
 
 type VariantProps = { checked: boolean; lit: boolean; ignitions: number };
@@ -50,7 +50,7 @@ function Rocker({ checked, lit, ignitions }: VariantProps) {
       <span className="absolute inset-[0.22em] rounded-[0.3em] bg-[#030405] shadow-[inset_0_0.1em_0.25em_rgb(0_0_0/0.95)]" />
       <span
         className={cn(
-          "absolute inset-[0.1em] rounded-[0.4em] bg-[radial-gradient(ellipse_at_50%_30%,rgb(var(--neon)/0.35),transparent_65%)] transition-opacity duration-200",
+          "absolute inset-[0.1em] rounded-[0.4em] bg-[radial-gradient(ellipse_at_50%_30%,rgb(var(--neon)/CALC(0.35*var(--neon-glow,1))),transparent_65%)] transition-opacity duration-200",
           checked && lit ? "opacity-100" : "opacity-0",
         )}
       />
@@ -135,7 +135,7 @@ function Flip({ checked, lit, ignitions }: VariantProps) {
             : "delay-[120ms] duration-[220ms] ease-[cubic-bezier(0.5,0,0.3,1)] [--nk-cover:0deg] group-hover/hw:[--nk-cover:12deg] group-active/hw:[--nk-cover:24deg]",
         )}
       >
-        <span className="absolute inset-0 rounded-b-[0.4em] rounded-t-[0.2em] border border-[rgb(var(--neon)/0.35)] bg-[linear-gradient(180deg,rgb(var(--neon)/0.2),rgb(var(--neon)/0.09)_60%,rgb(var(--neon)/0.16))] shadow-[inset_0_0_0.6em_rgb(var(--neon)/0.1),inset_0.12em_0_0_rgb(255_255_255/0.1),0_0.3em_0.5em_-0.1em_rgb(0_0_0/0.6)] [backface-visibility:hidden]">
+        <span className="absolute inset-0 rounded-b-[0.4em] rounded-t-[0.2em] border border-[rgb(var(--neon)/0.35)] bg-[linear-gradient(180deg,rgb(var(--neon)/0.2),rgb(var(--neon)/0.09)_60%,rgb(var(--neon)/0.16))] shadow-[inset_0_0_0.6em_rgb(var(--neon)/CALC(0.1*var(--neon-glow,1))),inset_0.12em_0_0_rgb(255_255_255/0.1),0_0.3em_0.5em_-0.1em_rgb(0_0_0/0.6)] [backface-visibility:hidden]">
           <span className="absolute inset-y-[0.3em] left-[0.25em] w-[0.12em] rounded-full bg-white/20" />
           <span className="absolute inset-x-[0.2em] bottom-[0.18em] h-[0.4em] rounded-[0.2em] bg-[rgb(var(--neon)/0.16)] shadow-[inset_0_1px_0_rgb(255_255_255/0.16)]" />
         </span>

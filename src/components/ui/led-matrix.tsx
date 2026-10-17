@@ -54,6 +54,12 @@ function rasterize(text: string) {
 const prefersReducedMotion = () =>
   typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/** The theme's glow multiplier. A finite check, not `|| 1`, so 0 stays 0. */
+function readGlow(node: Element) {
+  const value = parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"));
+  return Number.isFinite(value) ? Math.max(0, value) : 1;
+}
+
 function parseRgb(value: string): [number, number, number] {
   const match = value.match(/\d+(\.\d+)?/g);
   if (!match || match.length < 3) return [34, 211, 238];
@@ -76,6 +82,11 @@ export interface LedMatrixProps
   speed?: number;
   /** Which way the text travels. */
   direction?: "left" | "right";
+  /**
+   * With `speed` 0, text too wide for the display scrolls at this speed instead of being cut off.
+   * 0 clips it.
+   */
+  overflowSpeed?: number;
   /** Palette name or any hex color. Inherits `--neon-accent` when omitted. */
   color?: NeonColor;
 }
@@ -92,6 +103,7 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
       gap = 2,
       speed = 60,
       direction = "left",
+      overflowSpeed = 40,
       color,
       ...props
     },
@@ -114,6 +126,7 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
       let cols = 0;
       let dpr = 1;
       let rgb = parseRgb(getComputedStyle(probe).color);
+      let glow = readGlow(probe);
       let unlit: HTMLCanvasElement | null = null;
       let offset = 0;
       let drawnShift = Number.NaN;
@@ -125,6 +138,8 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
       const radius = dotSize / 2;
 
       const center = (index: number) => index * pitch + radius;
+      // A held message that doesn't fit runs like a ticker rather than losing its end.
+      const pace = () => (speed > 0 ? speed : bitmap.length > cols ? Math.max(0, overflowSpeed) : 0);
 
       // Unlit dots never change between frames, so they're painted once and stamped.
       const paintUnlit = () => {
@@ -165,7 +180,7 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
 
       const startColumn = (shift: number) => {
         const length = bitmap.length;
-        if (speed === 0 || reduce) return length <= cols ? Math.floor((cols - length) / 2) : 0;
+        if (pace() === 0 || reduce) return length <= cols ? Math.floor((cols - length) / 2) : 0;
         const span = length + cols;
         const travelled = ((shift % span) + span) % span;
         return direction === "left" ? cols - travelled : travelled - length;
@@ -198,11 +213,13 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
         }
         const [r, g, b] = rgb;
         // shadowBlur ignores the transform, so it's scaled by hand.
-        ctx.shadowColor = `rgb(${r}, ${g}, ${b})`;
-        ctx.shadowBlur = Math.max(4, dotSize * 2.2) * dpr;
+        ctx.shadowColor = `rgba(${r}, ${g}, ${b}, ${Math.min(1, glow)})`;
+        ctx.shadowBlur = glow > 0 ? Math.max(4, dotSize * 2.2) * dpr : 0;
         ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
         ctx.fill(halo);
-        ctx.fill(halo);
+        // The second pass only stacks the halo; above 1 a third makes it run hot.
+        if (glow > 0) ctx.fill(halo);
+        if (glow > 1) ctx.fill(halo);
         ctx.shadowBlur = 0;
         const mix = (channel: number) => Math.round(channel * 0.45 + 255 * 0.55);
         ctx.fillStyle = `rgb(${mix(r)}, ${mix(g)}, ${mix(b)})`;
@@ -221,14 +238,14 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
       };
 
       const frame = (now: number) => {
-        offset += (Math.min(now - last, 100) / 1000) * (speed / pitch);
+        offset += (Math.min(now - last, 100) / 1000) * (pace() / pitch);
         last = now;
         draw();
         raf = requestAnimationFrame(frame);
       };
 
       const sync = () => {
-        const moving = speed > 0 && !reduce && onscreen && document.visibilityState === "visible";
+        const moving = pace() > 0 && !reduce && onscreen && document.visibilityState === "visible";
         if (moving && !raf) {
           last = performance.now();
           raf = requestAnimationFrame(frame);
@@ -239,10 +256,11 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
         if (!moving) draw(true);
       };
 
-      // A CSS variable can't reach into a canvas. The probe's color transitions
-      // whenever --neon changes (a prop or an ancestor's accent), and we re-read it.
+      // A CSS variable can't reach into a canvas. The probe's color and letter-spacing
+      // transition whenever --neon or --neon-glow changes, and we re-read them.
       const recolor = () => {
         rgb = parseRgb(getComputedStyle(probe).color);
+        glow = readGlow(probe);
         paintUnlit();
         draw(true);
       };
@@ -272,7 +290,10 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
       const resizeObserver =
         typeof ResizeObserver === "undefined"
           ? null
-          : new ResizeObserver(([entry]) => resize(entry.contentRect.width));
+          : new ResizeObserver(([entry]) => {
+              resize(entry.contentRect.width);
+              sync();
+            });
       resizeObserver?.observe(box);
       const intersectionObserver =
         typeof IntersectionObserver === "undefined"
@@ -295,7 +316,7 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
         dprQuery?.removeEventListener?.("change", onDpr);
         probe.removeEventListener("transitionend", recolor);
       };
-    }, [bitmap, rows, fixedColumns, dotSize, gap, pitch, height, speed, direction, color]);
+    }, [bitmap, rows, fixedColumns, dotSize, gap, pitch, height, speed, direction, overflowSpeed, color]);
 
     return (
       <div
@@ -315,7 +336,11 @@ const LedMatrix = React.forwardRef<HTMLDivElement, LedMatrixProps>(
           ref={probeRef}
           aria-hidden
           className="pointer-events-none absolute size-0 overflow-hidden"
-          style={{ color: "rgb(var(--neon))", transition: "color 1ms" }}
+          style={{
+            color: "rgb(var(--neon))",
+            letterSpacing: "calc(var(--neon-glow, 1) * 1px)",
+            transition: "color 1ms, letter-spacing 1ms",
+          }}
         />
         <div className="relative" style={{ height }}>
           <canvas ref={canvasRef} aria-hidden className="block" style={{ height }} />

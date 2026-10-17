@@ -42,6 +42,15 @@ src/lib/utils.ts                    cn()
 - Use the variable through arbitrary values only: `text-[rgb(var(--neon))]`, `bg-[rgb(var(--neon)/0.12)]`, `border-[rgb(var(--neon)/0.6)]`, `shadow-[0_0_18px_rgb(var(--neon)/0.45)]`, `[text-shadow:0_0_10px_rgb(var(--neon)/0.6)]`.
 - Omit `"color"` from the native props you extend: `Omit<React.HTMLAttributes<...>, "color">`.
 
+**Glow intensity.** Every glow reads one more variable, `--neon-glow`: a unitless multiplier, 1 by default, set app-wide in CSS (`:root { --neon-glow: 0.6; }`) or from the [Theme Studio](https://get-neonkit.vercel.app/theme). Glow is light that spills past an element: blurred box-shadow, text-shadow and drop-shadow layers, radial-gradient spill that fades to `transparent`, blurred halo copies, SVG blur filters and canvas bloom. Fills, borders, text colors and focus rings are structure and don't read it. At 0 the component should look flat and still designed.
+
+- Scale the glow layer's alpha: `shadow-[0_0_18px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]`, and `rgb(var(--neon)/var(--neon-glow,1))` where the layer had no alpha. In CSS strings and inline styles, write it normally: `rgb(var(--neon) / calc(0.45 * var(--neon-glow, 1)))`.
+- Write `CALC` in uppercase inside Tailwind classes. CSS function names are case-insensitive, and Tailwind 3 respaces everything after a lowercase `calc(` in an arbitrary value, which turns `drop-shadow` into `drop - shadow` and `-8px` into `- 8px`. Tailwind 4 doesn't care either way.
+- Blurred copies: add `opacity(var(--neon-glow,1))` to their filter (`[filter:blur(6px)_opacity(var(--neon-glow,1))]`). Their state opacity classes keep working.
+- SVG blur filters can't read variables in attributes. Either set `opacity: "var(--neon-glow, 1)"` on the element drawn through the filter, or multiply the blur by `<feFlood floodColor="#fff" style={{ floodOpacity: "var(--neon-glow, 1)" }} />` with `feComposite operator="arithmetic" k1={1}`.
+- Canvas: read it with `parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"))` and a `Number.isFinite` check, not `|| 1`, so 0 stays 0. Re-read it when the color is re-read: give the probe element `letter-spacing: calc(var(--neon-glow, 1) * 1px)` with a 1ms transition so `transitionend` fires on change.
+- `node scripts/neon-glow-codemod.mjs` rewrites shadows, filters and spill gradients for you, and `tests/neon-glow.test.ts` fails on any glow that doesn't read the variable.
+
 **Tailwind 3 and 4 both.** Users copy into either, so:
 
 - No theme tokens from this site (`bg-background`, `text-muted`, `font-neon`). Neutrals come from `white/<alpha>`, `black/<alpha>`, or arbitrary hex like `bg-[#0a0b11]`.

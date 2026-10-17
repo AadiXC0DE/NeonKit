@@ -33,18 +33,18 @@ export default function PowerButtonDemo() {
       <Screw className="bottom-3 left-3" />
       <Screw className="bottom-3 right-3" />
 
-      <div className="flex items-center justify-between px-2 font-mono text-[10px] uppercase tracking-[0.18em] text-white/50">
-        <span>Monitor A</span>
-        <span>230V · 50Hz</span>
+      <div className="flex items-baseline justify-between px-2 text-xs text-white/55">
+        <span className="font-medium text-white/80">Monitor A</span>
+        <span className="font-mono text-[11px] text-white/50">230 V · 50 Hz</span>
       </div>
 
       <div className="flex flex-col items-center gap-6 pb-3 pt-10">
         <PowerButton size="xl" pressed={on} onPressedChange={setOn} aria-label="Monitor A power" />
-        <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em]">
+        <p className="flex items-center gap-3 text-xs font-medium">
           <span
             className={cn(
               "transition-colors duration-300",
-              on ? "text-white/25" : "text-white/60",
+              on ? "text-white/35" : "text-white/70",
             )}
           >
             Standby
@@ -55,7 +55,7 @@ export default function PowerButtonDemo() {
               "transition-[color,text-shadow] duration-300",
               on
                 ? "text-[rgb(var(--neon-accent,34_211_238))] [text-shadow:0_0_10px_rgb(var(--neon-accent,34_211_238)/0.7)]"
-                : "text-white/25",
+                : "text-white/35",
             )}
           >
             Live

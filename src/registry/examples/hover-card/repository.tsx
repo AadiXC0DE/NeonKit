@@ -17,7 +17,7 @@ export default function HoverCardRepository() {
           <p className="mt-2 text-sm leading-6 text-white/60">
             A V8 isolate runtime for request handlers, with streaming responses and a 5 ms cold start.
           </p>
-          <div className="mt-3 flex items-center gap-4 text-xs text-white/50">
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-white/50">
             <span className="flex items-center gap-1.5">
               <span aria-hidden className="size-2 rounded-full bg-[#3178c6]" /> TypeScript
             </span>
@@ -27,7 +27,7 @@ export default function HoverCardRepository() {
             <span className="flex items-center gap-1">
               <GitFork aria-hidden className="size-3.5" /> 312
             </span>
-            <span className="ml-auto">Updated 3 days ago</span>
+            <span className="ml-auto whitespace-nowrap">Updated 3 days ago</span>
           </div>
         </HoverCardContent>
       </HoverCard>

@@ -440,7 +440,7 @@ const HoverCardSurface = React.forwardRef<HTMLDivElement, HoverCardContentProps 
           style={{ transformOrigin: at, ...style }}
           className={cn(
             "relative w-72 rounded-xl border border-white/10 bg-[#0a0b11] p-4 text-sm text-white/90",
-            "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+            "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
             className,
           )}
           onPointerEnter={(event) => {
@@ -460,7 +460,7 @@ const HoverCardSurface = React.forwardRef<HTMLDivElement, HoverCardContentProps 
             transition={{ duration: reduceMotion ? 0.15 : 0.45, delay: reduceMotion ? 0 : 0.08, ease: EASE }}
             className="pointer-events-none absolute -inset-px rounded-[inherit] border border-transparent"
             style={{
-              background: `radial-gradient(150px circle at ${at}, rgb(var(--neon) / 0.95), rgb(var(--neon) / 0.3) 45%, transparent 80%) border-box`,
+              background: `radial-gradient(150px circle at ${at}, rgb(var(--neon) / calc(0.95 * var(--neon-glow, 1))), rgb(var(--neon) / calc(0.3 * var(--neon-glow, 1))) 45%, transparent 80%) border-box`,
               WebkitMask: ring,
               WebkitMaskComposite: "xor",
               mask: ring,
@@ -473,7 +473,7 @@ const HoverCardSurface = React.forwardRef<HTMLDivElement, HoverCardContentProps 
             animate={{ opacity: 1 }}
             transition={{ duration: reduceMotion ? 0.15 : 0.5, delay: reduceMotion ? 0 : 0.08, ease: EASE }}
             className="pointer-events-none absolute inset-0 rounded-[inherit]"
-            style={{ background: `radial-gradient(180px circle at ${at}, rgb(var(--neon) / 0.07), transparent 70%)` }}
+            style={{ background: `radial-gradient(180px circle at ${at}, rgb(var(--neon) / calc(0.07 * var(--neon-glow, 1))), transparent 70%)` }}
           />
           <div className="relative">{children}</div>
         </motion.div>

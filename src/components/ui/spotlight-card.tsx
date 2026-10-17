@@ -46,12 +46,12 @@ const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps>(
         {/* Light on the surface */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-300 group-hover/spotlight:opacity-100 group-focus-within/spotlight:opacity-100 [background:radial-gradient(var(--r)_circle_at_var(--x)_var(--y),rgb(var(--neon)/0.12),transparent_70%)]"
+          className="pointer-events-none absolute inset-0 -z-10 opacity-0 transition-opacity duration-300 group-hover/spotlight:opacity-100 group-focus-within/spotlight:opacity-100 [background:radial-gradient(var(--r)_circle_at_var(--x)_var(--y),rgb(var(--neon)/CALC(0.12*var(--neon-glow,1))),transparent_70%)]"
         />
         {/* Light caught by the border */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[inherit] p-px opacity-0 transition-opacity duration-300 group-hover/spotlight:opacity-100 group-focus-within/spotlight:opacity-100 [background:radial-gradient(calc(var(--r)*0.75)_circle_at_var(--x)_var(--y),rgb(var(--neon)),transparent_70%)] [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)]"
+          className="pointer-events-none absolute inset-0 rounded-[inherit] p-px opacity-0 transition-opacity duration-300 group-hover/spotlight:opacity-100 group-focus-within/spotlight:opacity-100 [background:radial-gradient(calc(var(--r)*0.75)_circle_at_var(--x)_var(--y),rgb(var(--neon)/var(--neon-glow,1)),transparent_70%)] [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)]"
         />
         {children}
       </div>

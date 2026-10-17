@@ -122,7 +122,7 @@ function geometry(shape: Shape, size: keyof typeof sizes, width: number): Geomet
       const points = samples(from, to, 12);
       return `M${f(points[0][0])},${f(points[0][1])}${smooth(points)}`;
     };
-    const crossing = { under: segment(-lo - 0.32, -lo + 0.32), over: segment(lo - 0.5, lo + 0.5) };
+    const crossing = { under: segment(-lo - 0.2, -lo + 0.2), over: segment(lo - 0.5, lo + 0.5) };
 
     const left = cx - a * Math.PI;
     const right = cx + a * Math.PI;
@@ -303,7 +303,7 @@ const TubeDivider = React.forwardRef<HTMLDivElement, TubeDividerProps>(
           key={`spill-${ignitions}`}
           aria-hidden
           className={cn(
-            "pointer-events-none absolute inset-x-[4%] -inset-y-6 bg-[radial-gradient(50%_50%_at_50%_50%,rgb(var(--neon)/0.13),transparent)] transition-opacity duration-300",
+            "pointer-events-none absolute inset-x-[4%] -inset-y-6 bg-[radial-gradient(50%_50%_at_50%_50%,rgb(var(--neon)/CALC(0.13*var(--neon-glow,1))),transparent)] transition-opacity duration-300",
             ignite,
           )}
           style={{ opacity: on ? 1 : 0 }}
@@ -351,8 +351,8 @@ const TubeDivider = React.forwardRef<HTMLDivElement, TubeDividerProps>(
             className={cn("transition-opacity duration-200 ease-out", ignite)}
             style={{ opacity: on ? 1 : 0 }}
           >
-            <path d={g.lit} {...stroke} strokeWidth={tube * 3} filter={`url(#${uid}-wide)`} style={{ stroke: "rgb(var(--neon))", opacity: 0.45 }} />
-            <path d={g.lit} {...stroke} strokeWidth={tube * 1.3} filter={`url(#${uid}-tight)`} style={{ stroke: "rgb(var(--neon))" }} />
+            <path d={g.lit} {...stroke} strokeWidth={tube * 3} filter={`url(#${uid}-wide)`} style={{ stroke: "rgb(var(--neon))", opacity: "calc(0.45 * var(--neon-glow, 1))" }} />
+            <path d={g.lit} {...stroke} strokeWidth={tube * 1.3} filter={`url(#${uid}-tight)`} style={{ stroke: "rgb(var(--neon))", opacity: "var(--neon-glow, 1)" }} />
             <path d={g.lit} {...stroke} strokeWidth={tube} style={{ stroke: "rgb(var(--neon))" }} />
             <path d={g.lit} {...stroke} strokeWidth={tube * 0.45} style={{ stroke: core }} />
             {flow && (
@@ -364,7 +364,7 @@ const TubeDivider = React.forwardRef<HTMLDivElement, TubeDividerProps>(
                 strokeWidth={tube * 0.9}
                 filter={`url(#${uid}-tight)`}
                 className="nk-tube-divider-flow"
-                style={{ stroke: core }}
+                style={{ stroke: core, opacity: "var(--neon-glow, 1)" }}
               />
             )}
           </g>
@@ -372,10 +372,10 @@ const TubeDivider = React.forwardRef<HTMLDivElement, TubeDividerProps>(
           {/* Where the loop crosses itself, the rear pass is blacked out and the front one runs over it */}
           {g.crossing && (
             <g>
-              <path d={g.crossing.under} {...stroke} strokeWidth={tube + 2.5} style={{ stroke: "#07080c" }} />
+              <path d={g.crossing.under} {...stroke} strokeWidth={tube + 1.6} style={{ stroke: "#07080c", opacity: 0.9 }} />
               <path d={g.crossing.under} {...stroke} strokeWidth={tube + 1.4} style={{ stroke: "rgb(var(--neon) / 0.1)" }} />
               <g className={cn("transition-opacity duration-200 ease-out", ignite)} style={{ opacity: on ? 1 : 0 }}>
-                <path d={g.crossing.over} {...stroke} strokeLinecap="butt" strokeWidth={tube * 1.3} filter={`url(#${uid}-tight)`} style={{ stroke: "rgb(var(--neon))" }} />
+                <path d={g.crossing.over} {...stroke} strokeLinecap="butt" strokeWidth={tube * 1.3} filter={`url(#${uid}-tight)`} style={{ stroke: "rgb(var(--neon))", opacity: "var(--neon-glow, 1)" }} />
                 <path d={g.crossing.over} {...stroke} strokeLinecap="butt" strokeWidth={tube} style={{ stroke: "rgb(var(--neon))" }} />
                 <path d={g.crossing.over} {...stroke} strokeLinecap="butt" strokeWidth={tube * 0.45} style={{ stroke: core }} />
               </g>

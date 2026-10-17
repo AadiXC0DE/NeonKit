@@ -204,10 +204,24 @@ describe("Particles", () => {
     reducedMotion = true;
     const { rerender } = render(<Particles connect />);
     resize();
-    vi.spyOn(window, "getComputedStyle").mockReturnValue({ color: "rgb(163, 230, 53)" } as CSSStyleDeclaration);
+    vi.spyOn(window, "getComputedStyle").mockReturnValue({ color: "rgb(163, 230, 53)", getPropertyValue: () => "" } as unknown as CSSStyleDeclaration);
     calls = [];
     rerender(<Particles connect color="lime" />);
     // Links are stroked in the raw color.
     expect(calls.some((call) => call.name === "strokeStyle" && String(call.args[0]).includes("163 230 53"))).toBe(true);
+  });
+
+  it("drops the halo sprites at --neon-glow 0 and keeps the motes", () => {
+    reducedMotion = true;
+    const { rerender } = render(<Particles />);
+    resize();
+    vi.spyOn(window, "getComputedStyle").mockReturnValue({
+      color: "rgb(34, 211, 238)",
+      getPropertyValue: (name: string) => (name === "--neon-glow" ? "0" : ""),
+    } as unknown as CSSStyleDeclaration);
+    calls = [];
+    rerender(<Particles color="cyan" />);
+    expect(calls.some((call) => call.name === "drawImage")).toBe(false);
+    expect(calls.some((call) => call.name === "arc")).toBe(true);
   });
 });

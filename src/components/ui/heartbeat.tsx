@@ -258,9 +258,9 @@ const Heartbeat = React.forwardRef<HTMLDivElement, HeartbeatProps>(
             >
               <span
                 style={{ width: spill, height: spill, left: -spill / 2, top: -spill / 2 }}
-                className="absolute rounded-full bg-[radial-gradient(circle,rgb(var(--neon)/0.3),transparent_68%)]"
+                className="absolute rounded-full bg-[radial-gradient(circle,rgb(var(--neon)/CALC(0.3*var(--neon-glow,1))),transparent_68%)]"
               />
-              <span className="absolute -left-[2.5px] -top-[2.5px] size-[5px] rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_0_2px_rgb(var(--neon)/0.4),0_0_6px_3px_rgb(var(--neon)/0.55),0_0_16px_6px_rgb(var(--neon)/0.2)]" />
+              <span className="absolute -left-[2.5px] -top-[2.5px] size-[5px] rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_0_2px_rgb(var(--neon)/0.4),0_0_6px_3px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),0_0_16px_6px_rgb(var(--neon)/CALC(0.2*var(--neon-glow,1)))]" />
             </span>
           </>
         )}

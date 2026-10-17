@@ -140,7 +140,7 @@ const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
         className={cn(
           "inline-flex h-[22px] shrink-0 items-center rounded-full border px-2 align-[1px] text-[12px] font-medium leading-none",
           "border-[rgb(var(--neon)/0.45)] bg-[rgb(var(--neon)/0.1)] [color:color-mix(in_srgb,rgb(var(--neon))_70%,white)]",
-          launch && "shadow-[0_0_10px_rgb(var(--neon)/0.35),inset_0_0_6px_rgb(var(--neon)/0.15)]",
+          launch && "shadow-[0_0_10px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1))),inset_0_0_6px_rgb(var(--neon)/CALC(0.15*var(--neon-glow,1)))]",
           !marquee && "mr-2.5",
         )}
       >
@@ -183,7 +183,7 @@ const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
                     launch && "bg-[linear-gradient(to_top,rgb(var(--neon)/0.2),rgb(var(--neon)/0.05)_60%,transparent)]",
                   )}
                 />
-                <span className="absolute inset-x-2 bottom-px h-[1.5px] rounded-full [background:color-mix(in_srgb,rgb(var(--neon))_45%,white)] shadow-[0_0_2px_rgb(var(--neon)),0_0_8px_rgb(var(--neon)/0.8),0_-2px_18px_rgb(var(--neon)/0.45)]" />
+                <span className="absolute inset-x-2 bottom-px h-[1.5px] rounded-full [background:color-mix(in_srgb,rgb(var(--neon))_45%,white)] shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_8px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_-2px_18px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]" />
               </span>
             )}
             {/* Unlit, the tube is still there as tinted glass */}
@@ -199,7 +199,7 @@ const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
                 {action != null && <span className="shrink-0">{action}</span>}
               </div>
             ) : (
-              <p className={cn("min-w-0 flex-1 py-2.5 text-center text-pretty", dismissible ? "px-11" : "px-4")}>
+              <p className={cn("min-w-0 flex-1 py-2.5 text-center text-balance", dismissible ? "px-11" : "px-4")}>
                 {tagNode}
                 {children}
                 {action != null && <span className="ml-2.5 inline-block">{action}</span>}
@@ -251,7 +251,7 @@ const BannerAction = React.forwardRef<HTMLButtonElement, BannerActionProps>((raw
       className={cn(
         "group/banner-action inline-flex items-center gap-1 whitespace-nowrap rounded-[4px] font-medium outline-none",
         "[color:color-mix(in_srgb,rgb(var(--neon))_72%,white)] underline-offset-4 [text-decoration-color:rgb(var(--neon)/0.5)]",
-        "transition-[text-shadow] duration-200 hover:underline hover:[text-shadow:0_0_10px_rgb(var(--neon)/0.6)]",
+        "transition-[text-shadow] duration-200 hover:underline hover:[text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]",
         "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07080c]",
         className,
       )}

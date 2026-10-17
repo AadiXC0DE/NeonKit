@@ -246,8 +246,8 @@ const ImageCompare = React.forwardRef<HTMLDivElement, ImageCompareProps>(
               className={cn(
                 "absolute rounded-full transition-[box-shadow] duration-200",
                 "[background:color-mix(in_srgb,rgb(var(--neon))_35%,white)]",
-                "shadow-[0_0_2px_rgb(var(--neon)),0_0_8px_rgb(var(--neon)/0.8),0_0_22px_rgb(var(--neon)/0.4)]",
-                "group-data-[state=dragging]/compare:shadow-[0_0_2px_rgb(var(--neon)),0_0_10px_rgb(var(--neon)),0_0_32px_rgb(var(--neon)/0.6)]",
+                "shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_8px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_0_22px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1)))]",
+                "group-data-[state=dragging]/compare:shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_10px_rgb(var(--neon)/var(--neon-glow,1)),0_0_32px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]",
                 "group-data-[disabled]/compare:shadow-none group-data-[disabled]/compare:opacity-40",
                 vertical ? "-top-px h-0.5" : "-left-px w-0.5",
               )}
@@ -293,12 +293,12 @@ const ImageCompare = React.forwardRef<HTMLDivElement, ImageCompareProps>(
             aria-hidden
             className={cn(
               "absolute inset-[5px] rounded-full border-[1.5px] border-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] transition-[box-shadow,opacity] duration-200",
-              "shadow-[0_0_6px_rgb(var(--neon)/0.8),inset_0_0_6px_rgb(var(--neon)/0.5)]",
+              "shadow-[0_0_6px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),inset_0_0_6px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]",
               "group-data-[disabled]/compare:opacity-30 group-data-[disabled]/compare:shadow-none",
             )}
           />
-          <svg aria-hidden viewBox="0 0 24 24" className={cn("size-[18px] text-white/90", vertical && "rotate-90")}>
-            <path d="M9.5 8 5.5 12l4 4M14.5 8l4 4-4 4" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" />
+          <svg aria-hidden viewBox="0 0 24 24" className={cn("size-5 text-white", vertical && "rotate-90")}>
+            <path d="M9 7.5 4.5 12 9 16.5M15 7.5l4.5 4.5-4.5 4.5" fill="none" stroke="currentColor" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </div>

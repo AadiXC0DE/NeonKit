@@ -55,11 +55,13 @@ export default function SwitchDemo() {
         <div key={id} className="flex items-center gap-3.5 px-4 py-3.5">
           <span
             className={cn(
-              "flex size-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] transition-colors duration-150",
-              checked ? "text-white/90" : "text-white/50",
+              "flex size-9 shrink-0 items-center justify-center rounded-lg border transition-[color,border-color,background-color] duration-150",
+              checked
+                ? "border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.08)] text-[rgb(var(--neon))]"
+                : "border-white/10 bg-white/[0.04] text-white/55",
             )}
           >
-            <Icon className="size-4" />
+            <Icon className="size-[18px]" />
           </span>
           <div className="min-w-0 flex-1">
             <label htmlFor={id} className="block text-sm font-medium text-white/90">

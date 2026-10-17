@@ -257,8 +257,8 @@ const DonutChart = React.forwardRef<HTMLDivElement, DonutChartProps>(
 
     const glow = (lit: boolean) =>
       lit
-        ? `drop-shadow(0 0 ${f(0.9 * unit * 1.6)}px rgb(var(--nk-seg))) drop-shadow(0 0 ${f(unit * 9)}px rgb(var(--nk-seg) / 0.8))`
-        : `drop-shadow(0 0 ${f(0.9 * unit * 1.2)}px rgb(var(--nk-seg) / 0.9)) drop-shadow(0 0 ${f(unit * 6)}px rgb(var(--nk-seg) / 0.5))`;
+        ? `drop-shadow(0 0 ${f(0.9 * unit * 1.6)}px rgb(var(--nk-seg) / var(--neon-glow, 1))) drop-shadow(0 0 ${f(unit * 9)}px rgb(var(--nk-seg) / calc(0.8 * var(--neon-glow, 1))))`
+        : `drop-shadow(0 0 ${f(0.9 * unit * 1.2)}px rgb(var(--nk-seg) / calc(0.9 * var(--neon-glow, 1)))) drop-shadow(0 0 ${f(unit * 6)}px rgb(var(--nk-seg) / calc(0.5 * var(--neon-glow, 1))))`;
 
     const valueSize = Math.max(16, Math.round(size * 0.13));
     const caption = current
@@ -498,7 +498,7 @@ const DonutChart = React.forwardRef<HTMLDivElement, DonutChartProps>(
               >
                 <span
                   className="h-[3px] w-3.5 shrink-0 rounded-full"
-                  style={{ background: CORE, boxShadow: "0 0 0 0.5px rgb(var(--nk-seg)), 0 0 6px rgb(var(--nk-seg) / 0.8)" }}
+                  style={{ background: CORE, boxShadow: "0 0 0 0.5px rgb(var(--nk-seg)), 0 0 6px rgb(var(--nk-seg) / calc(0.8 * var(--neon-glow, 1)))" }}
                 />
                 <span className="min-w-0 flex-1 truncate text-white/80">{s.label}</span>
                 <span className="tabular-nums text-white/90">{formatValue(s.value)}</span>
@@ -510,7 +510,7 @@ const DonutChart = React.forwardRef<HTMLDivElement, DonutChartProps>(
                 <span className="h-[3px] w-3.5 shrink-0 rounded-full bg-white/15" />
                 <span className="min-w-0 flex-1 truncate text-white/55">{remainderLabel}</span>
                 <span className="tabular-nums text-white/60">{formatValue(remainder)}</span>
-                <span className="w-11 text-right tabular-nums text-white/40">{formatShare(remainder / whole)}</span>
+                <span className="w-11 text-right tabular-nums text-white/50">{formatShare(remainder / whole)}</span>
               </li>
             )}
           </ul>

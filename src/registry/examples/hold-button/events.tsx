@@ -20,7 +20,7 @@ export default function HoldButtonEvents() {
       </HoldButton>
       <ol className="w-full space-y-1 rounded-lg border border-white/10 bg-[#0a0b11] p-3 font-mono text-xs text-white/55" aria-live="polite">
         {log.length === 0 ? (
-          <li className="text-white/30">Press and hold, or focus and hold Space.</li>
+          <li className="font-sans text-white/55">Press and hold, or focus and hold Space.</li>
         ) : (
           log.map((line, i) => (
             <li key={line.id} className={i === 0 ? "text-white/90" : undefined}>

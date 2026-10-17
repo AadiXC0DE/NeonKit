@@ -14,7 +14,7 @@ export default function CardDemo() {
       <CardHeader>
         <div className="flex items-center justify-between gap-4">
           <CardTitle>Usage this month</CardTitle>
-          <span className="text-xs text-white/40">Oct 1 – 31</span>
+          <span className="text-xs text-white/50">Oct 1 – 31</span>
         </div>
         <CardDescription>Pro plan · resets in 20 days</CardDescription>
       </CardHeader>
@@ -29,7 +29,7 @@ export default function CardDemo() {
               <div className="flex items-baseline justify-between gap-4 text-sm">
                 <span className="text-white/55">{metric.label}</span>
                 <span className="tabular-nums text-white/90">
-                  {metric.used} <span className="text-white/35">/ {metric.limit}</span>
+                  {metric.used} <span className="text-white/45">/ {metric.limit}</span>
                 </span>
               </div>
               <div className="h-1 overflow-hidden rounded-full bg-white/[0.06]">
@@ -47,7 +47,7 @@ export default function CardDemo() {
         </div>
       </CardContent>
       <CardFooter className="justify-between border-t border-white/[0.06] pt-4">
-        <span className="text-xs text-white/40">Updated 4 minutes ago</span>
+        <span className="text-xs text-white/50">Updated 4 minutes ago</span>
         <Button variant="ghost" size="sm" className="-mr-3">
           View breakdown
         </Button>

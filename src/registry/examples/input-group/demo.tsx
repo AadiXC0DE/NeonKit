@@ -50,7 +50,7 @@ export default function InputGroupDemo() {
         </label>
         <InputGroup>
           <InputGroupAddon>
-            <InputGroupText>https://pay.acme.co/</InputGroupText>
+            <InputGroupText>pay.acme.co/</InputGroupText>
           </InputGroupAddon>
           <InputGroupInput
             id="pay-link"

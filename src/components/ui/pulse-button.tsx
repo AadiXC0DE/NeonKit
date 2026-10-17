@@ -50,17 +50,18 @@ const css = `
 
 const variants = {
   solid:
-    "bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/0.45),inset_0_1px_0_rgb(255_255_255/0.45)] hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_32px_rgb(var(--neon)/0.7),inset_0_1px_0_rgb(255_255_255/0.45)] hover:brightness-110",
+    "bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_32px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:brightness-110",
   outline:
-    "border border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.06)] text-[rgb(var(--neon))] shadow-[0_0_12px_rgb(var(--neon)/0.25),inset_0_0_12px_rgb(var(--neon)/0.12)] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)] hover:border-[rgb(var(--neon))] hover:bg-[rgb(var(--neon)/0.12)] hover:shadow-[0_0_24px_rgb(var(--neon)/0.5),inset_0_0_16px_rgb(var(--neon)/0.2)]",
+    "border border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.06)] text-[rgb(var(--neon))] shadow-[0_0_12px_rgb(var(--neon)/CALC(0.25*var(--neon-glow,1))),inset_0_0_12px_rgb(var(--neon)/CALC(0.12*var(--neon-glow,1)))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))] hover:border-[rgb(var(--neon))] hover:bg-[rgb(var(--neon)/0.12)] hover:shadow-[0_0_24px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_16px_rgb(var(--neon)/CALC(0.2*var(--neon-glow,1)))]",
   soft: "bg-[rgb(var(--neon)/0.12)] text-[rgb(var(--neon))] hover:bg-[rgb(var(--neon)/0.2)]",
 } as const;
 
 const sizes = {
-  sm: { root: "h-8 gap-1.5 rounded-md px-3 text-xs", reach: 10 },
-  md: { root: "h-10 gap-2 rounded-lg px-4 text-sm", reach: 13 },
-  lg: { root: "h-12 gap-2.5 rounded-xl px-6 text-base", reach: 16 },
-  icon: { root: "size-10 rounded-full", reach: 13 },
+  sm: { root: "h-8 gap-1.5 rounded-md px-3 text-xs [&_svg]:size-4", reach: 10 },
+  md: { root: "h-10 gap-2 rounded-lg px-4 text-sm [&_svg]:size-4", reach: 13 },
+  lg: { root: "h-12 gap-2.5 rounded-xl px-6 text-base [&_svg]:size-[18px]", reach: 16 },
+  // A lone glyph carries the button, so it gets more of the circle.
+  icon: { root: "size-10 rounded-full [&_svg]:size-[18px]", reach: 13 },
 } as const;
 
 type AnyProps = Record<string, unknown>;
@@ -161,7 +162,7 @@ const PulseButton = React.forwardRef<HTMLButtonElement, PulseButtonProps>(
             !active && "[&>span]:[animation-play-state:paused]",
           )}
         >
-          <span className="nk-pulse-button-halo absolute inset-0 rounded-[inherit] shadow-[0_0_22px_1px_rgb(var(--neon)/0.45)]" />
+          <span className="nk-pulse-button-halo absolute inset-0 rounded-[inherit] shadow-[0_0_22px_1px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]" />
           {Array.from({ length: rings }, (_, i) => (
             <span
               key={i}
@@ -187,7 +188,7 @@ const PulseButton = React.forwardRef<HTMLButtonElement, PulseButtonProps>(
         "transition-[background-color,border-color,color,box-shadow,filter,transform,scale] duration-200 ease-out active:scale-[0.97]",
         "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
         "disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50",
-        "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "[&_svg]:pointer-events-none [&_svg]:shrink-0",
         s.root,
         variants[variant],
         className,

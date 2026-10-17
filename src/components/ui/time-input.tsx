@@ -519,7 +519,7 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
               <span
                 aria-hidden
                 title="Required"
-                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
               />
             )}
           </label>
@@ -544,7 +544,7 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
             "[--neon:var(--neon-accent,34_211_238)]",
             "group/field relative flex w-full cursor-text items-center border border-white/10 bg-white/[0.03] text-white/90",
             "transition-[border-color,background-color,box-shadow] ease-[cubic-bezier(0.23,1,0.32,1)] duration-[150ms,150ms,320ms]",
-            "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+            "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
             !disabled && "hover:[&:not(:focus-within)]:border-white/20",
             invalid && "border-[rgb(var(--neon)/0.55)] hover:[&:not(:focus-within)]:border-[rgb(var(--neon)/0.75)]",
             disabled && "cursor-not-allowed opacity-50",
@@ -649,7 +649,7 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
                       "transition-[background-color,color] duration-150 ease-out",
                       empty ? "text-white/50" : "text-white/90",
                       !disabled &&
-                        "focus:bg-[rgb(var(--neon)/0.12)] focus:text-white focus:[text-shadow:0_0_10px_rgb(var(--neon)/0.45)]",
+                        "focus:bg-[rgb(var(--neon)/0.12)] focus:text-white focus:[text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
                       empty && "focus:text-white/70",
                       disabled && "cursor-not-allowed",
                       s.segment,
@@ -665,7 +665,7 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
               aria-hidden
               className={cn(
                 "pointer-events-none absolute left-0 top-0 h-0.5 w-4 origin-left rounded-full opacity-0",
-                "bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/0.9),0_0_2px_rgb(var(--neon))]",
+                "bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_2px_rgb(var(--neon)/var(--neon-glow,1))]",
                 "transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
               )}
             />

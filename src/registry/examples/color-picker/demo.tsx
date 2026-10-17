@@ -9,10 +9,13 @@ export default function ColorPickerDemo() {
   const [brand, setBrand] = React.useState("#ff5fa2");
 
   return (
-    <div className="grid w-full max-w-2xl items-end gap-6 sm:grid-cols-[18rem_minmax(0,1fr)]">
-      <ColorPicker label="Brand neon" value={brand} onValueChange={setBrand} />
+    <div className="grid w-full max-w-2xl gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+      <div className="self-start">
+        <ColorPicker label="Brand neon" value={brand} onValueChange={setBrand} />
+      </div>
 
-      <div className="grid gap-1.5">
+      {/* Stretches to the picker's height, so both labels and both bottoms line up. */}
+      <div className="grid grid-rows-[auto_minmax(0,1fr)] gap-1.5">
         <span className="text-sm font-medium text-white/80">Storefront sign</span>
         <div className="relative isolate flex min-h-64 flex-col items-center justify-center gap-6 overflow-hidden rounded-xl border border-white/10 bg-[#07080d] px-6 py-10">
           <div

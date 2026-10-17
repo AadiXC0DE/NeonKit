@@ -9,7 +9,7 @@ export default function HologramCardMemberPass() {
       <div className="relative flex h-full flex-col">
         <div className="flex items-center justify-between">
           <span className="text-[13px] font-semibold tracking-[0.02em] text-white/75">NeonKit</span>
-          <span className="rounded-full border border-[rgb(var(--neon)/0.4)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[rgb(var(--neon))]">
+          <span className="rounded-full border border-[rgb(var(--neon)/0.4)] px-2 py-0.5 text-[11px] font-medium text-[rgb(var(--neon))]">
             Founding
           </span>
         </div>
@@ -27,11 +27,11 @@ export default function HologramCardMemberPass() {
         <p className="mt-auto font-mono text-[15px] tracking-[0.18em] text-white/90 tabular-nums">0042 · 2026</p>
         <div className="mt-2 flex items-end justify-between">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">Supporter</p>
+            <p className="text-[11px] text-white/55">Supporter</p>
             <p className="text-sm text-white/90">Mara Okafor</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">Since</p>
+            <p className="text-[11px] text-white/55">Since</p>
             <p className="font-mono text-sm text-white/90">10/26</p>
           </div>
         </div>

@@ -1,10 +1,11 @@
 import * as React from "react";
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { render } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import * as Icons from "@/components/ui/icons";
 import { Check, CheckCircle, CircleCheck, Home, House, icons, type Icon } from "@/components/ui/icons";
+import IconsBrowser from "@/registry/examples/icons/demo";
 
 const components = Object.entries(Icons).filter(([name]) => name !== "createIcon" && name !== "icons") as [string, Icon][];
 const svgOf = (el: React.ReactElement) => render(el).container.querySelector("svg")!;
@@ -102,4 +103,54 @@ describe("icons", () => {
     expect(Dot.displayName).toBe("CustomDot");
     expect(svg).toHaveAttribute("class", "nk-icon nk-icon-custom-dot");
   });
+
+  it("breaks a tube wherever another passes in front of it", () => {
+    const runs = (Glyph: Icon) => (svgOf(<Glyph />).querySelector("path")!.getAttribute("d")!.match(/M/g) ?? []).length;
+    // Calendar: the frame's top tube breaks around both binder rings (2 frame pieces, 2 rings, the header line).
+    expect(runs(Icons.Calendar)).toBe(5);
+    // Table: the row line breaks around the column divider (frame, header, 2 row pieces, divider).
+    expect(runs(Icons.Table)).toBe(5);
+    // Link: each ring passes behind the other once.
+    expect(runs(Icons.Link)).toBe(2);
+  });
 });
+
+describe("icon browser", () => {
+  const options = () => screen.getAllByRole("option").map((option) => option.getAttribute("data-icon"));
+
+  it("files every icon in exactly one set", () => {
+    render(<IconsBrowser />);
+    const shown = options();
+    expect(shown).toHaveLength(Object.keys(icons).length);
+    expect(new Set(shown).size).toBe(shown.length);
+    expect([...shown].sort()).toEqual(Object.keys(icons).sort());
+  });
+
+  it("searches from the start of a word", () => {
+    render(<IconsBrowser />);
+    fireEvent.change(screen.getByRole("searchbox", { name: "Search icons" }), { target: { value: "cal" } });
+    expect(options()).toEqual(["Calendar", "CalendarDays", "CalendarPlus"]);
+    fireEvent.change(screen.getByRole("searchbox", { name: "Search icons" }), { target: { value: "up down" } });
+    expect(options()).toEqual(expect.arrayContaining(["ArrowUpDown", "ChevronsUpDown"]));
+  });
+
+  it("moves the selection with the arrow keys and keeps one tab stop", () => {
+    render(<IconsBrowser />);
+    const list = screen.getByRole("listbox", { name: "Icons" });
+    const selected = () => within(list).getByRole("option", { selected: true });
+    expect(selected()).toHaveAttribute("data-icon", "Command");
+    expect(within(list).getAllByRole("option").filter((option) => option.tabIndex === 0)).toHaveLength(1);
+    fireEvent.keyDown(selected(), { key: "ArrowRight" });
+    expect(selected()).toHaveAttribute("data-icon", "LayoutGrid");
+    expect(selected()).toHaveFocus();
+    fireEvent.keyDown(selected(), { key: "Home" });
+    expect(selected()).toHaveAttribute("data-icon", "ArrowUp");
+  });
+
+  it("focuses search on slash unless you are typing", () => {
+    render(<IconsBrowser />);
+    fireEvent.keyDown(document.body, { key: "/" });
+    expect(screen.getByRole("searchbox", { name: "Search icons" })).toHaveFocus();
+  });
+});
+

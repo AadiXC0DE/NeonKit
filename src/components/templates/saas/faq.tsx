@@ -48,7 +48,7 @@ export function Faq({ id, clock, title, intro, items, updated }: FaqProps) {
     >
       <div className="mx-auto grid max-w-[1120px] gap-14 lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-8 lg:gap-y-16">
         <div className="lg:col-span-5 lg:row-start-1">
-          <Headline id={`${id}-title`} clock={clock} className="max-w-[13ch] text-[clamp(2.25rem,4.6vw,3.75rem)]">
+          <Headline id={`${id}-title`} clock={clock} className="max-w-[20ch] text-[clamp(2.25rem,4.6vw,3.75rem)] lg:max-w-[13ch]">
             {title}
           </Headline>
           <p className="mt-7 max-w-[42ch] text-pretty text-[16px] leading-[1.6] text-white/60">{intro}</p>

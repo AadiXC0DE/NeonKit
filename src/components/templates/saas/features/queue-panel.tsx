@@ -158,7 +158,7 @@ export function QueuePanel({ night }: { night: NightRun }) {
                     <span className="whitespace-nowrap text-white/90">{deploy.service}</span>
                     <span className="text-white/60">{deploy.sha}</span>
                   </p>
-                  <p className="mt-0.5 truncate text-[13px] leading-5 text-white/55">
+                  <p className="mt-0.5 text-pretty text-[13px] leading-5 text-white/55 sm:truncate">
                     {deploy.message}
                     <span className="hidden sm:inline">
                       <span className="text-white/30"> · </span>

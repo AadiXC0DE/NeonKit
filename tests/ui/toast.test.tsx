@@ -25,6 +25,17 @@ afterEach(() => {
 const region = () => screen.getByRole("region", { name: "Notifications" });
 
 describe("Toast", () => {
+  it("portals the stack to document.body so a transformed parent can't trap it", () => {
+    render(
+      <div data-testid="frame" style={{ transform: "scale(0.98)", ["--neon-accent" as string]: "255 95 162" }}>
+        <Toaster />
+      </div>,
+    );
+    expect(region().parentElement).toBe(document.body);
+    expect(screen.getByTestId("frame")).not.toContainElement(region());
+    expect(region().style.getPropertyValue("--neon-accent")).toBe("255 95 162");
+  });
+
   it("announces through live regions that are already mounted", () => {
     render(<Toaster />);
     const polite = screen.getByRole("status");

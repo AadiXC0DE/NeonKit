@@ -23,9 +23,15 @@ const reference = [
   { title: "Error codes", href: "#errors" },
 ];
 
+const changes = [
+  { version: "4.2.0", note: "Preview deployments get their own TLS certificate in under 10 s." },
+  { version: "4.1.3", note: "Edge config reads are cached for 60 s per region." },
+  { version: "4.1.0", note: "The Python SDK supports streaming responses." },
+];
+
 export default function NavigationMenuDocs() {
   return (
-    <div className="relative h-72 w-full max-w-xl overflow-hidden rounded-xl border border-white/10 bg-[#07080d]">
+    <div className="relative min-h-72 w-full max-w-xl overflow-hidden rounded-xl border border-white/10 bg-[#07080d]">
       <header className="relative z-10 flex h-12 items-center gap-2 border-b border-white/[0.06] px-3">
         <span className="shrink-0 pr-2 text-sm font-semibold text-white/90">Docs</span>
         <NavigationMenu className="min-w-0">
@@ -73,11 +79,17 @@ export default function NavigationMenuDocs() {
           </NavigationMenuList>
         </NavigationMenu>
       </header>
-      <div className="space-y-3 p-6">
-        <div className="h-3 w-40 rounded-full bg-white/10" />
-        <div className="h-2 w-full max-w-sm rounded-full bg-white/[0.06]" />
-        <div className="h-2 w-full max-w-xs rounded-full bg-white/[0.06]" />
-      </div>
+      <article className="px-6 py-5">
+        <h2 className="text-lg font-semibold tracking-tight text-white/90">Changelog</h2>
+        <ol className="mt-4 grid gap-3.5 text-sm">
+          {changes.map((change) => (
+            <li key={change.version} className="grid grid-cols-[3.5rem_1fr] gap-3">
+              <span className="font-mono text-[12.5px] leading-5 text-white/45">{change.version}</span>
+              <span className="leading-5 text-white/70">{change.note}</span>
+            </li>
+          ))}
+        </ol>
+      </article>
     </div>
   );
 }

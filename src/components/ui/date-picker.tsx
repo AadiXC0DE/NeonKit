@@ -310,7 +310,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
               <span
                 aria-hidden
                 title="Required"
-                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
               />
             )}
           </label>
@@ -322,9 +322,9 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
             className={cn(
               "group/field relative flex w-full items-center border border-white/10 bg-white/[0.03] text-white/90",
               "transition-[border-color,background-color,box-shadow] ease-[cubic-bezier(0.23,1,0.32,1)] duration-[150ms,150ms,320ms]",
-              "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+              "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
               open &&
-                "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.04)] shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+                "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.04)] shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
               !disabled && !open && "hover:[&:not(:focus-within)]:border-white/20",
               invalid && "border-[rgb(var(--neon)/0.55)]",
               invalid && !open && "hover:[&:not(:focus-within)]:border-[rgb(var(--neon)/0.75)]",
@@ -429,7 +429,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                         {active && (
                           <span
                             aria-hidden
-                            className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))] sm:block"
+                            className="absolute inset-y-1.5 left-0 hidden w-0.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/var(--neon-glow,1))] sm:block"
                           />
                         )}
                         {preset.label}

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CodeBlock } from "@/components/site/code-block";
 import { DocArticle } from "@/components/site/doc-article";
-import { H2, InlineCode, P, PageHeader, PagerLinks } from "@/components/site/prose";
+import { H2, InlineCode, P, PageHeader, PagerLinks, textLink } from "@/components/site/prose";
 import { ThemingPlayground } from "@/components/site/theming-playground";
 import { neonColorNames, neonColors } from "@/lib/neon";
 
@@ -31,6 +32,14 @@ export default function ThemingPage() {
       </PageHeader>
 
       <ThemingPlayground />
+
+      <P>
+        To retune the whole palette, the glow, the corners and the page surface at once, use the{" "}
+        <Link href="/theme" className={textLink}>
+          Theme Studio
+        </Link>
+        . It exports your globals.css, lib/neon.ts and a one-line shadcn install.
+      </P>
 
       <H2 id="per-component">Per component</H2>
       <P>Pass a palette name or any hex value.</P>

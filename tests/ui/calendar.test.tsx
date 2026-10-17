@@ -196,6 +196,13 @@ describe("Calendar", () => {
     render(<Calendar autoFocus defaultSelected={new Date(2026, 9, 14)} />);
     expect(document.activeElement).toHaveAccessibleName("Wednesday, October 14, 2026");
   });
+
+  it("autofocuses without scrolling, so a calendar in an unplaced popover doesn't jump the page", () => {
+    const focus = vi.spyOn(HTMLElement.prototype, "focus");
+    render(<Calendar autoFocus defaultSelected={new Date(2026, 9, 14)} />);
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+    focus.mockRestore();
+  });
 });
 
 describe("Calendar range", () => {

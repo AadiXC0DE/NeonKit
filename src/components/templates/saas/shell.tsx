@@ -1,5 +1,6 @@
 import { neonVars } from "@/lib/neon";
 import { color } from "./config";
+import { fonts } from "./fonts";
 import { Footer } from "./footer";
 import { Navbar } from "./navbar";
 
@@ -9,7 +10,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     <div
       // The template's one color, set once. Everything inside inherits it.
       style={neonVars(color)}
-      className="relative min-h-screen overflow-x-clip bg-[#05060a] text-white antialiased"
+      className={`${fonts} relative min-h-screen overflow-x-clip bg-[#05060a] text-white antialiased`}
     >
       <a
         href="#main"

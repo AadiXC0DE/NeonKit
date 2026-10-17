@@ -73,5 +73,6 @@ export const doc: ComponentDoc = {
     "Only the next slot to fill is in the tab order. Arrow keys, Home and End move between slots.",
     "Backspace clears the focused slot, or steps back and clears the previous one when the focused slot is empty.",
     "Link an error message with aria-describedby when invalid is on. The shake is skipped when reduced motion is on.",
+    "Slots keep their size while there's room. Give the group w-full min-w-0 in a narrow column and they narrow together instead of overflowing.",
   ],
 };

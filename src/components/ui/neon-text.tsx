@@ -9,7 +9,7 @@ import { neonVars, type NeonColor } from "@/lib/neon";
 // Light is sized in em so a 14px caption and a 96px headline burn alike:
 // a near-white core, a tight colored body and a wide, faint halo.
 const lit =
-  "[color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] [text-shadow:0_0_0.015em_rgb(255_255_255/0.9),0_0_max(1.5px,0.05em)_rgb(var(--neon)),0_0_max(4px,0.14em)_rgb(var(--neon)),0_0_0.38em_rgb(var(--neon)/0.7),0_0_0.9em_rgb(var(--neon)/0.4)]";
+  "[color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] [text-shadow:0_0_0.015em_rgb(255_255_255/CALC(0.9*var(--neon-glow,1))),0_0_max(1.5px,0.05em)_rgb(var(--neon)/var(--neon-glow,1)),0_0_max(4px,0.14em)_rgb(var(--neon)/var(--neon-glow,1)),0_0_0.38em_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))),0_0_0.9em_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1)))]";
 // Unlit, it is tinted glass with a faint highlight along the top of the tube.
 const unlit = "text-[rgb(var(--neon)/0.16)] [text-shadow:0_-0.014em_0_rgb(255_255_255/0.08)]";
 

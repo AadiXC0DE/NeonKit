@@ -36,14 +36,14 @@ const activeTriggers = {
 } as const;
 
 const indicators = {
-  pill: "absolute inset-0 border border-[rgb(var(--neon)/0.45)] bg-[rgb(var(--neon)/0.1)] shadow-[0_0_16px_rgb(var(--neon)/0.25),inset_0_0_12px_rgb(var(--neon)/0.08)]",
+  pill: "absolute inset-0 border border-[rgb(var(--neon)/0.45)] bg-[rgb(var(--neon)/0.1)] shadow-[0_0_16px_rgb(var(--neon)/CALC(0.25*var(--neon-glow,1))),inset_0_0_12px_rgb(var(--neon)/CALC(0.08*var(--neon-glow,1)))]",
   underline:
-    "absolute inset-x-0 -bottom-px h-0.5 bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.6),0_0_2px_rgb(var(--neon)/0.9)]",
+    "absolute inset-x-0 -bottom-px h-0.5 bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),0_0_2px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]",
 } as const;
 
 // The vertical underline sits on the list's left hairline instead of the bottom one.
 const verticalUnderline =
-  "absolute inset-y-1 -left-px w-0.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.6),0_0_2px_rgb(var(--neon)/0.9)]";
+  "absolute inset-y-1 -left-px w-0.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),0_0_2px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]";
 
 type TabsVariant = keyof typeof indicators;
 type TabsOrientation = keyof typeof lists;

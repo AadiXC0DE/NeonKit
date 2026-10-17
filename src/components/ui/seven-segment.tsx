@@ -212,7 +212,7 @@ const SevenSegment = React.forwardRef<HTMLSpanElement, SevenSegmentProps>(
         );
       });
 
-    const glow = `drop-shadow(0 0 calc(${H} * 0.03) rgb(var(--neon))) drop-shadow(0 0 calc(${H} * 0.14) rgb(var(--neon) / 0.55))`;
+    const glow = `drop-shadow(0 0 calc(${H} * 0.03) rgb(var(--neon) / var(--neon-glow, 1))) drop-shadow(0 0 calc(${H} * 0.14) rgb(var(--neon) / calc(0.55 * var(--neon-glow, 1))))`;
 
     return (
       <span

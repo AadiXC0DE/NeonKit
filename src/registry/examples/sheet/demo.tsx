@@ -59,13 +59,17 @@ export default function SheetDemo() {
             </SheetDescription>
           </SheetHeader>
 
-          <div className="mt-6 grid gap-2">
-            <div className="grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_32px] gap-2 px-0.5 text-xs font-medium text-white/50">
+          <div className="mt-6 grid gap-3 sm:gap-2">
+            <div className="hidden grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_32px] gap-2 px-0.5 text-xs font-medium text-white/50 sm:grid">
               <span>Key</span>
               <span>Value</span>
             </div>
             {variables.map((variable, index) => (
-              <div key={variable.id} className="grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_32px] items-center gap-2">
+              // On a phone the value drops under its key, so neither gets cut to a few characters.
+              <div
+                key={variable.id}
+                className="grid grid-cols-[minmax(0,1fr)_32px] items-center gap-x-2 gap-y-1.5 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_32px] sm:gap-y-2"
+              >
                 <Input
                   size="sm"
                   aria-label={`Key ${index + 1}`}
@@ -88,7 +92,7 @@ export default function SheetDemo() {
                   variant="ghost"
                   aria-label={`Remove ${variable.key || "variable"}`}
                   onClick={() => setVariables((current) => current.filter((item) => item.id !== variable.id))}
-                  className="size-8 rounded-md hover:text-[#ff4d5e]"
+                  className="col-start-2 row-span-2 row-start-1 size-8 rounded-md hover:text-[#ff4d5e] sm:col-start-3 sm:row-span-1"
                 >
                   <Trash2 />
                 </Button>

@@ -97,7 +97,7 @@ function MessageForm() {
 
   return (
     <form noValidate onSubmit={submit} aria-label="Message Juno" className="flex h-full flex-col gap-5 p-5 sm:p-8">
-      <p className="truncate font-mono text-[13px] text-white/70">
+      <p className="truncate font-mono text-[12px] text-white/70 sm:text-[13px]">
         &gt; new message to <span className="text-[rgb(var(--neon))]">{email}</span>
       </p>
       <div className="grid gap-5 sm:grid-cols-2">

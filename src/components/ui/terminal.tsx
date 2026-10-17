@@ -50,7 +50,7 @@ function Caret({ blink, className }: { blink: boolean; className?: string }) {
     <span
       aria-hidden
       className={cn(
-        "relative -mr-[0.6em] inline-block h-[1.2em] w-[0.6em] translate-y-[0.22em] [background-color:color-mix(in_srgb,rgb(var(--neon))_70%,white)] shadow-[0_0_8px_rgb(var(--neon)/0.8),0_0_18px_rgb(var(--neon)/0.35)]",
+        "relative -mr-[0.6em] inline-block h-[1.2em] w-[0.6em] translate-y-[0.22em] [background-color:color-mix(in_srgb,rgb(var(--neon))_70%,white)] shadow-[0_0_8px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_0_18px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]",
         blink && "nk-terminal-blink",
         className,
       )}
@@ -74,6 +74,8 @@ export interface TerminalProps
   prompt?: string;
   /** Palette name or any hex color. Inherits `--neon-accent` when omitted. */
   color?: NeonColor;
+  /** Called when the last line has printed: once per run, and once per pass when looping. */
+  onDone?: () => void;
 }
 
 const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
@@ -88,11 +90,13 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
       loop = false,
       startOnView = true,
       prompt = "$",
+      onDone,
       ...props
     },
     ref,
   ) => {
     const rootRef = React.useRef<HTMLDivElement>(null);
+    const onDoneRef = React.useRef(onDone);
     const typedRef = React.useRef<HTMLSpanElement>(null);
     const restRef = React.useRef<HTMLSpanElement>(null);
     const linesRef = React.useRef(lines);
@@ -108,6 +112,7 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
 
     React.useEffect(() => {
       linesRef.current = lines;
+      onDoneRef.current = onDone;
     });
 
     React.useEffect(() => {
@@ -129,6 +134,11 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
       return () => io.disconnect();
     }, [started]);
 
+    // Reduced motion prints the whole session at once, so it is done as soon as it starts.
+    React.useEffect(() => {
+      if (started && reduced) onDoneRef.current?.();
+    }, [started, reduced, run, script]);
+
     React.useEffect(() => {
       if (!started || reduced) return;
       const session = linesRef.current;
@@ -145,6 +155,7 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
         setTyping(false);
         const line = session[index];
         if (!line) {
+          onDoneRef.current?.();
           if (loop) {
             timer = setTimeout(() => {
               index = 0;
@@ -210,13 +221,13 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
       >
         <style>{css}</style>
         <div className="relative flex h-9 items-center gap-3 border-b border-white/[0.06] px-3.5">
-          <span aria-hidden className="flex w-16 gap-1.5">
+          <span aria-hidden className="flex w-14 gap-1.5">
             <span className="size-2.5 rounded-full bg-white/[0.08] shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" />
             <span className="size-2.5 rounded-full bg-white/[0.08] shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" />
             <span className="size-2.5 rounded-full bg-white/[0.08] shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]" />
           </span>
           <span className="min-w-0 flex-1 truncate text-center text-xs text-white/55">{title}</span>
-          <span className="flex w-16 justify-end">
+          <span className="flex w-14 justify-end">
             {!loop && !reduced && (
               // Stays mounted while the session replays, so a keyboard user keeps focus on it.
               <button
@@ -246,14 +257,15 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
         </div>
         <div className="relative px-4 py-3.5">
           <pre className="sr-only">{transcript}</pre>
-          <div aria-hidden className="whitespace-pre-wrap break-all">
+          {/* Wrap at spaces first, and inside a word only when it can't fit on a line of its own. */}
+          <div aria-hidden className="whitespace-pre-wrap [overflow-wrap:anywhere]">
             {lines.map((line, i) => {
               const input = line.kind === "input";
               if (i === shown && input) {
                 return (
                   <div key={`${run}-${i}-live`} className={kinds.input}>
-                    <span className="text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.6)]">{prompt}</span>{" "}
-                    <span ref={typedRef} className="[text-shadow:0_0_10px_rgb(var(--neon)/0.25)]" />
+                    <span className="text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]">{prompt}</span>{" "}
+                    <span ref={typedRef} className="[text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.25*var(--neon-glow,1)))]" />
                     <Caret blink={!typing} />
                     <span ref={restRef} className="invisible">
                       {line.text}
@@ -265,7 +277,7 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
                 <div key={`${run}-${i}`} className={cn(kinds[line.kind], i >= shown && "invisible")}>
                   {input && (
                     <>
-                      <span className="text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.6)]">{prompt}</span>{" "}
+                      <span className="text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]">{prompt}</span>{" "}
                     </>
                   )}
                   {line.text}
@@ -273,7 +285,7 @@ const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
               );
             })}
             <div className={cn(kinds.input, !done && "invisible")}>
-              <span className="text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.6)]">{prompt}</span>{" "}
+              <span className="text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]">{prompt}</span>{" "}
               {done && <Caret blink />}
             </div>
           </div>
@@ -398,14 +410,14 @@ const Typewriter = React.forwardRef<HTMLElement, TypewriterProps>(
         <span
           aria-hidden
           ref={wordRef}
-          className="[color:color-mix(in_srgb,rgb(var(--neon))_45%,white)] [text-shadow:0_0_2px_rgb(var(--neon)/0.6),0_0_14px_rgb(var(--neon)/0.55),0_0_36px_rgb(var(--neon)/0.3)]"
+          className="[color:color-mix(in_srgb,rgb(var(--neon))_45%,white)] [text-shadow:0_0_2px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),0_0_14px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),0_0_36px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1)))]"
         >
           {words[0]}
         </span>
         {cursor && (
           <span
             aria-hidden
-            className="nk-terminal-blink ml-[0.06em] inline-block h-[0.9em] w-[0.07em] min-w-[2px] translate-y-[0.1em] rounded-full [background-color:color-mix(in_srgb,rgb(var(--neon))_45%,white)] shadow-[0_0_6px_rgb(var(--neon)),0_0_16px_rgb(var(--neon)/0.6)]"
+            className="nk-terminal-blink ml-[0.06em] inline-block h-[0.9em] w-[0.07em] min-w-[2px] translate-y-[0.1em] rounded-full [background-color:color-mix(in_srgb,rgb(var(--neon))_45%,white)] shadow-[0_0_6px_rgb(var(--neon)/var(--neon-glow,1)),0_0_16px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
           />
         )}
       </Tag>

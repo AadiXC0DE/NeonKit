@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import {
   AnimatePresence,
   animate,
@@ -263,6 +264,24 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(
     React.useImperativeHandle(ref, () => sectionRef.current as HTMLElement);
     React.useEffect(() => registerToaster(id), [id]);
 
+    // The stack renders into document.body (or the open modal <dialog> it sits in), so a transformed
+    // or isolated ancestor can't trap the fixed position or bury it under a sticky header. The
+    // portal leaves the accent behind, so it's read from where the Toaster is mounted.
+    const anchorRef = React.useRef<HTMLSpanElement>(null);
+    const [host, setHost] = React.useState<HTMLElement | null>(null);
+    const [inherited, setInherited] = React.useState<string | undefined>(undefined);
+    React.useEffect(() => {
+      const anchor = anchorRef.current;
+      if (!anchor) return;
+      setHost((anchor.closest("dialog") as HTMLElement | null) ?? document.body);
+    }, [activeId]);
+    React.useEffect(() => {
+      const anchor = anchorRef.current;
+      if (!anchor || color) return;
+      const accent = window.getComputedStyle(anchor).getPropertyValue("--neon-accent").trim();
+      setInherited(accent || undefined);
+    }, [color, items]);
+
     const measure = React.useCallback((toastId: string, height: number) => {
       setHeights((prev) => (prev[toastId] === height ? prev : { ...prev, [toastId]: height }));
     }, []);
@@ -274,7 +293,7 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(
       if (target?.isConnected) target.focus({ preventScroll: true });
     }, []);
 
-    if (activeId !== id) return null;
+    if (activeId !== id) return <span ref={anchorRef} hidden />;
 
     // A removed toast never fires pointerleave or blur, so re-check once exits settle.
     const syncInteraction = () => {
@@ -317,11 +336,15 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(
       offset += height + GAP;
     }
 
-    return (
+    const sectionStyle = !color && inherited
+      ? ({ "--neon-accent": inherited, ...style } as React.CSSProperties)
+      : style;
+
+    const region = (
       <section
         ref={sectionRef}
         aria-label="Notifications"
-        style={neonVars(color, style)}
+        style={neonVars(color, sectionStyle)}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
           "fixed z-[100] w-[min(356px,calc(100vw_-_32px))]",
@@ -380,6 +403,13 @@ const Toaster = React.forwardRef<HTMLElement, ToasterProps>(
           </AnimatePresence>
         </ol>
       </section>
+    );
+
+    return (
+      <>
+        <span ref={anchorRef} hidden />
+        {host && createPortal(region, host)}
+      </>
     );
   },
 );
@@ -501,7 +531,7 @@ function ToastItem({
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute -left-px bottom-3.5 top-3.5 w-px rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/0.7)]"
+          className="pointer-events-none absolute -left-px bottom-3.5 top-3.5 w-px rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]"
         />
 
         <motion.div
@@ -516,9 +546,9 @@ function ToastItem({
               initial={version > 0 && !reduceMotion ? { opacity: 0, scale: 0.9 } : false}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.2, ease: EASE }}
-              className="mt-0.5 flex shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.6))]"
+              className="mt-px flex shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]"
             >
-              <Icon className={cn("size-4", status === "loading" && "animate-spin")} aria-hidden />
+              <Icon className={cn("size-[18px]", status === "loading" && "animate-spin")} aria-hidden />
             </motion.span>
           )}
 

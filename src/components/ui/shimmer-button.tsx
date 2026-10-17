@@ -58,12 +58,12 @@ const sizes = {
 
 const variants = {
   outline: {
-    root: "border border-[rgb(var(--neon)/0.28)] [background:linear-gradient(180deg,rgb(var(--neon)/0.11),rgb(var(--neon)/0.03)),#07080d] [color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_0_0_rgb(var(--neon)/0)] [text-shadow:0_0_12px_rgb(var(--neon)/0.45)] hover:border-[rgb(var(--neon)/0.5)] hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_0_24px_-4px_rgb(var(--neon)/0.55)]",
+    root: "border border-[rgb(var(--neon)/0.28)] [background:linear-gradient(180deg,rgb(var(--neon)/0.11),rgb(var(--neon)/0.03)),#07080d] [color:color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_0_0_rgb(var(--neon)/0)] [text-shadow:0_0_12px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))] hover:border-[rgb(var(--neon)/0.5)] hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_0_24px_-4px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]",
     sweep: "bg-[linear-gradient(90deg,transparent,rgb(var(--neon)/0.12)_30%,color-mix(in_srgb,rgb(var(--neon))_40%,white)_50%,rgb(var(--neon)/0.12)_70%,transparent)] opacity-25",
     head: "stroke-[color-mix(in_srgb,rgb(var(--neon))_35%,white)]",
   },
   solid: {
-    root: "border border-[rgb(var(--neon))] bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_18px_rgb(var(--neon)/0.45),inset_0_1px_0_rgb(255_255_255/0.45)] hover:shadow-[0_0_32px_rgb(var(--neon)/0.7),inset_0_1px_0_rgb(255_255_255/0.45)] hover:brightness-110",
+    root: "border border-[rgb(var(--neon))] bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_18px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:shadow-[0_0_32px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:brightness-110",
     sweep: "bg-[linear-gradient(90deg,transparent,rgb(255_255_255/0.2)_30%,rgb(255_255_255/0.75)_50%,rgb(255_255_255/0.2)_70%,transparent)] opacity-60",
     head: "stroke-white",
   },
@@ -191,7 +191,7 @@ const ShimmerButton = React.forwardRef<HTMLButtonElement, ShimmerButtonProps>(
           aria-hidden
           className="pointer-events-none absolute left-[-0.5px] top-[-0.5px] h-[calc(100%+1px)] w-[calc(100%+1px)] overflow-visible"
         >
-          <g className="opacity-70 [filter:blur(3px)]">
+          <g className="opacity-70 [filter:blur(3px)_opacity(var(--neon-glow,1))]">
             <Dash radius={s.radius} pattern="0 82 18 0" width={3} className="stroke-[rgb(var(--neon))]" />
           </g>
           <Dash radius={s.radius} pattern="0 72 28 0" className="stroke-[rgb(var(--neon)/0.14)]" />

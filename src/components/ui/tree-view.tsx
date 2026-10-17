@@ -390,7 +390,7 @@ const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
             aria-disabled={node.disabled || undefined}
             aria-busy={busy || undefined}
             tabIndex={tabbableId === node.id ? 0 : -1}
-            className="outline-none [&:focus-visible>[data-tree-row]]:shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.7),0_0_12px_-2px_rgb(var(--neon)/0.45)]"
+            className="outline-none [&:focus-visible>[data-tree-row]]:shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.7),0_0_12px_-2px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]"
           >
             <div
               data-tree-row=""
@@ -412,7 +412,7 @@ const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
                 <span
                   aria-hidden
                   style={{ left: guideLeft - indent + 1, width: indent - CHEVRON / 2 - 0.5 + (branch ? 0 : CHEVRON - 3) }}
-                  className="pointer-events-none absolute top-1/2 h-px bg-[rgb(var(--neon)/0.8)] shadow-[0_0_6px_rgb(var(--neon)/0.6)]"
+                  className="pointer-events-none absolute top-1/2 h-px bg-[rgb(var(--neon)/0.8)] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
                 />
               )}
               <span
@@ -443,7 +443,7 @@ const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
                   className={cn(
                     "flex size-4 shrink-0 items-center justify-center [&_svg]:size-[15px] [&_svg]:stroke-[1.75]",
                     isSelected
-                      ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.6))]"
+                      ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]"
                       : branch
                         ? "text-white/55"
                         : "text-white/35",
@@ -473,7 +473,7 @@ const TreeView = React.forwardRef<HTMLUListElement, TreeViewProps>(
                     aria-hidden
                     style={{ left: guideLeft }}
                     className={cn(
-                      "pointer-events-none absolute bottom-1 top-0 w-px bg-[rgb(var(--neon)/0.85)] shadow-[0_0_4px_rgb(var(--neon)/0.8),0_0_12px_rgb(var(--neon)/0.4)]",
+                      "pointer-events-none absolute bottom-1 top-0 w-px bg-[rgb(var(--neon)/0.85)] shadow-[0_0_4px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_0_12px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1)))]",
                       "transition-opacity duration-200 ease-out",
                       activeParent === node.id ? "opacity-100" : "opacity-0",
                     )}

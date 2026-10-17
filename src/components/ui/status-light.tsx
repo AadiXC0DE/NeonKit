@@ -59,7 +59,7 @@ function PanelLamp({ size, lit }: { size: number; lit: boolean }) {
     <span aria-hidden className="relative inline-block shrink-0" style={{ width: size, height: size }}>
       {/* Light thrown onto the panel around the bezel. A shadow, so it never widens the page. */}
       {lit && (
-        <span className="nk-status-lit pointer-events-none absolute inset-0 rounded-full shadow-[0_0_8px_2px_rgb(var(--neon)/0.2),0_0_20px_6px_rgb(var(--neon)/0.08)]" />
+        <span className="nk-status-lit pointer-events-none absolute inset-0 rounded-full shadow-[0_0_8px_2px_rgb(var(--neon)/CALC(0.2*var(--neon-glow,1))),0_0_20px_6px_rgb(var(--neon)/CALC(0.08*var(--neon-glow,1)))]" />
       )}
       {/* Turned metal bezel */}
       <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_215deg,#666c78,#1a1c23_18%,#9298a3_40%,#23262e_58%,#5d636f_78%,#666c78)] shadow-[0_1px_1.5px_rgb(0_0_0/0.85),0_0_0_0.5px_rgb(0_0_0/0.7)]" />
@@ -72,11 +72,11 @@ function PanelLamp({ size, lit }: { size: number; lit: boolean }) {
       {lit && (
         <span className="nk-status-lit absolute inset-0">
           <span
-            className="absolute inset-[21%] rounded-full shadow-[0_0_2px_rgb(var(--neon)),0_0_6px_rgb(var(--neon)/0.85),0_0_14px_rgb(var(--neon)/0.45)]"
+            className="absolute inset-[21%] rounded-full shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_6px_rgb(var(--neon)/CALC(0.85*var(--neon-glow,1))),0_0_14px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]"
             style={{ background: LIT_LENS }}
           />
           {/* Bloom caught on the inner lip of the bezel */}
-          <span className="absolute inset-[11%] rounded-full shadow-[inset_0_0_2px_1px_rgb(var(--neon)/0.55),0_0_3px_rgb(var(--neon)/0.35)]" />
+          <span className="absolute inset-[11%] rounded-full shadow-[inset_0_0_2px_1px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),0_0_3px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]" />
         </span>
       )}
       {/* Specular highlight on the dome */}
@@ -97,7 +97,7 @@ function DotLamp({ size, lit, pulse }: { size: number; lit: boolean; pulse: bool
       <span className="absolute inset-0 rounded-full bg-[rgb(var(--neon)/0.22)] shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.18)]" />
       {lit && (
         <span
-          className="nk-status-lit absolute inset-0 rounded-full shadow-[0_0_3px_rgb(var(--neon)),0_0_9px_rgb(var(--neon)/0.6)]"
+          className="nk-status-lit absolute inset-0 rounded-full shadow-[0_0_3px_rgb(var(--neon)/var(--neon-glow,1)),0_0_9px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
           style={{
             background:
               "radial-gradient(circle at 42% 38%, #fff 0 14%, color-mix(in srgb, rgb(var(--neon)) 42%, white) 34%, rgb(var(--neon)) 72%)",

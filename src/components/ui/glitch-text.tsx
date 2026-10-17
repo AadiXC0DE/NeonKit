@@ -14,8 +14,8 @@ const css = `
 @supports (color: hsl(from red h s l)) {
   .nk-glitch-text { --nk-glitch-alt: hsl(from rgb(var(--neon)) calc(h + 150) s l); }
 }
-.nk-glitch-text-a { color: rgb(var(--neon)); text-shadow: 0 0 0.12em rgb(var(--neon) / 0.7); }
-.nk-glitch-text-b { color: var(--nk-glitch-alt); text-shadow: 0 0 0.12em var(--nk-glitch-alt); }
+.nk-glitch-text-a { color: rgb(var(--neon)); text-shadow: 0 0 0.12em rgb(var(--neon) / calc(0.7 * var(--neon-glow, 1))); }
+.nk-glitch-text-b { color: var(--nk-glitch-alt); text-shadow: 0 0 0.12em color-mix(in srgb, var(--nk-glitch-alt) calc(clamp(0, var(--neon-glow, 1), 1) * 100%), transparent); }
 .nk-glitch-text-a, .nk-glitch-text-b { opacity: 0; }
 .nk-glitch-text:is([data-active], [data-burst]) :is(.nk-glitch-text-a, .nk-glitch-text-b),
 .nk-glitch-text[data-trigger="hover"]:hover :is(.nk-glitch-text-a, .nk-glitch-text-b),

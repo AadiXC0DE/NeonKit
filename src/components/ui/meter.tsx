@@ -14,7 +14,7 @@ const css = `
 }
 .nk-meter-seg[data-lit], .nk-meter-seg[data-peak] {
   background-color: color-mix(in srgb, rgb(var(--nk-meter-seg)) 82%, white);
-  box-shadow: inset 0 0 3px 1px rgb(255 255 255 / 0.45), 0 0 5px rgb(var(--nk-meter-seg) / 0.9), 0 0 16px 1px rgb(var(--nk-meter-seg) / 0.5);
+  box-shadow: inset 0 0 3px 1px rgb(255 255 255 / calc(0.45 * var(--neon-glow, 1))), 0 0 5px rgb(var(--nk-meter-seg) / calc(0.9 * var(--neon-glow, 1))), 0 0 16px 1px rgb(var(--nk-meter-seg) / calc(0.5 * var(--neon-glow, 1)));
   transition-duration: 0ms;
 }
 @media (prefers-reduced-motion: reduce) { .nk-meter-seg { transition: none; } }
@@ -206,7 +206,7 @@ const Meter = React.forwardRef<HTMLDivElement, MeterProps>(
           className={cn(
             "flex min-h-0 min-w-0 flex-1 rounded-[5px] border border-white/10 bg-[#07080c] p-[3px]",
             // The housing picks up light from the lit segments, more as the level rises.
-            "shadow-[inset_0_1px_3px_rgb(0_0_0/0.7),0_1px_0_rgb(255_255_255/0.03),0_0_28px_-4px_rgb(var(--neon)/calc(var(--nk-meter-level)*0.4))]",
+            "shadow-[inset_0_1px_3px_rgb(0_0_0/0.7),0_1px_0_rgb(255_255_255/0.03),0_0_28px_-4px_rgb(var(--neon)/CALC(calc(var(--nk-meter-level)*0.4)*var(--neon-glow,1)))]",
             vertical && "flex-col-reverse",
           )}
           style={{ gap: s.gap, [vertical ? "width" : "height"]: s.thickness + 8 }}

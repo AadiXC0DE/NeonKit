@@ -632,9 +632,9 @@ const ResizableHandle = React.forwardRef<HTMLDivElement, ResizableHandleProps>(
               horizontal ? "h-8 w-[7px]" : "h-[7px] w-8",
               edge === "start" && (horizontal ? "translate-x-[4px]" : "translate-y-[4px]"),
               edge === "end" && (horizontal ? "-translate-x-[4px]" : "-translate-y-[4px]"),
-              "group-hover/handle:border-[rgb(var(--neon)/0.7)] group-hover/handle:bg-[rgb(var(--neon)/0.35)] group-hover/handle:shadow-[0_0_10px_rgb(var(--neon)/0.35)]",
-              "group-focus-visible/handle:border-[rgb(var(--neon))] group-focus-visible/handle:bg-[rgb(var(--neon))] group-focus-visible/handle:shadow-[0_0_2px_rgb(var(--neon)),0_0_10px_rgb(var(--neon)/0.8),0_0_24px_rgb(var(--neon)/0.45)]",
-              "group-data-[dragging]/handle:border-[rgb(var(--neon))] group-data-[dragging]/handle:bg-[rgb(var(--neon))] group-data-[dragging]/handle:shadow-[0_0_2px_rgb(var(--neon)),0_0_10px_rgb(var(--neon)/0.8),0_0_24px_rgb(var(--neon)/0.45)]",
+              "group-hover/handle:border-[rgb(var(--neon)/0.7)] group-hover/handle:bg-[rgb(var(--neon)/0.35)] group-hover/handle:shadow-[0_0_10px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]",
+              "group-focus-visible/handle:border-[rgb(var(--neon))] group-focus-visible/handle:bg-[rgb(var(--neon))] group-focus-visible/handle:shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_10px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_0_24px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
+              "group-data-[dragging]/handle:border-[rgb(var(--neon))] group-data-[dragging]/handle:bg-[rgb(var(--neon))] group-data-[dragging]/handle:shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_10px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_0_24px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
             )}
           />
         )}

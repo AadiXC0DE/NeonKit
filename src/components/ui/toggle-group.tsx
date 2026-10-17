@@ -25,7 +25,7 @@ const HIT_AREA =
   "before:absolute before:-inset-x-px before:top-1/2 before:h-[max(100%,2.75rem)] before:-translate-y-1/2 before:content-['']";
 
 const LIT_LABEL =
-  "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.55)] [&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/0.7))]";
+  "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))] [&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))))]";
 
 type Size = "sm" | "md" | "lg";
 type Orientation = "horizontal" | "vertical";
@@ -47,7 +47,7 @@ function useIgnitions(on: boolean) {
  * -----------------------------------------------------------------------------------------------*/
 
 const toggleSizes = {
-  sm: { root: "h-8 min-w-8 rounded-md px-2 text-xs", label: "gap-1.5 [&_svg]:size-3.5" },
+  sm: { root: "h-8 min-w-8 rounded-md px-2 text-xs", label: "gap-1.5 [&_svg]:size-4" },
   md: { root: "h-10 min-w-10 rounded-lg px-2.5 text-sm", label: "gap-2 [&_svg]:size-4" },
   lg: { root: "h-12 min-w-12 rounded-xl px-3 text-base", label: "gap-2.5 [&_svg]:size-[18px]" },
 } as const;
@@ -130,7 +130,7 @@ const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
               aria-hidden
               className={cn(
                 "pointer-events-none absolute rounded-[inherit] bg-[rgb(var(--neon)/0.12)]",
-                "shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.5),inset_0_0_12px_rgb(var(--neon)/0.14),0_0_16px_-4px_rgb(var(--neon)/0.55)]",
+                "shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.5),inset_0_0_12px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1))),0_0_16px_-4px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]",
                 v.glow,
                 ignitions > 0 && IGNITE,
               )}
@@ -170,10 +170,10 @@ const groupVariants = {
     // Root radius minus its 3px padding, set inline so the pill keeps its corners while it slides.
     radius: { sm: 5, md: 7, lg: 9 },
     idle: "text-white/55 hover:text-white/85",
-    on: "text-white [text-shadow:0_0_12px_rgb(var(--neon)/0.35)] [&_svg]:text-[rgb(var(--neon))] [&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/0.6))]",
+    on: "text-white [text-shadow:0_0_12px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))] [&_svg]:text-[rgb(var(--neon))] [&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]",
     focus: FOCUS_RING,
     indicator:
-      "absolute inset-0 bg-[rgb(var(--neon)/0.12)] shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.5),inset_0_0_12px_rgb(var(--neon)/0.1),0_0_18px_-4px_rgb(var(--neon)/0.55)]",
+      "absolute inset-0 bg-[rgb(var(--neon)/0.12)] shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.5),inset_0_0_12px_rgb(var(--neon)/CALC(0.1*var(--neon-glow,1))),0_0_18px_-4px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]",
   },
   outline: {
     root: "overflow-hidden border border-white/10 bg-white/[0.02]",
@@ -203,12 +203,12 @@ const groupVariants = {
     on: LIT_LABEL,
     focus: FOCUS_RING,
     indicator:
-      "absolute inset-0 bg-[rgb(var(--neon)/0.12)] shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.35),0_0_14px_-4px_rgb(var(--neon)/0.5)]",
+      "absolute inset-0 bg-[rgb(var(--neon)/0.12)] shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.35),0_0_14px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]",
   },
 } as const;
 
 const labelSizes = {
-  sm: "gap-1.5 [&_svg]:size-3.5",
+  sm: "gap-1.5 [&_svg]:size-[15px]",
   md: "gap-2 [&_svg]:size-4",
   lg: "gap-2 [&_svg]:size-[18px]",
 } as const;
@@ -453,11 +453,11 @@ const ToggleGroupItem = React.forwardRef<HTMLButtonElement, ToggleGroupItemProps
     const indicatorDetail =
       group.variant === "segmented" ? (
         // A short filament along the pill's lower edge: the part that reads as lit glass.
-        <span className="absolute inset-x-[22%] bottom-0 h-px rounded-full bg-[rgb(var(--neon)/0.9)] shadow-[0_0_6px_rgb(var(--neon)/0.9)]" />
+        <span className="absolute inset-x-[22%] bottom-0 h-px rounded-full bg-[rgb(var(--neon)/0.9)] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]" />
       ) : group.variant === "outline" ? (
         <span
           className={cn(
-            "absolute bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.7),0_0_2px_rgb(var(--neon))]",
+            "absolute bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))),0_0_2px_rgb(var(--neon)/var(--neon-glow,1))]",
             vertical ? "inset-y-0 left-0 w-0.5" : "inset-x-0 bottom-0 h-0.5",
           )}
         />

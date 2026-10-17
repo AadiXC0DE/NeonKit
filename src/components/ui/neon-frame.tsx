@@ -13,12 +13,12 @@ const css = `
 @keyframes nk-neon-frame-scan { 0% { transform: translateY(-100%); opacity: 0; } 6% { opacity: 1; } 64% { transform: translateY(0); opacity: 1; } 72%, 100% { transform: translateY(0); opacity: 0; } }
 .nk-neon-frame-corner {
   transform: scale(var(--nk-sx), var(--nk-sy));
-  filter: drop-shadow(0 0 1.5px rgb(var(--neon) / 0.9)) drop-shadow(0 0 7px rgb(var(--neon) / 0.45));
+  filter: drop-shadow(0 0 1.5px rgb(var(--neon) / calc(0.9 * var(--neon-glow, 1)))) drop-shadow(0 0 7px rgb(var(--neon) / calc(0.45 * var(--neon-glow, 1))));
   transition: transform 260ms ${EASE}, filter 200ms ease-out;
 }
 .nk-neon-frame:is(:hover, :focus-within) > .nk-neon-frame-corner,
 .nk-neon-frame[data-active="true"] > .nk-neon-frame-corner {
-  filter: drop-shadow(0 0 2px rgb(var(--neon))) drop-shadow(0 0 12px rgb(var(--neon) / 0.75));
+  filter: drop-shadow(0 0 2px rgb(var(--neon) / var(--neon-glow, 1))) drop-shadow(0 0 12px rgb(var(--neon) / calc(0.75 * var(--neon-glow, 1))));
 }
 .nk-neon-frame[data-active="true"] > .nk-neon-frame-corner {
   transform: translate(calc(var(--nk-sx) * 3px), calc(var(--nk-sy) * 3px)) scale(var(--nk-sx), var(--nk-sy));
@@ -27,7 +27,7 @@ const css = `
 .nk-neon-frame[data-active="false"] > .nk-neon-frame-corner { filter: none; }
 .nk-neon-frame[data-active="false"] .nk-neon-frame-light,
 .nk-neon-frame[data-active="false"] .nk-neon-frame-fade { opacity: 0; }
-.nk-neon-frame[data-active="false"]:is(:hover, :focus-within) > .nk-neon-frame-corner { filter: drop-shadow(0 0 6px rgb(var(--neon) / 0.4)); }
+.nk-neon-frame[data-active="false"]:is(:hover, :focus-within) > .nk-neon-frame-corner { filter: drop-shadow(0 0 6px rgb(var(--neon) / calc(0.4 * var(--neon-glow, 1)))); }
 .nk-neon-frame[data-active="false"]:is(:hover, :focus-within) .nk-neon-frame-light { opacity: 0.7; }
 .nk-neon-frame-arm { stroke-dasharray: 1; stroke-dashoffset: 0; }
 .nk-neon-frame[data-state="armed"] .nk-neon-frame-arm { stroke-dashoffset: 1; }
@@ -168,7 +168,7 @@ const NeonFrame = React.forwardRef<HTMLElement, NeonFrameProps>(
           side === "top" ? "top-0" : "bottom-0",
           edge === "left" ? "left-[calc(var(--nk-arm)+10px)]" : "right-[calc(var(--nk-arm)+10px)]",
           primary
-            ? "border-[rgb(var(--neon)/0.4)] text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.55)]"
+            ? "border-[rgb(var(--neon)/0.4)] text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]"
             : "border-white/10 text-white/55",
         )}
         style={
@@ -179,7 +179,7 @@ const NeonFrame = React.forwardRef<HTMLElement, NeonFrameProps>(
         }
       >
         {primary && (
-          <span aria-hidden className="size-1 shrink-0 bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]" />
+          <span aria-hidden className="size-1 shrink-0 bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/var(--neon-glow,1))]" />
         )}
         {content}
       </span>
@@ -204,7 +204,7 @@ const NeonFrame = React.forwardRef<HTMLElement, NeonFrameProps>(
         {/* The brackets' light on the panel */}
         <span
           aria-hidden
-          className="nk-neon-frame-fade pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_0_0,rgb(var(--neon)/0.1),transparent_72px),radial-gradient(circle_at_100%_0,rgb(var(--neon)/0.1),transparent_72px),radial-gradient(circle_at_100%_100%,rgb(var(--neon)/0.1),transparent_72px),radial-gradient(circle_at_0_100%,rgb(var(--neon)/0.1),transparent_72px)]"
+          className="nk-neon-frame-fade pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_0_0,rgb(var(--neon)/CALC(0.1*var(--neon-glow,1))),transparent_72px),radial-gradient(circle_at_100%_0,rgb(var(--neon)/CALC(0.1*var(--neon-glow,1))),transparent_72px),radial-gradient(circle_at_100%_100%,rgb(var(--neon)/CALC(0.1*var(--neon-glow,1))),transparent_72px),radial-gradient(circle_at_0_100%,rgb(var(--neon)/CALC(0.1*var(--neon-glow,1))),transparent_72px)]"
         />
 
         {hasLabel && tab(label, "top", "left", true)}
@@ -219,7 +219,7 @@ const NeonFrame = React.forwardRef<HTMLElement, NeonFrameProps>(
           <span aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
             <span className="nk-neon-frame-scan absolute inset-0">
               <span className="absolute inset-x-0 bottom-0 h-16 bg-[linear-gradient(to_bottom,transparent,rgb(var(--neon)/0.07))]" />
-              <span className="absolute inset-x-0 bottom-0 h-px bg-[rgb(var(--neon)/0.5)] shadow-[0_0_8px_rgb(var(--neon)/0.6)]" />
+              <span className="absolute inset-x-0 bottom-0 h-px bg-[rgb(var(--neon)/0.5)] shadow-[0_0_8px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]" />
             </span>
           </span>
         )}

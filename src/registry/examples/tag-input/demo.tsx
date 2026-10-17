@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Send } from "@/components/ui/icons";
+import { UserPlus } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { TagInput } from "@/components/ui/tag-input";
 
@@ -48,7 +48,7 @@ export default function TagInputDemo() {
           {sent}
         </p>
         <Button type="submit" variant="solid" size="sm" disabled={!recipients.length}>
-          <Send />
+          <UserPlus />
           {recipients.length
             ? `Send ${recipients.length} ${recipients.length === 1 ? "invite" : "invites"}`
             : "Send invites"}

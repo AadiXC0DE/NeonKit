@@ -15,12 +15,12 @@ export default function AvatarDemo() {
     <ul className="grid w-full max-w-sm gap-1">
       {team.map((member) => (
         <li key={member.name} className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-white/[0.03]">
-          <Avatar src={member.src} alt={member.name} status={member.status} />
+          <Avatar src={member.src} alt={member.name} status={member.status} decorative />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-white/90">{member.name}</p>
             <p className="truncate text-xs text-white/50">{member.role}</p>
           </div>
-          <span className="shrink-0 text-xs text-white/40">{member.note}</span>
+          <span className="shrink-0 text-xs text-white/50">{member.note}</span>
         </li>
       ))}
     </ul>

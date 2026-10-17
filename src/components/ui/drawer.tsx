@@ -744,7 +744,7 @@ const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps>(
                   <span
                     aria-hidden
                     className={cn(
-                      "pointer-events-none absolute inset-x-0 top-0 h-20 rounded-t-[20px] bg-[radial-gradient(60%_100%_at_50%_0%,rgb(var(--neon)/0.08),transparent)] transition-opacity duration-300",
+                      "pointer-events-none absolute inset-x-0 top-0 h-20 rounded-t-[20px] bg-[radial-gradient(60%_100%_at_50%_0%,rgb(var(--neon)/CALC(0.08*var(--neon-glow,1))),transparent)] transition-opacity duration-300",
                       dragging ? "opacity-100" : "opacity-60",
                     )}
                   />
@@ -801,7 +801,7 @@ function Handle({
         className={cn(
           "absolute inset-0 rounded-full transition-[background-color,box-shadow] duration-200 ease-out",
           dragging
-            ? "bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/0.9),0_0_18px_rgb(var(--neon)/0.5)]"
+            ? "bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_18px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
             : "bg-white/[0.16] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.06)] group-hover/handle:bg-white/25",
         )}
       />
@@ -815,7 +815,7 @@ function Handle({
       {detent > 0 && (
         <span
           key={detent}
-          className="absolute -inset-px rounded-full bg-[rgb(var(--neon))] opacity-0 shadow-[0_0_8px_rgb(var(--neon)),0_0_22px_rgb(var(--neon)/0.6)] [animation:nk-drawer-detent_700ms_cubic-bezier(0.23,1,0.32,1)_both] motion-reduce:hidden"
+          className="absolute -inset-px rounded-full bg-[rgb(var(--neon))] opacity-0 shadow-[0_0_8px_rgb(var(--neon)/var(--neon-glow,1)),0_0_22px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))] [animation:nk-drawer-detent_700ms_cubic-bezier(0.23,1,0.32,1)_both] motion-reduce:hidden"
         />
       )}
     </span>

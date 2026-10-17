@@ -2,6 +2,7 @@ import * as React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { NeonIcon } from "@/components/ui/neon-icon";
+import { BellRing, Mic } from "@/components/ui/icons";
 
 const litLevels = (container: HTMLElement) => container.querySelectorAll('[data-part="level"][data-lit]').length;
 
@@ -95,5 +96,43 @@ describe("NeonIcon", () => {
     expect(screen.queryByRole("img")).toBeNull();
     expect(ref.current).not.toHaveAttribute("aria-label");
     expect(ref.current?.style.height).toBe("40px");
+  });
+
+  it("lights any icon from the set, as a component or an element", () => {
+    const { container, rerender } = render(<NeonIcon icon={Mic} size={40} />);
+    const img = screen.getByRole("img", { name: "Mic" });
+    expect(img).toHaveAttribute("data-icon", "mic");
+    // Glass, two halo layers, tube and core.
+    expect(container.querySelectorAll("svg.nk-icon-mic")).toHaveLength(5);
+    expect(container.querySelector('[data-part="tube"]')).toHaveAttribute("data-lit");
+    rerender(<NeonIcon icon={<BellRing />} value={0} />);
+    expect(screen.getByRole("img")).toHaveAccessibleName("Bell ring, off");
+    expect(container.querySelector('[data-part="tube"]')).not.toHaveAttribute("data-lit");
+  });
+
+  it("names a server-rendered svg by its icon class", () => {
+    const svg = (
+      <svg className="nk-icon nk-icon-git-fork" viewBox="0 0 24 24">
+        <path d="M6 3v12" />
+      </svg>
+    );
+    const { container } = render(<NeonIcon icon={svg} strokeWidth={2} size={24} />);
+    expect(screen.getByRole("img")).toHaveAccessibleName("Git fork");
+    const layers = container.querySelectorAll("svg");
+    expect(layers[0]).toHaveAttribute("width", "24");
+    expect(layers[0]).toHaveAttribute("stroke-width", "2");
+    expect(layers[0]).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("strikes on when turned on, and on mount with ignite", () => {
+    const strike = (c: HTMLElement) => (c.querySelector('[data-part="tube"] > span') as HTMLElement).style.animation;
+    const { container, rerender } = render(<NeonIcon icon={Mic} value={0} />);
+    expect(strike(container)).toBe("");
+    rerender(<NeonIcon icon={Mic} value={1} />);
+    expect(strike(container)).toContain("nk-neon-icon-strike");
+    const mounted = render(<NeonIcon icon={Mic} ignite />);
+    expect(strike(mounted.container)).toContain("nk-neon-icon-strike");
+    const built = render(<NeonIcon icon="power" ignite />);
+    expect((built.container.querySelector('[data-part="on"] g g') as HTMLElement).style.animation).toContain("nk-neon-icon-strike");
   });
 });

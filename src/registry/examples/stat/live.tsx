@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Activity, Layers } from "@/components/ui/icons";
 import { Stat, StatGroup } from "@/components/ui/stat";
 
 const START = { seed: 7, history: [412, 398, 431, 446, 420, 409, 455, 470, 452, 461, 488, 474], queue: 38 };
@@ -30,9 +31,27 @@ export default function StatLive() {
   const change = ((rps - history[0]) / history[0]) * 100;
 
   return (
-    <StatGroup variant="framed" columns={2} className="w-full max-w-xl">
-      <Stat live label="Requests per second" value={rps} delta={change} trend={history} helper="Edge, all regions, last 24 s" />
-      <Stat live label="Jobs in queue" value={queue} positive="down" helper="ingest-worker, 6 replicas" />
+    <StatGroup variant="framed" columns={2} className="w-full max-w-2xl">
+      <Stat
+        live
+        icon={Activity}
+        label="Requests per second"
+        value={rps}
+        delta={change}
+        trend={history}
+        helper="Edge, all regions, last 24 s"
+      />
+      <Stat
+        live
+        icon={Layers}
+        color="amber"
+        label="Jobs in queue"
+        value={queue}
+        goal={120}
+        formatGoal={(share) => `${Math.round(share * 100)}% of the alert line`}
+        positive="down"
+        helper="ingest-worker, 6 replicas"
+      />
     </StatGroup>
   );
 }

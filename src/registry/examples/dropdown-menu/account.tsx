@@ -22,7 +22,7 @@ export default function DropdownMenuAccount() {
         <ChevronsUpDown aria-hidden className="size-4 shrink-0 text-white/35" />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="w-64">
         <DropdownMenuLabel className="pb-2">
           <span className="block text-sm font-medium text-white/90">Mara Okafor</span>
           <span className="block font-normal text-white/50">mara@northlight.dev</span>

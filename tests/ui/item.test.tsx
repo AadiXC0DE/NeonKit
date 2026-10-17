@@ -76,6 +76,14 @@ describe("Item", () => {
     expect(screen.getByText("ana@acme.dev")).toHaveClass("truncate");
   });
 
+  it("lets a description wrap in full with lines=\"none\"", () => {
+    render(<ItemDescription lines="none">Generated 14 March. 8 of 10 unused.</ItemDescription>);
+    const text = screen.getByText("Generated 14 March. 8 of 10 unused.");
+    expect(text).not.toHaveClass("truncate");
+    expect(text).not.toHaveClass("line-clamp-2");
+    expect(text).toHaveAttribute("data-lines", "none");
+  });
+
   it("hides separators from assistive tech", () => {
     const { container } = render(<ItemSeparator inset={70} />);
     const rule = container.firstElementChild as HTMLElement;

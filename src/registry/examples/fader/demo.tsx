@@ -112,7 +112,7 @@ export default function FaderDemo() {
             key={c.id}
             className="flex flex-1 flex-col items-center gap-4 border-r border-white/[0.05] px-3 pb-5 pt-4"
           >
-            <span className="text-[10px] font-medium tabular-nums text-white/40">{String(i + 1).padStart(2, "0")}</span>
+            <span className="text-[10px] font-medium tabular-nums text-white/50">{String(i + 1).padStart(2, "0")}</span>
             <Knob
               size="sm"
               aria-label={`${c.name} pan`}

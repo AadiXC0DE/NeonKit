@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
+import { RefreshCw, Repeat } from "@/components/ui/icons";
 import { Stat } from "@/components/ui/stat";
 
 export default function StatLoading() {
@@ -20,6 +21,7 @@ export default function StatLoading() {
         key={run}
         size="lg"
         loading={loading}
+        icon={Repeat}
         label="Net revenue retention"
         value={118.4}
         unit="%"
@@ -37,6 +39,7 @@ export default function StatLoading() {
           setRun((r) => r + 1);
         }}
       >
+        <RefreshCw aria-hidden className="size-3.5" />
         Refresh
       </Button>
     </div>

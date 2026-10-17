@@ -101,13 +101,13 @@ const markers = {
     "border-white/10 bg-white/[0.03] text-white/40 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),inset_0_-1px_0_rgb(0_0_0/0.3)]",
   // The halo arrives a beat late, as the connector's light reaches it.
   current:
-    "border-[rgb(var(--neon)/0.85)] bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.8)] shadow-[0_0_0_4px_rgb(var(--neon)/0.12),0_0_22px_rgb(var(--neon)/0.45),inset_0_0_8px_rgb(var(--neon)/0.25)] delay-[220ms]",
+    "border-[rgb(var(--neon)/0.85)] bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))] shadow-[0_0_0_4px_rgb(var(--neon)/0.12),0_0_22px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_0_8px_rgb(var(--neon)/CALC(0.25*var(--neon-glow,1)))] delay-[220ms]",
   complete:
-    "border-[rgb(var(--neon)/0.55)] bg-[rgb(var(--neon)/0.14)] text-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.22)]",
+    "border-[rgb(var(--neon)/0.55)] bg-[rgb(var(--neon)/0.14)] text-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.22*var(--neon-glow,1)))]",
   error:
-    "border-[rgb(255_77_94/0.8)] bg-[rgb(255_77_94/0.12)] text-[#ff4d5e] shadow-[0_0_14px_rgb(255_77_94/0.35)]",
+    "border-[rgb(255_77_94/0.8)] bg-[rgb(255_77_94/0.12)] text-[#ff4d5e] shadow-[0_0_14px_rgb(255_77_94/CALC(0.35*var(--neon-glow,1)))]",
   errorCurrent:
-    "border-[#ff4d5e] bg-[rgb(255_77_94/0.12)] text-[#ff4d5e] shadow-[0_0_0_4px_rgb(255_77_94/0.12),0_0_22px_rgb(255_77_94/0.45)]",
+    "border-[#ff4d5e] bg-[rgb(255_77_94/0.12)] text-[#ff4d5e] shadow-[0_0_0_4px_rgb(255_77_94/0.12),0_0_22px_rgb(255_77_94/CALC(0.45*var(--neon-glow,1)))]",
 } as const;
 
 const titles = {
@@ -172,7 +172,7 @@ const Step = React.forwardRef<HTMLLIElement, StepProps>(
           strokeWidth={2.5}
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="[grid-area:1/1] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.7))]"
+          className="[grid-area:1/1] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))))]"
         >
           <path
             d="M5 12.5l4.5 4.5L19 7.5"
@@ -263,7 +263,7 @@ const Step = React.forwardRef<HTMLLIElement, StepProps>(
             <span
               style={{ transform: `${vertical ? "scaleY" : "scaleX"}(${state === "complete" ? 1 : 0})` }}
               className={cn(
-                "absolute inset-0 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/0.75),0_0_2px_rgb(var(--neon))]",
+                "absolute inset-0 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/CALC(0.75*var(--neon-glow,1))),0_0_2px_rgb(var(--neon)/var(--neon-glow,1))]",
                 "transition-transform duration-[400ms] ease-in-out motion-reduce:transition-none",
                 vertical ? "origin-top" : "origin-left",
               )}

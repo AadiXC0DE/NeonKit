@@ -19,9 +19,20 @@ export interface CursorGlowProps
   trail?: boolean;
   /** How long the tail lingers, in milliseconds. */
   trailLength?: number;
+  /**
+   * Shown only under the light, fading out toward its edge: a brighter copy of a pattern, a
+   * second layer of art. It's positioned like the light layer, so align it with the content below.
+   */
+  reveal?: React.ReactNode;
 }
 
 type Point = { x: number; y: number; t: number };
+
+/** The theme's glow multiplier. A finite check, not `|| 1`, so 0 stays 0. */
+function readGlow(node: Element) {
+  const value = parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"));
+  return Number.isFinite(value) ? Math.max(0, value) : 1;
+}
 
 /**
  * A light layer. With `target="parent"` place it inside a `relative` parent;
@@ -38,6 +49,7 @@ const CursorGlow = React.forwardRef<HTMLDivElement, CursorGlowProps>(
       intensity = 1,
       trail = false,
       trailLength = 260,
+      reveal,
       ...props
     },
     forwardedRef,
@@ -45,6 +57,7 @@ const CursorGlow = React.forwardRef<HTMLDivElement, CursorGlowProps>(
     const ref = React.useRef<HTMLDivElement>(null);
     const lightRef = React.useRef<HTMLDivElement>(null);
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const revealRef = React.useRef<HTMLDivElement>(null);
     React.useImperativeHandle(forwardedRef, () => ref.current as HTMLDivElement);
 
     const strength = Math.min(1, Math.max(0, intensity));
@@ -70,6 +83,7 @@ const CursorGlow = React.forwardRef<HTMLDivElement, CursorGlowProps>(
       let frame = 0;
       let last = 0;
       let rgb = "34 211 238";
+      let glow = 1;
       let width = 0;
       let height = 0;
       let points: Point[] = [];
@@ -146,7 +160,7 @@ const CursorGlow = React.forwardRef<HTMLDivElement, CursorGlowProps>(
         const along = (alpha: number, tint: string) => {
           const gradient = context.createLinearGradient(tail.x, tail.y, head.x, head.y);
           gradient.addColorStop(0, `rgb(${tint} / 0)`);
-          gradient.addColorStop(1, `rgb(${tint} / ${alpha * strength})`);
+          gradient.addColorStop(1, `rgb(${tint} / ${Math.min(1, alpha * strength * glow)})`);
           return gradient;
         };
         context.globalCompositeOperation = "lighter";
@@ -163,6 +177,10 @@ const CursorGlow = React.forwardRef<HTMLDivElement, CursorGlowProps>(
         x += (goalX - x) * follow;
         y += (goalY - y) * follow;
         light.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        if (revealRef.current) {
+          revealRef.current.style.setProperty("--nk-glow-x", `${x}px`);
+          revealRef.current.style.setProperty("--nk-glow-y", `${y}px`);
+        }
 
         const tailing = settings.current.trail && !reduce;
         if (tailing && visible) points.push({ x, y, t: now });
@@ -185,6 +203,7 @@ const CursorGlow = React.forwardRef<HTMLDivElement, CursorGlowProps>(
       const show = (value: boolean) => {
         visible = value;
         light.style.opacity = value ? "1" : "0";
+        if (revealRef.current) revealRef.current.style.opacity = value ? "1" : "0";
       };
 
       const onMove = (event: PointerEvent) => {
@@ -197,6 +216,7 @@ const CursorGlow = React.forwardRef<HTMLDivElement, CursorGlowProps>(
           // Read the color fresh each time the light appears: an ancestor's
           // --neon-accent can change without this component re-rendering.
           rgb = getComputedStyle(root).getPropertyValue("--neon").trim() || rgb;
+          glow = readGlow(root);
           if (!points.length) {
             x = goalX;
             y = goalY;
@@ -257,15 +277,27 @@ const CursorGlow = React.forwardRef<HTMLDivElement, CursorGlowProps>(
         >
           <div style={{ opacity: strength }}>
             <div
-              className="rounded-full [background:radial-gradient(closest-side,rgb(var(--neon)/0.3),rgb(var(--neon)/0.12)_45%,rgb(var(--neon)/0.04)_70%,transparent)]"
+              className="rounded-full [background:radial-gradient(closest-side,rgb(var(--neon)/CALC(0.3*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.12*var(--neon-glow,1)))_45%,rgb(var(--neon)/CALC(0.04*var(--neon-glow,1)))_70%,transparent)]"
               style={{ width: size, height: size, marginLeft: -size / 2, marginTop: -size / 2 }}
             />
             <div
-              className="absolute left-0 top-0 rounded-full [background:radial-gradient(closest-side,rgb(var(--neon)/0.3),rgb(var(--neon)/0.1)_50%,transparent)]"
+              className="absolute left-0 top-0 rounded-full [background:radial-gradient(closest-side,rgb(var(--neon)/CALC(0.3*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.1*var(--neon-glow,1)))_50%,transparent)]"
               style={{ width: size / 4, height: size / 4, marginLeft: -size / 8, marginTop: -size / 8 }}
             />
           </div>
         </div>
+        {reveal != null && (
+          <div
+            ref={revealRef}
+            className="absolute inset-0 opacity-0 transition-opacity duration-300 ease-out"
+            style={{
+              maskImage: `radial-gradient(circle ${size * 0.42}px at var(--nk-glow-x, -999px) var(--nk-glow-y, -999px), #000, rgb(0 0 0 / 0.35) 45%, transparent)`,
+              WebkitMaskImage: `radial-gradient(circle ${size * 0.42}px at var(--nk-glow-x, -999px) var(--nk-glow-y, -999px), #000, rgb(0 0 0 / 0.35) 45%, transparent)`,
+            }}
+          >
+            {reveal}
+          </div>
+        )}
         {trail && <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />}
       </div>
     );

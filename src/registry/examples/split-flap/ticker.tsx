@@ -15,16 +15,16 @@ export default function SplitFlapTicker() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center gap-2 text-[13px] font-medium text-white/60">
-        <TrainFront aria-hidden className="size-3.5" />
+    // Hung from the left like a platform sign, so the name reads from the same edge every stop.
+    <div className="flex flex-col items-start gap-3">
+      <div className="flex items-center gap-2 text-sm font-medium text-white/65">
+        <TrainFront aria-hidden size={18} />
         Next stop
       </div>
       <SplitFlap
         aria-live="polite"
         value={stops[stop]}
         length={12}
-        align="right"
         charset="letters"
         className="[--flap-h:30px] lg:[--flap-h:44px]"
       />

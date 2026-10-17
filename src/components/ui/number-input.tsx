@@ -546,7 +546,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             "flex h-full shrink-0 cursor-pointer select-none items-center justify-center text-white/50 outline-none touch-manipulation",
             "transition-[background-color,color] duration-150 ease-out",
             "hover:bg-white/[0.04] hover:text-white/90",
-            "active:bg-[rgb(var(--neon)/0.1)] active:text-[rgb(var(--neon))] active:[&_svg]:[filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.8))]",
+            "active:bg-[rgb(var(--neon)/0.1)] active:text-[rgb(var(--neon))] active:[&_svg]:[filter:drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))))]",
             "disabled:cursor-not-allowed disabled:text-white/20 disabled:hover:bg-transparent",
             direction > 0 && "border-l border-white/[0.06]",
             s.stepper,
@@ -578,7 +578,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             className={cn(
               "w-fit select-none font-medium text-white/80 transition-[color,text-shadow] duration-150",
               canScrub && "cursor-ew-resize touch-none hover:text-white",
-              scrubbing && "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]",
+              scrubbing && "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]",
               s.label,
             )}
           >
@@ -587,7 +587,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               <span
                 aria-hidden
                 title="Required"
-                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
               />
             )}
           </label>
@@ -599,9 +599,9 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           className={cn(
             "group/field relative flex w-full cursor-text items-center overflow-hidden border border-white/10 bg-white/[0.03] text-white/90",
             "transition-[border-color,background-color,box-shadow] ease-[cubic-bezier(0.23,1,0.32,1)] duration-[150ms,150ms,320ms]",
-            "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+            "focus-within:border-[rgb(var(--neon)/0.8)] focus-within:bg-[rgb(var(--neon)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
             scrubbing &&
-              "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.04)] shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+              "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.04)] shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
             !disabled && "hover:[&:not(:focus-within)]:border-white/20",
             invalid && "border-[rgb(var(--neon)/0.55)] hover:[&:not(:focus-within)]:border-[rgb(var(--neon)/0.75)]",
             readOnly &&
@@ -659,7 +659,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             className={cn(
               "h-full w-full min-w-0 flex-1 bg-transparent tabular-nums text-inherit outline-none placeholder:text-white/50",
               "transition-[color,text-shadow] duration-150 disabled:cursor-not-allowed",
-              scrubbing && "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.5)]",
+              scrubbing && "text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]",
               s.input,
               leading && s.afterLeading,
               trailing && s.beforeTrailing,

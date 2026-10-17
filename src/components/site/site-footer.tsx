@@ -21,6 +21,7 @@ const groups: { title: string; links: { label: string; href: string }[] }[] = [
       { label: "Introduction", href: "/docs" },
       { label: "Installation", href: "/docs/installation" },
       { label: "Theming", href: "/docs/theming" },
+      { label: "Theme Studio", href: "/theme" },
       { label: "Use with AI", href: "/docs/ai" },
     ],
   },

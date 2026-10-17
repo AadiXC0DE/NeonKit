@@ -1,25 +1,23 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronDown, Pencil, RotateCcw, ThumbsDown, ThumbsUp } from "@/components/ui/icons";
+import { Pencil, RotateCcw, ThumbsDown, ThumbsUp } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 import { CodeBlock } from "@/components/ui/code-block";
 import { CopyButton } from "@/components/ui/copy-button";
+import { Reasoning, type ReasoningProps } from "@/components/ui/reasoning";
+import { ToolCall, type ToolCallProps, type ToolCallStatus } from "@/components/ui/tool-call";
 
 const css = `
-@keyframes nk-chat-in{from{opacity:0;color:color-mix(in srgb,rgb(var(--neon)) 75%,white);text-shadow:0 0 10px rgb(var(--neon)/0.7)}}
+@keyframes nk-chat-in{from{opacity:0;color:color-mix(in srgb,rgb(var(--neon)) 75%,white);text-shadow:0 0 10px rgb(var(--neon) / calc(0.7 * var(--neon-glow, 1)))}}
 @keyframes nk-chat-pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@keyframes nk-chat-sweep{from{transform:translateY(-100%)}to{transform:translateY(500%)}}
-@keyframes nk-chat-orbit{to{transform:rotate(360deg)}}
-@keyframes nk-chat-scan{from{transform:translateX(-100%)}to{transform:translateX(400%)}}
+@keyframes nk-chat-breathe{0%,100%{opacity:.6}50%{opacity:.2}}
 .nk-chat-word{animation:nk-chat-in 700ms cubic-bezier(0.23,1,0.32,1) both}
 .nk-chat-pulse{animation:nk-chat-pulse 1.15s ease-in-out infinite}
-.nk-chat-sweep{animation:nk-chat-sweep 1.8s cubic-bezier(0.45,0,0.55,1) infinite}
-.nk-chat-scan{animation:nk-chat-scan 1.6s cubic-bezier(0.45,0,0.55,1) infinite}
-.nk-chat-orbit{animation:nk-chat-orbit 1.6s linear infinite}
-@media (prefers-reduced-motion:reduce){.nk-chat-word,.nk-chat-pulse,.nk-chat-sweep,.nk-chat-scan,.nk-chat-orbit{animation:none}.nk-chat-sweep,.nk-chat-scan{display:none}}
+.nk-chat-breathe{animation:nk-chat-breathe 2.4s cubic-bezier(0.45,0,0.55,1) infinite}
+@media (prefers-reduced-motion:reduce){.nk-chat-word,.nk-chat-pulse,.nk-chat-breathe{animation:none}}
 `;
 
 function Styles() {
@@ -289,7 +287,7 @@ function Caret() {
       className={cn(
         "nk-chat-pulse ml-[3px] inline-block h-[3px] w-[0.75em] rounded-full align-baseline",
         "[background:color-mix(in_srgb,rgb(var(--neon))_55%,white)]",
-        "shadow-[0_0_3px_rgb(var(--neon)),0_0_10px_rgb(var(--neon)/0.8),0_0_22px_rgb(var(--neon)/0.4)]",
+        "shadow-[0_0_3px_rgb(var(--neon)/var(--neon-glow,1)),0_0_10px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_0_22px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1)))]",
       )}
     />
   );
@@ -356,7 +354,7 @@ function renderInline(nodes: Inline[], animate: boolean): React.ReactNode {
             rel={external ? "noreferrer noopener" : undefined}
             className={cn(
               "rounded-[3px] text-[rgb(var(--neon))] underline decoration-[rgb(var(--neon)/0.4)] underline-offset-[3px] outline-none",
-              "transition-[text-decoration-color,text-shadow] duration-150 hover:decoration-[rgb(var(--neon))] hover:[text-shadow:0_0_10px_rgb(var(--neon)/0.6)]",
+              "transition-[text-decoration-color,text-shadow] duration-150 hover:decoration-[rgb(var(--neon))] hover:[text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]",
               "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
             )}
           >
@@ -517,407 +515,39 @@ function ListMarker({ ordered, index }: { ordered: boolean; index: number }) {
 }
 
 /* ------------------------------------------------------------------------------------------------
- * Reasoning
+ * Reasoning and tool calls: the standalone components, with the defaults a chat reply wants.
  * ---------------------------------------------------------------------------------------------- */
 
-function useElapsed(running: boolean) {
-  const [elapsed, setElapsed] = React.useState<number | null>(null);
-  React.useEffect(() => {
-    if (!running) return;
-    const start = performance.now();
-    const tick = () => setElapsed((performance.now() - start) / 1000);
-    tick();
-    const id = window.setInterval(tick, 100);
-    return () => window.clearInterval(id);
-  }, [running]);
-  return elapsed;
+export interface ChatReasoningProps extends Omit<ReasoningProps, "followStreaming"> {
+  /** Open while thinking and fold away after, unless toggled by hand. On by default here. */
+  followStreaming?: boolean;
 }
 
-function formatSeconds(seconds: number) {
-  if (seconds < 60) return `${Math.max(1, Math.round(seconds))}s`;
-  const m = Math.floor(seconds / 60);
-  const s = Math.round(seconds % 60);
-  return s ? `${m}m ${s}s` : `${m}m`;
-}
-
-export interface ChatReasoningProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "color"> {
-  /** Still thinking: the rail is lit, the timer runs and the panel stays open. */
-  streaming?: boolean;
-  /** Seconds spent. Measured while streaming when omitted. */
-  duration?: number;
-  open?: boolean;
-  /** Starts open while streaming, closed otherwise. */
-  defaultOpen?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  /** Header while streaming. */
-  label?: React.ReactNode;
-  color?: NeonColor;
-}
-
-const ChatReasoning = React.forwardRef<HTMLDivElement, ChatReasoningProps>(
-  (
-    { streaming = false, duration, open: openProp, defaultOpen, onOpenChange, label = "Thinking", className, style, color, children, ...props },
-    ref,
-  ) => {
-    const id = React.useId();
-    const [innerOpen, setInnerOpen] = React.useState(defaultOpen ?? streaming);
-    const open = openProp ?? innerOpen;
-    const [touched, setTouched] = React.useState(false);
-    const elapsed = useElapsed(streaming);
-    const [measured, setMeasured] = React.useState<number | undefined>(undefined);
-    const [wasStreaming, setWasStreaming] = React.useState(streaming);
-
-    // Folds itself away when the thinking ends (and opens when it starts), unless someone opened
-    // or closed it by hand. Adjusted during render so there's no closed-then-open flash.
-    if (wasStreaming !== streaming) {
-      setWasStreaming(streaming);
-      if (!streaming && elapsed !== null) setMeasured(elapsed);
-      if (!touched && openProp === undefined) setInnerOpen(streaming);
-    }
-
-    const onOpenChangeRef = React.useRef(onOpenChange);
-    React.useEffect(() => {
-      onOpenChangeRef.current = onOpenChange;
-    });
-    const firstRun = React.useRef(true);
-    React.useEffect(() => {
-      if (firstRun.current) {
-        firstRun.current = false;
-        return;
-      }
-      if (!touched) onOpenChangeRef.current?.(streaming);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [streaming]);
-
-    const toggle = () => {
-      setTouched(true);
-      if (openProp === undefined) setInnerOpen(!open);
-      onOpenChange?.(!open);
-    };
-
-    const spent = duration ?? measured;
-    const content = typeof children === "string" ? <ReasoningText text={children} /> : children;
-
-    return (
-      <div
-        ref={ref}
-        style={neonVars(color, style)}
-        data-state={streaming ? "streaming" : "done"}
-        className={cn("[--neon:var(--neon-accent,34_211_238)]", "relative min-w-0", className)}
-        {...props}
-      >
-        <Styles />
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-controls={`${id}-panel`}
-          onClick={toggle}
-          className={cn(
-            "group/reason -ml-1.5 flex h-8 cursor-pointer items-center gap-2.5 rounded-md pl-1.5 pr-2 text-sm outline-none",
-            "transition-colors duration-150 hover:bg-white/[0.04]",
-            "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
-          )}
-        >
-          <span
-            aria-hidden
-            className={cn(
-              "h-3.5 w-[3px] shrink-0 rounded-full transition-[background-color,box-shadow] duration-300",
-              streaming
-                ? "nk-chat-pulse [background:color-mix(in_srgb,rgb(var(--neon))_55%,white)] shadow-[0_0_3px_rgb(var(--neon)),0_0_10px_rgb(var(--neon)/0.7)]"
-                : "bg-white/25",
-            )}
-          />
-          <span className={cn("font-medium", streaming ? "text-white/85" : "text-white/60 group-hover/reason:text-white/85")}>
-            {streaming ? label : spent !== undefined ? `Thought for ${formatSeconds(spent)}` : "Reasoning"}
-          </span>
-          {streaming && elapsed !== null && (
-            <span className="font-mono text-xs tabular-nums text-white/50">{elapsed.toFixed(1)}s</span>
-          )}
-          <ChevronDown
-            aria-hidden
-            className={cn(
-              "size-3.5 text-white/40 transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
-              open && "rotate-180",
-            )}
-          />
-        </button>
-        <div
-          id={`${id}-panel`}
-          role="region"
-          aria-label="Reasoning"
-          className={cn(
-            "grid transition-[grid-template-rows,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
-            open ? "visible grid-rows-[1fr]" : "invisible grid-rows-[0fr]",
-          )}
-        >
-          <div className="min-h-0 overflow-hidden">
-            <div className="relative ml-[0px] mt-1 pb-1 pl-[18px]">
-              <span
-                aria-hidden
-                className={cn(
-                  "absolute bottom-1 left-0 top-0 overflow-hidden rounded-full transition-[background-color,box-shadow,width] duration-500",
-                  streaming
-                    ? "w-[3px] [background:color-mix(in_srgb,rgb(var(--neon))_35%,#0a0c12)] shadow-[0_0_8px_rgb(var(--neon)/0.45)]"
-                    : "w-px bg-white/10",
-                )}
-              >
-                {streaming && (
-                  <span className="nk-chat-sweep absolute inset-x-0 top-0 h-1/4 rounded-full bg-[linear-gradient(transparent,color-mix(in_srgb,rgb(var(--neon))_50%,white),transparent)]" />
-                )}
-              </span>
-              <div className="text-sm leading-[1.65] text-[#8a93a6]">{content}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  },
-);
+/** Reasoning that opens while it thinks and folds itself away when done. */
+const ChatReasoning = React.forwardRef<HTMLDivElement, ChatReasoningProps>(({ followStreaming = true, ...props }, ref) => (
+  <Reasoning ref={ref} followStreaming={followStreaming} {...props} />
+));
 ChatReasoning.displayName = "ChatReasoning";
 
-function ReasoningText({ text }: { text: string }) {
-  return (
-    <div className="grid gap-2.5">
-      {text
-        .split(/\n{2,}/)
-        .filter(Boolean)
-        .map((paragraph, index) => (
-          <p key={index} className="whitespace-pre-line">
-            {renderInline(parseInline(paragraph, 0), false)}
-          </p>
-        ))}
-    </div>
-  );
+export type ChatToolStatus = "pending" | "running" | "done" | "error" | ToolCallStatus;
+
+export interface ChatToolCallProps extends Omit<ToolCallProps, "status"> {
+  status?: ChatToolStatus;
 }
 
-/* ------------------------------------------------------------------------------------------------
- * Tool calls
- * ---------------------------------------------------------------------------------------------- */
-
-export type ChatToolStatus = "pending" | "running" | "done" | "error";
-
-function summarizeArgs(args: unknown) {
-  if (args === undefined || args === null) return "";
+function summarizeArgs(args: ToolCallProps["args"]) {
+  if (args === undefined || args === null) return undefined;
   if (typeof args === "string") return args;
-  if (typeof args !== "object") return String(args);
-  return Object.entries(args as Record<string, unknown>)
-    .map(([key, value]) => `${key}: ${typeof value === "string" ? JSON.stringify(value) : JSON.stringify(value)}`)
+  return Object.entries(args)
+    .map(([key, value]) => `${key}: ${JSON.stringify(value)}`)
     .join(", ");
 }
 
-function ToolStatusMark({ status }: { status: ChatToolStatus }) {
-  if (status === "done") return <Check aria-hidden className="size-3.5 text-white/55" strokeWidth={2.25} />;
-  if (status === "error")
-    return (
-      <span aria-hidden className="grid size-3.5 place-items-center rounded-full bg-[rgb(255_77_94/0.16)] text-[9px] font-bold leading-none text-[rgb(255_77_94)]">
-        !
-      </span>
-    );
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        "h-[3px] w-3 rounded-full",
-        status === "running"
-          ? "nk-chat-pulse [background:color-mix(in_srgb,rgb(var(--neon))_55%,white)] shadow-[0_0_3px_rgb(var(--neon)),0_0_9px_rgb(var(--neon)/0.75)]"
-          : "bg-white/25",
-      )}
-    />
-  );
-}
-
-const statusText: Record<ChatToolStatus, string> = {
-  pending: "Queued",
-  running: "Running",
-  done: "Done",
-  error: "Failed",
-};
-
-export interface ChatToolCallProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "color" | "onToggle"> {
-  /** The tool's name, shown in mono. */
-  name: string;
-  /** Arguments: an object (shown as key: value and as JSON when open) or a preformatted string. */
-  args?: Record<string, unknown> | string;
-  status?: ChatToolStatus;
-  /** Shown when the row is open. Strings render as code. */
-  result?: React.ReactNode;
-  /** Language for a string result. */
-  resultLanguage?: string;
-  /** Shown under the row on failure. */
-  error?: React.ReactNode;
-  /** Seconds it took. */
-  duration?: number;
-  open?: boolean;
-  defaultOpen?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  color?: NeonColor;
-}
-
-const ChatToolCall = React.forwardRef<HTMLDivElement, ChatToolCallProps>(
-  (
-    {
-      name,
-      args,
-      status = "done",
-      result,
-      resultLanguage,
-      error,
-      duration,
-      open: openProp,
-      defaultOpen = false,
-      onOpenChange,
-      className,
-      style,
-      color,
-      ...props
-    },
-    ref,
-  ) => {
-    const id = React.useId();
-    const [innerOpen, setInnerOpen] = React.useState(defaultOpen);
-    const open = openProp ?? innerOpen;
-    const summary = summarizeArgs(args);
-    const expandable = args !== undefined || result !== undefined;
-    const live = status === "running";
-
-    const toggle = () => {
-      if (openProp === undefined) setInnerOpen(!open);
-      onOpenChange?.(!open);
-    };
-
-    const header = (
-      <>
-        <span className="grid size-4 shrink-0 place-items-center">
-          <ToolStatusMark status={status} />
-        </span>
-        <span className="flex min-w-0 flex-1 items-baseline gap-2.5 font-mono text-[12.5px]">
-          <span className={cn("shrink-0", status === "error" ? "text-[rgb(255_77_94)]" : "text-white/90")}>{name}</span>
-          {summary && <span className="min-w-0 truncate text-white/50">{summary}</span>}
-        </span>
-        <span
-          className={cn(
-            "shrink-0 text-xs tabular-nums",
-            status === "error" ? "text-[rgb(255_77_94)]" : live ? "text-white/70" : "text-white/50",
-          )}
-        >
-          {status === "done" && duration !== undefined ? `${duration < 10 ? duration.toFixed(1) : Math.round(duration)}s` : statusText[status]}
-        </span>
-        {expandable && (
-          <ChevronDown
-            aria-hidden
-            className={cn(
-              "size-3.5 shrink-0 text-white/40 transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
-              open && "rotate-180",
-            )}
-          />
-        )}
-      </>
-    );
-
-    const rowClass = "flex h-10 w-full min-w-0 items-center gap-3 px-3 text-left";
-
-    return (
-      <div
-        ref={ref}
-        style={neonVars(color, style)}
-        data-status={status}
-        className={cn(
-          "[--neon:var(--neon-accent,34_211_238)]",
-          "relative min-w-0 overflow-hidden rounded-[10px] border bg-white/[0.02] transition-[border-color,box-shadow] duration-300",
-          live
-            ? "border-[rgb(var(--neon)/0.3)] shadow-[0_0_0_1px_rgb(var(--neon)/0.05),0_0_24px_-10px_rgb(var(--neon)/0.6)]"
-            : status === "error"
-              ? "border-[rgb(255_77_94/0.3)]"
-              : "border-white/[0.07]",
-          className,
-        )}
-        {...props}
-      >
-        <Styles />
-        {expandable ? (
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-controls={`${id}-detail`}
-            onClick={toggle}
-            className={cn(
-              rowClass,
-              "cursor-pointer outline-none transition-colors duration-150 hover:bg-white/[0.03]",
-              "focus-visible:bg-white/[0.03] focus-visible:shadow-[inset_0_0_0_1px_rgb(var(--neon)/0.6)] rounded-[9px]",
-            )}
-          >
-            {header}
-            <span className="sr-only">, {statusText[status]}</span>
-          </button>
-        ) : (
-          <div className={rowClass}>
-            {header}
-            <span className="sr-only">, {statusText[status]}</span>
-          </div>
-        )}
-        {live && (
-          <span aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px overflow-hidden">
-            <span className="nk-chat-scan absolute inset-y-0 left-0 w-1/3 bg-[linear-gradient(90deg,transparent,rgb(var(--neon)),transparent)]" />
-          </span>
-        )}
-        {error && (
-          <p className="border-t border-[rgb(255_77_94/0.18)] px-3 py-2 text-[13px] leading-5 text-[rgb(255_140_150)]">{error}</p>
-        )}
-        {expandable && (
-          <div
-            id={`${id}-detail`}
-            className={cn(
-              "grid transition-[grid-template-rows,visibility] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
-              open ? "visible grid-rows-[1fr]" : "invisible grid-rows-[0fr]",
-            )}
-          >
-            <div className="min-h-0 overflow-hidden">
-              <div className="grid gap-3 border-t border-white/[0.06] px-3 py-3">
-                {args !== undefined && (
-                  <ToolDetail label="Input">
-                    {typeof args === "string" ? (
-                      <ToolCode code={args} />
-                    ) : (
-                      <ToolCode code={JSON.stringify(args, null, 2)} language="json" />
-                    )}
-                  </ToolDetail>
-                )}
-                {result !== undefined && (
-                  <ToolDetail label="Output">
-                    {typeof result === "string" ? <ToolCode code={result} language={resultLanguage} /> : result}
-                  </ToolDetail>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  },
-);
+/** A ToolCall whose one-line summary always spells out key: value pairs. */
+const ChatToolCall = React.forwardRef<HTMLDivElement, ChatToolCallProps>(({ args, summary, ...props }, ref) => (
+  <ToolCall ref={ref} args={args} summary={summary ?? summarizeArgs(args)} {...props} />
+));
 ChatToolCall.displayName = "ChatToolCall";
-
-function ToolDetail({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="grid min-w-0 gap-1.5">
-      <span className="text-xs text-white/50">{label}</span>
-      {children}
-    </div>
-  );
-}
-
-function ToolCode({ code, language }: { code: string; language?: string }) {
-  return (
-    <CodeBlock
-      code={code}
-      language={language}
-      header={false}
-      lineNumbers={false}
-      maxHeight={220}
-      className="rounded-lg border-white/[0.06] bg-black/25 [&_.nk-code-scroll>div]:py-2 [&_.nk-code-line]:pl-3 [&_.nk-code-scroll]:text-[12px]"
-    />
-  );
-}
 
 /* ------------------------------------------------------------------------------------------------
  * Attachments
@@ -1014,33 +644,40 @@ function initials(name: React.ReactNode) {
 }
 
 /**
- * The default mark for replies: a small ring of tube, dim and closed at rest. While the reply is
- * live it lights, opens a blackout gap and the gap orbits.
+ * The default mark for replies: a small ring of tube with a blackout gap where its electrodes
+ * would leave it. Dim at rest; while the reply is live it is lit and its halo breathes. It never
+ * spins: a spinning ring is a loader, and this is a lamp.
  */
 function ReplyMark({ live }: { live: boolean }) {
   return (
     <span aria-hidden className="grid size-7 place-items-center">
-      <svg
-        viewBox="0 0 20 20"
-        fill="none"
-        className={cn(
-          "size-5 overflow-visible transition-[filter] duration-500",
-          live && "nk-chat-orbit [filter:drop-shadow(0_0_2px_rgb(var(--neon)))_drop-shadow(0_0_6px_rgb(var(--neon)/0.6))]",
-        )}
-      >
+      <svg viewBox="0 0 20 20" fill="none" className="size-5 overflow-visible">
+        <circle
+          cx="10"
+          cy="10"
+          r="7"
+          strokeWidth="4.5"
+          strokeLinecap="round"
+          transform="rotate(-62 10 10)"
+          strokeDasharray="38 6"
+          className={cn(
+            "stroke-[rgb(var(--neon))] [filter:blur(2.5px)_opacity(var(--neon-glow,1))] transition-opacity duration-500",
+            live ? "nk-chat-breathe opacity-60" : "opacity-0",
+          )}
+        />
         <circle
           cx="10"
           cy="10"
           r="7"
           strokeWidth="2.25"
           strokeLinecap="round"
-          transform="rotate(-70 10 10)"
-          style={{ strokeDasharray: live ? "35 9" : "44 0" }}
+          transform="rotate(-62 10 10)"
+          strokeDasharray="38 6"
           className={cn(
-            "transition-[stroke,stroke-dasharray] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]",
+            "transition-[stroke] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]",
             live
               ? "stroke-[color-mix(in_srgb,rgb(var(--neon))_55%,white)]"
-              : "stroke-[color-mix(in_srgb,rgb(var(--neon))_42%,#4a5163)]",
+              : "stroke-[color-mix(in_srgb,rgb(var(--neon))_30%,#4a5163)]",
           )}
         />
       </svg>
@@ -1067,7 +704,7 @@ const actionButton = cn(
 );
 
 const pressedAction =
-  "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.7))] hover:text-[rgb(var(--neon))]";
+  "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))))] hover:text-[rgb(var(--neon))]";
 
 export interface ChatMessageProps extends Omit<React.HTMLAttributes<HTMLElement>, "color"> {
   /** Who sent it. System messages render as a centered note. */
@@ -1154,7 +791,7 @@ function MessageEditor({
         }}
         className={cn(
           "block w-full resize-none rounded-[12px] border border-[rgb(var(--neon)/0.5)] bg-[#0a0c12] px-3.5 py-2.5 text-[15px] leading-[1.6] text-white/90 outline-none",
-          "shadow-[0_0_0_1px_rgb(var(--neon)/0.12),0_0_22px_-8px_rgb(var(--neon)/0.5)] [scrollbar-width:thin]",
+          "shadow-[0_0_0_1px_rgb(var(--neon)/0.12),0_0_22px_-8px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))] [scrollbar-width:thin]",
         )}
       />
       <div className="flex items-center justify-end gap-1.5">
@@ -1171,7 +808,7 @@ function MessageEditor({
           disabled={!draft.trim()}
           className={cn(
             "h-8 cursor-pointer rounded-lg bg-[rgb(var(--neon))] px-3 text-[13px] font-semibold text-[#05060a] outline-none transition-[box-shadow,opacity,transform] active:scale-[0.97]",
-            "shadow-[0_0_0_1px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.45),inset_0_1px_0_rgb(255_255_255/0.45)]",
+            "shadow-[0_0_0_1px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)]",
             "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
             "disabled:cursor-default disabled:opacity-40",
           )}

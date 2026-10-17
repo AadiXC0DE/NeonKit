@@ -267,8 +267,8 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.HTMLAttributes<HT
       aria-current="page"
       className={cn(
         "inline-flex min-w-0 items-center gap-1.5 font-medium text-[rgb(var(--neon))]",
-        "[text-shadow:0_0_12px_rgb(var(--neon)/0.5)] [&_svg]:size-3.5 [&_svg]:shrink-0",
-        "[&_svg]:[filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.6))]",
+        "[text-shadow:0_0_12px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))] [&_svg]:size-3.5 [&_svg]:shrink-0",
+        "[&_svg]:[filter:drop-shadow(0_0_4px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]",
         className,
       )}
       {...props}
@@ -301,7 +301,7 @@ const BreadcrumbEllipsis = React.forwardRef<HTMLButtonElement, React.ButtonHTMLA
       className={cn(
         "inline-flex h-6 w-7 cursor-pointer items-center justify-center rounded-md text-white/50 outline-none",
         "transition-[background-color,color,box-shadow,transform] duration-150 ease-out active:scale-[0.97]",
-        "hover:bg-[rgb(var(--neon)/0.1)] hover:text-[rgb(var(--neon))] hover:shadow-[0_0_12px_rgb(var(--neon)/0.2)]",
+        "hover:bg-[rgb(var(--neon)/0.1)] hover:text-[rgb(var(--neon))] hover:shadow-[0_0_12px_rgb(var(--neon)/CALC(0.2*var(--neon-glow,1)))]",
         "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
         "[&_svg]:size-4",
         className,

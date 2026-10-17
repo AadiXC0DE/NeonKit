@@ -16,7 +16,7 @@ export default function NumberInputDemo() {
         <h3 className="text-sm font-medium text-white/90">Team plan</h3>
         <p className="text-sm text-white/55">Drag a label sideways to scrub. Hold Shift for bigger steps.</p>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid gap-3 min-[420px]:grid-cols-2">
         <NumberInput label="Seats" value={seats} onValueChange={setSeats} min={1} max={500} />
         <NumberInput
           label="Price per seat"

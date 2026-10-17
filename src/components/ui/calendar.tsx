@@ -276,7 +276,7 @@ const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
     useIsomorphicLayoutEffect(() => {
       if (!pendingFocus.current) return;
       pendingFocus.current = false;
-      rootRef.current?.querySelector<HTMLElement>("[data-active-day]")?.focus();
+      rootRef.current?.querySelector<HTMLElement>("[data-active-day]")?.focus({ preventScroll: true });
     });
 
     // Month changes slide in from the direction of travel.
@@ -562,7 +562,7 @@ const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
                               className={cn(
                                 "pointer-events-none absolute inset-y-0 rounded-full border",
                                 span?.lit
-                                  ? "border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.13)] shadow-[0_0_20px_-6px_rgb(var(--neon)/0.6),inset_0_0_12px_rgb(var(--neon)/0.16),inset_0_1px_0_rgb(255_255_255/0.06)]"
+                                  ? "border-[rgb(var(--neon)/0.35)] bg-[rgb(var(--neon)/0.13)] shadow-[0_0_20px_-6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),inset_0_0_12px_rgb(var(--neon)/CALC(0.16*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.06)]"
                                   : "border-[rgb(var(--neon)/0.22)] bg-[rgb(var(--neon)/0.05)]",
                                 span?.lit &&
                                   igniting &&
@@ -613,7 +613,7 @@ const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
                                   "transition-[background-color,color,box-shadow,transform] duration-150 ease-out active:scale-[0.94]",
                                   "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
                                   endpoint
-                                    ? "bg-[rgb(var(--neon))] font-semibold text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_16px_rgb(var(--neon)/0.55),inset_0_1px_0_rgb(255_255_255/0.45)]"
+                                    ? "bg-[rgb(var(--neon))] font-semibold text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_16px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)]"
                                     : between
                                       ? cn(
                                           "hover:bg-[rgb(var(--neon)/0.16)]",
@@ -637,7 +637,7 @@ const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
                                         ? "bg-[#05060a]/70"
                                         : dayDisabled
                                           ? "bg-white/30"
-                                          : "bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]",
+                                          : "bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/var(--neon-glow,1))]",
                                     )}
                                   />
                                 )}

@@ -25,10 +25,10 @@ function Team({
         className="[--segment-h:52px] lg:[--segment-h:72px]"
       />
       <div className="flex gap-1">
-        <Button size="icon" variant="ghost" className="size-8" aria-label={`${name} minus one`} onClick={() => onChange(Math.max(0, score - 1))}>
+        <Button size="icon" variant="outline" className="size-8" aria-label={`${name} minus one`} onClick={() => onChange(Math.max(0, score - 1))}>
           <Minus />
         </Button>
-        <Button size="icon" variant="ghost" className="size-8" aria-label={`${name} plus one`} onClick={() => onChange(Math.min(99, score + 1))}>
+        <Button size="icon" variant="outline" className="size-8" aria-label={`${name} plus one`} onClick={() => onChange(Math.min(99, score + 1))}>
           <Plus />
         </Button>
       </div>

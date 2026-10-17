@@ -30,7 +30,8 @@ const pad = (n: number) => String(Math.max(0, n)).padStart(2, "0");
 
 function readout(phase: Phase, now: number | null): [string, string, string, string] {
   if (now === null) return ["", "", "", ""];
-  if (phase === "after") return [String(replay.talks), "04", "12", "38"];
+  // Set like the live readout ("5/8"), so the board never shows two blank flaps in front of the count.
+  if (phase === "after") return [`${replay.talks}/${filmed.length}`, "04", "12", "38"];
   const seconds = Math.max(0, Math.floor(Math.abs(now - doorsAt) / 1000));
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
@@ -121,7 +122,7 @@ export function DepartureBoard({ className }: { className?: string }) {
                 value={value}
                 length={index === 0 ? 3 : 2}
                 align="right"
-                charset={index === 0 && shown === "live" ? "alphanumeric" : "numeric"}
+                charset={index === 0 && shown !== "before" ? "alphanumeric" : "numeric"}
                 flipDuration={55}
                 stagger={35}
               />

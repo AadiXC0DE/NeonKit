@@ -67,7 +67,7 @@ export default function HologramCardDemo() {
           >
             Kowloon Nights
           </h3>
-          <span className="text-[9px] font-semibold uppercase tracking-[0.14em] text-[rgb(var(--neon))]">Holo</span>
+          <span className="text-[10px] font-medium text-[rgb(var(--neon))]">Holo</span>
         </div>
 
         <div className="mt-2 aspect-[8/5] overflow-hidden rounded-md border border-white/10">
@@ -86,7 +86,7 @@ export default function HologramCardDemo() {
         <dl className="mt-auto grid grid-cols-3 divide-x divide-white/10 rounded-md border border-white/10 bg-white/[0.03] py-1.5 text-center">
           {stats.map((stat) => (
             <div key={stat.label}>
-              <dt className="text-[8.5px] font-semibold uppercase tracking-[0.14em] text-white/50">{stat.label}</dt>
+              <dt className="text-[10px] text-white/55">{stat.label}</dt>
               <dd className="mt-0.5 text-[13px] font-semibold tabular-nums text-white/90">{stat.value}</dd>
             </div>
           ))}

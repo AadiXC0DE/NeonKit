@@ -45,7 +45,7 @@ const css = `
 .nk-dock-tile svg { transition: filter 200ms cubic-bezier(0.23, 1, 0.32, 1), color 200ms; }
 .nk-dock-tile:hover:not([data-disabled]), .nk-dock-tile:focus-visible { color: color-mix(in srgb, rgb(var(--neon)) 40%, white); border-color: rgb(var(--neon) / 0.32); }
 .nk-dock-tile:hover:not([data-disabled]) svg, .nk-dock-tile:focus-visible svg {
-  filter: drop-shadow(0 0 1.5px rgb(var(--neon))) drop-shadow(0 0 7px rgb(var(--neon) / 0.7));
+  filter: drop-shadow(0 0 1.5px rgb(var(--neon) / var(--neon-glow, 1))) drop-shadow(0 0 7px rgb(var(--neon) / calc(0.7 * var(--neon-glow, 1))));
 }
 @media (prefers-reduced-motion: reduce) { .nk-dock-tile, .nk-dock-tile svg { transition: none; } }
 `;
@@ -287,7 +287,7 @@ const DockItem = React.forwardRef<HTMLButtonElement, DockItemProps>((raw, ref) =
           "transition-[transform,border-color,color] duration-150 ease-out active:scale-[0.92]",
           "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0d12]",
           "data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40",
-          "[&_svg]:pointer-events-none [&_svg]:size-[46%] [&_svg]:shrink-0",
+          "[&_svg]:pointer-events-none [&_svg]:size-[52%] [&_svg]:shrink-0",
           className,
         )}
         {...props}
@@ -315,7 +315,7 @@ const DockItem = React.forwardRef<HTMLButtonElement, DockItemProps>((raw, ref) =
           style={badgeColor ? ({ "--nk-badge": toNeonRgb(badgeColor) } as React.CSSProperties) : undefined}
           className={cn(
             "pointer-events-none absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full px-[5px] text-[11px] font-semibold tabular-nums leading-none text-[#14040a]",
-            "bg-[color-mix(in_srgb,rgb(var(--nk-badge,255_77_94))_88%,white)] shadow-[0_0_0_1.5px_#0b0d12,0_0_8px_rgb(var(--nk-badge,255_77_94)/0.7)]",
+            "bg-[color-mix(in_srgb,rgb(var(--nk-badge,255_77_94))_88%,white)] shadow-[0_0_0_1.5px_#0b0d12,0_0_8px_rgb(var(--nk-badge,255_77_94)/CALC(0.7*var(--neon-glow,1)))]",
           )}
         >
           {badge}
@@ -330,7 +330,7 @@ const DockItem = React.forwardRef<HTMLButtonElement, DockItemProps>((raw, ref) =
           <span
             aria-hidden
             className={cn(
-              "pointer-events-none absolute rounded-full [background:color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_2px_rgb(var(--neon)),0_0_7px_rgb(var(--neon)/0.8)]",
+              "pointer-events-none absolute rounded-full [background:color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_2px_rgb(var(--neon)/var(--neon-glow,1)),0_0_7px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))]",
               vertical ? "top-1/2 h-[24%] w-[3px] -translate-y-1/2" : "left-1/2 h-[3px] w-[24%] -translate-x-1/2",
             )}
             style={vertical ? { left: -Math.round(base * 0.15) } : { bottom: -Math.round(base * 0.15) }}

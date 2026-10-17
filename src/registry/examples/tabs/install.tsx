@@ -30,7 +30,7 @@ function CopyButton({ value }: { value: string }) {
       size="sm"
       onClick={copy}
       aria-label={copied ? "Copied" : "Copy command"}
-      className="size-7 shrink-0 px-0 [&_svg]:size-3.5"
+      className="size-7 shrink-0 px-0"
     >
       {copied ? <Check /> : <Copy />}
     </Button>
@@ -39,7 +39,7 @@ function CopyButton({ value }: { value: string }) {
 
 export default function TabsInstall() {
   return (
-    <Tabs variant="underline" defaultValue="npm" className="w-full max-w-xl gap-0 rounded-xl border border-white/10 bg-[#0a0b11]">
+    <Tabs variant="underline" defaultValue="npm" className="w-full max-w-2xl gap-0 rounded-xl border border-white/10 bg-[#0a0b11]">
       <TabsList className="px-4">
         {commands.map(({ manager }) => (
           <TabsTrigger key={manager} value={manager} className="font-mono text-[13px]">
@@ -52,7 +52,8 @@ export default function TabsInstall() {
           <span aria-hidden className="select-none font-mono text-[13px] text-white/25">
             $
           </span>
-          <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-[13px] text-white/80">
+          {/* Scrolls sideways on narrow screens; the fade says there's more. */}
+          <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap pr-6 font-mono text-[13px] text-white/80 [mask-image:linear-gradient(to_right,black_calc(100%-24px),transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {command}
           </code>
           <CopyButton value={command} />

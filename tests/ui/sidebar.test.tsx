@@ -289,6 +289,21 @@ describe("Sidebar mobile drawer", () => {
     spy.mockRestore();
   });
 
+  it("renders into document.body so an isolated parent can't bury it", async () => {
+    const spy = mobile();
+    const { container } = render(
+      <div style={{ isolation: "isolate", ["--neon-accent" as string]: "52 211 153" }}>
+        <Shell />
+      </div>,
+    );
+    await openDrawer();
+    const dialog = screen.getByRole("dialog", { name: "Sidebar" });
+    expect(container.contains(dialog)).toBe(false);
+    expect(dialog.parentElement).toBe(document.body);
+    expect(dialog.style.getPropertyValue("--neon-accent")).toBe("52 211 153");
+    spy.mockRestore();
+  });
+
   it("keeps Tab inside the drawer", async () => {
     const spy = mobile();
     render(

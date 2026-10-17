@@ -78,7 +78,8 @@ const columns: DataTableColumn<Invoice>[] = [
     cell: ({ row }) => {
       const s = statuses[row.status];
       return (
-        <span className="inline-flex items-center gap-2" style={neonVars(s.color)}>
+        // Block flex: an inline-flex box would sit its empty dot on the baseline and drop the label 2px.
+        <span className="flex items-center gap-2" style={neonVars(s.color)}>
           <span
             className={
               row.status === "draft" || row.status === "void"

@@ -364,9 +364,9 @@ const PromptInput = React.forwardRef<HTMLTextAreaElement, PromptInputProps>(
           "shadow-[0_16px_40px_-24px_rgb(0_0_0/0.9)]",
           "transition-[border-color,box-shadow,background-color] duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]",
           "hover:border-white/[0.16]",
-          "focus-within:border-[rgb(var(--neon)/0.4)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.06),0_0_18px_-8px_rgb(var(--neon)/0.4),0_16px_40px_-24px_rgb(0_0_0/0.9)]",
+          "focus-within:border-[rgb(var(--neon)/0.4)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.06),0_0_18px_-8px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1))),0_16px_40px_-24px_rgb(0_0_0/0.9)]",
           "data-[typing]:duration-100 data-[typing]:focus-within:border-[rgb(var(--neon)/0.85)]",
-          "data-[typing]:focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.28),0_0_30px_-4px_rgb(var(--neon)/0.55),inset_0_0_18px_-8px_rgb(var(--neon)/0.3),0_16px_40px_-24px_rgb(0_0_0/0.9)]",
+          "data-[typing]:focus-within:shadow-[0_0_0_1px_rgb(var(--neon)/0.28),0_0_30px_-4px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),inset_0_0_18px_-8px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1))),0_16px_40px_-24px_rgb(0_0_0/0.9)]",
           disabled && "cursor-not-allowed opacity-55 hover:border-white/10",
           className,
         )}
@@ -405,7 +405,7 @@ const PromptInput = React.forwardRef<HTMLTextAreaElement, PromptInputProps>(
             onPaste={onPaste}
             enterKeyHint={submitOn === "enter" ? "send" : undefined}
             className={cn(
-              "block w-full min-w-0 resize-none overflow-hidden bg-transparent text-[15px] leading-6 text-white/90 outline-none placeholder:text-white/35",
+              "block w-full min-w-0 resize-none overflow-hidden bg-transparent text-[15px] leading-6 text-white/90 outline-none placeholder:text-white/50",
               "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin] disabled:cursor-not-allowed",
             )}
           />
@@ -470,14 +470,14 @@ const PromptInput = React.forwardRef<HTMLTextAreaElement, PromptInputProps>(
                 disabled={disabled}
                 className={cn(
                   "group/stop inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg outline-none",
-                  "border border-[rgb(var(--neon)/0.55)] bg-[rgb(var(--neon)/0.08)] shadow-[0_0_16px_-4px_rgb(var(--neon)/0.6),inset_0_0_10px_rgb(var(--neon)/0.12)]",
+                  "border border-[rgb(var(--neon)/0.55)] bg-[rgb(var(--neon)/0.08)] shadow-[0_0_16px_-4px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),inset_0_0_10px_rgb(var(--neon)/CALC(0.12*var(--neon-glow,1)))]",
                   "transition-[background-color,box-shadow,transform] duration-150 ease-out hover:bg-[rgb(var(--neon)/0.14)] active:scale-[0.94]",
                   "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0c12]",
                 )}
               >
                 <span
                   aria-hidden
-                  className="size-2.5 rounded-[2px] [background:color-mix(in_srgb,rgb(var(--neon))_60%,white)] shadow-[0_0_6px_rgb(var(--neon))]"
+                  className="size-2.5 rounded-[2px] [background:color-mix(in_srgb,rgb(var(--neon))_60%,white)] shadow-[0_0_6px_rgb(var(--neon)/var(--neon-glow,1))]"
                 />
               </button>
             ) : (
@@ -492,8 +492,8 @@ const PromptInput = React.forwardRef<HTMLTextAreaElement, PromptInputProps>(
                   ready
                     ? cn(
                         "nk-prompt-ignite cursor-pointer bg-[rgb(var(--neon))] text-[#05060a] active:scale-[0.94]",
-                        "shadow-[0_0_0_1px_rgb(var(--neon)),0_0_16px_rgb(var(--neon)/0.55),inset_0_1px_0_rgb(255_255_255/0.45)]",
-                        "hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_26px_rgb(var(--neon)/0.75),inset_0_1px_0_rgb(255_255_255/0.45)]",
+                        "shadow-[0_0_0_1px_rgb(var(--neon)),0_0_16px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)]",
+                        "hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_26px_rgb(var(--neon)/CALC(0.75*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)]",
                       )
                     : "cursor-default bg-white/[0.06] text-white/30",
                 )}
@@ -507,7 +507,7 @@ const PromptInput = React.forwardRef<HTMLTextAreaElement, PromptInputProps>(
         {dragging && (
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 grid place-items-center rounded-[inherit] border border-dashed border-[rgb(var(--neon)/0.7)] bg-[#0a0c12]/90 text-sm text-white/85 shadow-[inset_0_0_30px_-8px_rgb(var(--neon)/0.45)]"
+            className="pointer-events-none absolute inset-0 grid place-items-center rounded-[inherit] border border-dashed border-[rgb(var(--neon)/0.7)] bg-[#0a0c12]/90 text-sm text-white/85 shadow-[inset_0_0_30px_-8px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]"
           >
             Drop to attach
           </div>

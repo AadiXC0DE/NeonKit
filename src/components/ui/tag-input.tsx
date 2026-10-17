@@ -502,7 +502,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
       return (
         <>
           {item.slice(0, at)}
-          <mark className="bg-transparent text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/0.55)]">
+          <mark className="bg-transparent text-[rgb(var(--neon))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]">
             {item.slice(at, at + query.length)}
           </mark>
           {item.slice(at + query.length)}
@@ -522,7 +522,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
               <span
                 aria-hidden
                 title="Required"
-                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
               />
             )}
           </label>
@@ -537,7 +537,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
               "[--neon-field:var(--neon)]",
               "relative flex w-full cursor-text flex-wrap items-center border border-white/10 bg-white/[0.03] text-white/90",
               "transition-[border-color,background-color,box-shadow] ease-[cubic-bezier(0.23,1,0.32,1)] duration-[150ms,150ms,320ms]",
-              "focus-within:border-[rgb(var(--neon-field)/0.8)] focus-within:bg-[rgb(var(--neon-field)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon-field)/0.2),0_0_20px_-4px_rgb(var(--neon-field)/0.5),inset_0_0_12px_-2px_rgb(var(--neon-field)/0.14)]",
+              "focus-within:border-[rgb(var(--neon-field)/0.8)] focus-within:bg-[rgb(var(--neon-field)/0.04)] focus-within:shadow-[0_0_0_1px_rgb(var(--neon-field)/0.2),0_0_20px_-4px_rgb(var(--neon-field)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon-field)/CALC(0.14*var(--neon-glow,1)))]",
               !disabled && "hover:[&:not(:focus-within)]:border-white/20",
               invalid &&
                 "border-[rgb(var(--neon-field)/0.55)] hover:[&:not(:focus-within)]:border-[rgb(var(--neon-field)/0.75)]",
@@ -561,9 +561,9 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
                       className={cn(
                         "inline-flex min-w-0 max-w-full items-center border border-[rgb(var(--neon)/0.3)] bg-[rgb(var(--neon)/0.08)] text-white/90 outline-none",
                         "transition-[border-color,background-color,box-shadow,color] duration-150 ease-out",
-                        "focus-visible:border-[rgb(var(--neon)/0.8)] focus-visible:shadow-[0_0_14px_-2px_rgb(var(--neon)/0.6)]",
+                        "focus-visible:border-[rgb(var(--neon)/0.8)] focus-visible:shadow-[0_0_14px_-2px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]",
                         isArmed &&
-                          "border-[rgb(var(--neon))] bg-[rgb(var(--neon)/0.18)] text-white shadow-[0_0_16px_-2px_rgb(var(--neon)/0.7)]",
+                          "border-[rgb(var(--neon))] bg-[rgb(var(--neon)/0.18)] text-white shadow-[0_0_16px_-2px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]",
                         fresh.includes(keys[index]) && IGNITE,
                         s.chip,
                         locked && "pr-2",
@@ -631,7 +631,7 @@ const TagInput = React.forwardRef<HTMLInputElement, TagInputProps>(
               onMouseDown={(event) => event.preventDefault()}
               className={cn(
                 "absolute left-0 top-full z-50 mt-1.5 max-h-56 w-full overflow-y-auto overscroll-contain border border-white/10 bg-[#0a0b11] p-1",
-                "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+                "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
                 "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]",
                 s.list,
               )}

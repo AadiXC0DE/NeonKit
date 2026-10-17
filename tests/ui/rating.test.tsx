@@ -141,4 +141,13 @@ describe("Rating", () => {
     render(<Rating aria-label="Rating" color="amber" />);
     expect(screen.getByRole("slider").style.getPropertyValue("--neon")).toBe("251 191 36");
   });
+
+  it("crops the star's view box so it reads at the size of the other icons", () => {
+    const { container, rerender } = render(<Rating aria-label="Rating" defaultValue={2} />);
+    const stars = container.querySelectorAll("svg");
+    expect(stars.length).toBeGreaterThan(0);
+    stars.forEach((svg) => expect(svg).toHaveAttribute("viewBox", "3 3 18 18"));
+    rerender(<Rating aria-label="Rating" icon="heart" defaultValue={2} />);
+    container.querySelectorAll("svg").forEach((svg) => expect(svg).toHaveAttribute("viewBox", "0 0 24 24"));
+  });
 });

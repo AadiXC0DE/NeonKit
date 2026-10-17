@@ -35,7 +35,10 @@ export default function ItemPeople() {
                 </Badge>
               )}
             </ItemTitle>
-            <ItemDescription lines={1}>{member.email}</ItemDescription>
+            <ItemDescription lines={1}>
+              {member.email}
+              <span className="sm:hidden"> · {member.role}</span>
+            </ItemDescription>
           </ItemContent>
           <ItemActions>
             <span className="hidden text-[13px] text-white/55 sm:inline">{member.role}</span>
@@ -53,7 +56,7 @@ export default function ItemPeople() {
         </ItemMedia>
         <ItemContent>
           <ItemTitle className="text-white/70">jonas@riverline.studio</ItemTitle>
-          <ItemDescription>Invited by Ana, 2 days ago. Expires Friday.</ItemDescription>
+          <ItemDescription lines="none">Invited by Ana, 2 days ago. Expires Friday.</ItemDescription>
         </ItemContent>
         <ItemActions>
           <Button variant="ghost" size="sm">

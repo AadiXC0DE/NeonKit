@@ -6,12 +6,16 @@ import { useMotionValueEvent, useReducedMotion, useSpring } from "motion/react";
 import { cn } from "@/lib/utils";
 import { neonVars, toNeonRgb, type NeonColor } from "@/lib/neon";
 
-// Small dials print larger (in dial units) so the legends stay readable.
+// Small dials print larger (in dial units) so the legends stay readable. `px` is rendered
+// pixels per dial unit, used to keep numerals from shrinking below a readable 7.5px.
 const sizes = {
-  sm: { root: "w-40", legend: 10, numeral: 12 },
-  md: { root: "w-56", legend: 8, numeral: 10.5 },
-  lg: { root: "w-72", legend: 7.5, numeral: 10 },
+  sm: { root: "w-40", legend: 10, numeral: 12, px: 0.8 },
+  md: { root: "w-56", legend: 8, numeral: 10.5, px: 1.12 },
+  lg: { root: "w-72", legend: 7.5, numeral: 10, px: 1.44 },
 } as const;
+
+// Rough advance of a tabular numeral (or the minus sign) in em, with room for the gap between labels.
+const NUMERAL_EM = 0.72;
 
 // The dial is drawn in a 200-unit box and sweeps 240°, leaving the bottom for the readout.
 const SWEEP = 240;
@@ -160,13 +164,20 @@ const Gauge = React.forwardRef<HTMLDivElement, GaugeProps>(
         marks.push({ angle: angleOf(v), major: i % minorsPer === 0, value: v });
       }
     }
-    // Fit the numerals to the room between them: shrink first, then label every other one.
+    // Fit the numerals to the room between them: shrink first, and once they would drop below a
+    // readable size, number every 2nd (3rd, …) major tick instead, preferring a step that still
+    // numbers the last one.
     const majors = marks.filter((mark) => mark.major);
     const spacing = intervals > 0 ? ((SWEEP / intervals) * Math.PI * 54) / 180 : 0;
     const longest = Math.max(1, ...majors.map((mark) => trim(mark.value).length));
-    const fit = (spacing * 0.8) / (longest * 0.62);
-    const numeralSize = clamp(fit, 7, s.numeral);
-    const numerals = fit < 7 ? majors.filter((_, i) => i % 2 === 0) : majors;
+    const fitFor = (step: number) => (spacing * step * 0.75) / (longest * NUMERAL_EM);
+    const floor = Math.max(7, 7.5 / s.px);
+    const steps = Array.from({ length: Math.max(1, intervals) }, (_, i) => i + 1).filter((step) => fitFor(step) >= floor);
+    const step = steps.find((n) => intervals % n === 0) ?? steps[0] ?? Math.max(1, intervals);
+    const numeralSize = clamp(fitFor(step), floor, s.numeral);
+    const numerals = majors.filter((_, i) => i % step === 0);
+    // Long legends ("×1000 r/min") shrink to stay between the end numerals.
+    const legendSize = label ? Math.min(s.legend, 68 / (label.length * 0.9)) : s.legend;
     const isRed = (v: number) => red !== undefined && v >= red - 1e-9;
     const activeZone = zones?.findIndex((zone) => value >= Math.min(zone.from, zone.to) && value <= Math.max(zone.from, zone.to));
     const text = format(value);
@@ -274,9 +285,9 @@ const Gauge = React.forwardRef<HTMLDivElement, GaugeProps>(
               y="125"
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize={s.legend}
+              fontSize={legendSize}
               fontWeight={600}
-              letterSpacing={s.legend * 0.2}
+              letterSpacing={legendSize * 0.2}
               style={{ fill: "rgb(255 255 255 / 0.5)" }}
             >
               {label.toUpperCase()}
@@ -293,7 +304,7 @@ const Gauge = React.forwardRef<HTMLDivElement, GaugeProps>(
         <svg
           aria-hidden
           viewBox="0 0 200 200"
-          className="pointer-events-none absolute inset-0 size-full overflow-visible [filter:drop-shadow(0_0_2px_rgb(var(--neon)/0.9))_drop-shadow(0_0_7px_rgb(var(--neon)/0.5))]"
+          className="pointer-events-none absolute inset-0 size-full overflow-visible [filter:drop-shadow(0_0_2px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))))_drop-shadow(0_0_7px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))))]"
         >
           <defs>
             <mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
@@ -364,7 +375,7 @@ const Gauge = React.forwardRef<HTMLDivElement, GaugeProps>(
           <svg
             aria-hidden
             viewBox="0 0 200 200"
-            className="pointer-events-none absolute inset-0 size-full overflow-visible [filter:drop-shadow(0_0_2px_rgb(255_77_94))_drop-shadow(0_0_7px_rgb(255_77_94/0.55))]"
+            className="pointer-events-none absolute inset-0 size-full overflow-visible [filter:drop-shadow(0_0_2px_rgb(255_77_94/var(--neon-glow,1)))_drop-shadow(0_0_7px_rgb(255_77_94/CALC(0.55*var(--neon-glow,1))))]"
           >
             {[
               { width: 3.5, stroke: `rgb(${RED})` },
@@ -395,7 +406,7 @@ const Gauge = React.forwardRef<HTMLDivElement, GaugeProps>(
         <svg
           aria-hidden
           viewBox="0 0 200 200"
-          className="pointer-events-none absolute inset-0 size-full overflow-visible [filter:drop-shadow(0_0_1.5px_rgb(var(--neon)))_drop-shadow(0_0_6px_rgb(var(--neon)/0.6))]"
+          className="pointer-events-none absolute inset-0 size-full overflow-visible [filter:drop-shadow(0_0_1.5px_rgb(var(--neon)/var(--neon-glow,1)))_drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]"
         >
           <g ref={needleRef} transform={`rotate(${angleOf(initial).toFixed(2)} 100 100)`}>
             <path d={NEEDLE} style={{ fill: "rgb(var(--neon))" }} />

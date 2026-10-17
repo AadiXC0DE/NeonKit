@@ -25,7 +25,7 @@ const css = `
 .nk-odo[data-variant="lit"] .nk-odo-face { background: linear-gradient(180deg, #0e1016, #08090d); }
 .nk-odo[data-variant="lit"] .nk-odo-ink {
   color: color-mix(in srgb, rgb(var(--neon)) 30%, white);
-  text-shadow: 0 0 0.02em rgb(255 255 255 / 0.7), 0 0 0.12em rgb(var(--neon)), 0 0 0.36em rgb(var(--neon) / 0.6);
+  text-shadow: 0 0 0.02em rgb(255 255 255 / calc(0.7 * var(--neon-glow, 1))), 0 0 0.12em rgb(var(--neon) / var(--neon-glow, 1)), 0 0 0.36em rgb(var(--neon) / calc(0.6 * var(--neon-glow, 1)));
 }
 .nk-odo[data-variant="lit"] .nk-odo-frac .nk-odo-face { background: linear-gradient(180deg, #13151c, #0b0c11); }
 .nk-odo[data-variant="lit"] .nk-odo-frac .nk-odo-ink { color: color-mix(in srgb, rgb(var(--neon)) 55%, white); opacity: 0.78; }
@@ -33,9 +33,9 @@ const css = `
   background: radial-gradient(ellipse 90% 75% at 50% 50%, color-mix(in srgb, rgb(var(--neon)) 52%, white), rgb(var(--neon)) 58%, color-mix(in srgb, rgb(var(--neon)) 62%, black));
 }
 .nk-odo[data-variant="backlit"] .nk-odo-ink { color: #16110a; text-shadow: 0 0 0.04em rgb(0 0 0 / 0.35); }
-.nk-odo[data-variant="backlit"] .nk-odo-window { box-shadow: 0 0 0.3em rgb(var(--neon) / 0.45), 0 0 0.9em rgb(var(--neon) / 0.2); }
+.nk-odo[data-variant="backlit"] .nk-odo-window { box-shadow: 0 0 0.3em rgb(var(--neon) / calc(0.45 * var(--neon-glow, 1))), 0 0 0.9em rgb(var(--neon) / calc(0.2 * var(--neon-glow, 1))); }
 .nk-odo[data-variant="backlit"] .nk-odo-frac .nk-odo-face { background: linear-gradient(180deg, #1a1712, #0f0d0a); }
-.nk-odo[data-variant="backlit"] .nk-odo-frac .nk-odo-ink { color: color-mix(in srgb, rgb(var(--neon)) 70%, white); text-shadow: 0 0 0.2em rgb(var(--neon) / 0.6); }
+.nk-odo[data-variant="backlit"] .nk-odo-frac .nk-odo-ink { color: color-mix(in srgb, rgb(var(--neon)) 70%, white); text-shadow: 0 0 0.2em rgb(var(--neon) / calc(0.6 * var(--neon-glow, 1))); }
 .nk-odo[data-variant="cream"] .nk-odo-face { background: linear-gradient(180deg, #f4ecda, #e2d5b8); }
 .nk-odo[data-variant="cream"] .nk-odo-ink { color: #17140f; }
 .nk-odo[data-variant="cream"] .nk-odo-frac .nk-odo-face { background: linear-gradient(180deg, color-mix(in srgb, rgb(var(--neon)) 78%, black), color-mix(in srgb, rgb(var(--neon)) 60%, black)); }

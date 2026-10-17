@@ -48,6 +48,12 @@ function mulberry32(seed: number) {
   };
 }
 
+/** The theme's glow multiplier. A finite check, not `|| 1`, so 0 stays 0. */
+function readGlow(node: Element) {
+  const value = parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"));
+  return Number.isFinite(value) ? Math.max(0, value) : 1;
+}
+
 // The canvas carries `color: rgb(var(--neon))`, so the resolved channels are one read away.
 function readRgb(node: HTMLElement): Rgb {
   const parts = getComputedStyle(node).color.match(/[\d.]+/g);
@@ -132,6 +138,7 @@ const LightRays = React.forwardRef<HTMLDivElement, LightRaysProps>(
       let width = 0;
       let height = 0;
       let rgb = readRgb(dustCanvas);
+      let glow = readGlow(dustCanvas);
       let raf = 0;
       let last = 0;
       let time = 0;
@@ -211,7 +218,8 @@ const LightRays = React.forwardRef<HTMLDivElement, LightRaysProps>(
       const draw = () => {
         const g = geometry();
         const [r, gr, b] = rgb;
-        const level = Math.max(0, Math.min(1, live.current.intensity));
+        // The whole effect is light, so --neon-glow scales it with the intensity prop.
+        const level = Math.max(0, Math.min(1, live.current.intensity)) * glow;
         aimRays();
 
         // Beams: one soft conic wedge per ray, added together, then faded with distance.
@@ -290,7 +298,7 @@ const LightRays = React.forwardRef<HTMLDivElement, LightRaysProps>(
         for (const mote of dustList) {
           const light = lightAt(mote.x, mote.y, g);
           const sparkle = 0.7 + 0.3 * Math.sin(time * 1.7 + mote.phase);
-          const alpha = Math.min(1, (0.05 + light * 1.8) * sparkle * (0.4 + level * 0.6));
+          const alpha = Math.min(1, (0.05 + light * 1.8) * sparkle * (0.4 + level * 0.6) * Math.min(1, glow));
           if (alpha < 0.02) continue;
           motes.globalAlpha = alpha;
           motes.beginPath();
@@ -360,6 +368,7 @@ const LightRays = React.forwardRef<HTMLDivElement, LightRaysProps>(
 
       recolor.current = () => {
         rgb = readRgb(dustCanvas);
+        glow = readGlow(dustCanvas);
         if (!raf && width > 0) draw();
       };
       refresh.current = () => {
@@ -424,11 +433,15 @@ const LightRays = React.forwardRef<HTMLDivElement, LightRaysProps>(
         {...props}
       >
         <canvas ref={beamRef} className="absolute inset-0 size-full [mix-blend-mode:screen]" />
-        {/* The color transition is a change detector: when --neon changes upstream, transitionend fires. */}
+        {/* The color and letter-spacing transitions are change detectors: when --neon or --neon-glow changes upstream, transitionend fires. */}
         <canvas
           ref={dustRef}
           className="absolute inset-0 size-full"
-          style={{ color: "rgb(var(--neon))", transition: "color 1ms linear" }}
+          style={{
+            color: "rgb(var(--neon))",
+            letterSpacing: "calc(var(--neon-glow, 1) * 1px)",
+            transition: "color 1ms linear, letter-spacing 1ms linear",
+          }}
         />
       </div>
     );

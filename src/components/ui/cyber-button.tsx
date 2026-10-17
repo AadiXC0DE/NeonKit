@@ -66,7 +66,7 @@ const sizes = {
 
 const variants = {
   outline: {
-    root: "[color:color-mix(in_srgb,rgb(var(--neon))_35%,white)] [text-shadow:0_0_10px_rgb(var(--neon)/0.5)]",
+    root: "[color:color-mix(in_srgb,rgb(var(--neon))_35%,white)] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]",
     border: "bg-[rgb(var(--neon)/0.5)] group-hover/cyber:bg-[rgb(var(--neon)/0.95)] group-focus-visible/cyber:bg-[rgb(var(--neon)/0.95)]",
     face: "[background:linear-gradient(180deg,rgb(var(--neon)/0.13),rgb(var(--neon)/0.04)_60%),#06070b] group-hover/cyber:[background:linear-gradient(180deg,rgb(var(--neon)/0.2),rgb(var(--neon)/0.07)_60%),#06070b]",
     scan: "bg-[linear-gradient(90deg,transparent,rgb(var(--neon)/0.85)_18%,rgb(var(--neon)/0.85)_82%,transparent)]",
@@ -181,7 +181,7 @@ const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>(
 
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 transition-[filter] duration-200 ease-out group-hover/cyber:[filter:drop-shadow(0_0_7px_rgb(var(--neon)/0.55))] group-focus-visible/cyber:[filter:drop-shadow(0_0_7px_rgb(var(--neon)/0.55))]"
+          className="pointer-events-none absolute inset-0 transition-[filter] duration-200 ease-out group-hover/cyber:[filter:drop-shadow(0_0_7px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))))] group-focus-visible/cyber:[filter:drop-shadow(0_0_7px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))))]"
         >
           <span className={cn("nk-cyber-button-shape absolute inset-0 transition-colors duration-200", v.border)} />
           <span
@@ -202,7 +202,7 @@ const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>(
         {/* Corner tick: a short bar parallel to the lower chamfer, just outside it */}
         <span
           aria-hidden
-          className={cn("nk-cyber-button-tick pointer-events-none absolute h-px shadow-[0_0_6px_rgb(var(--neon))]", v.tick)}
+          className={cn("nk-cyber-button-tick pointer-events-none absolute h-px shadow-[0_0_6px_rgb(var(--neon)/var(--neon-glow,1))]", v.tick)}
         />
 
         <span className="nk-cyber-button-label relative inline-flex items-center gap-[inherit] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">

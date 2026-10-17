@@ -25,7 +25,7 @@ const time = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).
 // Every cover is drawn in the accent plus darks, so the queue reads as one label's catalogue.
 function Cover({ art, label, className }: { art: Art; label?: string; className?: string }) {
   const id = React.useId().replace(/:/g, "");
-  const glow = { filter: "drop-shadow(0 0 1px rgb(var(--neon))) drop-shadow(0 0 4px rgb(var(--neon) / 0.7))" };
+  const glow = { filter: "drop-shadow(0 0 1px rgb(var(--neon) / var(--neon-glow, 1))) drop-shadow(0 0 4px rgb(var(--neon) / calc(0.7 * var(--neon-glow, 1))))" };
   const ink = art === "type" ? "#0b0a12" : "rgb(255 255 255 / 0.5)";
   return (
     <svg aria-hidden viewBox="0 0 100 100" className={cn("block", className)} preserveAspectRatio="xMidYMid slice">
@@ -96,7 +96,7 @@ function IconButton({ label, active, className, ...props }: React.ButtonHTMLAttr
       className={cn(
         "inline-flex size-10 items-center justify-center rounded-full outline-none transition-[color,background-color,transform] duration-150 active:scale-[0.94] [&_svg]:size-[18px]",
         "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
-        active ? "text-[rgb(var(--neon))] [&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/0.8))]" : "text-white/55 hover:bg-white/[0.06] hover:text-white/90",
+        active ? "text-[rgb(var(--neon))] [&_svg]:[filter:drop-shadow(0_0_5px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))))]" : "text-white/55 hover:bg-white/[0.06] hover:text-white/90",
         className,
       )}
       {...props}
@@ -195,7 +195,7 @@ export default function AppMusicPlayer() {
               className={cn(
                 "rounded-md border px-2.5 py-1 text-[13px] font-semibold tracking-[-0.01em] transition-[color,border-color,box-shadow,text-shadow] duration-300",
                 playing
-                  ? "nk-app-music-player-onair border-[rgb(var(--neon))] text-[color-mix(in_srgb,rgb(var(--neon))_35%,white)] shadow-[0_0_10px_rgb(var(--neon)/0.6),inset_0_0_8px_rgb(var(--neon)/0.3)] [text-shadow:0_0_6px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.7)]"
+                  ? "nk-app-music-player-onair border-[rgb(var(--neon))] text-[color-mix(in_srgb,rgb(var(--neon))_35%,white)] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),inset_0_0_8px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1)))] [text-shadow:0_0_6px_rgb(var(--neon)/var(--neon-glow,1)),0_0_14px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]"
                   : "border-[rgb(var(--neon)/0.18)] text-[rgb(var(--neon)/0.3)]",
               )}
             >
@@ -209,7 +209,7 @@ export default function AppMusicPlayer() {
             <div className="relative">
               <div
                 aria-hidden
-                className="absolute inset-x-[8%] -bottom-6 h-1/2 rounded-full bg-[rgb(var(--neon)/0.35)] blur-[48px] transition-opacity duration-700"
+                className="absolute inset-x-[8%] -bottom-6 h-1/2 rounded-full bg-[rgb(var(--neon)/0.35)] [filter:blur(48px)_opacity(var(--neon-glow,1))] transition-opacity duration-700"
                 style={{ opacity: playing ? 1 : 0.25 }}
               />
               <div className="relative aspect-square overflow-hidden rounded-2xl border border-white/10 shadow-[0_30px_60px_-30px_rgb(0_0_0/0.9)]">
@@ -257,7 +257,7 @@ export default function AppMusicPlayer() {
                     type="button"
                     aria-label={playing ? "Pause" : "Play"}
                     onClick={() => setPlaying((p) => !p)}
-                    className="mx-1.5 inline-flex size-14 items-center justify-center rounded-full bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_24px_rgb(var(--neon)/0.5),inset_0_1px_0_rgb(255_255_255/0.45)] outline-none transition-[transform,box-shadow] duration-150 hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_36px_rgb(var(--neon)/0.7),inset_0_1px_0_rgb(255_255_255/0.45)] active:scale-[0.95] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
+                    className="mx-1.5 inline-flex size-14 items-center justify-center rounded-full bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_24px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] outline-none transition-[transform,box-shadow] duration-150 hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_36px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] active:scale-[0.95] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]"
                   >
                     {playing ? <Pause className="size-6" fill="currentColor" /> : <Play className="ml-0.5 size-6" fill="currentColor" />}
                   </button>
@@ -323,7 +323,7 @@ export default function AppMusicPlayer() {
                         )}
                       </span>
                       <span className="min-w-0">
-                        <span className={cn("block truncate text-sm", active ? "text-[color-mix(in_srgb,rgb(var(--neon))_45%,white)] [text-shadow:0_0_12px_rgb(var(--neon)/0.5)]" : "text-white/85")}>
+                        <span className={cn("block truncate text-sm", active ? "text-[color-mix(in_srgb,rgb(var(--neon))_45%,white)] [text-shadow:0_0_12px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]" : "text-white/85")}>
                           {t.title}
                         </span>
                         <span className="block truncate text-[13px] text-white/55">{t.artist}</span>

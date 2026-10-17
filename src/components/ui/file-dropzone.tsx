@@ -389,7 +389,7 @@ const FileDropzone = React.forwardRef<HTMLDivElement, FileDropzoneProps>(
                 style={{ "--nk-dash-shift": `${-geometry.period}px` } as React.CSSProperties}
                 className={cn(
                   "pointer-events-none absolute inset-0 -z-10 size-full overflow-visible",
-                  "[filter:drop-shadow(0_0_3px_rgb(var(--neon)/0.9))_drop-shadow(0_0_12px_rgb(var(--neon)/0.45))]",
+                  "[filter:drop-shadow(0_0_3px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))))_drop-shadow(0_0_12px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))))]",
                   dragging
                     ? "opacity-100 [animation:neonkit-dropzone-ignite_360ms_linear_backwards] motion-reduce:[animation:none]"
                     : cn(
@@ -431,7 +431,7 @@ const FileDropzone = React.forwardRef<HTMLDivElement, FileDropzoneProps>(
                   "[animation:neonkit-dropzone-bloom_700ms_cubic-bezier(0.23,1,0.32,1)_both]",
                   bloom.rejected
                     ? "bg-[radial-gradient(circle,rgb(255_77_94/0.26),rgb(255_77_94/0.06)_40%,transparent_68%)]"
-                    : "bg-[radial-gradient(circle,rgb(var(--neon)/0.3),rgb(var(--neon)/0.08)_40%,transparent_68%)]",
+                    : "bg-[radial-gradient(circle,rgb(var(--neon)/CALC(0.3*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.08*var(--neon-glow,1)))_40%,transparent_68%)]",
                 )}
               />
             )}
@@ -443,11 +443,11 @@ const FileDropzone = React.forwardRef<HTMLDivElement, FileDropzoneProps>(
                 aria-hidden
                 className={cn(
                   "grid size-11 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/55",
-                  "transition-[transform,translate,border-color,background-color,color,box-shadow] duration-200 ease-out [&_svg]:size-5",
+                  "transition-[transform,translate,border-color,background-color,color,box-shadow] duration-200 ease-out [&_svg]:size-6",
                   !disabled &&
                     "group-hover/dropzone:border-white/[0.16] group-hover/dropzone:text-white/80",
                   dragging &&
-                    "-translate-y-0.5 border-[rgb(var(--neon)/0.55)] bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))] shadow-[0_0_20px_-2px_rgb(var(--neon)/0.45)] group-hover/dropzone:border-[rgb(var(--neon)/0.55)] group-hover/dropzone:text-[rgb(var(--neon))] motion-reduce:translate-y-0",
+                    "-translate-y-0.5 border-[rgb(var(--neon)/0.55)] bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))] shadow-[0_0_20px_-2px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))] group-hover/dropzone:border-[rgb(var(--neon)/0.55)] group-hover/dropzone:text-[rgb(var(--neon))] motion-reduce:translate-y-0",
                 )}
               >
                 <CloudUpload />
@@ -614,7 +614,7 @@ const FileList = React.forwardRef<HTMLUListElement, FileListProps>(
                 data-status={file.status}
                 style={failed ? neonVars(INVALID) : undefined}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg border border-white/[0.08] bg-white/[0.02] py-2.5 pl-2.5 pr-2",
+                  "flex items-center gap-3 rounded-lg border border-white/[0.08] bg-white/[0.02] py-3 pl-3 pr-2",
                   "[animation:neonkit-filelist-in_220ms_cubic-bezier(0.23,1,0.32,1)_backwards] motion-reduce:[animation:none]",
                   "transition-[border-color] duration-200",
                   failed && "border-[rgb(var(--neon)/0.3)]",
@@ -623,7 +623,7 @@ const FileList = React.forwardRef<HTMLUListElement, FileListProps>(
                 <span
                   aria-hidden
                   className={cn(
-                    "grid size-9 shrink-0 place-items-center rounded-lg border bg-white/[0.03] transition-colors duration-200 [&_svg]:size-4",
+                    "grid size-10 shrink-0 place-items-center rounded-lg border bg-white/[0.03] transition-colors duration-200 [&_svg]:size-5",
                     failed
                       ? "border-[rgb(var(--neon)/0.35)] text-[rgb(var(--neon))]"
                       : file.status === "uploading"
@@ -635,56 +635,59 @@ const FileList = React.forwardRef<HTMLUListElement, FileListProps>(
                 </span>
 
                 <div className="grid min-w-0 flex-1 gap-1.5">
-                  <div className="flex min-w-0 items-baseline justify-between gap-3">
-                    <p className="min-w-0 truncate text-sm text-white/90" title={file.name}>
-                      {file.name}
-                    </p>
+                  {/* The name gets the whole row; size and status sit under the tube and never squeeze it. */}
+                  <p className="min-w-0 truncate text-sm text-white/90" title={file.name}>
+                    {file.name}
+                  </p>
+                  {/* The progress tube: unlit glass that fills with light */}
+                  <div
+                    role="progressbar"
+                    aria-label={`${file.name} upload`}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={Math.round(percent)}
+                    className="relative h-1 w-full rounded-full bg-white/[0.06] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.04)]"
+                  >
+                    <div
+                      style={{ transform: `scaleX(${percent / 100})` }}
+                      className={cn(
+                        "absolute inset-0 origin-left rounded-full bg-[rgb(var(--neon))] rtl:origin-right",
+                        "transition-[transform,opacity,box-shadow] duration-[400ms,700ms,700ms] ease-out motion-reduce:transition-none",
+                        done
+                          ? "opacity-40 shadow-none delay-[0ms,300ms,300ms]"
+                          : "shadow-[0_0_8px_rgb(var(--neon)/CALC(0.65*var(--neon-glow,1)))]",
+                        percent === 0 && "opacity-0",
+                      )}
+                    />
+                  </div>
+                  <div className="flex min-w-0 items-start justify-between gap-3 text-xs leading-4 tabular-nums">
                     <p
                       className={cn(
-                        "flex shrink-0 items-center gap-1 text-xs tabular-nums",
+                        "flex min-w-0 items-start gap-1.5",
                         failed ? "text-[#ff4d5e]" : done ? "text-white/70" : "text-white/55",
                       )}
                     >
                       {done && (
                         <CircleCheck
                           aria-hidden
-                          className="size-3.5 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.6))]"
+                          className="size-4 shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]"
                         />
                       )}
-                      <span className="sr-only">{formatBytes(file.size)}, </span>
-                      {statusText}
+                      <span className="min-w-0">
+                        <span className="sr-only">{formatBytes(file.size)}, </span>
+                        {statusText}
+                      </span>
                     </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    {/* The progress tube: unlit glass that fills with light */}
-                    <div
-                      role="progressbar"
-                      aria-label={`${file.name} upload`}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      aria-valuenow={Math.round(percent)}
-                      className="relative h-1 min-w-0 flex-1 rounded-full bg-white/[0.06] shadow-[inset_0_0_0_1px_rgb(255_255_255/0.04)]"
-                    >
-                      <div
-                        style={{ transform: `scaleX(${percent / 100})` }}
-                        className={cn(
-                          "absolute inset-0 origin-left rounded-full bg-[rgb(var(--neon))] rtl:origin-right",
-                          "transition-[transform,opacity,box-shadow] duration-[400ms,700ms,700ms] ease-out motion-reduce:transition-none",
-                          done
-                            ? "opacity-40 shadow-none delay-[0ms,300ms,300ms]"
-                            : "shadow-[0_0_8px_rgb(var(--neon)/0.65)]",
-                          percent === 0 && "opacity-0",
-                        )}
-                      />
-                    </div>
-                    <span aria-hidden className="w-14 shrink-0 text-right text-[11px] tabular-nums text-white/50">
+                    <span aria-hidden className="shrink-0 text-white/50">
                       {formatBytes(file.size)}
                     </span>
                   </div>
                 </div>
 
-                {((failed && onRetry) || onRemove) && (
+                {(onRetry || onRemove) && (
                   <div className="flex shrink-0 items-center gap-0.5">
+                    {/* Every row keeps the retry slot, so the progress tubes end in one column. */}
+                    {onRetry && !failed && <span aria-hidden className="size-7 shrink-0" />}
                     {failed && onRetry && (
                       <button
                         type="button"

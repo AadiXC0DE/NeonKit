@@ -5,7 +5,7 @@ const contacts = [
   { angle: 74, distance: 0.82, label: "UNKNOWN", color: "amber" },
   { angle: 168, distance: 0.6, label: "FRIEND 1", color: "green" },
   { angle: 236, distance: 0.9, label: "HOSTILE", color: "red" },
-  { angle: 312, distance: 0.36, label: "UNKNOWN", color: "amber" },
+  { angle: 300, distance: 0.62, label: "UNKNOWN", color: "amber" },
 ];
 
 const legend = [

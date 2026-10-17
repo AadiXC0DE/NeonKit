@@ -13,7 +13,7 @@ export default function PowerButtonRack() {
       {channels.map(({ label, color, icon, on }) => (
         <div key={label} className="flex flex-col items-center gap-3">
           <PowerButton size="lg" color={color} icon={icon} defaultPressed={on} aria-label={`${label} power`} />
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/50">{label}</span>
+          <span className="text-xs font-medium text-white/60">{label}</span>
         </div>
       ))}
     </div>

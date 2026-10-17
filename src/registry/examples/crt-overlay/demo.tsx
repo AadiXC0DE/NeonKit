@@ -38,7 +38,7 @@ export default function CrtOverlayDemo() {
       </CrtOverlay>
 
       <div className="mt-3 flex items-center justify-between px-2">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">NK-14 colour monitor</span>
+        <span className="text-[12px] font-medium text-white/55">NK-14 colour monitor</span>
         <div className="flex items-center gap-3">
           <span
             aria-hidden

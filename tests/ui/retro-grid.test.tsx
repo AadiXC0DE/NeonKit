@@ -38,6 +38,14 @@ describe("RetroGrid", () => {
     const ref = React.createRef<HTMLDivElement>();
     const { container } = render(<RetroGrid ref={ref} angle={60} />);
     expect(ref.current).toBe(container.firstElementChild);
-    expect(container.querySelector<HTMLElement>("[style*='rotateX']")?.style.transform).toBe("rotateX(60deg)");
+    expect(container.querySelector<HTMLElement>("[style*='rotateX']")?.style.transform).toContain("rotateX(60deg)");
+  });
+
+  it("sets perspective from the angle so the horizon sits on the line", () => {
+    const { container, rerender } = render(<RetroGrid angle={60} />);
+    // tan(60°) ≈ 1.732: perspective is the floor height times that.
+    expect(container.querySelector<HTMLElement>("[style*='perspective']")?.style.perspective).toMatch(/173\.2/);
+    rerender(<RetroGrid angle={120} />);
+    expect(container.querySelector<HTMLElement>("[style*='rotateX']")?.style.transform).toContain("rotateX(88deg)");
   });
 });

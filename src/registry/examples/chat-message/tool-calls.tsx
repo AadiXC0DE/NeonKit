@@ -1,4 +1,5 @@
 import { ChatToolCall } from "@/components/ui/chat-message";
+import { ToolCallGroup } from "@/components/ui/tool-call";
 
 const logs = `14:02:11  POST /api/invites  429  3ms
 14:02:11  POST /api/invites  429  2ms
@@ -7,7 +8,7 @@ const logs = `14:02:11  POST /api/invites  429  3ms
 
 export default function ChatMessageToolCalls() {
   return (
-    <div className="grid w-full max-w-xl gap-2">
+    <ToolCallGroup label="Invite fix" className="w-full max-w-xl">
       <ChatToolCall
         name="query_logs"
         args={{ service: "web", path: "/api/invites", since: "15m" }}
@@ -24,6 +25,6 @@ export default function ChatMessageToolCalls() {
       />
       <ChatToolCall name="deploy_preview" args={{ branch: "fix/invite-limit" }} status="running" />
       <ChatToolCall name="notify" args={{ channel: "#releases" }} status="pending" />
-    </div>
+    </ToolCallGroup>
   );
 }

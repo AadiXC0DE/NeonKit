@@ -57,11 +57,11 @@ function Delta({ value, good }: { value: number; good: boolean }) {
     <span
       className={
         good
-          ? "inline-flex items-center gap-0.5 text-xs font-medium tabular-nums text-[rgb(52_211_153)]"
-          : "inline-flex items-center gap-0.5 text-xs font-medium tabular-nums text-[rgb(255_77_94)]"
+          ? "inline-flex items-center gap-px text-xs font-medium tabular-nums text-[rgb(52_211_153)]"
+          : "inline-flex items-center gap-px text-xs font-medium tabular-nums text-[rgb(255_77_94)]"
       }
     >
-      <Icon className="size-3.5" aria-hidden />
+      <Icon size={16} strokeWidth={2.25} className="-my-0.5 shrink-0" aria-hidden />
       {value > 0 ? "+" : value < 0 ? "−" : ""}
       {Math.abs(value).toFixed(1)}%
     </span>

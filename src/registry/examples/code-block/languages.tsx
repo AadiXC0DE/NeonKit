@@ -26,7 +26,7 @@ $ NODE_ENV=production npm run build -- --profile`}
         wrapToggle={false}
         startLine={14}
         code={`  "dependencies": {
-    "lucide-react": "^0.548.0",
+    "motion": "^12.23.0",
     "next": "16.1.0",
     "react": "^19.3.0"
   },`}

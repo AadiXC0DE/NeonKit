@@ -47,6 +47,7 @@ export const doc: ComponentDoc = {
         { prop: "startOnView", type: "boolean", default: "true", description: "Wait until it scrolls into view before typing." },
         { prop: "prompt", type: "string", default: '"$"', description: "Printed before every input line." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Prompt and caret color." },
+        { prop: "onDone", type: "() => void", description: "Called when the last line has printed: once per run, once per pass when looping, and right away under reduced motion." },
       ],
     },
     {

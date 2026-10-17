@@ -40,9 +40,9 @@ const sizes = {
 
 // The 2px #05060a ring cuts the light out of the avatar edge.
 const statuses = {
-  online: "bg-[rgb(52_211_153)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(52_211_153/0.45)]",
-  away: "bg-[rgb(251_191_36)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(251_191_36/0.4)]",
-  busy: "bg-[rgb(255_77_94)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(255_77_94/0.45)]",
+  online: "bg-[rgb(52_211_153)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(52_211_153/CALC(0.45*var(--neon-glow,1)))]",
+  away: "bg-[rgb(251_191_36)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(251_191_36/CALC(0.4*var(--neon-glow,1)))]",
+  busy: "bg-[rgb(255_77_94)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(255_77_94/CALC(0.45*var(--neon-glow,1)))]",
   offline: "bg-[#05060a] shadow-[0_0_0_2px_#05060a,inset_0_0_0_2px_rgb(255_255_255/0.3)]",
 } as const;
 
@@ -96,11 +96,16 @@ export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLSpanElement>,
   /** Neon ring with a glow, separated from the avatar by a thin gap. */
   ring?: boolean;
   status?: AvatarStatus;
+  /**
+   * Hides the avatar from screen readers while `alt` still sets the initials. Use it when the
+   * name is printed right next to the avatar, so it isn't read twice.
+   */
+  decorative?: boolean;
 }
 
 const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
   (
-    { className, style, color, src, alt, fallback, size: sizeProp, shape: shapeProp, ring = false, status, ...props },
+    { className, style, color, src, alt, fallback, size: sizeProp, shape: shapeProp, ring = false, status, decorative = false, ...props },
     ref,
   ) => {
     const group = React.useContext(AvatarGroupContext);
@@ -110,13 +115,14 @@ const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
     const radius = shape === "circle" ? "rounded-full" : s.square;
     const imageStatus = useImageStatus(src);
     const loaded = imageStatus === "loaded";
+    const labelled = Boolean(alt) && !decorative;
 
     return (
       <span
         ref={ref}
-        role={alt ? "img" : undefined}
-        aria-label={alt ? (status ? `${alt} (${status})` : alt) : undefined}
-        aria-hidden={alt ? undefined : true}
+        role={labelled ? "img" : undefined}
+        aria-label={labelled ? (status ? `${alt} (${status})` : alt) : undefined}
+        aria-hidden={labelled ? undefined : true}
         style={neonVars(color, style)}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
@@ -124,7 +130,7 @@ const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
           s.root,
           radius,
           ring
-            ? "shadow-[0_0_0_2px_#05060a,0_0_0_3px_rgb(var(--neon)),0_0_14px_3px_rgb(var(--neon)/0.4)]"
+            ? "shadow-[0_0_0_2px_#05060a,0_0_0_3px_rgb(var(--neon)),0_0_14px_3px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1)))]"
             : group && "shadow-[0_0_0_2px_#05060a]",
           className,
         )}

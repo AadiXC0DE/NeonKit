@@ -234,17 +234,18 @@ const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
           )}
         >
           {status === "current" && (
-            <span className="absolute -inset-2.5 rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/0.5),transparent)] opacity-70 [animation:nk-timeline-pulse_2.4s_ease-in-out_infinite] motion-reduce:[animation:none]" />
+            <span className="absolute -inset-2.5 rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),transparent)] opacity-70 [animation:nk-timeline-pulse_2.4s_ease-in-out_infinite] motion-reduce:[animation:none]" />
           )}
           <span
             className={cn(
               "absolute inset-0 grid place-items-center rounded-full border",
               "transition-[background-color,border-color,box-shadow,color] duration-300 ease-out",
-              "[&_svg]:size-3.5 [&_svg]:shrink-0",
+              // Icons sit a touch heavier than text strokes so they read at this small size.
+              "[&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:[stroke-width:2]",
               status === "done" &&
                 "border-[rgb(var(--neon)/0.45)] bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))]",
               status === "current" &&
-                "border-[rgb(var(--neon))] bg-[rgb(var(--neon)/0.16)] text-[rgb(var(--neon))] shadow-[0_0_0_3px_rgb(var(--neon)/0.1),0_0_16px_rgb(var(--neon)/0.55),inset_0_0_8px_rgb(var(--neon)/0.3)] [&_svg]:[filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.9))]",
+                "border-[rgb(var(--neon))] bg-[rgb(var(--neon)/0.16)] text-[rgb(var(--neon))] shadow-[0_0_0_3px_rgb(var(--neon)/0.1),0_0_16px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),inset_0_0_8px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1)))] [&_svg]:[filter:drop-shadow(0_0_4px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))))]",
               status === "upcoming" && "border-white/10 bg-white/[0.03] text-white/35",
             )}
           >
@@ -252,9 +253,9 @@ const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
               <span
                 className={cn(
                   "rounded-full",
-                  status === "done" && "size-1.5 bg-current shadow-[0_0_6px_rgb(var(--neon)/0.9)]",
+                  status === "done" && "size-1.5 bg-current shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]",
                   status === "current" &&
-                    "size-2 bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon))]",
+                    "size-2 bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/var(--neon-glow,1))]",
                   status === "upcoming" && "size-1.5 border border-white/25",
                 )}
               />
@@ -295,7 +296,7 @@ const TimelineItem = React.forwardRef<HTMLLIElement, TimelineItemProps>(
           >
             <span
               className={cn(
-                "absolute bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/0.9),0_0_14px_rgb(var(--neon)/0.45)]",
+                "absolute bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_14px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
                 vertical ? "inset-x-[2px] inset-y-0" : "inset-x-0 inset-y-[2px]",
               )}
             />

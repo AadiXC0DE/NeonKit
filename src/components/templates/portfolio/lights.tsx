@@ -4,6 +4,7 @@ import * as React from "react";
 import { CursorGlow } from "@/components/ui/cursor-glow";
 import { neonVars } from "@/lib/neon";
 import { color } from "./config";
+import { fonts } from "./fonts";
 
 /** What the accent becomes with the lights off: plain glass, no color left in the room. */
 export const UNLIT = "#8f949f";
@@ -75,7 +76,7 @@ export function Lights({ children }: { children: React.ReactNode }) {
       <div
         data-lights={on ? "on" : "off"}
         style={neonVars(on ? color : UNLIT)}
-        className="relative isolate min-h-screen overflow-x-clip bg-[#05060a] text-white antialiased selection:bg-[rgb(var(--neon)/0.3)]"
+        className={`${fonts} relative isolate min-h-screen overflow-x-clip bg-[#05060a] text-white antialiased selection:bg-[rgb(var(--neon)/0.3)]`}
       >
         <style>{css}</style>
         {children}

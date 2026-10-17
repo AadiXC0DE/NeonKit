@@ -23,6 +23,12 @@ type Star = {
 const NEAR = 0.04;
 const MAX_STARS = 1400;
 
+/** The theme's glow multiplier. A finite check, not `|| 1`, so 0 stays 0. */
+function readGlow(node: Element) {
+  const value = parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"));
+  return Number.isFinite(value) ? Math.max(0, value) : 1;
+}
+
 // The canvas carries `color: rgb(var(--neon))`, so the resolved channels are one read away.
 function readRgb(node: HTMLElement): Rgb {
   const parts = getComputedStyle(node).color.match(/[\d.]+/g);
@@ -113,6 +119,7 @@ const Starfield = React.forwardRef<HTMLDivElement, StarfieldProps>(
       let width = 0;
       let height = 0;
       let rgb = readRgb(canvas);
+      let glow = readGlow(canvas);
       let sprites = { white: glowSprite([235, 242, 255], 32), tinted: glowSprite(rgb, 32) };
       let raf = 0;
       let last = 0;
@@ -158,10 +165,10 @@ const Starfield = React.forwardRef<HTMLDivElement, StarfieldProps>(
 
         if (streak) {
           // The tunnel brightens at its vanishing point.
-          const glow = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, Math.max(width, height) * 0.5);
-          glow.addColorStop(0, `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]} / ${0.16 * warpLevel})`);
-          glow.addColorStop(1, `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]} / 0)`);
-          ctx.fillStyle = glow;
+          const tunnel = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, Math.max(width, height) * 0.5);
+          tunnel.addColorStop(0, `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]} / ${Math.min(1, 0.16 * warpLevel * glow)})`);
+          tunnel.addColorStop(1, `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]} / 0)`);
+          ctx.fillStyle = tunnel;
           ctx.fillRect(0, 0, width, height);
           ctx.lineCap = "round";
         }
@@ -188,9 +195,9 @@ const Starfield = React.forwardRef<HTMLDivElement, StarfieldProps>(
             continue;
           }
 
-          if (size > 1.5) {
+          if (size > 1.5 && glow > 0) {
             const halo = size * 7;
-            ctx.globalAlpha = alpha * 0.9;
+            ctx.globalAlpha = Math.min(1, alpha * 0.9 * glow);
             ctx.drawImage(tinted ? sprites.tinted : sprites.white, head.x - halo / 2, head.y - halo / 2, halo, halo);
             ctx.globalAlpha = 1;
           }
@@ -285,6 +292,7 @@ const Starfield = React.forwardRef<HTMLDivElement, StarfieldProps>(
 
       recolor.current = () => {
         rgb = readRgb(canvas);
+        glow = readGlow(canvas);
         sprites = { ...sprites, tinted: glowSprite(rgb, 32) };
         if (!raf && width > 0) draw();
       };
@@ -352,11 +360,15 @@ const Starfield = React.forwardRef<HTMLDivElement, StarfieldProps>(
         )}
         {...props}
       >
-        {/* The color transition is a change detector: when --neon changes upstream, transitionend fires. */}
+        {/* The color and letter-spacing transitions are change detectors: when --neon or --neon-glow changes upstream, transitionend fires. */}
         <canvas
           ref={canvasRef}
           className="absolute inset-0 size-full"
-          style={{ color: "rgb(var(--neon))", transition: "color 1ms linear" }}
+          style={{
+            color: "rgb(var(--neon))",
+            letterSpacing: "calc(var(--neon-glow, 1) * 1px)",
+            transition: "color 1ms linear, letter-spacing 1ms linear",
+          }}
         />
       </div>
     );

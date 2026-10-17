@@ -336,8 +336,8 @@ const ScrollArea = React.forwardRef<HTMLDivElement, ScrollAreaProps>(
                 "transition-[transform,scale,background-color,box-shadow] duration-150 ease-out motion-reduce:transition-none",
                 vertical ? "inset-y-0 right-[3px] w-1.5 origin-right" : "inset-x-0 bottom-[3px] h-1.5 origin-bottom",
                 active &&
-                  "bg-[rgb(var(--neon))] shadow-[0_0_4px_rgb(var(--neon)),0_0_14px_rgb(var(--neon)/0.75)]",
-                !active && lit && "bg-[rgb(var(--neon)/0.85)] shadow-[0_0_10px_rgb(var(--neon)/0.6)]",
+                  "bg-[rgb(var(--neon))] shadow-[0_0_4px_rgb(var(--neon)/var(--neon-glow,1)),0_0_14px_rgb(var(--neon)/CALC(0.75*var(--neon-glow,1)))]",
+                !active && lit && "bg-[rgb(var(--neon)/0.85)] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]",
                 !lit &&
                   cn(
                     "bg-white/25 group-hover/track:bg-white/40",

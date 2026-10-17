@@ -28,7 +28,7 @@ export default function ItemDemo() {
           </ItemMedia>
           <ItemContent>
             <ItemTitle id="two-factor">Two-factor authentication</ItemTitle>
-            <ItemDescription>
+            <ItemDescription lines="none">
               {twoFactor ? "A code from your authenticator app at every sign-in." : "Off. Anyone with your password can sign in."}
             </ItemDescription>
           </ItemContent>
@@ -43,7 +43,7 @@ export default function ItemDemo() {
           </ItemMedia>
           <ItemContent>
             <ItemTitle>Passkeys</ItemTitle>
-            <ItemDescription>2 registered. Last used on a MacBook Pro, 3 days ago.</ItemDescription>
+            <ItemDescription lines="none">2 registered. Last used on a MacBook Pro, 3 days ago.</ItemDescription>
           </ItemContent>
           <ItemActions>
             <Button variant="ghost" size="sm">
@@ -59,7 +59,7 @@ export default function ItemDemo() {
             </ItemMedia>
             <ItemContent>
               <ItemTitle>Active sessions</ItemTitle>
-              <ItemDescription>4 devices in Lisbon and Berlin</ItemDescription>
+              <ItemDescription lines="none">4 devices in Lisbon and Berlin</ItemDescription>
             </ItemContent>
             <ItemActions>
               <ChevronRight className="size-4 text-white/35 transition-transform duration-200 group-hover/item:translate-x-0.5" />
@@ -73,7 +73,7 @@ export default function ItemDemo() {
           </ItemMedia>
           <ItemContent>
             <ItemTitle>Recovery codes</ItemTitle>
-            <ItemDescription>Generated 14 March. 8 of 10 unused.</ItemDescription>
+            <ItemDescription lines="none">Generated 14 March. 8 of 10 unused.</ItemDescription>
           </ItemContent>
           <ItemActions>
             <Button variant="ghost" size="sm">

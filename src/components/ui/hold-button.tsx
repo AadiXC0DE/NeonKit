@@ -293,7 +293,7 @@ const HoldButton = React.forwardRef<HTMLButtonElement, HoldButtonProps>(
           <span
             aria-hidden
             style={{ opacity: `calc(${P} * ${P})` }}
-            className="pointer-events-none absolute -inset-px rounded-[inherit] shadow-[0_0_14px_rgb(var(--neon)/0.55),0_0_36px_rgb(var(--neon)/0.3)]"
+            className="pointer-events-none absolute -inset-px rounded-[inherit] shadow-[0_0_14px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),0_0_36px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1)))]"
           />
 
           {/* The tube: lit gas pushes in from the left with a hot leading edge. */}
@@ -307,7 +307,7 @@ const HoldButton = React.forwardRef<HTMLButtonElement, HoldButtonProps>(
             >
               <span
                 style={{ opacity: completed ? 0 : `clamp(0, ${P} * 24, 1)` }}
-                className="absolute inset-y-0 right-0 w-[2px] bg-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_6px_1px_rgb(var(--neon)),0_0_18px_4px_rgb(var(--neon)/0.5)]"
+                className="absolute inset-y-0 right-0 w-[2px] bg-[color-mix(in_srgb,rgb(var(--neon))_40%,white)] shadow-[0_0_6px_1px_rgb(var(--neon)/var(--neon-glow,1)),0_0_18px_4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
               />
             </span>
           </span>
@@ -323,7 +323,7 @@ const HoldButton = React.forwardRef<HTMLButtonElement, HoldButtonProps>(
           <span
             aria-hidden
             className={cn(
-              "pointer-events-none absolute -inset-px rounded-[inherit] bg-[rgb(var(--neon)/0.2)] shadow-[inset_0_0_14px_rgb(var(--neon)/0.35)] transition-opacity duration-300 ease-out",
+              "pointer-events-none absolute -inset-px rounded-[inherit] bg-[rgb(var(--neon)/0.2)] shadow-[inset_0_0_14px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))] transition-opacity duration-300 ease-out",
               completed ? "opacity-100" : "opacity-0",
             )}
           />
@@ -332,7 +332,7 @@ const HoldButton = React.forwardRef<HTMLButtonElement, HoldButtonProps>(
             <React.Fragment key={completions}>
               <span
                 aria-hidden
-                className="nk-hold-button-flash pointer-events-none absolute -inset-px rounded-[inherit] bg-[color-mix(in_srgb,rgb(var(--neon))_55%,white)] shadow-[0_0_24px_rgb(var(--neon)),0_0_60px_rgb(var(--neon)/0.6)]"
+                className="nk-hold-button-flash pointer-events-none absolute -inset-px rounded-[inherit] bg-[color-mix(in_srgb,rgb(var(--neon))_55%,white)] shadow-[0_0_24px_rgb(var(--neon)/var(--neon-glow,1)),0_0_60px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
               />
               <span
                 aria-hidden
@@ -355,7 +355,7 @@ const HoldButton = React.forwardRef<HTMLButtonElement, HoldButtonProps>(
               <span
                 aria-hidden={completed ? undefined : true}
                 className={cn(
-                  "inline-flex items-center gap-[inherit] [text-shadow:0_0_10px_rgb(var(--neon)/0.8)] transition-[opacity,transform,translate] duration-150 ease-out [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+                  "inline-flex items-center gap-[inherit] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))] transition-[opacity,transform,translate] duration-150 ease-out [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
                   completed ? "opacity-100" : "translate-y-1 opacity-0",
                 )}
               >

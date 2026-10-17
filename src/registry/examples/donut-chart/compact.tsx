@@ -3,9 +3,23 @@
 import { DonutChart } from "@/components/ui/donut-chart";
 
 const budgets = [
-  { name: "Error budget left", value: 62, max: 100, format: (v: number) => `${v}%`, color: undefined },
-  { name: "Seats taken", value: 44, max: 50, format: (v: number) => `${v}/50`, color: "amber" },
-  { name: "Build minutes", value: 2780, max: 3000, format: (v: number) => `${(v / 1000).toFixed(1)}k`, color: "red" },
+  {
+    name: "Error budget left",
+    detail: "99.9% SLO, 30-day window",
+    value: 62,
+    max: 100,
+    format: (v: number) => `${v}%`,
+    color: undefined,
+  },
+  { name: "Seats taken", detail: "6 left on the Team plan", value: 44, max: 50, format: (v: number) => `${v}/50`, color: "amber" },
+  {
+    name: "Build minutes",
+    detail: "2,780 of 3,000, resets Nov 1",
+    value: 2780,
+    max: 3000,
+    format: (v: number) => `${(v / 1000).toFixed(1)}k`,
+    color: "red",
+  },
 ];
 
 export default function DonutChartCompact() {
@@ -23,7 +37,10 @@ export default function DonutChartCompact() {
             thickness={0.1}
             showLegend={false}
           />
-          <figcaption className="text-[14px] text-white/60">{b.name}</figcaption>
+          <figcaption className="grid gap-0.5 sm:text-center">
+            <span className="text-[14px] text-white/80">{b.name}</span>
+            <span className="text-xs text-white/50">{b.detail}</span>
+          </figcaption>
         </figure>
       ))}
     </div>

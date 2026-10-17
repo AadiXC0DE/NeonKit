@@ -41,6 +41,7 @@ export const doc: ComponentDoc = {
       props: [
         { prop: "text", type: "string", description: "The message. A–Z, 0–9 and common punctuation, plus · ° → ← ▲ ▼. Lowercase shows as uppercase; other characters are blank." },
         { prop: "speed", type: "number", default: "60", description: "Scroll speed in pixels per second. 0 holds the text still and centers it when it fits." },
+        { prop: "overflowSpeed", type: "number", default: "40", description: "With speed 0, text wider than the display scrolls at this speed instead of being cut off. 0 clips it." },
         { prop: "direction", type: '"left" | "right"', default: '"left"', description: "Which way the text travels." },
         { prop: "rows", type: "number", default: "7", description: "Dot rows. The font is centered vertically in taller displays and cropped in shorter ones." },
         { prop: "columns", type: "number", description: "Fixed width in dots. Leave unset to fill the parent's width." },

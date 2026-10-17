@@ -45,6 +45,12 @@ const warm: Rgb = [255, 176, 84];
 const tail: Rgb = [255, 70, 84];
 const cool: Rgb = [214, 228, 255];
 
+/** The theme's glow multiplier. A finite check, not `|| 1`, so 0 stays 0. */
+function readGlow(node: Element) {
+  const value = parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"));
+  return Number.isFinite(value) ? Math.max(0, value) : 1;
+}
+
 // The canvas carries `color: rgb(var(--neon))`, so the resolved channels are one read away.
 function readRgb(node: HTMLElement): Rgb {
   const parts = getComputedStyle(node).color.match(/[\d.]+/g);
@@ -114,6 +120,7 @@ const RainGlass = React.forwardRef<HTMLDivElement, RainGlassProps>(
       let height = 0;
       let dpr = 1;
       let rgb = readRgb(glass);
+      let glow = readGlow(glass);
       let lights: Light[] = [];
       let drops: Drop[] = [];
       // Beads: thousands of tiny droplets live in two bitmaps instead of objects.
@@ -208,14 +215,15 @@ const RainGlass = React.forwardRef<HTMLDivElement, RainGlassProps>(
         backCtx.setTransform(BOKEH_SCALE, 0, 0, BOKEH_SCALE, 0, 0);
         // Wet street glow along the bottom.
         const street = backCtx.createLinearGradient(0, height, 0, height * 0.35);
-        street.addColorStop(0, paint(0, 0.14));
+        street.addColorStop(0, paint(0, 0.14 * glow));
         street.addColorStop(1, paint(0, 0));
         backCtx.fillStyle = street;
         backCtx.fillRect(0, 0, width, height);
         backCtx.globalCompositeOperation = "lighter";
         for (const light of lights) {
           const breathe = 0.85 + 0.15 * Math.sin(time * 0.6 + light.phase);
-          const a = light.alpha * breathe;
+          // The lights behind the glass are glow: --neon-glow dims them, 0 leaves dark glass.
+          const a = Math.min(1, light.alpha * breathe * glow);
           // Out-of-focus highlights are discs with a slightly brighter rim, not soft blobs.
           const disc = backCtx.createRadialGradient(light.x, light.y, 0, light.x, light.y, light.r);
           disc.addColorStop(0, paint(light.kind, a * 0.6));
@@ -531,6 +539,7 @@ const RainGlass = React.forwardRef<HTMLDivElement, RainGlassProps>(
 
       recolor.current = () => {
         rgb = readRgb(glass);
+        glow = readGlow(glass);
         paintShading();
         if (!raf && width > 0) draw();
       };
@@ -603,11 +612,15 @@ const RainGlass = React.forwardRef<HTMLDivElement, RainGlassProps>(
         {...props}
       >
         <canvas ref={backRef} className="absolute inset-0 size-full" />
-        {/* The color transition is a change detector: when --neon changes upstream, transitionend fires. */}
+        {/* The color and letter-spacing transitions are change detectors: when --neon or --neon-glow changes upstream, transitionend fires. */}
         <canvas
           ref={glassRef}
           className="absolute inset-0 size-full"
-          style={{ color: "rgb(var(--neon))", transition: "color 1ms linear" }}
+          style={{
+            color: "rgb(var(--neon))",
+            letterSpacing: "calc(var(--neon-glow, 1) * 1px)",
+            transition: "color 1ms linear, letter-spacing 1ms linear",
+          }}
         />
       </div>
     );

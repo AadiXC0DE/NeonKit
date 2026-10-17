@@ -16,7 +16,7 @@ const initial = [
     id: "n1",
     icon: TriangleAlert,
     title: "Build failed on main",
-    body: "acme-web · Type error in checkout/summary.tsx, line 48. 2 commits since the last green build.",
+    body: "Type error in checkout/summary.tsx:48, from Tomás’s last push.",
     time: "2m",
     unread: true,
   },

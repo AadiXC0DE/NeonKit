@@ -30,13 +30,13 @@ export const doc: ComponentDoc = {
       name: "tool-calls",
       title: "Tool calls",
       description:
-        "Done, failed, running and queued. Rows with arguments or output open to show them as JSON and code; a running row carries a current along its bottom edge.",
+        "Done, failed, running and queued. Rows open to their arguments and output. These are Tool Call rows; use ToolCallGroup to join them into one log.",
       component: ChatMessageToolCalls,
     },
     {
       name: "reasoning",
       title: "Reasoning",
-      description: "The rail stays lit while it thinks. Open or close it by hand and it stops folding itself away.",
+      description: "The filament is hot while it thinks and the trace stays open. Open or close it by hand and it stops folding itself away.",
       component: ChatMessageReasoning,
     },
     {
@@ -74,26 +74,25 @@ export const doc: ComponentDoc = {
     },
     {
       name: "ChatReasoning",
-      description: "A disclosure. A string child is split into paragraphs.",
+      description: "Reasoning with followStreaming on: it opens while thinking and folds away when done. Takes every Reasoning prop.",
       props: [
-        { prop: "streaming", type: "boolean", default: "false", description: "Lit rail, running timer, open." },
+        { prop: "streaming", type: "boolean", default: "false", description: "Hot filament, running timer, open." },
         { prop: "duration", type: "number", description: "Seconds spent. Measured while streaming when omitted." },
-        { prop: "open", type: "boolean", description: "Controlled open state." },
-        { prop: "defaultOpen", type: "boolean", default: "streaming", description: "Initial open state." },
-        { prop: "onOpenChange", type: "(open: boolean) => void", description: "Called on toggle and when it folds itself away." },
+        { prop: "open / defaultOpen / onOpenChange", type: "boolean / boolean / (open) => void", description: "Disclosure state. defaultOpen follows streaming." },
+        { prop: "followStreaming", type: "boolean", default: "true", description: "Set false for a trace that stays folded to its one live line." },
         { prop: "label", type: "ReactNode", default: '"Thinking"', description: "Header while streaming." },
       ],
     },
     {
       name: "ChatToolCall",
+      description: "ToolCall with its arguments always summarised as key: value pairs. Takes every ToolCall prop, including approval.",
       props: [
         { prop: "name", type: "string", description: "The tool's name." },
-        { prop: "args", type: "Record<string, unknown> | string", description: "Summarised in the row, shown as JSON when open." },
-        { prop: "status", type: '"pending" | "running" | "done" | "error"', default: '"done"', description: "Drives the mark, the label and the live edge." },
+        { prop: "args", type: "Record<string, unknown> | string", description: "Summarised in the row, listed when open." },
+        { prop: "status", type: '"pending" | "approval" | "running" | "done" | "success" | "error" | "denied"', default: '"done"', description: "Drives the lamp, the readout and the border." },
         { prop: "result", type: "ReactNode", description: "Shown when open. Strings render as code." },
-        { prop: "resultLanguage", type: "string", description: "Language for a string result." },
         { prop: "error", type: "ReactNode", description: "Shown under the row." },
-        { prop: "duration", type: "number", description: "Seconds, shown when done." },
+        { prop: "duration", type: "number", description: "Seconds. A live timer counts while running." },
         { prop: "open / defaultOpen / onOpenChange", type: "boolean / boolean / (open) => void", description: "Disclosure state." },
       ],
     },
@@ -114,6 +113,6 @@ export const doc: ComponentDoc = {
     "Reasoning and tool rows are disclosure buttons with aria-expanded; closed panels are hidden from assistive tech, not just collapsed.",
     "Unclosed code fences, backticks and bold render formatted while text streams, so the reply doesn't flash raw markdown.",
     "Links only render for http(s), mailto and relative URLs. External ones open in a new tab with noopener.",
-    "Under prefers-reduced-motion the caret holds still, words appear without the fade and the live rails stop moving.",
+    "Under prefers-reduced-motion the caret holds still, words appear without the fade and the reply mark stops breathing.",
   ],
 };

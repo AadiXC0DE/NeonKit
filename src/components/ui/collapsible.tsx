@@ -226,7 +226,7 @@ const CollapsibleTrigger = React.forwardRef<HTMLButtonElement, CollapsibleTrigge
           className={cn(
             "size-4 shrink-0 transition-[transform,color,filter] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
             open
-              ? "rotate-180 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.7))]"
+              ? "rotate-180 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))))]"
               : "text-white/40",
           )}
         >
@@ -270,7 +270,7 @@ const CollapsibleContent = React.forwardRef<HTMLDivElement, CollapsibleContentPr
           scaleY: { duration: 0.26, ease: EASE },
           opacity: { duration: 0.7, delay: 0.3, ease: "easeOut" },
         }}
-        className="pointer-events-none absolute inset-y-0 left-0 w-px origin-top bg-[linear-gradient(180deg,rgb(var(--neon)/0.15),rgb(var(--neon)))] shadow-[0_0_8px_rgb(var(--neon)/0.8)]"
+        className="pointer-events-none absolute inset-y-0 left-0 w-px origin-top bg-[linear-gradient(180deg,rgb(var(--neon)/0.15),rgb(var(--neon)))] shadow-[0_0_8px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))]"
       />
     );
 

@@ -14,7 +14,8 @@ export const doc: ComponentDoc = {
     {
       name: "demo",
       title: "Comet trail",
-      description: "Move the pointer over the panel. The light lags a touch behind it, and fast moves leave a tail.",
+      description:
+        "Move the pointer over the panel. The light lags a touch behind it, fast moves leave a tail, and the dots under it burn neon through reveal.",
       component: CursorGlowDemo,
     },
     {
@@ -41,6 +42,11 @@ export const doc: ComponentDoc = {
         { prop: "intensity", type: "number", default: "1", description: "Brightness of the light and tail, 0 to 1." },
         { prop: "trail", type: "boolean", default: "false", description: "A comet tail that streams behind fast movement." },
         { prop: "trailLength", type: "number", default: "260", description: "How long the tail lingers, in milliseconds." },
+        {
+          prop: "reveal",
+          type: "ReactNode",
+          description: "Content shown only under the light, fading toward its edge. It fills the layer, so a pattern lines up with the same pattern on the parent.",
+        },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex. Falls back to --neon-accent, then cyan." },
       ],
     },

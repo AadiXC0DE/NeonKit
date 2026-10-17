@@ -6,6 +6,7 @@ import { SidebarInset, SidebarProvider, useSidebar } from "@/components/ui/sideb
 import { Toaster } from "@/components/ui/toast";
 import { neonVars } from "@/lib/neon";
 import { color } from "../config";
+import { fonts } from "../fonts";
 import { NOTICES } from "../data";
 import { AppSidebar } from "./app-sidebar";
 import { CommandPalette } from "./command-palette";
@@ -18,7 +19,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
       // The template's color is set once here, from config.ts; everything inside follows it.
       style={neonVars(color)}
       shortcut={false}
-      className="min-h-screen bg-[#05060a] text-white antialiased"
+      className={`${fonts} min-h-screen bg-[#05060a] text-white antialiased`}
     >
       <a
         href="#main"

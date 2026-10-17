@@ -91,7 +91,7 @@ export function Settings() {
   const marked = (keys: readonly (keyof SettingsState)[]) => keys.some((k) => changedKeys.includes(k));
 
   return (
-    <div className="mx-auto max-w-[1080px]">
+    <div className="max-w-[1080px]">
       <SearchParams onChange={onParams} />
       <PageHeader title="Team settings">
         {team.name}&apos;s name, people, alerts and bill. Changes apply to every project on the team once you save.

@@ -12,7 +12,7 @@ export default function ButtonGroupWithInput() {
   return (
     <div className="flex min-w-0 w-full max-w-md flex-col gap-4">
       <ButtonGroup className="w-full">
-        <Input aria-label="Search logs" placeholder="status:500 path:/api/checkout" leading={<Search />} />
+        <Input aria-label="Search logs" placeholder="status:500 /checkout" leading={<Search />} />
         <Button variant="outline">Search</Button>
       </ButtonGroup>
 
@@ -26,7 +26,7 @@ export default function ButtonGroupWithInput() {
           <ButtonGroupText>https://</ButtonGroupText>
           <Input
             aria-label="Webhook URL"
-            defaultValue="hooks.acme.dev/deploys"
+            defaultValue="hooks.acme.dev/ci"
             onChange={() => setSaved(false)}
             spellCheck={false}
           />

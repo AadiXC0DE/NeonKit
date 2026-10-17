@@ -93,6 +93,25 @@ describe("Terminal", () => {
     expect(container.querySelectorAll(".invisible")).toHaveLength(0);
   });
 
+  it("calls onDone when the last line prints, and again after Replay", () => {
+    const onDone = vi.fn();
+    render(<Terminal lines={session} startOnView={false} onDone={onDone} />);
+    advance(1000);
+    expect(onDone).not.toHaveBeenCalled();
+    advance(4000);
+    expect(onDone).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Replay" }));
+    advance(5000);
+    expect(onDone).toHaveBeenCalledTimes(2);
+  });
+
+  it("calls onDone at once under reduced motion", () => {
+    window.matchMedia = vi.fn().mockReturnValue({ matches: true }) as unknown as typeof window.matchMedia;
+    const onDone = vi.fn();
+    render(<Terminal lines={session} startOnView={false} onDone={onDone} />);
+    expect(onDone).toHaveBeenCalledTimes(1);
+  });
+
   it("forwards the ref", () => {
     const ref = React.createRef<HTMLDivElement>();
     render(<Terminal ref={ref} lines={session} />);

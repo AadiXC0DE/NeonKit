@@ -166,7 +166,7 @@ describe("Starfield", () => {
   it("re-reads --neon when the color prop changes", () => {
     const { rerender } = render(<Starfield tint={1} />);
     resize();
-    const computed = vi.spyOn(window, "getComputedStyle").mockReturnValue({ color: "rgb(240, 70, 235)" } as CSSStyleDeclaration);
+    const computed = vi.spyOn(window, "getComputedStyle").mockReturnValue({ color: "rgb(240, 70, 235)", getPropertyValue: () => "" } as unknown as CSSStyleDeclaration);
     styles.length = 0;
     rerender(<Starfield tint={1} color="magenta" />);
     runFrame(16);

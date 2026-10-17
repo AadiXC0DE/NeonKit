@@ -390,7 +390,9 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
       const node = plotRef.current;
       if (!node) return;
       const measure = () => {
-        const next = Math.round(node.getBoundingClientRect().width);
+        // Layout width, not the painted one: an ancestor mid scale-in (a dialog opening at 0.96)
+        // would otherwise bake its transform into the geometry.
+        const next = node.offsetWidth || Math.round(node.getBoundingClientRect().width);
         if (next > 0) setMeasured((previous) => (previous === next ? previous : next));
       };
       measure();
@@ -655,7 +657,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
                     className="size-2 rounded-[2px]"
                     style={{
                       background: `rgb(var(${s.colorVar}) / ${s.muted ? 0.45 : 0.9})`,
-                      boxShadow: s.muted ? undefined : `0 0 6px rgb(var(${s.colorVar}) / 0.6)`,
+                      boxShadow: s.muted ? undefined : `0 0 6px rgb(var(${s.colorVar}) / calc(0.6 * var(--neon-glow, 1)))`,
                     }}
                   />
                 ) : (
@@ -663,7 +665,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
                     className="h-0.5 w-3.5 rounded-full"
                     style={{
                       background: `rgb(var(${s.colorVar}) / ${s.muted ? 0.45 : 1})`,
-                      boxShadow: s.muted ? undefined : `0 0 6px rgb(var(${s.colorVar}) / 0.7)`,
+                      boxShadow: s.muted ? undefined : `0 0 6px rgb(var(${s.colorVar}) / calc(0.7 * var(--neon-glow, 1)))`,
                     }}
                   />
                 )}
@@ -840,7 +842,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
                           strokeWidth={4}
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          style={{ stroke, strokeOpacity: i === primary ? 0.8 : 0.45 }}
+                          style={{ stroke, strokeOpacity: `calc(${i === primary ? 0.8 : 0.45} * var(--neon-glow, 1))` }}
                         />
                       )}
                       <path
@@ -866,7 +868,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
                       ))}
                       {!s.muted && last && (
                         <g>
-                          <circle cx={last[0]} cy={last[1]} r={5} filter={`url(#${uid}-glow)`} style={{ fill: stroke, opacity: 0.9 }} />
+                          <circle cx={last[0]} cy={last[1]} r={5} filter={`url(#${uid}-glow)`} style={{ fill: stroke, opacity: "calc(0.9 * var(--neon-glow, 1))" }} />
                           <circle cx={last[0]} cy={last[1]} r={2.5} style={{ fill: core }} />
                         </g>
                       )}
@@ -913,7 +915,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
                               strokeWidth={3}
                               strokeLinecap="round"
                               className="transition-opacity duration-150 ease-out"
-                              style={{ stroke: `rgb(var(${s.colorVar}))`, opacity: lit ? 1 : 0.55 }}
+                              style={{ stroke: `rgb(var(${s.colorVar}))`, opacity: `calc(${lit ? 1 : 0.55} * var(--neon-glow, 1))` }}
                             />
                           )}
                           <path
@@ -947,7 +949,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
                   className="absolute inset-y-0 left-0 w-px"
                   style={{
                     background: "linear-gradient(to bottom, transparent, rgb(var(--nk-gc-c0) / 0.9) 35%, rgb(var(--nk-gc-c0)))",
-                    boxShadow: "0 0 8px rgb(var(--nk-gc-c0) / 0.8)",
+                    boxShadow: "0 0 8px rgb(var(--nk-gc-c0) / calc(0.8 * var(--neon-glow, 1)))",
                   }}
                 />
                 <span
@@ -973,7 +975,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
                   <stop offset="1" style={{ stopColor: "rgb(var(--nk-gc-c0))", stopOpacity: 0.75 }} />
                 </linearGradient>
                 <radialGradient id={`${uid}-pool`}>
-                  <stop offset="0" style={{ stopColor: "rgb(var(--nk-gc-c0))", stopOpacity: 0.55 }} />
+                  <stop offset="0" style={{ stopColor: "rgb(var(--nk-gc-c0))", stopOpacity: "calc(0.55 * var(--neon-glow, 1))" }} />
                   <stop offset="1" style={{ stopColor: "rgb(var(--nk-gc-c0))", stopOpacity: 0 }} />
                 </radialGradient>
                 <filter id={`${uid}-dot`} x="-2" y="-2" width="5" height="5">
@@ -997,7 +999,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
                     style={{ transform: `translate(${shownX}px, ${yPx(v)}px)` }}
                   >
                     {!s.muted && (
-                      <circle r={7} filter={`url(#${uid}-dot)`} style={{ fill: `rgb(var(${s.colorVar}))`, opacity: 0.75 }} />
+                      <circle r={7} filter={`url(#${uid}-dot)`} style={{ fill: `rgb(var(${s.colorVar}))`, opacity: "calc(0.75 * var(--neon-glow, 1))" }} />
                     )}
                     <circle
                       r={4}
@@ -1077,7 +1079,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
               aria-hidden
               className={cn(
                 "pointer-events-none absolute left-0 top-0 z-10 min-w-[8.5rem] rounded-lg border border-white/10 bg-[#0a0b11]/95 px-3 py-2.5",
-                "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+                "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
                 "transition-[transform,opacity] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
               )}
               style={{
@@ -1097,7 +1099,7 @@ const GlowChart = React.forwardRef<HTMLDivElement, GlowChartProps>(
                         className="h-0.5 w-2.5 shrink-0 rounded-full"
                         style={{
                           background: `rgb(var(${s.colorVar}) / ${s.muted ? 0.5 : 1})`,
-                          boxShadow: s.muted ? undefined : `0 0 6px rgb(var(${s.colorVar}) / 0.7)`,
+                          boxShadow: s.muted ? undefined : `0 0 6px rgb(var(${s.colorVar}) / calc(0.7 * var(--neon-glow, 1)))`,
                         }}
                       />
                       <span className="text-sm font-medium tabular-nums leading-5 text-white/90">
@@ -1247,7 +1249,7 @@ const Sparkline = React.forwardRef<HTMLSpanElement, SparklineProps>(
             <svg
               viewBox={`0 0 100 ${height}`}
               preserveAspectRatio="none"
-              className="absolute inset-0 size-full overflow-visible [filter:drop-shadow(0_0_2px_rgb(var(--neon)/0.85))_drop-shadow(0_0_6px_rgb(var(--neon)/0.4))]"
+              className="absolute inset-0 size-full overflow-visible [filter:drop-shadow(0_0_2px_rgb(var(--neon)/CALC(0.85*var(--neon-glow,1))))_drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1))))]"
             >
               <path
                 d={line}
@@ -1271,7 +1273,7 @@ const Sparkline = React.forwardRef<HTMLSpanElement, SparklineProps>(
           )}
           {dot && end && (
             <span
-              className="absolute size-[5px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_10px_rgb(var(--neon)/0.7)]"
+              className="absolute size-[5px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_4px_rgb(var(--neon)/var(--neon-glow,1)),0_0_10px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]"
               style={{ left: `${end[0]}%`, top: end[1] }}
             >
               {live && (

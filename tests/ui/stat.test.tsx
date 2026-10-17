@@ -1,6 +1,7 @@
 import * as React from "react";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { Gauge } from "@/components/ui/icons";
 import { Stat, StatGroup } from "@/components/ui/stat";
 
 // What a Server Component hands over before the client module is linked: a lazy node.
@@ -39,7 +40,7 @@ describe("Stat", () => {
         <Stat label="Deploys" value={286} delta={0} />
       </>,
     );
-    const deltas = container.querySelectorAll("[role=group] .text-\\[13px\\].font-medium");
+    const deltas = container.querySelectorAll("[data-slot=delta]");
     expect((deltas[0] as HTMLElement).style.getPropertyValue("--neon")).toBe("52 211 153");
     expect((deltas[1] as HTMLElement).style.getPropertyValue("--neon")).toBe("255 77 94");
     expect((deltas[2] as HTMLElement).style.getPropertyValue("--neon")).toBe("");
@@ -58,6 +59,37 @@ describe("Stat", () => {
     render(<Stat label="Requests per second" value={478} live trend={[400, 420, 478]} />);
     expect(screen.getByText("(live)")).toBeInTheDocument();
     expect(screen.getByRole("img", { name: /Trend of 3 values/ })).toBeInTheDocument();
+  });
+
+  it("draws the icon as a tube that lights only when live", () => {
+    const { container, rerender } = render(<Stat label="Latency" icon={Gauge} value={182} />);
+    const tubes = () => container.querySelectorAll("svg.nk-icon-gauge");
+    expect(tubes()).toHaveLength(2);
+    expect(tubes()[0].getAttribute("class")).not.toContain("drop-shadow");
+    rerender(<Stat label="Latency" icon={Gauge} value={182} live />);
+    expect(tubes()[0].getAttribute("class")).toContain("drop-shadow");
+    expect(screen.getByText("(live)")).toHaveClass("sr-only");
+  });
+
+  it("fills a meter toward the goal and reads its share", () => {
+    render(
+      <Stat
+        label="Seats"
+        value={86}
+        goal={100}
+        countUp={false}
+        formatGoal={(share) => `${100 - Math.round(share * 100)} seats open`}
+      />,
+    );
+    const meter = screen.getByRole("meter", { name: "Progress to goal" });
+    expect(meter).toHaveAttribute("aria-valuenow", "86");
+    expect(meter).toHaveAttribute("aria-valuetext", "86% of 100");
+    expect(screen.getByText("14 seats open")).toBeInTheDocument();
+  });
+
+  it("keeps four row slots for the group's subgrid, whatever is shown", () => {
+    const { container } = render(<Stat label="Bare" value={1} />);
+    expect(container.firstElementChild?.children).toHaveLength(4);
   });
 
   it("applies color through --neon", () => {

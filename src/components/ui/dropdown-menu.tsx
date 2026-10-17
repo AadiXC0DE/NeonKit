@@ -565,7 +565,9 @@ const MenuSurface = React.forwardRef<HTMLDivElement, MenuSurfaceProps>(
       middleware: [
         offset({ mainAxis: sideOffset, alignmentAxis: alignOffset }),
         flip({ padding: 8 }),
-        shift({ padding: 8 }),
+        // A side-opening submenu with no room on either side (a phone) slides back over its
+        // parent instead of hanging off the screen edge.
+        shift({ padding: 8, crossAxis: side === "left" || side === "right" }),
         size({
           padding: 8,
           apply({ availableWidth, availableHeight, elements, rects }) {
@@ -763,7 +765,7 @@ const MenuSurface = React.forwardRef<HTMLDivElement, MenuSurfaceProps>(
           className={cn(
             "relative min-w-[12rem] max-w-[var(--menu-available-width)] max-h-[min(var(--menu-available-height),28rem)] overflow-y-auto overscroll-contain",
             "rounded-xl border border-white/10 bg-[#0a0b11] p-1 text-white/90 outline-none",
-            "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
+            "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
             "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]",
             !isPresent && "pointer-events-none",
             className,
@@ -888,7 +890,7 @@ function Highlight({ menu }: { menu: MenuContextValue }) {
       <motion.span
         layout={!menu.reduceMotion}
         transition={{ duration: 0.18, ease: EASE }}
-        className="absolute bottom-1.5 left-0 top-1.5 w-0.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/0.9),0_0_14px_rgb(var(--neon)/0.45)]"
+        className="absolute bottom-1.5 left-0 top-1.5 w-0.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_14px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]"
       />
     </motion.span>
   );
@@ -1057,7 +1059,7 @@ function IconSlot({ icon, highlighted, danger }: { icon: React.ReactNode; highli
       className={cn(
         "relative flex size-4 shrink-0 items-center justify-center transition-[color,filter] duration-150 ease-out [&_svg]:size-4",
         highlighted
-          ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_5px_rgb(var(--neon)/0.65))]"
+          ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_5px_rgb(var(--neon)/CALC(0.65*var(--neon-glow,1))))]"
           : danger
             ? "text-[rgb(var(--neon)/0.75)]"
             : "text-white/50",
@@ -1150,7 +1152,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<HTMLDivElement, DropdownMenuCh
             className={cn(
               "relative flex size-4 shrink-0 items-center justify-center rounded-[5px] border transition-[border-color,background-color,box-shadow] duration-150 ease-out",
               checked
-                ? "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.16)] shadow-[0_0_10px_rgb(var(--neon)/0.45)]"
+                ? "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.16)] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]"
                 : "border-white/20 bg-white/[0.03]",
             )}
           >
@@ -1229,13 +1231,13 @@ const DropdownMenuRadioItem = React.forwardRef<HTMLDivElement, DropdownMenuRadio
             className={cn(
               "relative flex size-4 shrink-0 items-center justify-center rounded-full border transition-[border-color,box-shadow] duration-150 ease-out",
               checked
-                ? "border-[rgb(var(--neon)/0.8)] shadow-[0_0_10px_rgb(var(--neon)/0.4)]"
+                ? "border-[rgb(var(--neon)/0.8)] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1)))]"
                 : "border-white/20 bg-white/[0.03]",
             )}
           >
             <span
               className={cn(
-                "size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))] transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none",
+                "size-1.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/var(--neon-glow,1))] transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none",
                 checked ? "scale-100 opacity-100" : "scale-0 opacity-0",
               )}
             />

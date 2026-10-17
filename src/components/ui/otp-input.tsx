@@ -260,7 +260,7 @@ const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
         style={neonVars(red ? INVALID : color, style)}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
-          "relative inline-flex items-center",
+          "relative inline-flex max-w-full items-center",
           s.root,
           className,
         )}
@@ -276,7 +276,8 @@ const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
                   className={cn("h-0.5 shrink-0 rounded-full bg-[rgb(var(--neon)/0.45)]", s.dash)}
                 />
               ) : null}
-              <div className="relative shrink-0">
+              {/* Slots keep their size until the row runs out of room, then narrow together. */}
+              <div className="relative min-w-0 shrink">
                 <input
                   ref={(node) => {
                     inputs.current[index] = node;
@@ -318,12 +319,12 @@ const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
                     if (document.activeElement === event.currentTarget) event.currentTarget.select();
                   }}
                   className={cn(
-                    "peer block border border-white/10 bg-white/[0.03] p-0 text-center font-medium tabular-nums text-white caret-transparent outline-none selection:bg-transparent",
+                    "peer block max-w-full border border-white/10 bg-white/[0.03] p-0 text-center font-medium tabular-nums text-white caret-transparent outline-none selection:bg-transparent",
                     "transition-[border-color,background-color,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]",
                     char
-                      ? "border-[rgb(var(--neon)/0.45)] bg-[rgb(var(--neon)/0.05)] shadow-[0_0_12px_-3px_rgb(var(--neon)/0.45)]"
+                      ? "border-[rgb(var(--neon)/0.45)] bg-[rgb(var(--neon)/0.05)] shadow-[0_0_12px_-3px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]"
                       : "hover:border-white/20",
-                    "focus:border-[rgb(var(--neon))] focus:bg-[rgb(var(--neon)/0.08)] focus:shadow-[0_0_0_1px_rgb(var(--neon)/0.3),0_0_22px_-2px_rgb(var(--neon)/0.6),inset_0_0_10px_rgb(var(--neon)/0.15)]",
+                    "focus:border-[rgb(var(--neon))] focus:bg-[rgb(var(--neon)/0.08)] focus:shadow-[0_0_0_1px_rgb(var(--neon)/0.3),0_0_22px_-2px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),inset_0_0_10px_rgb(var(--neon)/CALC(0.15*var(--neon-glow,1)))]",
                     "disabled:cursor-not-allowed disabled:opacity-50",
                     mask && "text-transparent",
                     s.slot,
@@ -333,7 +334,7 @@ const OTPInput = React.forwardRef<HTMLDivElement, OTPInputProps>(
                   <span
                     aria-hidden
                     className={cn(
-                      "pointer-events-none absolute left-1/2 top-1/2 hidden w-px -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon))]",
+                      "pointer-events-none absolute left-1/2 top-1/2 hidden w-px -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/var(--neon-glow,1))]",
                       "animate-pulse [animation-duration:1.1s] peer-focus:block motion-reduce:animate-none",
                       s.caret,
                     )}

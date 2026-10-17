@@ -23,7 +23,7 @@ export default function EqualizerDemo() {
             aria-label="Previous track"
             className="grid size-9 cursor-pointer place-items-center rounded-full text-white/55 transition-colors hover:bg-white/[0.06] hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent,34_211_238)/0.6)]"
           >
-            <SkipBack className="size-4" />
+            <SkipBack className="size-5" />
           </button>
           <button
             type="button"
@@ -31,14 +31,14 @@ export default function EqualizerDemo() {
             onClick={() => setPlaying((value) => !value)}
             className="grid size-11 cursor-pointer place-items-center rounded-full border border-[rgb(var(--neon-accent,34_211_238)/0.5)] bg-[rgb(var(--neon-accent,34_211_238)/0.12)] text-[rgb(var(--neon-accent,34_211_238))] shadow-[0_0_18px_rgb(var(--neon-accent,34_211_238)/0.35)] transition-[transform,box-shadow] duration-150 hover:shadow-[0_0_26px_rgb(var(--neon-accent,34_211_238)/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent,34_211_238)/0.6)] active:scale-[0.97]"
           >
-            {playing ? <Pause className="size-4 fill-current" /> : <Play className="size-4 translate-x-px fill-current" />}
+            {playing ? <Pause className="size-5 fill-current" /> : <Play className="size-5 translate-x-px fill-current" />}
           </button>
           <button
             type="button"
             aria-label="Next track"
             className="grid size-9 cursor-pointer place-items-center rounded-full text-white/55 transition-colors hover:bg-white/[0.06] hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon-accent,34_211_238)/0.6)]"
           >
-            <SkipForward className="size-4" />
+            <SkipForward className="size-5" />
           </button>
         </div>
       </div>

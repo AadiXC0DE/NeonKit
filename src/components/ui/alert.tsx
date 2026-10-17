@@ -15,7 +15,7 @@ const statuses = {
 } as const;
 
 const glowIcon =
-  "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.6))]";
+  "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]";
 const quietDismiss =
   "text-white/40 hover:bg-white/[0.06] hover:text-white/80 focus-visible:ring-[rgb(var(--neon)/0.6)]";
 
@@ -28,14 +28,14 @@ const variants = {
     dismiss: quietDismiss,
   },
   outline: {
-    root: "border-[rgb(var(--neon)/0.6)] bg-transparent text-white/90 shadow-[0_0_16px_rgb(var(--neon)/0.16),inset_0_0_16px_rgb(var(--neon)/0.06)]",
+    root: "border-[rgb(var(--neon)/0.6)] bg-transparent text-white/90 shadow-[0_0_16px_rgb(var(--neon)/CALC(0.16*var(--neon-glow,1))),inset_0_0_16px_rgb(var(--neon)/CALC(0.06*var(--neon-glow,1)))]",
     icon: glowIcon,
     title: "text-white/90",
     description: "text-white/60",
     dismiss: quietDismiss,
   },
   solid: {
-    root: "border-[rgb(var(--neon))] bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_24px_rgb(var(--neon)/0.35),inset_0_1px_0_rgb(255_255_255/0.35)]",
+    root: "border-[rgb(var(--neon))] bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_24px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.35)]",
     icon: "text-[#05060a]",
     title: "text-[#05060a]",
     description: "text-[#05060a]/70",
@@ -125,11 +125,11 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
           {variant === "soft" && (
             <span
               aria-hidden
-              className="absolute top-3.5 bottom-3.5 -left-px w-0.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.8)]"
+              className="absolute top-3.5 bottom-3.5 -left-px w-0.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))]"
             />
           )}
           {iconNode !== false && iconNode != null && (
-            <span aria-hidden className={cn("flex h-5 shrink-0 items-center [&_svg]:size-4", v.icon)}>
+            <span aria-hidden className={cn("flex h-5 shrink-0 items-center [&_svg]:size-[18px]", v.icon)}>
               {iconNode}
             </span>
           )}

@@ -946,7 +946,7 @@ const CodeBody = React.memo(function CodeBody({
                     className={cn(
                       "absolute left-[7px] w-[2px] rounded-full",
                       "[background:color-mix(in_srgb,rgb(var(--neon))_55%,white)]",
-                      "shadow-[0_0_4px_rgb(var(--neon)),0_0_12px_rgb(var(--neon)/0.8),0_0_28px_rgb(var(--neon)/0.45)]",
+                      "shadow-[0_0_4px_rgb(var(--neon)/var(--neon-glow,1)),0_0_12px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_0_28px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
                       litAbove ? "top-0" : "top-[5px]",
                       litBelow ? "bottom-0" : "bottom-[5px]",
                     )}
@@ -958,7 +958,7 @@ const CodeBody = React.memo(function CodeBody({
                     className={cn(
                       "text-right tabular-nums transition-colors",
                       isLit
-                        ? "[color:color-mix(in_srgb,rgb(var(--neon))_70%,white)] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)]"
+                        ? "[color:color-mix(in_srgb,rgb(var(--neon))_70%,white)] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
                         : "text-white/[0.28]",
                     )}
                   >
@@ -1019,7 +1019,7 @@ const iconButton = cn(
   "inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-white/55 outline-none",
   "transition-[background-color,color,box-shadow] duration-150 ease-out hover:bg-white/[0.06] hover:text-white/90",
   "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0c12]",
-  "[&_svg]:size-3.5",
+  "[&_svg]:size-4",
 );
 
 export interface CodeBlockProps
@@ -1150,7 +1150,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
             className={cn(
               iconButton,
               wrap &&
-                "bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.6))] hover:bg-[rgb(var(--neon)/0.14)] hover:text-[rgb(var(--neon))]",
+                "bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))] [filter:drop-shadow(0_0_4px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))] hover:bg-[rgb(var(--neon)/0.14)] hover:text-[rgb(var(--neon))]",
             )}
           >
             <WrapText aria-hidden />
@@ -1161,7 +1161,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
             value={copyValue}
             size="sm"
             aria-label={current.filename ? `Copy ${current.filename}` : "Copy code"}
-            className="size-7 [&>span]:size-3.5"
+            className="size-7 [&>span]:size-4"
           />
         )}
       </div>
@@ -1213,7 +1213,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
                       {selected && (
                         <span
                           aria-hidden
-                          className="absolute inset-x-2.5 bottom-0 h-[2px] rounded-full [background:color-mix(in_srgb,rgb(var(--neon))_60%,white)] shadow-[0_0_4px_rgb(var(--neon)),0_0_12px_rgb(var(--neon)/0.6)]"
+                          className="absolute inset-x-2.5 bottom-0 h-[2px] rounded-full [background:color-mix(in_srgb,rgb(var(--neon))_60%,white)] shadow-[0_0_4px_rgb(var(--neon)/var(--neon-glow,1)),0_0_12px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
                         />
                       )}
                     </button>
@@ -1238,7 +1238,7 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
                 value={copyValue}
                 size="sm"
                 aria-label="Copy code"
-                className="size-7 bg-[#0a0c12]/90 [&>span]:size-3.5"
+                className="size-7 bg-[#0a0c12]/90 [&>span]:size-4"
               />
             </div>
           )

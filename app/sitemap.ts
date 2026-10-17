@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/docs", 0.8],
     ["/docs/installation", 0.8],
     ["/docs/theming", 0.7],
+    ["/theme", 0.8],
     ["/docs/ai", 0.7],
     ["/changelog", 0.6],
     ["/request", 0.5],

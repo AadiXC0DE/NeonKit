@@ -42,4 +42,13 @@ describe("Avatar", () => {
     const group = screen.getByRole("img", { name: "Hugo Moreau" }).parentElement!;
     expect(group.className).toContain("[--avatar-shift:9px]");
   });
+
+  it("hides a decorative avatar from assistive tech but keeps its initials", () => {
+    const { container } = render(<Avatar alt="Arjun Mehta" status="offline" decorative />);
+    expect(screen.queryByRole("img")).toBeNull();
+    const root = container.firstElementChild!;
+    expect(root).toHaveAttribute("aria-hidden", "true");
+    expect(root).not.toHaveAttribute("aria-label");
+    expect(screen.getByText("AM")).toBeInTheDocument();
+  });
 });

@@ -79,7 +79,7 @@ const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
             className={cn(
               "[--neon:var(--neon-accent,34_211_238)]",
               "relative -top-px ml-1.5 inline-block size-[5px] rounded-full align-middle",
-              "bg-[rgb(var(--neon))] shadow-[0_0_4px_rgb(var(--neon)/0.9),0_0_10px_rgb(var(--neon)/0.5)]",
+              "bg-[rgb(var(--neon))] shadow-[0_0_4px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]",
             )}
           />
         )}

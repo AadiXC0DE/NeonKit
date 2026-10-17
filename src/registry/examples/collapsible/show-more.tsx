@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const files = [
@@ -19,7 +20,9 @@ function FileRow({ file }: { file: (typeof files)[number] }) {
     <li className="flex items-center gap-3 py-1.5 font-mono text-xs">
       <span className="min-w-0 flex-1 truncate text-white/75">{file.path}</span>
       <span className="tabular-nums text-[rgb(52_211_153)]">+{file.added}</span>
-      <span className="w-6 text-right tabular-nums text-[#ff4d5e]">−{file.removed}</span>
+      <span className={cn("w-6 text-right tabular-nums", file.removed ? "text-[#ff4d5e]" : "text-white/30")}>
+        −{file.removed}
+      </span>
     </li>
   );
 }

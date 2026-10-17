@@ -35,7 +35,7 @@ export default function BadgeRemovable() {
             {filter}
           </Badge>
         ))}
-        {filters.length === 0 && <p className="text-sm text-white/40">No filters. Showing every component.</p>}
+        {filters.length === 0 && <p className="text-sm text-white/50">No filters. Showing every component.</p>}
       </div>
     </div>
   );

@@ -143,7 +143,7 @@ function Highlight({ text, search }: { text: string; search: string }) {
   for (const [from, to] of runs) {
     if (from > cursor) parts.push(text.slice(cursor, from));
     parts.push(
-      <span key={from} className="text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/0.55)]">
+      <span key={from} className="text-[rgb(var(--neon))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]">
         {text.slice(from, to)}
       </span>,
     );
@@ -697,7 +697,7 @@ const CommandInput = React.forwardRef<HTMLInputElement, CommandInputProps>(
               className="absolute left-0 top-0 transition-transform duration-150 ease-out motion-reduce:transition-none"
             >
               <span className="absolute -left-28 top-0 h-px w-56 bg-[linear-gradient(90deg,transparent,rgb(var(--neon)),transparent)]" />
-              <span className="absolute -left-32 -top-3 h-6 w-64 bg-[radial-gradient(closest-side,rgb(var(--neon)/0.22),transparent)]" />
+              <span className="absolute -left-32 -top-3 h-6 w-64 bg-[radial-gradient(closest-side,rgb(var(--neon)/CALC(0.22*var(--neon-glow,1))),transparent)]" />
             </span>
           </span>
           {ctx.loading && (
@@ -985,7 +985,7 @@ const CommandItem = React.forwardRef<HTMLDivElement, CommandItemProps>(
             initial={false}
             transition={{ duration: 0.18, ease: EASE }}
             style={{ borderRadius: 8 }}
-            className="absolute inset-0 border border-[rgb(var(--neon)/0.22)] bg-[rgb(var(--neon)/0.09)] shadow-[0_0_18px_-6px_rgb(var(--neon)/0.45),inset_0_0_14px_-6px_rgb(var(--neon)/0.35)]"
+            className="absolute inset-0 border border-[rgb(var(--neon)/0.22)] bg-[rgb(var(--neon)/0.09)] shadow-[0_0_18px_-6px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_0_14px_-6px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]"
           />
         )}
         {icon && (
@@ -993,7 +993,7 @@ const CommandItem = React.forwardRef<HTMLDivElement, CommandItemProps>(
             aria-hidden
             className={cn(
               "relative flex size-4 shrink-0 items-center justify-center transition-[color,filter] duration-150 [&_svg]:size-4",
-              active ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.6))]" : "text-white/40",
+              active ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]" : "text-white/40",
             )}
           >
             {icon}
@@ -1139,7 +1139,7 @@ const CommandDialog = React.forwardRef<HTMLDivElement, CommandDialogProps>(
                     label={label}
                     className={cn(
                       "rounded-2xl border-[rgb(var(--neon)/0.16)]",
-                      "shadow-[0_0_0_1px_rgb(0_0_0/0.5),0_24px_64px_-16px_rgb(0_0_0/0.9),0_0_80px_-24px_rgb(var(--neon)/0.35)]",
+                      "shadow-[0_0_0_1px_rgb(0_0_0/0.5),0_24px_64px_-16px_rgb(0_0_0/0.9),0_0_80px_-24px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]",
                       className,
                     )}
                     {...props}

@@ -3,26 +3,34 @@ import StatDemo from "../examples/stat/demo";
 import StatLive from "../examples/stat/live";
 import StatInverted from "../examples/stat/inverted";
 import StatLoading from "../examples/stat/loading";
+import StatGoal from "../examples/stat/goal";
 
 export const doc: ComponentDoc = {
-  usage: `import { Stat, StatGroup } from "@/components/ui/stat"
+  usage: `import { Gauge } from "@/components/ui/icons"
+import { Stat, StatGroup } from "@/components/ui/stat"
 
 <StatGroup>
-  <Stat label="p95 latency" value={182} unit="ms" delta={-12.4} positive="down" trend={latency} />
+  <Stat icon={Gauge} label="p95 latency" value={182} unit="ms" delta={-12.4} positive="down" trend={latency} />
   <Stat label="Active workspaces" value={1284} delta={3.1} />
 </StatGroup>`,
   examples: [
     {
       name: "demo",
       title: "KPI row",
-      description: "Four stats with sparklines. Values count up on mount; latency and churn are judged going down.",
+      description: "Four stats with full-width sparklines. Values count up on mount; latency and churn are judged going down.",
       component: StatDemo,
     },
     {
       name: "live",
       title: "Live",
-      description: "A heartbeat dot by the label, a pinging sparkline end, and a brief flash on each update.",
+      description: "The icon's tube lights up, the sparkline's end pings and each update flashes. The queue fills toward its alert line.",
       component: StatLive,
+    },
+    {
+      name: "goal",
+      title: "Toward a goal",
+      description: "goal draws a tube that fills to the target, and its share is read out under it.",
+      component: StatGoal,
     },
     {
       name: "inverted",
@@ -42,7 +50,8 @@ export const doc: ComponentDoc = {
       name: "Stat",
       description: "Renders a div with role=\"group\", named by its label. Accepts every native div attribute.",
       props: [
-        { prop: "label", type: "ReactNode", description: "What the number is. Sentence case, no colon." },
+        { prop: "label", type: "ReactNode", description: "What the number is. Sentence case, no colon. Wraps rather than truncating." },
+        { prop: "icon", type: "Icon", description: "A NeonKit icon, drawn as a tinted glass tube with a core. It lights up when live." },
         { prop: "value", type: "number | string", description: "A number counts up and is formatted; a string is shown as is." },
         { prop: "format", type: "(value: number) => string", description: "Formats the value, including every frame of the count-up." },
         { prop: "formatOptions", type: "Intl.NumberFormatOptions", description: "Options for the default formatter, e.g. currency. Decimals follow the value otherwise." },
@@ -51,10 +60,12 @@ export const doc: ComponentDoc = {
         { prop: "delta", type: "number", description: "Change since the comparison period. Its sign sets the arrow." },
         { prop: "formatDelta", type: "(delta: number) => ReactNode", default: "12.4%", description: "Formats the delta's absolute value. The arrow carries the sign." },
         { prop: "positive", type: '"up" | "down" | "neutral"', default: '"up"', description: "Which direction is good. Sets green or red; neutral stays grey." },
-        { prop: "trend", type: "number[]", description: "Draws a Sparkline beside the value." },
+        { prop: "trend", type: "number[]", description: "Draws a Sparkline." },
+        { prop: "trendPlacement", type: '"bottom" | "end"', default: '"bottom"', description: "Full width under the value, or small beside it. Beside it wraps under the value when the cell is narrow." },
+        { prop: "goal", type: "number", description: "A target for a numeric value. Draws a tube meter that fills toward it." },
         { prop: "helper", type: "ReactNode", description: "A line under the value, usually the comparison period." },
         { prop: "countUp", type: "boolean", default: "true", description: "Counts up on mount and eases between later values. Skipped under reduced motion." },
-        { prop: "live", type: "boolean", default: "false", description: "Heartbeat dot, pinging sparkline end and a flash on every update." },
+        { prop: "live", type: "boolean", default: "false", description: "Lights the icon (or shows a heartbeat dot), pings the sparkline end and flashes on every update." },
         { prop: "loading", type: "boolean", default: "false", description: "Skeletons in place of the value, delta and sparkline. Sets aria-busy." },
         { prop: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Value set at 24, 32 or 44px." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex for the sparkline and live dot. Falls back to --neon-accent, then cyan." },
@@ -75,6 +86,7 @@ export const doc: ComponentDoc = {
     "The delta says Up or Down in words, so color is never the only signal.",
     "Live stats don't announce each tick, which would talk over the page. Put a live region around the one value that matters if you need it.",
     "The count-up reserves the final value's width, so the delta and sparkline don't shift while it runs.",
+    "In a narrow cell the delta and an end sparkline wrap under the value instead of overlapping it.",
     "Under prefers-reduced-motion the value appears at once and the heartbeat dot holds still.",
   ],
 };

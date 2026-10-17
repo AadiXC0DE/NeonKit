@@ -158,7 +158,8 @@ export function Venue() {
                 <VenueMap />
               </div>
             </div>
-            <figcaption className="mt-3 flex justify-between gap-4 px-1 text-[13px] text-white/60">
+            {/* The caption stays inside the page's right edge while the map bleeds past it. */}
+            <figcaption className="mt-3 flex justify-between gap-4 px-1 text-[13px] text-white/60 lg:pr-[max(2rem,calc((100vw-1176px)/2))]">
               <span className="font-mono tabular-nums">51.903° N, 4.483° E</span>
               <span>Not to scale</span>
             </figcaption>
@@ -171,9 +172,9 @@ export function Venue() {
             {travel.map((item) => (
               <li
                 key={item.id}
-                className="grid gap-x-8 gap-y-2 border-b border-white/[0.07] py-6 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-baseline lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+                className="grid gap-x-8 gap-y-2 border-b border-white/[0.07] py-6 sm:grid-cols-[17rem_minmax(0,1fr)] sm:items-baseline lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
               >
-                <span className="flex items-baseline gap-3">
+                <span className="flex items-baseline gap-3 whitespace-nowrap">
                   <span className="text-[30px] font-[620] leading-none tracking-[-0.03em] text-white [font-stretch:112%]">{item.time}</span>
                   <span className="text-[15px] text-white/60">{item.mode.toLowerCase().startsWith("from") ? item.mode.replace("From", "from") : `by ${item.mode.toLowerCase()}`}</span>
                 </span>

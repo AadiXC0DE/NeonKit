@@ -114,4 +114,15 @@ describe("CursorGlow", () => {
     unmount();
     expect(remove.mock.calls.map(([type]) => type)).toEqual(expect.arrayContaining(["pointermove", "pointerleave"]));
   });
+
+  it("shows reveal content only under the light", async () => {
+    const { panel, glow } = setup({ reveal: <span data-testid="lit-dots" /> });
+    const layer = glow.querySelector('[data-testid="lit-dots"]')!.parentElement as HTMLElement;
+    expect(layer.style.opacity).toBe("");
+    expect(layer.style.maskImage).toContain("radial-gradient");
+    fireEvent.pointerMove(panel, { pointerType: "mouse", clientX: 40, clientY: 30 });
+    expect(layer.style.opacity).toBe("1");
+    await waitFor(() => expect(layer.style.getPropertyValue("--nk-glow-x")).toBe("40px"));
+    expect(layer.style.getPropertyValue("--nk-glow-y")).toBe("30px");
+  });
 });

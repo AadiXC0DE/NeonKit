@@ -269,7 +269,7 @@ const Tooltip = React.forwardRef<HTMLSpanElement, TooltipProps>(
                     className={cn(
                       "[--neon:var(--neon-accent,34_211_238)]",
                       "relative block w-max whitespace-nowrap rounded-lg border border-[rgb(var(--neon)/0.4)] bg-[#0a0b11] px-2.5 py-1.5 text-xs leading-4 text-white/90",
-                      "shadow-[0_0_14px_-2px_rgb(var(--neon)/0.35),0_8px_20px_-8px_rgb(0_0_0/0.8)]",
+                      "shadow-[0_0_14px_-2px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1))),0_8px_20px_-8px_rgb(0_0_0/0.8)]",
                       className,
                     )}
                     {...props}

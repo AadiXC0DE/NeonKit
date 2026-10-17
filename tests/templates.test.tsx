@@ -19,6 +19,12 @@ vi.mock("next/navigation", () => ({
   },
 }));
 
+// next/font only works through the Next compiler; here each loader just hands back class names.
+vi.mock("next/font/google", () => {
+  const font = (name: string) => () => ({ className: `font-${name}`, variable: `font-var-${name}`, style: { fontFamily: name } });
+  return { Mona_Sans: font("mona"), Fragment_Mono: font("fragment"), Tilt_Neon: font("tilt") };
+});
+
 beforeAll(() => {
   class Observer {
     observe() {}
@@ -83,6 +89,35 @@ describe.each(templates.map((template) => [template.slug, template] as const))("
     for (const file of files) {
       if (path.basename(file) === "config.ts") continue;
       expect(readFileSync(file, "utf8"), path.relative(root, file)).not.toContain("/preview/");
+    }
+  });
+
+  it("brings its own fonts, applied at the root", () => {
+    const fonts = read(`src/components/templates/${slug}/fonts.ts`);
+    expect(fonts).toMatch(/Mona_Sans\(/);
+    expect(fonts).toContain('variable: "--font-sans"');
+    expect(files.some((file) => /import \{ fonts \} from "\.\.?\/fonts"/.test(readFileSync(file, "utf8")))).toBe(true);
+  });
+
+  it("gives every asChild a JSX element child, so shadcn can rewrite it to render={} in base-* apps", () => {
+    for (const file of files) {
+      // Blank out comments and string contents so a `>` inside them can't end the tag early.
+      const code = readFileSync(file, "utf8")
+        .replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, (m) => " ".repeat(m.length))
+        .replace(/"[^"\n]*"/g, (m) => `"${" ".repeat(m.length - 2)}"`);
+      for (const match of code.matchAll(/\sasChild\b/g)) {
+        // Walk to the end of the opening tag, skipping `>` inside {expressions}.
+        let depth = 0;
+        let i = match.index!;
+        for (; i < code.length; i++) {
+          if (code[i] === "{") depth++;
+          else if (code[i] === "}") depth--;
+          else if (code[i] === ">" && depth === 0) break;
+        }
+        const next = code.slice(i + 1).trimStart()[0];
+        const line = code.slice(0, match.index).split("\n").length;
+        expect(code[i - 1] !== "/" && next === "<", `${path.relative(root, file)}:${line}`).toBe(true);
+      }
     }
   });
 
@@ -174,5 +209,20 @@ describe.each(templates.map((template) => [template.slug, template] as const))("
     unmount();
     vi.useRealTimers();
     },
+    // The first render of a template imports and transforms every section it uses; under load that alone can pass 5s.
+    30_000,
   );
+});
+
+describe("docs not-found", () => {
+  it("renders inside the docs shell with one h1 and links through basePath", async () => {
+    const NotFound = (await import("../app/preview/docs/not-found")).default;
+    const { basePath } = await import("@/components/templates/docs/config");
+    const { container, unmount } = render(<NotFound />);
+    expect(container.querySelectorAll("h1").length).toBe(1);
+    const hrefs = [...container.querySelectorAll("a")].map((a) => a.getAttribute("href"));
+    expect(hrefs.length).toBeGreaterThan(0);
+    for (const href of hrefs) expect(href?.startsWith(basePath)).toBe(true);
+    unmount();
+  }, 30_000);
 });

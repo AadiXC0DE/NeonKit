@@ -1,10 +1,10 @@
-import { Sparkles } from "@/components/ui/icons";
+import { Megaphone } from "@/components/ui/icons";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function AlertCustom() {
   return (
     <div className="grid w-full max-w-lg gap-3">
-      <Alert color="violet" icon={<Sparkles />}>
+      <Alert color="violet" icon={<Megaphone />}>
         <AlertTitle>Border Beam just landed</AlertTitle>
         <AlertDescription>
           Trace any card with a moving line of light. One file, no dependencies.

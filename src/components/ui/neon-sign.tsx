@@ -12,16 +12,16 @@ const css = `
 .nk-neon-sign-glass { color: rgb(var(--neon) / 0.16); text-shadow: 0 -0.014em 0 rgb(255 255 255 / 0.07); }
 .nk-neon-sign-tube {
   color: color-mix(in srgb, rgb(var(--neon)) 28%, white);
-  text-shadow: 0 0 0.015em rgb(255 255 255 / 0.9), 0 0 max(2px, 0.05em) rgb(var(--neon)), 0 0 max(5px, 0.14em) rgb(var(--neon)), 0 0 0.38em rgb(var(--neon) / 0.75), 0 0 0.85em rgb(var(--neon) / 0.45);
+  text-shadow: 0 0 0.015em rgb(255 255 255 / calc(0.9 * var(--neon-glow, 1))), 0 0 max(2px, 0.05em) rgb(var(--neon) / var(--neon-glow, 1)), 0 0 max(5px, 0.14em) rgb(var(--neon) / var(--neon-glow, 1)), 0 0 0.38em rgb(var(--neon) / calc(0.75 * var(--neon-glow, 1))), 0 0 0.85em rgb(var(--neon) / calc(0.45 * var(--neon-glow, 1)));
 }
 .nk-neon-sign-art { color: color-mix(in srgb, rgb(var(--neon)) 28%, white); }
-.nk-neon-sign-glow { filter: drop-shadow(0 0 max(1.5px, 0.03em) rgb(var(--neon))) drop-shadow(0 0 max(4px, 0.11em) rgb(var(--neon) / 0.9)) drop-shadow(0 0 0.34em rgb(var(--neon) / 0.55)); }
+.nk-neon-sign-glow { filter: drop-shadow(0 0 max(1.5px, 0.03em) rgb(var(--neon) / var(--neon-glow, 1))) drop-shadow(0 0 max(4px, 0.11em) rgb(var(--neon) / calc(0.9 * var(--neon-glow, 1)))) drop-shadow(0 0 0.34em rgb(var(--neon) / calc(0.55 * var(--neon-glow, 1)))); }
 .nk-neon-sign-plate {
   background: linear-gradient(160deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.018) 34%, rgb(255 255 255 / 0.01) 62%, rgb(255 255 255 / 0.035));
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), inset 0 -1px 0 rgb(0 0 0 / 0.4), 0 0.42em 0.9em -0.28em rgb(0 0 0 / 0.85);
 }
 .nk-neon-sign-sheen { background: linear-gradient(112deg, transparent 16%, rgb(255 255 255 / 0.04) 22%, transparent 31%, transparent 66%, rgb(255 255 255 / 0.022) 70%, transparent 76%); }
-.nk-neon-sign-edge { box-shadow: inset 0 0 0 1px rgb(var(--neon) / 0.3), inset 0 0 0.55em rgb(var(--neon) / 0.12), 0 0 1.3em -0.3em rgb(var(--neon) / 0.4); }
+.nk-neon-sign-edge { box-shadow: inset 0 0 0 1px rgb(var(--neon) / 0.3), inset 0 0 0.55em rgb(var(--neon) / calc(0.12 * var(--neon-glow, 1))), 0 0 1.3em -0.3em rgb(var(--neon) / calc(0.4 * var(--neon-glow, 1))); }
 .nk-neon-sign-standoff {
   background: radial-gradient(circle, transparent 0 58%, rgb(0 0 0 / 0.4) 64%, transparent 72%), conic-gradient(from 210deg, #b9bec7, #4f5562, #d6dae0, #434955, #9ba1ac, #383d47, #b9bec7);
   box-shadow: 0.02em 0.05em 0.07em rgb(0 0 0 / 0.75), 0 0 0 max(1px, 0.012em) rgb(0 0 0 / 0.55);
@@ -316,7 +316,7 @@ function Backplate() {
         >
           <span
             className="nk-neon-sign-f absolute inset-0 rounded-full mix-blend-screen"
-            style={{ background: `radial-gradient(circle at ${corner.light}, rgb(var(--neon) / 0.8), transparent 62%)` }}
+            style={{ background: `radial-gradient(circle at ${corner.light}, rgb(var(--neon) / calc(0.8 * var(--neon-glow, 1))), transparent 62%)` }}
           />
         </span>
       ))}
@@ -448,7 +448,7 @@ const NeonSign = React.forwardRef<HTMLDivElement, NeonSignProps>(
         >
           <span
             aria-hidden
-            className="nk-neon-sign-f pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[3.4em] w-[calc(100%+3.2em)] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(closest-side,rgb(var(--neon)/0.3),rgb(var(--neon)/0.11)_48%,transparent)] mix-blend-screen"
+            className="nk-neon-sign-f pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[3.4em] w-[calc(100%+3.2em)] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(closest-side,rgb(var(--neon)/CALC(0.3*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.11*var(--neon-glow,1)))_48%,transparent)] mix-blend-screen"
           />
           {/* Glass and lit copies share one box, so the line's own padding can't offset them */}
           <span className="relative inline-block">
@@ -517,7 +517,7 @@ const NeonSign = React.forwardRef<HTMLDivElement, NeonSignProps>(
         <span
           aria-hidden
           data-part="wash"
-          className="nk-neon-sign-f pointer-events-none absolute -inset-x-[1.6em] -inset-y-[1.3em] -z-10 bg-[radial-gradient(closest-side,rgb(var(--neon)/0.16),rgb(var(--neon)/0.06)_55%,transparent)]"
+          className="nk-neon-sign-f pointer-events-none absolute -inset-x-[1.6em] -inset-y-[1.3em] -z-10 bg-[radial-gradient(closest-side,rgb(var(--neon)/CALC(0.16*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.06*var(--neon-glow,1)))_55%,transparent)]"
         />
         {cable && <Cable side={cable} id={id} />}
         {backplate && <Backplate />}

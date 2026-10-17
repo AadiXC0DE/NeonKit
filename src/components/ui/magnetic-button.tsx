@@ -40,17 +40,18 @@ function unwrapLazy(node: React.ReactNode): React.ReactNode {
 
 const variants = {
   outline:
-    "border border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.06)] text-[rgb(var(--neon))] shadow-[0_0_12px_rgb(var(--neon)/0.25),inset_0_0_12px_rgb(var(--neon)/0.12)] [text-shadow:0_0_10px_rgb(var(--neon)/0.6)] hover:border-[rgb(var(--neon))] hover:bg-[rgb(var(--neon)/0.12)] hover:shadow-[0_0_24px_rgb(var(--neon)/0.5),inset_0_0_16px_rgb(var(--neon)/0.2)]",
+    "border border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.06)] text-[rgb(var(--neon))] shadow-[0_0_12px_rgb(var(--neon)/CALC(0.25*var(--neon-glow,1))),inset_0_0_12px_rgb(var(--neon)/CALC(0.12*var(--neon-glow,1)))] [text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))] hover:border-[rgb(var(--neon))] hover:bg-[rgb(var(--neon)/0.12)] hover:shadow-[0_0_24px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_16px_rgb(var(--neon)/CALC(0.2*var(--neon-glow,1)))]",
   solid:
-    "bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/0.45),inset_0_1px_0_rgb(255_255_255/0.45)] hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_32px_rgb(var(--neon)/0.7),inset_0_1px_0_rgb(255_255_255/0.45)] hover:brightness-110",
+    "bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_32px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:brightness-110",
   ghost: "text-white/70 hover:bg-[rgb(var(--neon)/0.1)] hover:text-[rgb(var(--neon))]",
 } as const;
 
 const sizes = {
-  sm: "h-8 gap-1.5 rounded-md px-3 text-xs",
-  md: "h-10 gap-2 rounded-lg px-4 text-sm",
-  lg: "h-12 gap-2.5 rounded-xl px-6 text-base",
-  icon: "size-10 rounded-full",
+  sm: "h-8 gap-1.5 rounded-md px-3 text-xs [&_svg]:size-4",
+  md: "h-10 gap-2 rounded-lg px-4 text-sm [&_svg]:size-4",
+  lg: "h-12 gap-2.5 rounded-xl px-6 text-base [&_svg]:size-[18px]",
+  // A lone glyph carries the button, so it gets more of the circle.
+  icon: "size-10 rounded-full [&_svg]:size-[18px]",
 } as const;
 
 // Slightly under-damped: it follows briskly and overshoots a touch when let go.
@@ -257,11 +258,11 @@ const MagneticButton = React.forwardRef<HTMLButtonElement, MagneticButtonProps>(
       <>
         <span
           aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-[var(--nk-magnetic-button-pull,0)] shadow-[0_0_26px_rgb(var(--neon)/0.45)]"
+          className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-[var(--nk-magnetic-button-pull,0)] shadow-[0_0_26px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]"
         />
         <span
           ref={labelRef}
-          className="relative inline-flex items-center gap-[inherit] will-change-[translate] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+          className="relative inline-flex items-center gap-[inherit] will-change-[translate] [&_svg]:pointer-events-none [&_svg]:shrink-0"
         >
           {label}
         </span>

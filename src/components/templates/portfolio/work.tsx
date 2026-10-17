@@ -81,7 +81,7 @@ function ProjectRow({
               onClick={onOpen}
               aria-haspopup="dialog"
               className={cn(
-                "text-left outline-none transition-colors duration-200 after:absolute after:inset-0 after:content-['']",
+                "text-left outline-none transition-colors duration-200 after:absolute after:inset-y-0 after:-inset-x-3 after:content-['']",
                 "focus-visible:after:rounded-xl focus-visible:after:ring-2 focus-visible:after:ring-[rgb(var(--neon)/0.6)]",
                 active ? "text-white" : "text-white/80",
               )}

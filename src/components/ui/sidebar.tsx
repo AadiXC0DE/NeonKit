@@ -386,8 +386,24 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
 
     const nudge = reduceMotion ? 0 : side === "left" ? -4 : 4;
 
-    return (
-      <SidebarInstanceContext.Provider value={instance}>
+    // Below md the drawer renders into document.body, so an isolated, transformed or z-indexed
+    // ancestor (a card, a preview frame) can't trap it under a sticky header. The portal leaves the
+    // accent behind, so it's read from where the Sidebar is mounted.
+    const portaled = isMobile && mounted;
+    const anchorRef = React.useRef<HTMLSpanElement>(null);
+    const [inheritedAccent, setInheritedAccent] = React.useState<string | undefined>(undefined);
+    React.useEffect(() => {
+      const anchor = anchorRef.current;
+      if (!portaled || color || !anchor) return;
+      setInheritedAccent(getComputedStyle(anchor).getPropertyValue("--neon-accent").trim() || undefined);
+    }, [portaled, color, openMobile]);
+    const panelStyle =
+      portaled && !color && inheritedAccent
+        ? ({ "--neon-accent": inheritedAccent, ...style } as React.CSSProperties)
+        : style;
+
+    const drawer = (
+      <>
         <AnimatePresence>
           {drawerOpen && (
             <motion.div
@@ -398,7 +414,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
               exit={{ opacity: 0, transition: { duration: 0.16 } }}
               transition={{ duration: 0.24, ease: EASE }}
               onClick={() => setOpenMobile(false)}
-              className="fixed inset-0 z-40 bg-black/60 md:hidden"
+              className="fixed inset-0 z-50 bg-black/60 md:hidden"
             />
           )}
         </AnimatePresence>
@@ -411,7 +427,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
           tabIndex={drawerOpen ? -1 : undefined}
           data-state={rail ? "collapsed" : "expanded"}
           data-side={side}
-          style={neonVars(color, style)}
+          style={neonVars(color, panelStyle)}
           className={cn(
             "[--neon:var(--neon-accent,34_211_238)]",
             "group/sidebar flex flex-col overflow-hidden border-white/[0.08] bg-[#07080d] text-white/90 outline-none",
@@ -432,6 +448,19 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
         >
           {children}
         </div>
+      </>
+    );
+
+    return (
+      <SidebarInstanceContext.Provider value={instance}>
+        {portaled ? (
+          <>
+            <span ref={anchorRef} hidden />
+            {createPortal(drawer, document.body)}
+          </>
+        ) : (
+          drawer
+        )}
         {mounted &&
           createPortal(
             <AnimatePresence>
@@ -463,7 +492,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                   <div
                     className={cn(
                       "flex -translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-lg border border-[rgb(var(--neon)/0.4)] bg-[#0a0b11] px-2.5 py-1.5 text-xs leading-4 text-white/90",
-                      "shadow-[0_0_14px_-2px_rgb(var(--neon)/0.35),0_8px_20px_-8px_rgb(0_0_0/0.8)]",
+                      "shadow-[0_0_14px_-2px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1))),0_8px_20px_-8px_rgb(0_0_0/0.8)]",
                       side === "right" && "-translate-x-full",
                     )}
                   >
@@ -673,7 +702,7 @@ const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
           className={cn(
             "relative grid size-4 shrink-0 place-items-center transition-[color,filter] duration-150 [&_svg]:size-4",
             active
-              ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.7))]"
+              ? "text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))))]"
               : "text-white/50 group-hover/item:text-white/80",
           )}
         >
@@ -682,7 +711,7 @@ const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
             <span
               aria-hidden
               className={cn(
-                "absolute -right-1 -top-1 size-1.5 rounded-full bg-[rgb(var(--neon))] opacity-0 shadow-[0_0_6px_rgb(var(--neon)/0.9)] transition-opacity duration-200",
+                "absolute -right-1 -top-1 size-1.5 rounded-full bg-[rgb(var(--neon))] opacity-0 shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))] transition-opacity duration-200",
                 rail && "md:opacity-100",
               )}
             />
@@ -768,7 +797,7 @@ const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
               style={{ borderRadius: 3 }}
               className={cn(
                 "pointer-events-none absolute inset-y-2 w-[3px] bg-[rgb(var(--neon))]",
-                "shadow-[0_0_10px_rgb(var(--neon)/0.85),0_0_2px_rgb(var(--neon))]",
+                "shadow-[0_0_10px_rgb(var(--neon)/CALC(0.85*var(--neon-glow,1))),0_0_2px_rgb(var(--neon)/var(--neon-glow,1))]",
                 instance.side === "left" ? "-left-[5px]" : "-right-[5px]",
               )}
             />

@@ -21,7 +21,7 @@ const css = `
   width: 2px;
   pointer-events: none;
   background: rgb(var(--neon));
-  box-shadow: 0 0 2px rgb(var(--neon)), 0 0 10px rgb(var(--neon) / 0.7);
+  box-shadow: 0 0 2px rgb(var(--neon) / var(--neon-glow, 1)), 0 0 10px rgb(var(--neon) / calc(0.7 * var(--neon-glow, 1)));
   opacity: 0;
   transform: scaleY(0.4);
   transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1), opacity 160ms ease-out;
@@ -279,7 +279,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
                 "size-3.5 shrink-0",
                 "transition-[transform,rotate,opacity,color,filter] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
                 sorted
-                  ? "text-[rgb(var(--neon))] opacity-100 [filter:drop-shadow(0_0_4px_rgb(var(--neon)/0.8))]"
+                  ? "text-[rgb(var(--neon))] opacity-100 [filter:drop-shadow(0_0_4px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))))]"
                   : "opacity-0 group-hover/sort:opacity-50 group-focus-visible/sort:opacity-50",
                 sortDirection === "desc" && "rotate-180",
               )}

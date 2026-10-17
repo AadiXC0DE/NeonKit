@@ -457,7 +457,7 @@ const AlertDialogConfirmInput = React.forwardRef<HTMLInputElement, AlertDialogCo
                       className={cn(
                         "transition-[color,text-shadow] duration-150",
                         index < matched &&
-                          "text-[rgb(var(--tube))] [text-shadow:0_0_8px_rgb(var(--tube)/0.7)]",
+                          "text-[rgb(var(--tube))] [text-shadow:0_0_8px_rgb(var(--tube)/CALC(0.7*var(--neon-glow,1)))]",
                       )}
                     >
                       {char}
@@ -492,7 +492,7 @@ const AlertDialogConfirmInput = React.forwardRef<HTMLInputElement, AlertDialogCo
             "transition-[border-color,box-shadow,background-color] duration-200 ease-out placeholder:text-white/25",
             wrong
               ? "border-[#ff4d5e]/50 focus:border-[#ff4d5e]/80"
-              : "border-white/10 hover:[&:not(:focus)]:border-white/20 focus:border-[rgb(var(--tube)/0.7)] focus:shadow-[0_0_0_1px_rgb(var(--tube)/0.15),0_0_18px_-6px_rgb(var(--tube)/0.6)]",
+              : "border-white/10 hover:[&:not(:focus)]:border-white/20 focus:border-[rgb(var(--tube)/0.7)] focus:shadow-[0_0_0_1px_rgb(var(--tube)/0.15),0_0_18px_-6px_rgb(var(--tube)/CALC(0.6*var(--neon-glow,1)))]",
             className,
           )}
           {...props}
@@ -550,7 +550,7 @@ const AlertDialogAction = React.forwardRef<HTMLButtonElement, AlertDialogActionP
           "[&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
           lit
             ? cn(
-                "border-[rgb(var(--tube)/0.85)] bg-[rgb(var(--tube)/0.1)] text-[rgb(var(--tube))] [text-shadow:0_0_10px_rgb(var(--tube)/0.6)]",
+                "border-[rgb(var(--tube)/0.85)] bg-[rgb(var(--tube)/0.1)] text-[rgb(var(--tube))] [text-shadow:0_0_10px_rgb(var(--tube)/CALC(0.6*var(--neon-glow,1)))]",
                 "hover:border-[rgb(var(--tube))] hover:bg-[rgb(var(--tube)/0.16)]",
               )
             : "cursor-not-allowed border-[rgb(var(--tube)/0.22)] bg-transparent text-[rgb(var(--tube)/0.42)]",
@@ -566,7 +566,7 @@ const AlertDialogAction = React.forwardRef<HTMLButtonElement, AlertDialogActionP
               aria-hidden
               className={cn(
                 "pointer-events-none absolute -inset-px rounded-[inherit]",
-                "shadow-[0_0_0_1px_rgb(var(--tube)/0.25),0_0_18px_rgb(var(--tube)/0.4),inset_0_0_12px_rgb(var(--tube)/0.18)]",
+                "shadow-[0_0_0_1px_rgb(var(--tube)/0.25),0_0_18px_rgb(var(--tube)/CALC(0.4*var(--neon-glow,1))),inset_0_0_12px_rgb(var(--tube)/CALC(0.18*var(--neon-glow,1)))]",
                 "[animation:nk-alert-ignite_520ms_linear_both] motion-reduce:[animation:none]",
               )}
             />

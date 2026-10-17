@@ -261,7 +261,7 @@ const Conversation = React.forwardRef<HTMLDivElement, ConversationProps>(
               "shadow-[0_10px_30px_-10px_rgb(0_0_0/0.9)] transition-[opacity,transform,translate,border-color,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
               "hover:bg-[#151924] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]",
               unread > 0
-                ? "border-[rgb(var(--neon)/0.45)] shadow-[0_0_20px_-6px_rgb(var(--neon)/0.6),0_10px_30px_-10px_rgb(0_0_0/0.9)]"
+                ? "border-[rgb(var(--neon)/0.45)] shadow-[0_0_20px_-6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),0_10px_30px_-10px_rgb(0_0_0/0.9)]"
                 : "border-white/[0.12]",
               showJump ? "pointer-events-auto translate-y-0 opacity-100" : "translate-y-2 opacity-0",
             )}
@@ -271,7 +271,7 @@ const Conversation = React.forwardRef<HTMLDivElement, ConversationProps>(
             {unread > 0 && (
               <span
                 aria-hidden
-                className="-mr-1 ml-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-[rgb(var(--neon))] px-1.5 text-[11px] font-semibold tabular-nums text-[#05060a] shadow-[0_0_10px_rgb(var(--neon)/0.7)]"
+                className="-mr-1 ml-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-[rgb(var(--neon))] px-1.5 text-[11px] font-semibold tabular-nums text-[#05060a] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]"
               >
                 {unread > 99 ? "99+" : unread}
               </span>

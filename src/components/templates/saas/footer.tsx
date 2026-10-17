@@ -196,7 +196,7 @@ export function Footer() {
           </nav>
 
           <div className="flex flex-col gap-6 border-t border-white/[0.07] py-7 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs text-white/60">© 2026 Nightshift Systems, Lda. Deploys at 02:00, support at 09:00.</p>
+            <p className="text-pretty text-xs text-white/60">© 2026 Nightshift Systems, Lda. Deploys at 02:00, support at 09:00.</p>
             <div className="flex items-center gap-1">
               {SOCIAL.map((item) => (
                 <a

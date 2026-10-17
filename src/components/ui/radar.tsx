@@ -152,7 +152,7 @@ const Radar = React.forwardRef<HTMLDivElement, RadarProps>(
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
           "relative isolate aspect-square max-w-full shrink-0 select-none rounded-full",
-          "bg-[radial-gradient(circle_at_50%_30%,#20242e,#0b0c11_70%)] shadow-[inset_0_1px_0_rgb(255_255_255/0.08),inset_0_-2px_6px_rgb(0_0_0/0.6),0_24px_60px_-24px_rgb(0_0_0/0.9),0_0_80px_-30px_rgb(var(--neon)/0.45)]",
+          "bg-[radial-gradient(circle_at_50%_30%,#20242e,#0b0c11_70%)] shadow-[inset_0_1px_0_rgb(255_255_255/0.08),inset_0_-2px_6px_rgb(0_0_0/0.6),0_24px_60px_-24px_rgb(0_0_0/0.9),0_0_80px_-30px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
           !named && sizes[size],
           className,
         )}
@@ -235,7 +235,7 @@ const Radar = React.forwardRef<HTMLDivElement, RadarProps>(
             aria-hidden
             className="nk-radar-sweep pointer-events-none absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,transparent_0deg,transparent_250deg,rgb(var(--neon)/0.04)_290deg,rgb(var(--neon)/0.16)_335deg,rgb(var(--neon)/0.42)_359.5deg,transparent_360deg)]"
           >
-            <span className="absolute bottom-1/2 left-1/2 h-1/2 w-[1.5px] -translate-x-1/2 bg-[linear-gradient(to_top,color-mix(in_srgb,rgb(var(--neon))_30%,white),rgb(var(--neon)/0.9)_60%,rgb(var(--neon)/0.3))] shadow-[0_0_6px_rgb(var(--neon)),0_0_16px_rgb(var(--neon)/0.6)]" />
+            <span className="absolute bottom-1/2 left-1/2 h-1/2 w-[1.5px] -translate-x-1/2 bg-[linear-gradient(to_top,color-mix(in_srgb,rgb(var(--neon))_30%,white),rgb(var(--neon)/0.9)_60%,rgb(var(--neon)/0.3))] shadow-[0_0_6px_rgb(var(--neon)/var(--neon-glow,1)),0_0_16px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]" />
           </div>
 
           {blips.map((blip, i) => {
@@ -259,12 +259,12 @@ const Radar = React.forwardRef<HTMLDivElement, RadarProps>(
                   } as React.CSSProperties
                 }
               >
-                <span className="nk-radar-ping absolute -left-3.5 -top-3.5 size-7 rounded-full border border-[rgb(var(--nk-radar-tint)/0.9)] shadow-[0_0_10px_rgb(var(--nk-radar-tint)/0.6)]" />
-                <span className="nk-radar-dot absolute -left-[3.5px] -top-[3.5px] size-[7px] rounded-full bg-[color-mix(in_srgb,rgb(var(--nk-radar-tint))_35%,white)] shadow-[0_0_4px_rgb(var(--nk-radar-tint)),0_0_12px_2px_rgb(var(--nk-radar-tint)/0.75)]" />
+                <span className="nk-radar-ping absolute -left-3.5 -top-3.5 size-7 rounded-full border border-[rgb(var(--nk-radar-tint)/0.9)] shadow-[0_0_10px_rgb(var(--nk-radar-tint)/CALC(0.6*var(--neon-glow,1)))]" />
+                <span className="nk-radar-dot absolute -left-[3.5px] -top-[3.5px] size-[7px] rounded-full bg-[color-mix(in_srgb,rgb(var(--nk-radar-tint))_35%,white)] shadow-[0_0_4px_rgb(var(--nk-radar-tint)/var(--neon-glow,1)),0_0_12px_2px_rgb(var(--nk-radar-tint)/CALC(0.75*var(--neon-glow,1)))]" />
                 {blip.label && (
                   <span
                     className={cn(
-                      "absolute top-1.5 whitespace-nowrap font-mono text-[10px] leading-none tracking-[0.06em] text-[rgb(var(--nk-radar-tint))] [text-shadow:0_0_8px_rgb(var(--nk-radar-tint)/0.8)]",
+                      "absolute top-1.5 whitespace-nowrap font-mono text-[10px] leading-none tracking-[0.06em] text-[rgb(var(--nk-radar-tint))] [text-shadow:0_0_8px_rgb(var(--nk-radar-tint)/CALC(0.8*var(--neon-glow,1)))]",
                       flip ? "right-2" : "left-2",
                     )}
                   >
@@ -275,7 +275,7 @@ const Radar = React.forwardRef<HTMLDivElement, RadarProps>(
             );
           })}
 
-          <span className="pointer-events-none absolute left-1/2 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_8px_rgb(var(--neon))]" />
+          <span className="pointer-events-none absolute left-1/2 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_srgb,rgb(var(--neon))_30%,white)] shadow-[0_0_8px_rgb(var(--neon)/var(--neon-glow,1))]" />
           {/* Curved glass. */}
           <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle,transparent_60%,rgb(0_0_0/0.55))] shadow-[inset_0_0_24px_rgb(0_0_0/0.8)]" />
           <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(ellipse_60%_40%_at_32%_18%,rgb(255_255_255/0.08),transparent_70%)]" />

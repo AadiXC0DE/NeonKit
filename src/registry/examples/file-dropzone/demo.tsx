@@ -84,7 +84,7 @@ export default function FileDropzoneDemo() {
           <h3 className="text-sm font-medium text-white/90">Launch assets</h3>
           <p className="text-xs text-white/55">Everything here ships with the Aurora press release.</p>
         </div>
-        <span className="shrink-0 pt-px font-mono text-[11px] tabular-nums text-white/50">
+        <span className="shrink-0 text-xs tabular-nums text-white/55">
           {done}/{files.length} uploaded
         </span>
       </div>
@@ -100,7 +100,7 @@ export default function FileDropzoneDemo() {
       {rejections.length > 0 && (
         <ul className="grid gap-1 text-xs leading-5 text-[#ff4d5e]">
           {rejections.map(({ file, message }) => (
-            <li key={file.name} className="truncate">
+            <li key={file.name} className="break-words">
               {file.name}: {message}
             </li>
           ))}

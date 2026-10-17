@@ -40,7 +40,7 @@ export default function KnobForm() {
         <Knob name="makeup" label="Makeup" min={0} max={12} step={0.5} defaultValue={3} formatValue={db} showValue />
       </div>
       <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/[0.06] pt-4">
-        <p aria-live="polite" className="min-w-0 truncate text-xs text-white/55">
+        <p aria-live="polite" className="min-w-0 text-pretty text-xs leading-5 text-white/55">
           {saved ?? "Double-click a knob to reset it."}
         </p>
         <Button type="submit" size="sm">

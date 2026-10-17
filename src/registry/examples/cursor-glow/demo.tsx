@@ -3,7 +3,13 @@ import { CursorGlow } from "@/components/ui/cursor-glow";
 export default function CursorGlowDemo() {
   return (
     <div className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-[#07080d] [--neon:var(--neon-accent,34_211_238)] [background-image:radial-gradient(rgb(255_255_255/0.09)_1px,transparent_1px)] [background-size:22px_22px]">
-      <CursorGlow trail />
+      {/* Under the light the same dot grid burns neon, as if the panel were perforated and lit from behind. */}
+      <CursorGlow
+        trail
+        reveal={
+          <div className="absolute inset-0 [background-image:radial-gradient(rgb(var(--neon))_1.3px,transparent_2px)] [background-size:22px_22px]" />
+        }
+      />
       <div className="relative px-6 py-20 text-center sm:py-24">
         <h3 className="mx-auto max-w-md text-balance text-3xl font-medium tracking-tight text-white/90 sm:text-4xl">
           Ship at 2am. Sleep anyway.

@@ -8,6 +8,20 @@ export type Release = {
 
 export const releases: Release[] = [
   {
+    version: "1.6",
+    date: "2026-10-18",
+    title: "Agents, and a lighting desk",
+    notes: [
+      "Seven AI components for agent interfaces: Reasoning (a filament that glows while it thinks and cools when it's done), Tool Call with approval, Agent Plan, Sources with inline citations, Context Meter, Voice Input and Model Select. Chat Message now renders its reasoning and tool calls with them.",
+      "Theme Studio at /theme: edit the palette, glow, radius, surface and motion on a live scene, then export globals.css variables, a lib/neon.ts, a link, or a registry item that shadcn add applies.",
+      "--neon-glow scales every glow in the library. Set it to 0 for a flat dark UI, or up to 1.5 for signage.",
+      "Stat was rebuilt: icons drawn as glass tube that light when live, a full-width trend, a goal meter, and rows that line up across a group whatever wraps.",
+      "The icons page is now a specimen: each glyph lit at 192px with its construction drawn over it (grid, bend radii, blockouts), 16 sets, keyboard browsing. Calendar and Table gained the blockout gaps they were missing.",
+      "Every older component was rechecked at desktop and phone widths, and 80-odd needed fixes. Date Picker no longer scrolls the page to the top when it opens. Submenus, the sidebar drawer and toasts stay on screen and above sticky headers. Gauge ticks no longer overlap, Retro Grid recedes in real perspective, Border Beam keeps one speed around corners, and labels that were cut off now wrap.",
+      "Templates installed into a fresh shadcn app now bring their own fonts, and links inside buttons survive Base UI's render rewrite.",
+    ],
+  },
+  {
     version: "1.5",
     date: "2026-10-15",
     title: "A full pass",

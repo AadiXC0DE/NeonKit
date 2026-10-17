@@ -36,11 +36,13 @@ export default function TableUsage() {
         {usage.map((row) => (
           <TableRow key={row.resource}>
             <TableCell className="whitespace-nowrap text-white/90">{row.resource}</TableCell>
-            <TableCell align="right" className="text-white/50">
+            <TableCell align="right" className="whitespace-nowrap text-white/50">
               {row.included}
             </TableCell>
-            <TableCell align="right">{row.used}</TableCell>
-            <TableCell align="right" className={row.cost > 0 ? "text-white/90" : "text-white/35"}>
+            <TableCell align="right" className="whitespace-nowrap">
+              {row.used}
+            </TableCell>
+            <TableCell align="right" className={row.cost > 0 ? "whitespace-nowrap text-white/90" : "text-white/45"}>
               {row.cost > 0 ? currency.format(row.cost) : "—"}
             </TableCell>
           </TableRow>
