@@ -465,6 +465,17 @@ const SplitFlapBoard = React.forwardRef<HTMLDivElement, SplitFlapBoardProps>(
   ) => {
     const local = React.useRef<HTMLDivElement>(null);
     const armed = useArmed(flipOnMount, local);
+    // A board wider than its container scrolls sideways; only then does it take a tab stop, so the keyboard can too.
+    const [scrolls, setScrolls] = React.useState(false);
+    React.useEffect(() => {
+      const node = local.current;
+      if (!node || typeof ResizeObserver === "undefined") return;
+      const measure = () => setScrolls(node.scrollWidth > node.clientWidth + 1);
+      const observer = new ResizeObserver(measure);
+      observer.observe(node);
+      measure();
+      return () => observer.disconnect();
+    }, [rows]);
     const count = Math.max(columns?.length ?? 0, ...rows.map((row) => row.cells.length));
     const layout = Array.from({ length: count }, (_, index) => {
       const column = columns?.[index];
@@ -482,9 +493,11 @@ const SplitFlapBoard = React.forwardRef<HTMLDivElement, SplitFlapBoardProps>(
       <div
         ref={setRefs(ref, local)}
         role="table"
+        tabIndex={scrolls ? 0 : undefined}
         style={neonVars(color, style)}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
+          "outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
           "relative isolate inline-block max-w-full overflow-x-auto rounded-xl border border-white/10 bg-[linear-gradient(to_bottom,#0d0f14,#08090c)] p-[calc(var(--flap-h,40px)*0.45)]",
           "shadow-[inset_0_1px_0_rgb(255_255_255/0.05),inset_0_0_0_1px_rgb(0_0_0/0.6),0_24px_60px_-28px_rgb(0_0_0/0.9)]",
           sizes[size],

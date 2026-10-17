@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Haze } from "@/components/ui/haze";
 import { NeonSign } from "@/components/ui/neon-sign";
 import { GitHubIcon } from "@/components/site/icons";
 import { siteConfig } from "@/config/site";
@@ -8,6 +9,15 @@ import { siteConfig } from "@/config/site";
 export function Closing() {
   return (
     <section aria-labelledby="closing-title" className="relative isolate overflow-x-clip px-4 pb-28 pt-16 sm:px-6 sm:pb-40">
+      {/* Smoke in the room, lit from the floor, fading out before the copy */}
+      <Haze
+        aria-hidden
+        light="bottom"
+        density={0.4}
+        intensity={0.45}
+        speed={0.6}
+        className="absolute inset-x-0 top-0 -z-20 h-[70%] opacity-70 [mask-image:radial-gradient(ellipse_50%_48%_at_50%_50%,black_35%,transparent_100%)]"
+      />
       {/* Light the sign throws on the wall */}
       <div
         aria-hidden

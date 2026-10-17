@@ -104,7 +104,7 @@ export default function KnobDemo() {
           aria-hidden
           className="w-40 rounded-md border border-black/70 bg-[#05070a] px-3 py-1.5 font-mono shadow-[inset_0_1px_4px_rgb(0_0_0/0.9),0_1px_0_rgb(255_255_255/0.05)]"
         >
-          <div className="text-[9px] uppercase tracking-[0.2em] text-[rgb(var(--neon-accent,34_211_238)/0.6)]">
+          <div className="text-[9px] uppercase tracking-[0.2em] text-[rgb(var(--neon-accent,34_211_238))]">
             {"name" in current ? current.name : current.label}
           </div>
           <div className="text-[15px] leading-5 tabular-nums [color:color-mix(in_srgb,rgb(var(--neon-accent,34_211_238))_35%,white)] [text-shadow:0_0_6px_rgb(var(--neon-accent,34_211_238)/0.8),0_0_14px_rgb(var(--neon-accent,34_211_238)/0.4)]">

@@ -408,6 +408,8 @@ const CarouselContent = React.forwardRef<HTMLDivElement, CarouselContentProps>(
       <div
         ref={setViewport}
         data-carousel-viewport=""
+        // Focusable so the track scrolls from the keyboard: arrows, Home and End are handled on the root.
+        tabIndex={0}
         aria-live={live}
         onScroll={onScroll}
         onPointerDown={onDragStart}
@@ -419,6 +421,7 @@ const CarouselContent = React.forwardRef<HTMLDivElement, CarouselContentProps>(
             ? "snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-x-contain"
             : "snap-y snap-mandatory overflow-y-auto overflow-x-hidden overscroll-y-contain",
           "cursor-grab data-[dragging]:cursor-grabbing data-[dragging]:select-none",
+          "outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
           viewportClassName,
         )}
       >

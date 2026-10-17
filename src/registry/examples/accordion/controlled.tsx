@@ -21,7 +21,7 @@ const steps = [
     value: "component",
     title: "3. Copy the component",
     body: "Paste the source into components/ui/accordion.tsx, or let the shadcn CLI do it for you.",
-    code: "npx shadcn@latest add https://get-neonkit.vercel.app/r/accordion.json",
+    code: "npx shadcn@latest add https://neonkit.heyaadi.com/r/accordion.json",
   },
 ];
 

@@ -111,8 +111,8 @@ describe("Sources", () => {
     expect(screen.queryByRole("button", { name: /more sources/ })).toBeNull();
   });
 
-  it("names chips by their source", () => {
+  it("names chips by what they show, then the title", () => {
     render(<Answer variant="chips" />);
-    expect(screen.getByRole("link", { name: "Source 3: Issue 2141 (github.com)" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Source 3 github.com: Issue 2141" })).toBeInTheDocument();
   });
 });

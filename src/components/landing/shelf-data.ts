@@ -7,16 +7,16 @@ export const featured = ["knob", "glow-chart", "neon-sign"];
 
 /** The four on each shelf that show it best, front first. */
 export const shelfPicks: Record<string, string[]> = {
-  Forms: ["switch", "calendar", "input", "slider"],
+  Forms: ["switch", "calendar", "password-input", "slider"],
   Buttons: ["power-button", "shimmer-button", "hold-button", "button-group"],
-  "Data Display": ["data-table", "donut-chart", "stat", "timeline"],
+  "Data Display": ["data-table", "heatmap", "donut-chart", "stat"],
   Navigation: ["stepper", "dock", "tree-view", "pagination"],
-  Overlay: ["command", "context-menu", "hover-card", "tooltip"],
+  Overlay: ["command", "tour", "context-menu", "hover-card"],
   Feedback: ["status-light", "toast", "progress", "alert"],
-  Layout: ["carousel", "resizable", "item", "collapsible"],
-  AI: ["chat-message", "conversation", "prompt-input"],
-  Text: ["split-flap", "seven-segment", "led-matrix", "glitch-text"],
+  Layout: ["device-frame", "carousel", "resizable", "item"],
+  AI: ["chat-message", "reasoning", "suggestions", "conversation"],
+  Text: ["split-flap", "rotating-text", "seven-segment", "led-matrix"],
   Instruments: ["gauge", "oscilloscope", "equalizer", "radar"],
-  Effects: ["hologram-card", "neon-frame", "crt-overlay", "spotlight-card"],
-  Backgrounds: ["cityscape", "aurora", "rain-glass", "light-rays"],
+  Effects: ["signal-beam", "hologram-card", "neon-frame", "crt-overlay"],
+  Backgrounds: ["cityscape", "sunset", "lasers", "globe"],
 };

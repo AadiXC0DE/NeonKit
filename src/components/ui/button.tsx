@@ -22,7 +22,7 @@ function fromRenderProp<P extends RenderProp>({ render, nativeButton, ...props }
 
 const variants = {
   solid:
-    "bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_32px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:brightness-110",
+    "bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_0_1px_rgb(var(--neon)),0_0_18px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:shadow-[0_0_0_1px_rgb(var(--neon)),0_0_32px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.45)] hover:brightness-110 disabled:shadow-none disabled:saturate-50",
   // At rest the tube is drawn but barely lit; hover strikes it.
   outline:
     "border border-[rgb(var(--neon)/0.6)] bg-[rgb(var(--neon)/0.05)] text-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1))),inset_0_0_10px_rgb(var(--neon)/CALC(0.08*var(--neon-glow,1)))] hover:border-[rgb(var(--neon))] hover:bg-[rgb(var(--neon)/0.12)] hover:shadow-[0_0_24px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_16px_rgb(var(--neon)/CALC(0.2*var(--neon-glow,1)))] hover:[text-shadow:0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]",

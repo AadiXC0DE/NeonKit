@@ -22,6 +22,11 @@ describe("DatePicker", () => {
     expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
+  it("keeps the visible date in the name when labelled with aria-label", () => {
+    render(<DatePicker aria-label="Start date" defaultValue={new Date(2026, 9, 12)} />);
+    expect(screen.getByRole("button", { name: "Start date Oct 12, 2026" })).toBeInTheDocument();
+  });
+
   it("shows the placeholder with nothing picked and no clear button", () => {
     render(<DatePicker label="Departure" placeholder="Any day" />);
     expect(screen.getByRole("button", { name: "Departure Any day" })).toBeInTheDocument();

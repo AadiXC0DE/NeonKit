@@ -357,7 +357,8 @@ function ChipItem({ source, index, context }: { source: Source; index: number; c
           <a
             href={source.url}
             {...linkTarget(source.url)}
-            aria-label={sourceName(source, index)}
+            // Starts with what the chip shows (number, domain, meta) so voice control can find it, then the title.
+            aria-label={`Source ${index} ${source.domain ?? hostOf(source.url)}${source.meta ? ` · ${source.meta}` : ""}: ${source.title}`}
             data-lit={lit ? "" : undefined}
             onPointerEnter={(event) => event.pointerType === "mouse" && setHot(true)}
             onPointerLeave={() => setHot(false)}

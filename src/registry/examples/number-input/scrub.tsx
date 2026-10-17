@@ -59,7 +59,7 @@ export default function NumberInputScrub() {
           onValueChange={set("opacity")}
         />
       </div>
-      <p className="text-[11px] leading-4 text-white/40">
+      <p className="text-[11px] leading-4 text-white/55">
         Drag a letter sideways to scrub. Shift moves in large steps, Alt slows down for precise values.
       </p>
     </div>

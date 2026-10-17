@@ -128,6 +128,7 @@ export function llmsTxt() {
       `- [Introduction](${siteConfig.url}/docs): what NeonKit is and how it works`,
       `- [Installation](${siteConfig.url}/docs/installation): shadcn CLI, namespaced registry, manual setup`,
       `- [Theming](${siteConfig.url}/docs/theming): the --neon variable, palette and custom colors`,
+      `- [Design language](${siteConfig.url}/docs/design): glow as light, when things glow, type, motion, radius, icon construction`,
       `- [Theme Studio](${siteConfig.url}/theme): edit the palette, glow (--neon-glow), radius, surface and motion live; install the result with \`npx shadcn@latest add "${siteConfig.url}/r/theme?<query>"\``,
       `- [Use with AI](${siteConfig.url}/docs/ai): MCP, Cursor, Copilot, v0 and prompts`,
     ].join("\n"),

@@ -8,7 +8,7 @@ export default function CodeBlockBare() {
         header={false}
         lineNumbers={false}
         language="bash"
-        code="npx shadcn@latest add https://get-neonkit.vercel.app/r/code-block.json"
+        code="npx shadcn@latest add https://neonkit.heyaadi.com/r/code-block.json"
       />
       <CodeBlock
         header={false}

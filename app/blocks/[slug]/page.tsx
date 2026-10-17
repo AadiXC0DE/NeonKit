@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { BlockCard } from "@/components/site/block-gallery";
 import { BlockPreview } from "@/components/site/block-preview";
 import { CodeBlock } from "@/components/site/code-block";
+import { OpenInV0 } from "@/components/site/copy-page";
 import { CommandBlock } from "@/components/site/install-tabs";
 import { JsonLd } from "@/components/site/json-ld";
 import { PageShell } from "@/components/site/page-shell";
@@ -103,6 +104,7 @@ export default async function BlockPage({ params }: Props) {
           />
         }
         title={block.name}
+        action={<OpenInV0 registryItem={registryUrl(slug)} />}
         className="mb-12"
       >
         <p>{block.description}</p>

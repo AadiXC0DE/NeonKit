@@ -117,7 +117,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const errored = Boolean(error);
     const message = errored ? (error === true ? null : error) : description;
     const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
-    const invalid = errored || rejected;
+    // A wrapping Field marks its control with aria-invalid; it lights the same red as `error`.
+    const ariaInvalid = props["aria-invalid"];
+    const invalid = errored || rejected || ariaInvalid === true || ariaInvalid === "true";
     const s = sizes[size];
 
     // Clicks on the padding or icons land in the input, like a native field.

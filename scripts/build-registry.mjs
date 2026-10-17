@@ -1,13 +1,19 @@
 // Builds shadcn-compatible registry items into public/r/ and checks that
 // every component only imports what its registry entry declares.
+//
+//   node scripts/build-registry.mjs              writes public/r/ and the generated indexes
+//   node scripts/build-registry.mjs --out <dir>  writes the registry JSON to <dir> only (used by install-test)
 
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
-const outDir = path.join(root, "public/r");
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://get-neonkit.vercel.app").replace(/\/$/, "");
+const outFlag = process.argv.indexOf("--out");
+const customOut = outFlag !== -1 ? process.argv[outFlag + 1] : undefined;
+if (outFlag !== -1 && !customOut) throw new Error("--out needs a directory");
+const outDir = customOut ? path.resolve(customOut) : path.join(root, "public/r");
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://neonkit.heyaadi.com").replace(/\/$/, "");
 const SCHEMA_ITEM = "https://ui.shadcn.com/schema/registry-item.json";
 
 const { items, blocks = [], templates = [] } = JSON.parse(await readFile(path.join(root, "src/registry/registry.json"), "utf8"));
@@ -25,7 +31,7 @@ const docsIndex = [
   "",
 ].join("\n");
 const docsIndexPath = path.join(root, "src/registry/docs/index.ts");
-if ((existsSync(docsIndexPath) ? await readFile(docsIndexPath, "utf8") : "") !== docsIndex) {
+if (!customOut && (existsSync(docsIndexPath) ? await readFile(docsIndexPath, "utf8") : "") !== docsIndex) {
   await writeFile(docsIndexPath, docsIndex);
 }
 
@@ -42,7 +48,7 @@ const blocksIndex = [
   "",
 ].join("\n");
 const blocksIndexPath = path.join(root, "src/registry/blocks.generated.ts");
-if ((existsSync(blocksIndexPath) ? await readFile(blocksIndexPath, "utf8") : "") !== blocksIndex) {
+if (!customOut && (existsSync(blocksIndexPath) ? await readFile(blocksIndexPath, "utf8") : "") !== blocksIndex) {
   await writeFile(blocksIndexPath, blocksIndex);
 }
 
@@ -342,5 +348,5 @@ if (errors.length) {
 }
 
 console.log(
-  `Registry: ${items.length} components, ${blocks.length} blocks, ${templates.length} templates + neon helper written to public/r`,
+  `Registry: ${items.length} components, ${blocks.length} blocks, ${templates.length} templates + neon helper written to ${customOut ? outDir : "public/r"}`,
 );

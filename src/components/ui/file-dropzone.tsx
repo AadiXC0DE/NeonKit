@@ -464,29 +464,30 @@ const FileDropzone = React.forwardRef<HTMLDivElement, FileDropzoneProps>(
               </div>
             </div>
           )}
-
-          <input
-            ref={inputRef}
-            type="file"
-            tabIndex={-1}
-            aria-hidden
-            name={name}
-            required={Boolean(name) && required}
-            accept={accept}
-            multiple={multiple}
-            disabled={disabled}
-            onClick={(event) => event.stopPropagation()}
-            onFocus={() => zoneRef.current?.focus()}
-            onChange={(event) => {
-              const picked = Array.from(event.target.files ?? []);
-              // Let the same file be picked again; a named input keeps what was accepted instead.
-              if (!name) event.target.value = "";
-              process(picked);
-            }}
-            // Visually hidden, not display:none, so a required one can still show the browser's message.
-            className="pointer-events-none absolute bottom-0 left-1/2 size-px -translate-x-1/2 opacity-0"
-          />
         </div>
+        <input
+          ref={inputRef}
+          type="file"
+          tabIndex={-1}
+          aria-hidden
+          name={name}
+          required={Boolean(name) && required}
+          accept={accept}
+          multiple={multiple}
+          disabled={disabled}
+          onClick={(event) => event.stopPropagation()}
+          onFocus={() => zoneRef.current?.focus()}
+          onChange={(event) => {
+            const picked = Array.from(event.target.files ?? []);
+            // Let the same file be picked again; a named input keeps what was accepted instead.
+            if (!name) event.target.value = "";
+            process(picked);
+          }}
+          // Visually hidden, not display:none, so a required one can still show the browser's message. It sits
+          // beside the zone rather than inside it: a control nested in role="button" is still reachable by
+          // assistive tech. With no insets it stays at its static position, just under the zone.
+          className="pointer-events-none absolute size-px opacity-0"
+        />
         <span role="status" className="sr-only">
           {announcement}
         </span>

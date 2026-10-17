@@ -434,9 +434,13 @@ const ContextMeter = React.forwardRef<HTMLDivElement, ContextMeterProps>(
     const reading = useReading(partsProp, used, limit, warnAt, criticalAt);
     const count = Math.max(4, Math.round(cells ?? sizes[size].cells));
     const headingId = React.useId();
-    const valueText = `${reading.percent}% used, ${format(reading.used)} of ${format(limit)} tokens${
-      reading.status === "ok" ? "" : `, ${statusText[reading.status].toLowerCase()}`
-    }`;
+    const statusSuffix = reading.status === "ok" ? "" : `, ${statusText[reading.status].toLowerCase()}`;
+    const valueText = `${reading.percent}% used, ${format(reading.used)} of ${format(limit)} tokens${statusSuffix}`;
+    // The trigger's name starts with the readout it shows, so voice control users can say what they see.
+    const triggerName =
+      size !== "sm" || readout === "tokens"
+        ? `${label}, ${format(reading.used)} / ${format(limit)} tokens, ${reading.percent}% used${statusSuffix}. Show breakdown`
+        : `${label}: ${valueText}. Show breakdown`;
 
     // Announce crossings into a warning zone, not the reading on mount.
     const [announcement, setAnnouncement] = React.useState("");
@@ -585,7 +589,7 @@ const ContextMeter = React.forwardRef<HTMLDivElement, ContextMeterProps>(
         <style href="nk-context-meter" precedence="nk">{css}</style>
         <Popover>
           <PopoverTrigger
-            aria-label={`${label}: ${valueText}. Show breakdown`}
+            aria-label={triggerName}
             className={cn(
               "cursor-pointer outline-none transition-[background-color,transform] duration-150 ease-out",
               "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-1 focus-visible:ring-offset-[#0a0c12]",

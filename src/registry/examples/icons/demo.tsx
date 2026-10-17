@@ -17,49 +17,59 @@ const SETS: [string, string][] = [
   ],
   [
     "Interface",
-    "Check CheckCheck X Plus Minus Menu Ellipsis EllipsisVertical GripVertical GripHorizontal Search SearchX ZoomIn Filter ListFilter Settings Settings2 Sliders SlidersHorizontal ToggleLeft ToggleRight Copy CopyPlus Trash Trash2 Pin Bookmark Link Link2 Paperclip Share Share2 Eye Power LoaderCircle Command LayoutGrid LayoutDashboard PanelLeft PanelRight PanelBottom Columns2 Rows2 Table List ListTree MousePointer MousePointer2 Hand",
+    "Check CheckCheck X Plus Minus Menu Ellipsis EllipsisVertical GripVertical GripHorizontal Search SearchX ZoomIn Filter ListFilter Settings Settings2 Sliders SlidersHorizontal ToggleLeft ToggleRight Copy CopyPlus Trash Trash2 Pin Bookmark Link Link2 Paperclip Share Share2 Eye Power LoaderCircle Command LayoutGrid LayoutDashboard PanelLeft PanelRight PanelBottom Columns2 Rows2 Table List ListTree MousePointer MousePointer2 Hand Save Clipboard ClipboardCheck ClipboardList Move Maximize Minimize Crop Scissors Frame Columns3 Grid2x2 Grid3x3 PanelTop LayoutList LayoutTemplate Component",
   ],
   [
     "Status",
-    "Info CircleAlert CircleCheck CircleHelp CircleX CirclePlus CircleMinus CircleStop CircleDot CircleDashed CircleDotDashed TriangleAlert OctagonAlert Ban Bell BellRing BellOff Siren Star Heart ThumbsUp ThumbsDown Flag Activity Gauge",
+    "Info CircleAlert CircleCheck CircleHelp CircleX CirclePlus CircleMinus CircleStop CircleDot CircleDashed CircleDotDashed TriangleAlert OctagonAlert Ban Bell BellRing BellOff Siren Star Heart ThumbsUp ThumbsDown Flag Activity Gauge ShieldAlert ShieldX Badge BadgeCheck Crown Smile Meh Frown",
   ],
   [
     "Text and shapes",
-    "Type Bold Italic Underline Strikethrough AlignLeft AlignCenter AlignRight WrapText Hash AtSign Pencil PenLine PenTool Palette Shapes Circle Square Triangle Hexagon Sparkle Sparkles",
+    "Type Bold Italic Underline Strikethrough AlignLeft AlignCenter AlignRight AlignJustify WrapText ListOrdered ListChecks Heading Heading1 Heading2 Pilcrow Quote Hash AtSign Sigma Infinity Pencil PenLine PenTool Spline Palette Shapes Circle Square Triangle Hexagon Sparkle Sparkles",
   ],
   [
     "Files",
-    "File FileText FilePen FilePlus2 FileCode FileCode2 FileCog FileImage FileSpreadsheet FileArchive FileWarning FileHeadphone FileVideoCamera Folder FolderOpen FolderInput FolderGit2 FolderKanban Archive Inbox Image Layers BookOpen BookMarked NotebookPen Newspaper ScrollText",
+    "File FileText FilePen FilePlus2 FileCode FileCode2 FileCog FileImage FileSpreadsheet FileArchive FileWarning FileHeadphone FileVideoCamera Folder FolderOpen FolderInput FolderGit2 FolderKanban Archive Inbox Image Images ImagePlus ImageOff Layers Book BookOpen BookMarked Library NotebookPen Newspaper ScrollText",
   ],
   [
     "Media",
-    "Play Pause SkipBack SkipForward Volume Volume1 Volume2 VolumeX Mic MicOff Music Music2 ListMusic AudioLines Headphones Speaker Radio Camera Video Film Clapperboard Tv",
+    "Play Pause SkipBack SkipForward Volume Volume1 Volume2 VolumeX Mic MicOff Music Music2 ListMusic AudioLines Headphones Speaker Radio Camera CameraOff Video VideoOff Film Clapperboard Tv Cast",
   ],
-  ["Messages", "Mail MailOpen Send MessageCircle MessageSquare MessagesSquare Phone Megaphone Rss"],
+  ["Messages", "Mail MailOpen Send MessageCircle MessageSquare MessagesSquare Phone PhoneCall Megaphone Rss"],
   [
     "Devices",
-    "Monitor Laptop Tablet Smartphone Watch Keyboard Mouse Cpu Server Database Plug Plug2 PlugZap Cable BatteryLow Wifi Antenna Fan QrCode ScanLine",
+    "Monitor Laptop Tablet Smartphone Watch Keyboard Mouse Printer Cpu Server Database HardDrive Plug Plug2 PlugZap Cable Battery BatteryLow BatteryFull BatteryCharging Wifi Bluetooth Signal Antenna Fan QrCode ScanLine",
   ],
   [
     "Charts",
-    "ChartBar ChartColumn ChartLine ChartNoAxesColumn ChartPie TrendingUp TrendingDown Percent SquareKanban Target",
+    "ChartBar ChartColumn ChartLine ChartArea ChartScatter ChartCandlestick ChartGantt ChartNoAxesColumn ChartPie TrendingUp TrendingDown Percent SquareKanban Target",
   ],
   [
     "Code",
-    "Code CodeXml Braces Terminal SquareTerminal GitBranch GitCommitHorizontal GitMerge GitPullRequest GitFork Github Figma Bug TestTube Webhook Bot Brain Box Boxes Package Orbit",
+    "Code CodeXml Braces Variable Regex Binary Terminal SquareTerminal GitBranch GitCommitHorizontal GitMerge GitPullRequest GitFork Github Figma Bug TestTube Webhook Workflow Network Bot Brain Box Boxes Package Orbit",
   ],
-  ["Commerce", "CreditCard Wallet DollarSign Euro Receipt Tag Ticket ShoppingBag ShoppingCart Store Briefcase"],
+  [
+    "Commerce",
+    "CreditCard Wallet Banknote Coins DollarSign Euro PoundSterling IndianRupee Bitcoin Receipt Tag Ticket ShoppingBag ShoppingCart Store Briefcase Landmark Scale",
+  ],
   [
     "People and access",
-    "User UserRound UserPlus UserRoundCheck Users UsersRound Accessibility GraduationCap Lock LockKeyhole Unlock Key KeyRound ShieldCheck Fingerprint EyeOff",
+    "User UserRound UserPlus UserMinus UserX UserCog UserRoundCheck Users UsersRound Contact IdCard PersonStanding Accessibility GraduationCap Lock LockKeyhole Unlock Key KeyRound Shield ShieldCheck Fingerprint EyeOff",
   ],
-  ["Time", "Clock Timer Calendar CalendarDays CalendarPlus"],
+  ["Time", "Clock Timer AlarmClock Hourglass History Calendar CalendarDays CalendarPlus"],
   [
     "Places",
-    "Globe Map MapPin Navigation Compass LocateFixed House Building Building2 Plane PlaneTakeoff Ship TrainFront Truck Bike Rocket",
+    "Globe Map MapPin Navigation Compass LocateFixed House Building Building2 Factory Warehouse Tent Anchor Plane PlaneTakeoff Ship TrainFront Truck Car Bike Rocket",
   ],
-  ["Nature", "Sun Moon Cloud CloudRain CloudUpload Snowflake Flame Droplet Wind Waves Leaf Mountain Thermometer Zap"],
-  ["Objects", "Lightbulb Lamp Coffee Hammer Wand Puzzle Gift Trophy LifeBuoy"],
+  [
+    "Nature",
+    "Sun Sunrise Sunset Moon Cloud CloudSun CloudRain CloudLightning CloudUpload Snowflake Flame Droplet Wind Waves Leaf Sprout TreePine Mountain Cat Fish Zap",
+  ],
+  ["Health", "HeartPulse Stethoscope Pill Thermometer"],
+  [
+    "Objects",
+    "Lightbulb Lamp Coffee Wine Utensils Umbrella Shirt Gem DoorOpen Hammer Wand Puzzle Gift Dice5 Trophy Crosshair LifeBuoy",
+  ],
 ];
 
 const sets = SETS.map(([title, list]) => ({
@@ -79,7 +89,7 @@ const matches = (name: string, set: string, q: string) =>
 // ---- construction: read the tube runs back out of the path data ------------------------------------------
 
 type Pt = [number, number];
-type Construction = {
+export type Construction = {
   runs: number;
   bends: { c: Pt; r: number }[];
   gaps: { a: Pt; b: Pt; ends: Pt[] }[];
@@ -227,14 +237,16 @@ function Tube({
 
 const GRID = Array.from({ length: 23 }, (_, i) => `M${i + 1} 0V24M0 ${i + 1}H24`).join("");
 
-function Plate({
+export function Plate({
   name,
   construction: show,
   onBuild,
+  className = "size-[168px] @xl:size-[192px]",
 }: {
   name: Name;
   construction: boolean;
   onBuild: (build: Construction) => void;
+  className?: string;
 }) {
   const Glyph = icons[name];
   const ref = React.useRef<SVGSVGElement>(null);
@@ -253,7 +265,7 @@ function Plate({
   }, [name, onBuild]);
 
   return (
-    <div className="relative size-[168px] shrink-0 @xl:size-[192px]">
+    <div className={`relative shrink-0 ${className}`}>
       <svg viewBox="0 0 24 24" aria-hidden className="absolute inset-0 size-full overflow-visible" fill="none">
         <path
           d={GRID}
@@ -341,7 +353,7 @@ function Plate({
   );
 }
 
-function Readout({ build }: { build: Construction | null }) {
+export function Readout({ build }: { build: Construction | null }) {
   const rows = [
     ["Stroke", "1.75"],
     ["Runs", build ? String(build.runs) : "–"],

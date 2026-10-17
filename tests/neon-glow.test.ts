@@ -97,7 +97,23 @@ describe("hand-work detector", () => {
   });
 });
 
-const canvasFiles = ["cursor-glow", "equalizer", "led-matrix", "light-rays", "oscilloscope", "particles", "rain-glass", "starfield"];
+const canvasFiles = [
+  "circuit",
+  "cursor-glow",
+  "dot-grid",
+  "equalizer",
+  "globe",
+  "haze",
+  "lasers",
+  "led-matrix",
+  "light-rays",
+  "oscilloscope",
+  "particles",
+  "rain-glass",
+  "sparks",
+  "starfield",
+  "tunnel",
+];
 
 describe.skipIf(!uiFiles.some((f) => read(f).includes("--neon-glow")))("canvas components read --neon-glow", () => {
   it.each(canvasFiles)("%s", (slug) => {

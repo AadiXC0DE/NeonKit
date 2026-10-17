@@ -116,7 +116,8 @@ export function Traffic({ className }: { className?: string }) {
               key={m}
               type="button"
               aria-pressed={selected}
-              aria-label={`${s.label}: ${s.format(value)}, ${delta.text} versus the previous ${RANGES[range].label}. Show on chart`}
+              // Same words as the tile, in the same order, so voice control matches what's on screen.
+              aria-label={`${s.label}: ${s.format(value)}, ${delta.text} vs prior ${range}. Show on chart`}
               onClick={() => {
                 setActive(null);
                 setMetric(m);

@@ -5,7 +5,7 @@ import { Check, Copy } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const url = "https://get-neonkit.vercel.app/r/tabs.json";
+const url = "https://neonkit.heyaadi.com/r/tabs.json";
 
 const commands = [
   { manager: "npm", command: `npx shadcn@latest add ${url}` },

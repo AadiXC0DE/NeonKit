@@ -49,7 +49,7 @@ export function CodeFrame({
       )}
       <div
         id={bodyId}
-        className={cn("overflow-auto py-4 [&_pre]:outline-none", numbered && "nk-numbered")}
+        className={cn("overflow-auto py-4 [&_pre]:outline-none [&:has(pre:focus-visible)]:shadow-[inset_0_0_0_2px_rgb(var(--neon-accent)/0.6)]", numbered && "nk-numbered")}
         style={clipped && !expanded ? { maxHeight } : undefined}
         dangerouslySetInnerHTML={{ __html: html }}
       />

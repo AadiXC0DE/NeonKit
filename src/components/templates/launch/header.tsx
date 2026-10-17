@@ -80,7 +80,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-[1240px] items-center gap-8 px-5 sm:px-8">
         <a
           href="#top"
-          aria-label="Low Light 2027, back to top"
+          aria-label="low light '27, back to top"
           className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#05060a]"
         >
           <Wordmark />

@@ -7,7 +7,7 @@ export default function CodeBlockLanguages() {
         language="bash"
         lineNumbers={false}
         wrapToggle={false}
-        code={`$ npx shadcn@latest add https://get-neonkit.vercel.app/r/code-block.json
+        code={`$ npx shadcn@latest add https://neonkit.heyaadi.com/r/code-block.json
 $ NODE_ENV=production npm run build -- --profile`}
       />
       <CodeBlock

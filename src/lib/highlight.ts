@@ -22,8 +22,8 @@ const theme: ThemeRegistration = {
     { scope: ["entity.name.type", "support.type", "entity.name.type.alias", "support.type.primitive"], settings: { foreground: "#8fb8ff" } },
     { scope: ["variable", "variable.other", "meta.object-literal.key"], settings: { foreground: "#c8d0de" } },
     { scope: ["variable.parameter"], settings: { foreground: "#d6dcea" } },
-    { scope: ["punctuation", "meta.brace", "punctuation.separator", "punctuation.terminator", "keyword.operator"], settings: { foreground: "#6b7489" } },
-    { scope: ["punctuation.definition.tag"], settings: { foreground: "#5a6276" } },
+    { scope: ["punctuation", "meta.brace", "punctuation.separator", "punctuation.terminator", "keyword.operator"], settings: { foreground: "#767f92" } },
+    { scope: ["punctuation.definition.tag"], settings: { foreground: "#737b8e" } },
     { scope: ["source.shell", "support.function.builtin.shell"], settings: { foreground: "#c8d0de" } },
   ],
 };

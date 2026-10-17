@@ -6,16 +6,25 @@ import { cn } from "@/lib/utils";
 import { neonVars, toNeonRgb, type NeonColor } from "@/lib/neon";
 
 // LEDs strike instantly and decay over a few frames, like real ones behind a diffuser.
+// Each lit segment only draws its core; the halo is one drop-shadow over the whole row, so a meter with
+// forty segments moving 20 times a second paints one blur instead of forty. Segments tinted by a zone
+// (the red over the line) keep a small halo of their own color.
 const css = `
+.nk-meter-row {
+  filter: drop-shadow(0 0 5px rgb(var(--neon) / calc(0.5 * var(--neon-glow, 1))));
+}
 .nk-meter-seg {
   background-color: rgb(var(--nk-meter-seg) / 0.14);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04), inset 0 0 0 1px rgb(var(--nk-meter-seg) / 0.08);
-  transition: background-color 200ms ease-out, box-shadow 200ms ease-out;
+  transition: background-color 200ms ease-out;
 }
 .nk-meter-seg[data-lit], .nk-meter-seg[data-peak] {
   background-color: color-mix(in srgb, rgb(var(--nk-meter-seg)) 82%, white);
-  box-shadow: inset 0 0 3px 1px rgb(255 255 255 / calc(0.45 * var(--neon-glow, 1))), 0 0 5px rgb(var(--nk-meter-seg) / calc(0.9 * var(--neon-glow, 1))), 0 0 16px 1px rgb(var(--nk-meter-seg) / calc(0.5 * var(--neon-glow, 1)));
+  box-shadow: inset 0 0 3px 1px rgb(255 255 255 / calc(0.45 * var(--neon-glow, 1)));
   transition-duration: 0ms;
+}
+.nk-meter-seg[data-tinted][data-lit], .nk-meter-seg[data-tinted][data-peak] {
+  box-shadow: inset 0 0 3px 1px rgb(255 255 255 / calc(0.45 * var(--neon-glow, 1))), 0 0 6px rgb(var(--nk-meter-seg) / calc(0.8 * var(--neon-glow, 1)));
 }
 @media (prefers-reduced-motion: reduce) { .nk-meter-seg { transition: none; } }
 `;
@@ -207,22 +216,24 @@ const Meter = React.forwardRef<HTMLDivElement, MeterProps>(
             "flex min-h-0 min-w-0 flex-1 rounded-[5px] border border-white/10 bg-[#07080c] p-[3px]",
             // The housing picks up light from the lit segments, more as the level rises.
             "shadow-[inset_0_1px_3px_rgb(0_0_0/0.7),0_1px_0_rgb(255_255_255/0.03),0_0_28px_-4px_rgb(var(--neon)/CALC(calc(var(--nk-meter-level)*0.4)*var(--neon-glow,1)))]",
-            vertical && "flex-col-reverse",
           )}
-          style={{ gap: s.gap, [vertical ? "width" : "height"]: s.thickness + 8 }}
+          style={{ [vertical ? "width" : "height"]: s.thickness + 8 }}
         >
-          {tints.map((tint, i) => (
-            <span
-              key={i}
-              ref={(node) => {
-                segmentRefs.current[i] = node;
-              }}
-              data-lit={i < lit ? "" : undefined}
-              data-peak={i === fixedPeak && i >= lit ? "" : undefined}
-              style={{ "--nk-meter-seg": tint } as React.CSSProperties}
-              className="nk-meter-seg min-h-0 min-w-0 flex-1 rounded-[1.5px]"
-            />
-          ))}
+          <span className={cn("nk-meter-row flex min-h-0 min-w-0 flex-1", vertical && "flex-col-reverse")} style={{ gap: s.gap }}>
+            {tints.map((tint, i) => (
+              <span
+                key={i}
+                ref={(node) => {
+                  segmentRefs.current[i] = node;
+                }}
+                data-lit={i < lit ? "" : undefined}
+                data-peak={i === fixedPeak && i >= lit ? "" : undefined}
+                data-tinted={tint === "var(--neon)" ? undefined : ""}
+                style={{ "--nk-meter-seg": tint } as React.CSSProperties}
+                className="nk-meter-seg min-h-0 min-w-0 flex-1 rounded-[1.5px]"
+              />
+            ))}
+          </span>
         </span>
       </div>
     );

@@ -17,7 +17,7 @@ export default function OdometerCarry() {
           −1
         </Button>
         {steps.map((step) => (
-          <Button key={step} size="sm" variant="outline" onClick={() => setValue((v) => Math.min(99999, v + step))} aria-label={`Add ${step}`}>
+          <Button key={step} size="sm" variant="outline" onClick={() => setValue((v) => Math.min(99999, v + step))} aria-label={`Add ${step.toLocaleString("en-US")}`}>
             +{step.toLocaleString("en-US")}
           </Button>
         ))}

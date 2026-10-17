@@ -191,6 +191,11 @@ describe("Command", () => {
     expect(screen.getByText("Nothing lit up.")).toBeInTheDocument();
     expect(input()).not.toHaveAttribute("aria-activedescendant");
     expect(screen.getByRole("status")).toHaveTextContent("No results");
+    // A listbox may only hold options, so the list drops the role while it shows the empty message.
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
+    type("mag");
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
   });
 
   it("reports the highlighted value and follows a controlled value", () => {

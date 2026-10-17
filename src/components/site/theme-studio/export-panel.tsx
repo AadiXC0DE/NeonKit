@@ -12,7 +12,7 @@ function Line({ label, value, children }: { label: string; value: string; childr
     <div className="grid min-w-0 gap-2">
       <p className="text-[14px] text-white/60">{label}</p>
       <div className="flex min-w-0 items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.02] py-1 pl-3.5 pr-1">
-        <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap py-2 font-mono text-[12.5px] text-white/85 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <code tabIndex={0} className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap py-2 font-mono text-[12.5px] text-white/85 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {value}
         </code>
         <CopyButton value={value} size="sm" aria-label={`Copy ${label.toLowerCase()}`} />

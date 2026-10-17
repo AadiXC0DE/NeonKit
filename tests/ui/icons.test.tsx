@@ -51,6 +51,17 @@ describe("icons", () => {
     expect(Icons.MapIcon).toBe(Icons.Map);
   });
 
+  it("draws the lucide names apps migrate with most", () => {
+    const drawn =
+      "Save Clipboard ClipboardCheck ClipboardList History Quote ListOrdered ListChecks AlignJustify Heading Heading1 Heading2 Scissors Crop Move Maximize Minimize Columns3 Grid2x2 Grid3x3 LayoutList LayoutTemplate PanelTop ImagePlus ImageOff Images Shield ShieldAlert ShieldX Badge BadgeCheck Smile Frown UserMinus UserX Contact IdCard Battery BatteryCharging HardDrive Bluetooth Printer VideoOff CameraOff PhoneCall Workflow Network Sigma Infinity Coins Banknote Landmark ChartArea ChartScatter Hourglass AlarmClock Car HeartPulse Pill Crosshair".split(" ");
+    expect(drawn.filter((name) => !(name in icons))).toEqual([]);
+    // shadcn-style twins and lucide's legacy names come along with each new glyph
+    expect(Icons.SaveIcon).toBe(Icons.Save);
+    expect(Icons.Grid3X3).toBe(Icons.Grid3x3);
+    expect(Icons.AreaChart).toBe(Icons.ChartArea);
+    expect(Icons.ReceiptText).toBe(Icons.Receipt);
+  });
+
   it("aliases point at the same component", () => {
     expect(CheckCircle).toBe(CircleCheck);
     expect(Home).toBe(House);
@@ -112,6 +123,14 @@ describe("icons", () => {
     expect(runs(Icons.Table)).toBe(5);
     // Link: each ring passes behind the other once.
     expect(runs(Icons.Link)).toBe(2);
+    // Infinity: one closed tube, broken once where it passes behind itself.
+    expect(runs(Icons.Infinity)).toBe(1);
+    // Hourglass: two caps, one diagonal whole, the other in two pieces behind it.
+    expect(runs(Icons.Hourglass)).toBe(5);
+    // Grid2x2: frame, upright divider, the cross divider in two pieces.
+    expect(runs(Icons.Grid2x2)).toBe(4);
+    // Scissors: the lower blade breaks where the upper one crosses it.
+    expect(runs(Icons.Scissors)).toBe(3);
   });
 });
 
@@ -129,7 +148,8 @@ describe("icon browser", () => {
   it("searches from the start of a word", () => {
     render(<IconsBrowser />);
     fireEvent.change(screen.getByRole("searchbox", { name: "Search icons" }), { target: { value: "cal" } });
-    expect(options()).toEqual(["Calendar", "CalendarDays", "CalendarPlus"]);
+    // "cal" starts a word in PhoneCall too, but sits mid-word in EllipsisVertical.
+    expect(options()).toEqual(["PhoneCall", "Calendar", "CalendarDays", "CalendarPlus"]);
     fireEvent.change(screen.getByRole("searchbox", { name: "Search icons" }), { target: { value: "up down" } });
     expect(options()).toEqual(expect.arrayContaining(["ArrowUpDown", "ChevronsUpDown"]));
   });

@@ -181,6 +181,7 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
       id: idProp,
       onKeyDown,
       "aria-describedby": ariaDescribedBy,
+      "aria-label": ariaLabel,
       ...props
     },
     ref,
@@ -339,7 +340,8 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                 id={id}
                 type="button"
                 disabled={disabled}
-                aria-labelledby={label ? `${labelId} ${valueId}` : undefined}
+                // The name always ends with the visible date, so an aria-label adds to it instead of hiding it.
+                aria-labelledby={label || ariaLabel ? `${labelId} ${valueId}` : undefined}
                 aria-describedby={[ariaDescribedBy, messageId].filter(Boolean).join(" ") || undefined}
                 onKeyDown={(event) => {
                   onKeyDown?.(event);
@@ -362,6 +364,11 @@ const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                 )}
                 {...props}
               >
+                {!label && ariaLabel && (
+                  <span id={labelId} hidden>
+                    {ariaLabel}
+                  </span>
+                )}
                 <CalendarDays aria-hidden />
                 <span id={valueId} className={cn("min-w-0 flex-1 truncate tabular-nums", !hasValue && "text-white/50")}>
                   {text}

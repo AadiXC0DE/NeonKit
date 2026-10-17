@@ -128,7 +128,7 @@ export default async function ComponentPage({ params }: Props) {
             />
           }
           title={item.name}
-          action={<CopyPage href={`/components/${slug}.md`} />}
+          action={<CopyPage href={`/components/${slug}.md`} registryItem={registryUrl(slug)} />}
           className="mb-12 sm:mb-14"
         >
           <p>{item.description}</p>

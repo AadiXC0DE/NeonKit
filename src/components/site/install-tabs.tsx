@@ -84,7 +84,7 @@ export function CommandBlock({ commands, className }: { commands: Record<Manager
         <CopyButton value={commands[pm].code} label="Copy command" />
       </div>
       <div
-        className="overflow-x-auto py-3.5 [&_.shiki]:text-[13.5px] [&_pre]:outline-none"
+        className="overflow-x-auto py-3.5 [&_.shiki]:text-[13.5px] [&_pre]:outline-none [&:has(pre:focus-visible)]:shadow-[inset_0_0_0_2px_rgb(var(--neon-accent)/0.6)]"
         dangerouslySetInnerHTML={{ __html: commands[pm].html }}
       />
     </div>

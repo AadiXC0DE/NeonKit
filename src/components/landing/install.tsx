@@ -15,7 +15,7 @@ const color: Record<Token[1], string> = {
   k: "text-[#8a93a6]", // keywords
   s: "text-[#c9d4e3]", // strings
   t: "text-fg", // tags and names
-  p: "text-[#6f7789]", // punctuation
+  p: "text-[#767f92]", // punctuation
   x: "text-[#aab3c3]", // everything else
 };
 
@@ -147,9 +147,9 @@ export function Install() {
               <div className="border-t border-white/[0.06] px-4 py-3 font-mono text-[12.5px] leading-[1.8] text-[#8a93a6]">
                 <span className="text-[rgb(var(--neon-accent))]">✓</span> Created 2 files
                 <br />
-                <span className="text-[#6f7789]">  </span>components/ui/<span className="text-fg">{kit[name].file}</span>
+                <span className="text-[#767f92]">  </span>components/ui/<span className="text-fg">{kit[name].file}</span>
                 <br />
-                <span className="text-[#6f7789]">  </span>lib/<span className="text-fg">neon.ts</span>
+                <span className="text-[#767f92]">  </span>lib/<span className="text-fg">neon.ts</span>
               </div>
             </div>
             <p className="mt-3 text-[14px] text-muted">Your project needs a shadcn setup once. The installation guide covers it.</p>
@@ -157,7 +157,7 @@ export function Install() {
 
           <Step n={2} title="Import it">
             <div className={panel}>
-              <pre className="overflow-x-auto p-4 font-mono text-[13px] leading-[1.75]">
+              <pre tabIndex={0} className="overflow-x-auto p-4 [outline-offset:-2px] font-mono text-[13px] leading-[1.75]">
                 <code>
                   {kit[name].code.map((line, i) => (
                     <span key={`${name}-${i}`} className="block min-h-[1.75em]">

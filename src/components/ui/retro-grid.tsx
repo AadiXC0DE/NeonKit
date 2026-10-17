@@ -47,6 +47,11 @@ const RetroGrid = React.forwardRef<HTMLDivElement, RetroGridProps>(
   ) => {
     const tilt = Math.min(88, Math.max(20, angle));
     const tan = Math.tan((tilt * Math.PI) / 180).toFixed(4);
+    // How far the plane runs, in container heights × 100. A row at distance s draws at s·sin / (tan/2 + s·sin) of
+    // the way to the horizon, so 4.5 / cos(angle) reaches 90%, where the mask has already faded it out. Anything
+    // longer is a bigger layer to repaint for nothing: the old fixed 3000 made pages stutter whenever something
+    // else on them changed every frame.
+    const length = Math.min(3000, Math.max(1500, Math.ceil(450 / Math.cos((tilt * Math.PI) / 180))));
     const vars = {
       "--cell": `${cellSize}px`,
       "--speed": `${speed}s`,
@@ -81,10 +86,10 @@ const RetroGrid = React.forwardRef<HTMLDivElement, RetroGridProps>(
             style={{ perspective: `calc(100cqh * ${tan})` }}
           >
             <div
-              className="absolute inset-x-[-250%] bottom-0 h-[3000cqh] origin-bottom overflow-hidden"
+              className="absolute inset-x-[-120%] bottom-0 origin-bottom overflow-hidden"
               // Pulled toward the viewer by half the perspective, so the nearest squares draw at twice cellSize.
               // The bottom edge sits on the perspective origin, so it stays on the floor's bottom edge.
-              style={{ transform: `translateZ(calc(50cqh * ${tan})) rotateX(${tilt}deg)` }}
+              style={{ height: `${length}cqh`, transform: `translateZ(calc(50cqh * ${tan})) rotateX(${tilt}deg)` }}
             >
             {/* Each line is a hot core with a soft falloff either side, painted into the tile */}
             <div

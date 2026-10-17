@@ -726,6 +726,10 @@ const CommandList = React.forwardRef<HTMLDivElement, CommandListProps>(
   ({ className, children, onMouseDown, ...props }, ref) => {
     const ctx = useCommand("CommandList");
     const dialog = React.useContext(CommandDialogContext);
+    // With nothing to pick, the list holds only the empty message, and a listbox may only contain options.
+    // It drops the role until results come back; the status region still announces "No results".
+    const isClient = useIsClient();
+    const empty = isClient && ctx.results.count === 0 && !ctx.loading;
 
     return (
       <motion.div
@@ -733,8 +737,8 @@ const CommandList = React.forwardRef<HTMLDivElement, CommandListProps>(
         // Lets the gliding highlight measure correctly while the list is scrolled.
         layoutScroll
         id={ctx.listId}
-        role="listbox"
-        aria-label={ctx.label ? `${ctx.label} results` : "Results"}
+        role={empty ? undefined : "listbox"}
+        aria-label={empty ? undefined : ctx.label ? `${ctx.label} results` : "Results"}
         aria-busy={ctx.loading || undefined}
         onMouseDown={(event) => {
           onMouseDown?.(event);

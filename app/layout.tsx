@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fragment_Mono, Mona_Sans, Tilt_Neon } from "next/font/google";
 import { AccentScript } from "@/components/site/accent-script";
 import { AccentRestorer } from "@/components/site/accent-store";
+import { SiteAnalytics } from "@/components/site/site-analytics";
 import { SkipLink } from "@/components/site/skip-link";
 import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SkipLink />
         <AccentRestorer />
         {children}
+        <SiteAnalytics />
       </body>
     </html>
   );

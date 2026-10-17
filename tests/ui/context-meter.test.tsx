@@ -74,7 +74,7 @@ describe("ContextMeter", () => {
 
   it("opens the breakdown from the compact button", () => {
     render(<ContextMeter size="sm" breakdown parts={PARTS} limit={200_000} />);
-    const button = screen.getByRole("button", { name: "Context window: 71% used, 142.3k of 200k tokens. Show breakdown" });
+    const button = screen.getByRole("button", { name: "Context window, 142.3k / 200k tokens, 71% used. Show breakdown" });
     expect(button).toHaveAttribute("aria-expanded", "false");
     fireEvent.click(button);
     expect(button).toHaveAttribute("aria-expanded", "true");

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const projects = [
   {
     name: "neonkit-docs",
-    domain: "get-neonkit.vercel.app",
+    domain: "neonkit.heyaadi.com",
     commit: "Live previews on every docs page",
     branch: "main",
     age: "2m ago",

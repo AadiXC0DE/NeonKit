@@ -28,7 +28,6 @@ function DayPicker({ value, onValueChange }: { value: string[]; onValueChange: (
             key={day.value}
             type="button"
             aria-pressed={pressed}
-            aria-label={day.name}
             onClick={() =>
               onValueChange(pressed ? value.filter((v) => v !== day.value) : [...value, day.value])
             }
@@ -42,6 +41,8 @@ function DayPicker({ value, onValueChange }: { value: string[]; onValueChange: (
             )}
           >
             {day.short}
+            {/* Spoken as "Mo, Monday": the name starts with what's on the button, so voice control finds it. */}
+            <span className="sr-only">, {day.name}</span>
           </button>
         );
       })}

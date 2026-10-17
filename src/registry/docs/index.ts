@@ -122,6 +122,23 @@ import { doc as statusLightDoc } from "./status-light";
 import { doc as dockDoc } from "./dock";
 import { doc as imageCompareDoc } from "./image-compare";
 import { doc as bannerDoc } from "./banner";
+import { doc as signalBeamDoc } from "./signal-beam";
+import { doc as globeDoc } from "./globe";
+import { doc as sparksDoc } from "./sparks";
+import { doc as rotatingTextDoc } from "./rotating-text";
+import { doc as scrollProgressDoc } from "./scroll-progress";
+import { doc as deviceFrameDoc } from "./device-frame";
+import { doc as dotGridDoc } from "./dot-grid";
+import { doc as circuitDoc } from "./circuit";
+import { doc as lasersDoc } from "./lasers";
+import { doc as tunnelDoc } from "./tunnel";
+import { doc as sunsetDoc } from "./sunset";
+import { doc as hazeDoc } from "./haze";
+import { doc as tourDoc } from "./tour";
+import { doc as passwordInputDoc } from "./password-input";
+import { doc as heatmapDoc } from "./heatmap";
+import { doc as suggestionsDoc } from "./suggestions";
+import { doc as aspectRatioDoc } from "./aspect-ratio";
 
 export const docs: Record<string, ComponentDoc> = {
   "button": buttonDoc,
@@ -246,4 +263,21 @@ export const docs: Record<string, ComponentDoc> = {
   "dock": dockDoc,
   "image-compare": imageCompareDoc,
   "banner": bannerDoc,
+  "signal-beam": signalBeamDoc,
+  "globe": globeDoc,
+  "sparks": sparksDoc,
+  "rotating-text": rotatingTextDoc,
+  "scroll-progress": scrollProgressDoc,
+  "device-frame": deviceFrameDoc,
+  "dot-grid": dotGridDoc,
+  "circuit": circuitDoc,
+  "lasers": lasersDoc,
+  "tunnel": tunnelDoc,
+  "sunset": sunsetDoc,
+  "haze": hazeDoc,
+  "tour": tourDoc,
+  "password-input": passwordInputDoc,
+  "heatmap": heatmapDoc,
+  "suggestions": suggestionsDoc,
+  "aspect-ratio": aspectRatioDoc,
 };

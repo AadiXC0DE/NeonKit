@@ -143,10 +143,10 @@ function Account() {
   return (
     <button
       type="button"
-      aria-label="Account: Mira Okafor"
       className="flex h-11 w-full min-w-0 cursor-pointer items-center gap-2.5 rounded-lg px-1.5 text-left outline-none transition-colors duration-150 hover:bg-white/[0.04] focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)]"
     >
       <Avatar alt="" fallback="MO" size="sm" status="online" />
+      <span className="sr-only">Account: </span>
       <span className={cn("grid min-w-0 flex-1 transition-opacity duration-200", collapsed && "md:opacity-0")}>
         <span className="truncate text-sm text-white/90">Mira Okafor</span>
         <span className="truncate text-xs text-white/50">mira@lumenlabs.dev</span>

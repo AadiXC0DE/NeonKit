@@ -42,7 +42,7 @@ src/lib/utils.ts                    cn()
 - Use the variable through arbitrary values only: `text-[rgb(var(--neon))]`, `bg-[rgb(var(--neon)/0.12)]`, `border-[rgb(var(--neon)/0.6)]`, `shadow-[0_0_18px_rgb(var(--neon)/0.45)]`, `[text-shadow:0_0_10px_rgb(var(--neon)/0.6)]`.
 - Omit `"color"` from the native props you extend: `Omit<React.HTMLAttributes<...>, "color">`.
 
-**Glow intensity.** Every glow reads one more variable, `--neon-glow`: a unitless multiplier, 1 by default, set app-wide in CSS (`:root { --neon-glow: 0.6; }`) or from the [Theme Studio](https://get-neonkit.vercel.app/theme). Glow is light that spills past an element: blurred box-shadow, text-shadow and drop-shadow layers, radial-gradient spill that fades to `transparent`, blurred halo copies, SVG blur filters and canvas bloom. Fills, borders, text colors and focus rings are structure and don't read it. At 0 the component should look flat and still designed.
+**Glow intensity.** Every glow reads one more variable, `--neon-glow`: a unitless multiplier, 1 by default, set app-wide in CSS (`:root { --neon-glow: 0.6; }`) or from the [Theme Studio](https://neonkit.heyaadi.com/theme). Glow is light that spills past an element: blurred box-shadow, text-shadow and drop-shadow layers, radial-gradient spill that fades to `transparent`, blurred halo copies, SVG blur filters and canvas bloom. Fills, borders, text colors and focus rings are structure and don't read it. At 0 the component should look flat and still designed.
 
 - Scale the glow layer's alpha: `shadow-[0_0_18px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]`, and `rgb(var(--neon)/var(--neon-glow,1))` where the layer had no alpha. In CSS strings and inline styles, write it normally: `rgb(var(--neon) / calc(0.45 * var(--neon-glow, 1)))`.
 - Write `CALC` in uppercase inside Tailwind classes. CSS function names are case-insensitive, and Tailwind 3 respaces everything after a lowercase `calc(` in an arbitrary value, which turns `drop-shadow` into `drop - shadow` and `-8px` into `- 8px`. Tailwind 4 doesn't care either way.
@@ -116,3 +116,11 @@ npm run lint
 npm test
 npm run build
 ```
+
+## Quality gates
+
+CI runs three jobs on every pull request and on pushes to `main`: `check` (the commands above), `a11y` and `install-test`.
+
+- **Size budgets.** `tests/budget.test.ts` (part of `npm test`) gzips each component file and its installed footprint, itself plus every NeonKit component it pulls in, and fails past 16 KB per file or 72 KB per footprint. If a component trips it, split it or slim it before raising the limit.
+- **Accessibility.** `npm run a11y` runs axe-core (WCAG 2.1 A and AA) over every component page, every block at `/view/<slug>`, every template route and the site pages, scrolling each page so the lazy previews mount. Serious and critical violations fail and print as a table. It needs a running site: `npm run dev` (or `npm run build && npm start`) in one terminal, then `npm run a11y` in another. Pass routes to check a few (`npm run a11y -- /components/knob /view/hero-city`), `--only=components,blocks,templates,site` for a group, `--verbose` for each failing node's markup, `BASE_URL` for another host. Locally it uses your installed Chrome. Fix the markup rather than adding to the short, commented `EXCEPTIONS` list in the script.
+- **Install.** `npm run install-test` builds the registry for `http://localhost:4400` into a temp dir, serves it, creates a fresh `create-next-app` project outside the repo, runs `shadcn init -d`, adds button, switch, dialog, select, data-table, chat-message, knob, neon-sign, the hero-city block and the saas template over HTTP, then runs `next build`. Run it when you change a component's imports, registry entry or anything a template installs. `--keep` leaves the temp project in place for a look; a failed run always keeps it. It needs the network the first time; after that npm serves most of it from its cache.

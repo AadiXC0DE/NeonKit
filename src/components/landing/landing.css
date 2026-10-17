@@ -97,3 +97,22 @@
     opacity: 0.25;
   }
 }
+
+/* ── Glyphs: the specimen strikes on when it changes ───────────────── */
+
+@keyframes nk-ignite {
+  0% { opacity: 0; }
+  10% { opacity: 0.9; }
+  18% { opacity: 0.2; }
+  30% { opacity: 1; }
+  40% { opacity: 0.55; }
+  56%, 100% { opacity: 1; }
+}
+.nk-ignite {
+  animation: nk-ignite 420ms linear both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nk-ignite {
+    animation: none;
+  }
+}

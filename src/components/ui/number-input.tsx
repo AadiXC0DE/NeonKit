@@ -243,7 +243,9 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     const message = errored ? (error === true ? null : error) : description;
     const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
     const rejected = useRejected(inputRef);
-    const invalid = errored || rejected;
+    // A wrapping Field marks its control with aria-invalid; it lights the same red as `error`.
+    const ariaInvalid = props["aria-invalid"];
+    const invalid = errored || rejected || ariaInvalid === true || ariaInvalid === "true";
     const s = sizes[size];
     const locked = Boolean(disabled || readOnly);
 

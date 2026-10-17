@@ -89,7 +89,7 @@ export const doc: ComponentDoc = {
   notes: [
     "Every glyph is bent tube: as few continuous runs as possible, real bend radii, and a blockout gap wherever one tube passes behind another, the way a sign maker paints out a crossing.",
     "Names and props follow lucide-react, so switching is a find and replace on the import path. Common lucide aliases (Loader2, AlertTriangle, Trash2, Home) are exported too, and LucideIcon and LucideProps are type aliases.",
-    "Named exports only and no side effects, so bundlers keep just the icons you import. The icons object is for pickers like the one above; importing it pulls in all 310.",
+    "Named exports only and no side effects, so bundlers keep just the icons you import. The icons object is for pickers like the one above; importing it pulls in all of them.",
     "Decorative by default. Give an icon a title or aria-label when it is the only content of a control, or label the control instead.",
   ],
 };

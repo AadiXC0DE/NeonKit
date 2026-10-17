@@ -96,15 +96,32 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
     ref,
   ) => {
     const context = React.useMemo(() => ({ density, stickyHeader }), [density, stickyHeader]);
+    // A table that overflows its frame scrolls; only then does the frame take a tab stop, so the keyboard can too.
+    const frameRef = React.useRef<HTMLDivElement>(null);
+    const [scrolls, setScrolls] = React.useState(false);
+    React.useEffect(() => {
+      const frame = frameRef.current;
+      const table = frame?.querySelector("table");
+      if (!frame || !table || typeof ResizeObserver === "undefined") return;
+      const measure = () =>
+        setScrolls(frame.scrollWidth > frame.clientWidth + 1 || frame.scrollHeight > frame.clientHeight + 1);
+      const observer = new ResizeObserver(measure);
+      observer.observe(frame);
+      observer.observe(table);
+      return () => observer.disconnect();
+    }, []);
 
     return (
       <TableContext.Provider value={context}>
         <div
+          ref={frameRef}
           data-density={density}
+          tabIndex={scrolls ? 0 : undefined}
           style={neonVars(color)}
           className={cn(
             "[--neon:var(--neon-accent,34_211_238)]",
             "relative w-full overflow-auto rounded-xl border border-white/10 bg-white/[0.02]",
+            "outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
             containerClassName,
           )}
         >

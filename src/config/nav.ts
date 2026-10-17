@@ -10,6 +10,7 @@ export const docsNav: NavSection[] = [
       { title: "Introduction", href: "/docs" },
       { title: "Installation", href: "/docs/installation" },
       { title: "Theming", href: "/docs/theming" },
+      { title: "Design language", href: "/docs/design" },
       { title: "Theme Studio", href: "/theme" },
       { title: "Use with AI", href: "/docs/ai" },
       { title: "All components", href: "/components" },

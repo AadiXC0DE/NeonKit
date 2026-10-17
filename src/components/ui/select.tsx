@@ -161,7 +161,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
     // A form reset goes back to the value the select started with.
     const proxyRef = React.useRef<HTMLInputElement>(null);
     const rejected = useRejected(proxyRef, selectedValue ?? "");
-    const invalid = errored || rejected;
+    // A wrapping Field marks its control with aria-invalid; it lights the same red as `error`.
+    const ariaInvalid = props["aria-invalid"];
+    const invalid = errored || rejected || ariaInvalid === true || ariaInvalid === "true";
     const initialValue = React.useRef(selectedValue);
     const resetRef = React.useRef<() => void>(() => {});
     React.useEffect(() => {

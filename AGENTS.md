@@ -9,7 +9,7 @@ Notes for AI coding agents working in this repo.
 - Templates live in `src/components/templates/<slug>/` (sections, `config.ts`) and `app/preview/<slug>/` (routes), listed under `templates` in `registry.json`. Link through `basePath` from `config.ts`, never `/preview/...`; see the Templates section of CONTRIBUTING.md.
 - Before you finish: `npm run type-check && npm run lint && npm test && npm run build`. The build fails if a component imports something its registry entry doesn't list.
 
-Using NeonKit in another project? Read https://get-neonkit.vercel.app/llms.txt instead.
+Using NeonKit in another project? Read https://neonkit.heyaadi.com/llms.txt instead.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

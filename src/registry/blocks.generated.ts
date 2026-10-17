@@ -9,11 +9,14 @@ import heroTerminal from "@/components/blocks/hero-terminal";
 import heroCity from "@/components/blocks/hero-city";
 import heroProduct from "@/components/blocks/hero-product";
 import heroSplitForm from "@/components/blocks/hero-split-form";
+import heroGlobe from "@/components/blocks/hero-globe";
+import heroSunset from "@/components/blocks/hero-sunset";
 import featuresBento from "@/components/blocks/features-bento";
 import featuresAlternating from "@/components/blocks/features-alternating";
 import featuresSpotlight from "@/components/blocks/features-spotlight";
 import featuresComparison from "@/components/blocks/features-comparison";
 import featuresSteps from "@/components/blocks/features-steps";
+import featuresIntegrations from "@/components/blocks/features-integrations";
 import logosGrid from "@/components/blocks/logos-grid";
 import logosMarquee from "@/components/blocks/logos-marquee";
 import statsCounters from "@/components/blocks/stats-counters";
@@ -29,6 +32,7 @@ import faqSearch from "@/components/blocks/faq-search";
 import ctaBand from "@/components/blocks/cta-band";
 import ctaSign from "@/components/blocks/cta-sign";
 import ctaTerminal from "@/components/blocks/cta-terminal";
+import ctaLasers from "@/components/blocks/cta-lasers";
 import footerBig from "@/components/blocks/footer-big";
 import footerMinimal from "@/components/blocks/footer-minimal";
 import footerSign from "@/components/blocks/footer-sign";
@@ -55,6 +59,7 @@ import marketingChangelog from "@/components/blocks/marketing-changelog";
 import marketingBlog from "@/components/blocks/marketing-blog";
 import marketingEventTicket from "@/components/blocks/marketing-event-ticket";
 import marketingProductCard from "@/components/blocks/marketing-product-card";
+import marketingDevice from "@/components/blocks/marketing-device";
 
 export const blockComponents: Record<string, React.ComponentType> = {
   "hero-sign": heroSign,
@@ -66,11 +71,14 @@ export const blockComponents: Record<string, React.ComponentType> = {
   "hero-city": heroCity,
   "hero-product": heroProduct,
   "hero-split-form": heroSplitForm,
+  "hero-globe": heroGlobe,
+  "hero-sunset": heroSunset,
   "features-bento": featuresBento,
   "features-alternating": featuresAlternating,
   "features-spotlight": featuresSpotlight,
   "features-comparison": featuresComparison,
   "features-steps": featuresSteps,
+  "features-integrations": featuresIntegrations,
   "logos-grid": logosGrid,
   "logos-marquee": logosMarquee,
   "stats-counters": statsCounters,
@@ -86,6 +94,7 @@ export const blockComponents: Record<string, React.ComponentType> = {
   "cta-band": ctaBand,
   "cta-sign": ctaSign,
   "cta-terminal": ctaTerminal,
+  "cta-lasers": ctaLasers,
   "footer-big": footerBig,
   "footer-minimal": footerMinimal,
   "footer-sign": footerSign,
@@ -112,4 +121,5 @@ export const blockComponents: Record<string, React.ComponentType> = {
   "marketing-blog": marketingBlog,
   "marketing-event-ticket": marketingEventTicket,
   "marketing-product-card": marketingProductCard,
+  "marketing-device": marketingDevice,
 };

@@ -225,6 +225,8 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
       <div
         ref={ref}
         data-state={paused ? "paused" : "running"}
+        // Under reduced motion the strip scrolls by hand instead, so the keyboard needs a way in.
+        tabIndex={reduce ? 0 : undefined}
         style={neonVars(color, {
           "--nk-marquee-gap": typeof gap === "number" ? `${gap}px` : gap,
           // clip, unlike hidden, can't be scrolled by focus; engines without it keep hidden.
@@ -243,6 +245,8 @@ const Marquee = React.forwardRef<HTMLDivElement, MarqueeProps>(
               ? "overflow-y-auto [scrollbar-width:thin]"
               : "overflow-x-auto [scrollbar-width:thin]"
             : "overflow-hidden",
+          reduce &&
+            "outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
           className,
         )}
         onPointerEnter={(event) => {

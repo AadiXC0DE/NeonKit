@@ -5,7 +5,7 @@
   "description": "Neon UI components for React. Copy, paste, glow.",
   "license": "MIT",
   "author": "AadiXC0DE",
-  "homepage": "https://get-neonkit.vercel.app",
+  "homepage": "https://neonkit.heyaadi.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/AadiXC0DE/NeonKit.git"
@@ -32,7 +32,9 @@
     "test": "vitest run",
     "registry:build": "node scripts/build-registry.mjs",
     "shoot": "node scripts/shoot.mjs",
-    "thumbs": "node scripts/thumbs.mjs"
+    "thumbs": "node scripts/thumbs.mjs",
+    "a11y": "node scripts/a11y.mjs",
+    "install-test": "node scripts/install-test.mjs"
   },
   "engines": {
     "node": ">=20.9.0"
@@ -40,6 +42,8 @@
   "dependencies": {
     "@floating-ui/react-dom": "^2.1.9",
     "@radix-ui/react-slot": "^1.4.0",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "clsx": "^2.1.1",
     "motion": "^14.1.0",
     "next": "^16.4.0",
@@ -58,6 +62,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "axe-core": "^4.14.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.4.0",
     "jsdom": "^29.1.1",

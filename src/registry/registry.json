@@ -1155,7 +1155,7 @@
       "slug": "icons",
       "name": "Icons",
       "category": "Foundations",
-      "description": "310 icons drawn as bent neon tube, with lucide-compatible names and props. Blockout gaps where one tube passes behind another.",
+      "description": "412 icons drawn as bent neon tube, with every lucide-react name for them. Blockout gaps where one tube passes behind another.",
       "dependencies": [],
       "registryDependencies": [],
       "addedIn": "1.5"
@@ -1283,6 +1283,167 @@
         "marquee"
       ],
       "addedIn": "1.5"
+    },
+    {
+      "slug": "signal-beam",
+      "name": "Signal Beam",
+      "category": "Effects",
+      "description": "A neon tube drawn between two elements, with a pulse of light running along it. Curves, reverses, runs both ways.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "globe",
+      "name": "Globe",
+      "category": "Backgrounds",
+      "description": "A dotted neon globe on canvas with real coastlines, pulsing markers and lit arcs. Drag or use arrow keys to spin.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "sparks",
+      "name": "Sparks",
+      "category": "Effects",
+      "description": "Bursts of white-hot sparks that cool to the neon color, fired from a hook, a function or a click wrapper.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "rotating-text",
+      "name": "Rotating Text",
+      "category": "Text",
+      "description": "Cycles words in a headline like swapping a neon sign insert: the old tube powers off, the next one strikes.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "scroll-progress",
+      "name": "Scroll Progress",
+      "category": "Feedback",
+      "description": "Reading progress as a lit tube on the window edge, or a ring for back to top. Follows the page or any container.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "device-frame",
+      "name": "Device Frame",
+      "category": "Layout",
+      "description": "Browser window and phone frames for screenshots or live UI, with a screen rim that catches the neon.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "dot-grid",
+      "name": "Dot Grid",
+      "category": "Backgrounds",
+      "description": "A pegboard of dots that light up near the pointer like LEDs behind a panel, with slow ripples rolling across.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "circuit",
+      "name": "Circuit",
+      "category": "Backgrounds",
+      "description": "A seeded PCB with buses of traces, vias and chips. Pulses of light run along the traces and light the pins they reach.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "lasers",
+      "name": "Lasers",
+      "category": "Backgrounds",
+      "description": "Stage lasers fanning from the top or bottom edge, sweeping slowly through patchy haze, with a bright source flare.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "tunnel",
+      "name": "Tunnel",
+      "category": "Backgrounds",
+      "description": "Neon rings or corridor frames rushing toward you down a winding tunnel, drawn on canvas with soft halos.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "sunset",
+      "name": "Sunset",
+      "category": "Backgrounds",
+      "description": "A synthwave sun whose slits drift down and widen, behind rim-lit mountains. Lines up with Retro Grid.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "haze",
+      "name": "Haze",
+      "category": "Backgrounds",
+      "description": "Drifting smoke lit by neon from below or a side: three layers of one noise tile, slid and lit each frame, no blur.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "tour",
+      "name": "Tour",
+      "category": "Overlay",
+      "description": "Product tour: the page dims around a lit outline that glides from target to target, with a focus-trapped step card.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "password-input",
+      "name": "Password Input",
+      "category": "Forms",
+      "description": "Password field with a reveal toggle, Caps Lock warning, four-segment strength meter and a rule checklist.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "input"
+      ],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "heatmap",
+      "name": "Heatmap",
+      "category": "Data Display",
+      "description": "Contribution calendar or labelled matrix, lit by value, with one tooltip and arrow-key navigation. SSR-stable.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "suggestions",
+      "name": "Suggestions",
+      "category": "AI",
+      "description": "A row of prompt chips for under a chat input. One tab stop, arrow keys, edge fades while it scrolls.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "aspect-ratio",
+      "name": "Aspect Ratio",
+      "category": "Layout",
+      "description": "Holds children at a fixed shape, from 16 / 9 or \"4:3\". Optional hairline frame with a lit corner tick.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
     }
   ],
   "blockCategories": [
@@ -1436,6 +1597,39 @@
       "height": 775
     },
     {
+      "slug": "hero-globe",
+      "name": "Globe Hero",
+      "category": "Heroes",
+      "description": "Edge-network hero: a draggable globe of 18 regions with deploy arcs and a live p95 latency readout.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "copy-button",
+        "globe",
+        "icons"
+      ],
+      "addedIn": "1.7",
+      "height": 844
+    },
+    {
+      "slug": "hero-sunset",
+      "name": "Sunset Hero",
+      "category": "Heroes",
+      "description": "Synthwave album launch over a sunset and grid floor: rotating format headline, format picker, release countdown.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "countdown",
+        "icons",
+        "retro-grid",
+        "rotating-text",
+        "sunset",
+        "toggle-group"
+      ],
+      "addedIn": "1.7",
+      "height": 860
+    },
+    {
       "slug": "features-bento",
       "name": "Bento Features",
       "category": "Features",
@@ -1513,6 +1707,19 @@
       ],
       "addedIn": "1.3",
       "height": 983
+    },
+    {
+      "slug": "features-integrations",
+      "name": "Integrations Features",
+      "category": "Features",
+      "description": "Eight sources beamed into a hub and out to three destinations. Switch a source off and the count drops.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "signal-beam"
+      ],
+      "addedIn": "1.7",
+      "height": 1151
     },
     {
       "slug": "logos-grid",
@@ -1722,6 +1929,21 @@
       ],
       "addedIn": "1.3",
       "height": 925
+    },
+    {
+      "slug": "cta-lasers",
+      "name": "Lasers CTA",
+      "category": "Calls to action",
+      "description": "Closing CTA under crossing lasers in haze. One big line whose ticket count ticks down, a button, one line of proof.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "haze",
+        "icons",
+        "lasers"
+      ],
+      "addedIn": "1.7",
+      "height": 781
     },
     {
       "slug": "footer-big",
@@ -2145,6 +2367,21 @@
       ],
       "addedIn": "1.3",
       "height": 790
+    },
+    {
+      "slug": "marketing-device",
+      "name": "Device Showcase",
+      "category": "Marketing",
+      "description": "Laptop and phone frames running one live app: seat a party on the phone and its table lights up on the laptop.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "device-frame",
+        "icons",
+        "switch"
+      ],
+      "addedIn": "1.7",
+      "height": 1376
     }
   ],
   "templates": [

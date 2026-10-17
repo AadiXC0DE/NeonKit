@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Anatomy } from "@/components/landing/anatomy";
 import { Closing } from "@/components/landing/closing";
+import { Glyphs } from "@/components/landing/glyphs";
 import { Hero } from "@/components/landing/hero";
 import { Install } from "@/components/landing/install";
 import { Lights } from "@/components/landing/lights";
 import { Rack } from "@/components/landing/rack";
 import { shelfPicks, type Reel } from "@/components/landing/shelf-data";
 import { Shelves } from "@/components/landing/shelves";
+import { System } from "@/components/landing/system";
 import "@/components/landing/landing.css";
 import { JsonLd } from "@/components/site/json-ld";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -96,6 +98,8 @@ export default function HomePage() {
         <Lights />
         <Rack instrumentCount={registry.filter((item) => item.category === "Instruments").length} />
         <Anatomy />
+        <System />
+        <Glyphs />
         <Shelves
           total={registry.length}
           shelves={shelves}

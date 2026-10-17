@@ -107,16 +107,122 @@ function useElapsed(running: boolean) {
   return seconds;
 }
 
-export default function FeaturesBento() {
+/** The meter bridge. Its readings tick 20 times a second, so they live here and re-render only this. */
+function Ingest({ line, knob }: { line: number; knob: React.ReactNode }) {
   const readings = useStreamLevels();
+  const over = readings.filter((r) => r.peak > line).length;
+  return (
+    <>
+      <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] px-5 py-3.5 text-[13px] sm:px-7">
+        <span className="text-white/60">
+          Ingest <span className="text-white/50">· {STREAMS.length} streams</span>
+        </span>
+        <span
+          aria-live="polite"
+          className={cn(
+            "tabular-nums transition-colors",
+            over ? "text-[#ff4d5e] [text-shadow:0_0_10px_rgb(255_77_94/0.6)]" : "text-white/55",
+          )}
+        >
+          {over === 0 ? "All under the line" : `${over} over the line`}
+        </span>
+      </div>
+
+      <div className="grid lg:grid-cols-12">
+        <div className="px-5 py-8 sm:px-7 lg:col-span-9 lg:py-10">
+          <div className="flex flex-col gap-5 lg:gap-7">
+            {STREAMS.map((stream, i) => {
+              const r = readings[i];
+              const hot = r.peak > line;
+              const silent = stream.base < 0.2;
+              return (
+                <div key={stream.id} className="grid grid-cols-[1fr_3.25rem] items-center gap-x-3 gap-y-1.5 sm:grid-cols-[9rem_1fr_3.5rem] sm:gap-x-5">
+                  <span className="col-span-2 flex items-baseline gap-2 truncate font-mono text-[12.5px] text-white/75 sm:col-span-1">
+                    {stream.id}
+                    {silent && <span className="font-sans text-[12px] text-white/50">quiet</span>}
+                  </span>
+                  <div className="relative min-w-0">
+                    <Meter
+                      aria-label={stream.id}
+                      value={r.level}
+                      segments={40}
+                      size="md"
+                      className="w-full"
+                      zones={[{ from: 0 }, { from: line, color: "red" }]}
+                    />
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute -inset-y-1.5 w-px bg-[#ff4d5e]/70 shadow-[0_0_6px_rgb(255_77_94/0.8)] transition-[left] duration-150"
+                      style={{ left: `calc(4px + ${line} * (100% - 8px))` }}
+                    />
+                  </div>
+                  <span className={cn("text-right font-mono text-[12.5px] tabular-nums", hot ? "text-[#ff4d5e]" : "text-white/55")}>
+                    {formatDb(toDb(r.peak))}
+                  </span>
+                </div>
+              );
+            })}
+            <div aria-hidden className="grid grid-cols-[1fr_3.25rem] gap-x-3 sm:grid-cols-[9rem_1fr_3.5rem] sm:gap-x-5">
+              <span className="hidden sm:block" />
+              <div className="relative h-4">
+                {SCALE.map((db) => (
+                  <span
+                    key={db}
+                    className={cn(
+                      "absolute -translate-x-1/2 font-mono text-[11px] tabular-nums text-white/50 first:translate-x-0 last:-translate-x-full",
+                      db === -6 && "hidden sm:block",
+                    )}
+                    style={{ left: `calc(4px + ${toLevel(db)} * (100% - 8px))` }}
+                  >
+                    {db}
+                  </span>
+                ))}
+              </div>
+              <span className="text-right font-mono text-[11px] text-white/50">dBFS</span>
+            </div>
+          </div>
+        </div>
+        {knob}
+      </div>
+    </>
+  );
+}
+
+export default function FeaturesBento() {
   const [threshold, setThreshold] = React.useState(-6);
   const [protocol, setProtocol] = React.useState<keyof typeof LATENCY>("srt");
   const [unplugged, setUnplugged] = React.useState(false);
   const down = useElapsed(unplugged);
 
   const line = toLevel(threshold);
-  const over = readings.filter((r) => r.peak > line).length;
   const latency = LATENCY[protocol];
+  // Built here and passed in as an element: the meters re-render 20 times a second, the knob doesn't.
+  const knobColumn = (
+    <div className="relative flex items-center gap-6 border-t border-white/[0.06] px-5 py-7 sm:px-7 lg:col-span-3 lg:flex-col lg:justify-center lg:gap-5 lg:border-l lg:border-t-0 lg:py-10">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-[84px] top-1/2 size-60 sm:left-[92px] lg:left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/0.12),transparent)]"
+      />
+      <Knob
+        size="lg"
+        aria-label="Over line"
+        min={-24}
+        max={0}
+        step={1}
+        value={threshold}
+        defaultValue={-6}
+        onValueChange={setThreshold}
+        formatValue={(v) => `${v === 0 ? "0" : `−${Math.abs(v)}`} dBFS`}
+      />
+      <div className="relative lg:text-center">
+        <p className="text-[13px] text-white/60">Over line</p>
+        <p className="mt-1 font-mono text-[15px] tabular-nums text-white/90">
+          {threshold === 0 ? "0" : `−${Math.abs(threshold)}`} dBFS
+        </p>
+      </div>
+    </div>
+  );
+
 
   return (
     <section
@@ -141,101 +247,7 @@ export default function FeaturesBento() {
 
         {/* The one big surface: the meter bridge and the knob that sets its over line. */}
         <div className="relative mt-14 overflow-hidden rounded-[14px] border border-white/[0.08] bg-[#08090e] shadow-[inset_0_1px_0_rgb(255_255_255/0.04),0_50px_100px_-50px_rgb(0_0_0/0.9)] sm:mt-20">
-          <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] px-5 py-3.5 text-[13px] sm:px-7">
-            <span className="text-white/60">
-              Ingest <span className="text-white/50">· {STREAMS.length} streams</span>
-            </span>
-            <span
-              aria-live="polite"
-              className={cn(
-                "tabular-nums transition-colors",
-                over ? "text-[#ff4d5e] [text-shadow:0_0_10px_rgb(255_77_94/0.6)]" : "text-white/55",
-              )}
-            >
-              {over === 0 ? "All under the line" : `${over} over the line`}
-            </span>
-          </div>
-
-          <div className="grid lg:grid-cols-12">
-            <div className="px-5 py-8 sm:px-7 lg:col-span-9 lg:py-10">
-              <div className="flex flex-col gap-5 lg:gap-7">
-                {STREAMS.map((stream, i) => {
-                  const r = readings[i];
-                  const hot = r.peak > line;
-                  const silent = stream.base < 0.2;
-                  return (
-                    <div key={stream.id} className="grid grid-cols-[1fr_3.25rem] items-center gap-x-3 gap-y-1.5 sm:grid-cols-[9rem_1fr_3.5rem] sm:gap-x-5">
-                      <span className="col-span-2 flex items-baseline gap-2 truncate font-mono text-[12.5px] text-white/75 sm:col-span-1">
-                        {stream.id}
-                        {silent && <span className="font-sans text-[12px] text-white/50">quiet</span>}
-                      </span>
-                      <div className="relative min-w-0">
-                        <Meter
-                          aria-label={stream.id}
-                          value={r.level}
-                          segments={40}
-                          size="md"
-                          className="w-full"
-                          zones={[{ from: 0 }, { from: line, color: "red" }]}
-                        />
-                        <span
-                          aria-hidden
-                          className="pointer-events-none absolute -inset-y-1.5 w-px bg-[#ff4d5e]/70 shadow-[0_0_6px_rgb(255_77_94/0.8)] transition-[left] duration-150"
-                          style={{ left: `calc(4px + ${line} * (100% - 8px))` }}
-                        />
-                      </div>
-                      <span className={cn("text-right font-mono text-[12.5px] tabular-nums", hot ? "text-[#ff4d5e]" : "text-white/55")}>
-                        {formatDb(toDb(r.peak))}
-                      </span>
-                    </div>
-                  );
-                })}
-                <div aria-hidden className="grid grid-cols-[1fr_3.25rem] gap-x-3 sm:grid-cols-[9rem_1fr_3.5rem] sm:gap-x-5">
-                  <span className="hidden sm:block" />
-                  <div className="relative h-4">
-                    {SCALE.map((db) => (
-                      <span
-                        key={db}
-                        className={cn(
-                          "absolute -translate-x-1/2 font-mono text-[11px] tabular-nums text-white/50 first:translate-x-0 last:-translate-x-full",
-                          db === -6 && "hidden sm:block",
-                        )}
-                        style={{ left: `calc(4px + ${toLevel(db)} * (100% - 8px))` }}
-                      >
-                        {db}
-                      </span>
-                    ))}
-                  </div>
-                  <span className="text-right font-mono text-[11px] text-white/50">dBFS</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative flex items-center gap-6 border-t border-white/[0.06] px-5 py-7 sm:px-7 lg:col-span-3 lg:flex-col lg:justify-center lg:gap-5 lg:border-l lg:border-t-0 lg:py-10">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-[84px] top-1/2 size-60 sm:left-[92px] lg:left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(var(--neon)/0.12),transparent)]"
-              />
-              <Knob
-                size="lg"
-                aria-label="Over line"
-                min={-24}
-                max={0}
-                step={1}
-                value={threshold}
-                defaultValue={-6}
-                onValueChange={setThreshold}
-                formatValue={(v) => `${v === 0 ? "0" : `−${Math.abs(v)}`} dBFS`}
-              />
-              <div className="relative lg:text-center">
-                <p className="text-[13px] text-white/60">Over line</p>
-                <p className="mt-1 font-mono text-[15px] tabular-nums text-white/90">
-                  {threshold === 0 ? "0" : `−${Math.abs(threshold)}`} dBFS
-                </p>
-              </div>
-            </div>
-          </div>
-
+          <Ingest line={line} knob={knobColumn} />
           <dl className="grid grid-cols-3 divide-x divide-white/[0.06] border-t border-white/[0.06]">
             {SUMMARY.map((item) => (
               <div key={item.label} className="flex flex-col-reverse px-4 py-4 sm:px-7">

@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "NeonKit",
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://get-neonkit.vercel.app").replace(/\/$/, ""),
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://neonkit.heyaadi.com").replace(/\/$/, ""),
   title: "NeonKit — neon UI components for React and Tailwind",
   description:
     "Neon UI components, blocks and templates for React and Tailwind CSS. Accessible, copied into your repo by the shadcn CLI, colored by one CSS variable.",

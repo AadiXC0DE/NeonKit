@@ -24,7 +24,6 @@ export default function EqualizerTrackList() {
             <button
               type="button"
               aria-current={active ? "true" : undefined}
-              aria-label={`${track.title} by ${track.artist}${active ? (playing ? ", playing" : ", paused") : ""}`}
               onClick={() => {
                 if (active) setPlaying((value) => !value);
                 else {
@@ -53,9 +52,11 @@ export default function EqualizerTrackList() {
                 >
                   {track.title}
                 </span>
+                <span className="sr-only"> by </span>
                 <span className="block truncate text-xs text-white/55">{track.artist}</span>
               </span>
               <span className="text-xs tabular-nums text-white/55">{track.length}</span>
+              {active && <span className="sr-only">{playing ? ", playing" : ", paused"}</span>}
             </button>
           </li>
         );

@@ -8,6 +8,22 @@ export type Release = {
 
 export const releases: Release[] = [
   {
+    version: "1.7",
+    date: "2026-10-18",
+    title: "Lights on",
+    notes: [
+      "New backgrounds: Dot Grid, Circuit, Lasers, Tunnel, Sunset and Haze. New effects and helpers: Signal Beam, Globe, Sparks, Rotating Text, Scroll Progress and Device Frame. And the pieces people kept asking for: Tour, Password Input, Heatmap, Suggestions and Aspect Ratio.",
+      "Five new blocks built on them: a Globe Hero for edge networks, Integrations with live signal beams, a Sunset Hero for a synthwave launch, a Lasers CTA, and a Device section where a phone and a laptop run the same app.",
+      "A design language page at /docs/design: glow as light, when things are allowed to glow, type, motion, radius and how the icons are built. The landing page now shows the system and the icon set live.",
+      "102 new icons, 412 in all: Save, Clipboard, History, Shield, Battery, Printer, the heading and list glyphs, money, charts, health and more, each drawn to the same tube rules. Icons also answer to every lucide-react name for the glyphs they draw, including the CheckIcon-style names shadcn's own components import, so moving a project over is a change of import path.",
+      "Every component page can open itself in v0, ChatGPT or Claude, next to Copy as Markdown. Block pages open in v0.",
+      "Field errors now light Input, Textarea, Select and Number Input red, and disabled solid buttons are no longer lit. The new accessibility gate turned up about twenty smaller fixes across components, examples and templates.",
+      "Galleries are much lighter. Previews boot one at a time between scrolls, only what's on screen animates, and frames in a sideways strip no longer reload each time they slide out. Meter now draws one halo per row instead of one per segment, which took Features Bento from 10 to 60 frames a second, and Retro Grid's floor is a fifth of the size it was, so pages that change while it moves no longer stutter.",
+      "NeonKit moved to neonkit.heyaadi.com. The old address redirects, registry URLs included.",
+      "Size budgets in the test suite: every component's source and its installed footprint are checked on each change.",
+    ],
+  },
+  {
     version: "1.6",
     date: "2026-10-18",
     title: "Agents, and a lighting desk",

@@ -115,7 +115,7 @@ export default function ThemingPage() {
 
       <PagerLinks
         prev={{ title: "Installation", href: "/docs/installation" }}
-        next={{ title: "Use with AI", href: "/docs/ai" }}
+        next={{ title: "Design language", href: "/docs/design" }}
       />
     </DocArticle>
   );
