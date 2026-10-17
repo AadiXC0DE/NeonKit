@@ -45,6 +45,13 @@ const RetroGrid = React.forwardRef<HTMLDivElement, RetroGridProps>(
     },
     ref,
   ) => {
+    const tilt = Math.min(88, Math.max(20, angle));
+    const tan = Math.tan((tilt * Math.PI) / 180).toFixed(4);
+    // How far the plane runs, in container heights × 100. A row at distance s draws at s·sin / (tan/2 + s·sin) of
+    // the way to the horizon, so 4.5 / cos(angle) reaches 90%, where the mask has already faded it out. Anything
+    // longer is a bigger layer to repaint for nothing: the old fixed 3000 made pages stutter whenever something
+    // else on them changed every frame.
+    const length = Math.min(3000, Math.max(1500, Math.ceil(450 / Math.cos((tilt * Math.PI) / 180))));
     const vars = {
       "--cell": `${cellSize}px`,
       "--speed": `${speed}s`,
@@ -65,21 +72,40 @@ const RetroGrid = React.forwardRef<HTMLDivElement, RetroGridProps>(
         {...props}
       >
         <style>{css}</style>
-        <div className="absolute inset-x-0 bottom-0 top-1/2 [perspective-origin:50%_0%] [perspective:220px] [mask-image:linear-gradient(to_bottom,transparent,#000_40%)]">
+        {/* Sky glow: the horizon's light falling off upward */}
+        {horizon && (
+          <div className="absolute inset-x-0 bottom-1/2 h-1/2 bg-[radial-gradient(ellipse_60%_100%_at_50%_100%,rgb(var(--neon)/CALC(0.16*var(--neon-glow,1))),rgb(var(--neon)/CALC(0.05*var(--neon-glow,1)))_45%,transparent_75%)]" />
+        )}
+        {/* The floor is a long plane tipped away from the viewer, so its rows really recede. A plane's vanishing
+            line sits perspective × cot(angle) above the perspective origin, so with the origin on the floor's
+            bottom edge and perspective = floor height × tan(angle), the horizon lands on the glowing line at
+            any size. Container units carry the floor height into CSS. */}
+        <div className="absolute inset-x-0 bottom-0 top-1/2 [container-type:size] [mask-image:linear-gradient(to_bottom,transparent_6%,rgb(0_0_0/0.4)_30%,#000_66%)]">
           <div
-            className="absolute inset-x-[-50%] top-0 h-full origin-top overflow-hidden"
-            style={{ transform: `rotateX(${angle}deg)` }}
+            className="absolute inset-0 [perspective-origin:50%_100%]"
+            style={{ perspective: `calc(100cqh * ${tan})` }}
           >
             <div
+              className="absolute inset-x-[-120%] bottom-0 origin-bottom overflow-hidden"
+              // Pulled toward the viewer by half the perspective, so the nearest squares draw at twice cellSize.
+              // The bottom edge sits on the perspective origin, so it stays on the floor's bottom edge.
+              style={{ height: `${length}cqh`, transform: `translateZ(calc(50cqh * ${tan})) rotateX(${tilt}deg)` }}
+            >
+            {/* Each line is a hot core with a soft falloff either side, painted into the tile */}
+            <div
               className={cn(
-                "absolute inset-x-0 top-0 h-[calc(100%+var(--cell))] [background-size:var(--cell)_var(--cell)] [background-image:linear-gradient(to_right,rgb(var(--neon)/var(--line))_1px,transparent_0),linear-gradient(to_bottom,rgb(var(--neon)/var(--line))_1px,transparent_0)]",
+                "absolute inset-x-0 top-0 h-[calc(100%+var(--cell))] [background-position:50%_0] [background-size:var(--cell)_var(--cell)]",
+                "[background-image:linear-gradient(to_right,color-mix(in_srgb,rgb(var(--neon)/var(--line))_70%,rgb(255_255_255/var(--line)))_1px,transparent_0),linear-gradient(to_bottom,color-mix(in_srgb,rgb(var(--neon)/var(--line))_70%,rgb(255_255_255/var(--line)))_1px,transparent_0),linear-gradient(to_right,rgb(var(--neon)/calc(var(--line)*0.35)),transparent_4px,transparent_calc(100%_-_4px),rgb(var(--neon)/calc(var(--line)*0.35))),linear-gradient(to_bottom,rgb(var(--neon)/calc(var(--line)*0.35)),transparent_4px,transparent_calc(100%_-_4px),rgb(var(--neon)/calc(var(--line)*0.35)))]",
                 speed > 0 && "nk-retro-grid",
               )}
             />
+            </div>
           </div>
+          {/* Haze on the floor where it meets the horizon */}
+          <div className="absolute inset-x-0 top-0 h-1/3 bg-[linear-gradient(to_bottom,rgb(var(--neon)/0.1),transparent)]" />
         </div>
         {horizon && (
-          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-px bg-[linear-gradient(to_right,transparent,rgb(var(--neon))_20%,rgb(var(--neon))_80%,transparent)] shadow-[0_0_14px_1px_rgb(var(--neon)/0.55),0_0_60px_6px_rgb(var(--neon)/0.3)]" />
+          <div className="absolute inset-x-0 top-1/2 h-px -translate-y-px bg-[linear-gradient(to_right,transparent,color-mix(in_srgb,rgb(var(--neon))_60%,white)_20%,color-mix(in_srgb,rgb(var(--neon))_60%,white)_80%,transparent)] shadow-[0_0_4px_rgb(var(--neon)/var(--neon-glow,1)),0_0_14px_1px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),0_0_60px_6px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1)))]" />
         )}
       </div>
     );

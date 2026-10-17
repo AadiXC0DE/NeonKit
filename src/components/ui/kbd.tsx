@@ -14,7 +14,7 @@ const sizes = {
 // Pressing lights up fast; releasing fades slowly, like a tube cooling down.
 const states = {
   rest: "border-white/10 bg-white/[0.04] text-white/70 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),inset_0_-2px_0_rgb(0_0_0/0.45)] duration-300",
-  lit: "translate-y-px border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.12)] text-[rgb(var(--neon))] shadow-[inset_0_1px_0_rgb(var(--neon)/0.2),inset_0_-1px_0_rgb(0_0_0/0.35),0_0_14px_rgb(var(--neon)/0.45)] [text-shadow:0_0_8px_rgb(var(--neon)/0.8)] duration-75",
+  lit: "translate-y-px border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.12)] text-[rgb(var(--neon))] shadow-[inset_0_1px_0_rgb(var(--neon)/0.2),inset_0_-1px_0_rgb(0_0_0/0.35),0_0_14px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))] duration-75",
 } as const;
 
 function matchesKey(event: KeyboardEvent, key: string) {

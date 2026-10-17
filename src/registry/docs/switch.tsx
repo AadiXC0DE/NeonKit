@@ -48,6 +48,8 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "The track has an invisible target at least 44px tall, so the small switch is still easy to tap.",
+    "With name, a form reset puts the switch back to where it started.",
     "Space and Enter toggle the switch, and aria-checked reports its state.",
     "Without a label, pass an aria-label or point a label element at the switch id.",
     "The power-on flicker is skipped when the user prefers reduced motion, and never plays for switches that are already on when they mount.",

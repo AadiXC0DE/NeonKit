@@ -72,7 +72,7 @@ export default function TabsDemo() {
               />
               <span className="grid gap-0.5">
                 <span className="text-sm text-white/90">{item.label}</span>
-                <span className="text-xs text-white/45">{item.hint}</span>
+                <span className="text-xs text-white/50">{item.hint}</span>
               </span>
             </label>
           ))}

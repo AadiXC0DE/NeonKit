@@ -9,7 +9,7 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "Go" }).style.getPropertyValue("--neon")).toBe("163 230 53");
   });
 
-  it("disables itself and announces busy while loading", () => {
+  it("ignores presses but keeps focus while loading", () => {
     const onClick = vi.fn();
     render(
       <Button loading onClick={onClick}>
@@ -17,7 +17,12 @@ describe("Button", () => {
       </Button>,
     );
     const button = screen.getByRole("button", { name: "Save" });
-    expect(button).toBeDisabled();
+    button.focus();
+    fireEvent.click(button);
+    expect(onClick).not.toHaveBeenCalled();
+    expect(button).toHaveFocus();
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveAttribute("aria-disabled", "true");
     expect(button).toHaveAttribute("aria-busy", "true");
   });
 
@@ -28,6 +33,19 @@ describe("Button", () => {
       </Button>,
     );
     expect(screen.getByRole("link", { name: "Docs" })).toHaveAttribute("href", "/docs");
+  });
+
+  it("takes Base UI's render prop, as the shadcn CLI writes it in base-* projects", () => {
+    render(
+      <Button variant="solid" render={<a href="/docs" />} nativeButton={false}>
+        Docs
+      </Button>,
+    );
+    const link = screen.getByRole("link", { name: "Docs" });
+    expect(link).toHaveAttribute("href", "/docs");
+    expect(link.className).toContain("bg-[rgb(var(--neon))]");
+    expect(link).not.toHaveAttribute("nativeButton");
+    expect(link).not.toHaveAttribute("render");
   });
 });
 

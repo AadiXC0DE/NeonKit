@@ -84,6 +84,26 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       if (inputRef.current) inputRef.current.indeterminate = indeterminate;
     });
 
+    // A form reset unticks the native box without a change event. Follow it, and tell a
+    // controlled parent, so the drawn box never disagrees with what the form submits.
+    const initialChecked = React.useRef(checked);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialChecked.current;
+        if (initial === checked) return;
+        if (!isControlled) setUncontrolled(initial);
+        onCheckedChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = inputRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     const state = indeterminate ? "indeterminate" : checked ? "checked" : "unchecked";
     const on = state !== "unchecked";
     const s = sizes[size];
@@ -101,7 +121,8 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         style={neonVars(color, style)}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
-          "group/checkbox inline-flex cursor-pointer select-none items-start",
+          // align-middle: as an inline box its baseline is the square's bottom edge, which sits it 2px low beside text.
+          "group/checkbox inline-flex cursor-pointer select-none items-start align-middle",
           disabled && "cursor-not-allowed opacity-50",
           s.root,
           className,
@@ -120,7 +141,8 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               [describedBy, description && descriptionId].filter(Boolean).join(" ") ||
               undefined
             }
-            className="peer absolute inset-0 m-0 size-full cursor-[inherit] appearance-none opacity-0"
+            // Reaches a few pixels past the box, so a bare checkbox in a table row is easy to hit.
+            className="peer absolute -inset-1.5 m-0 cursor-[inherit] appearance-none opacity-0"
             {...props}
           />
           <span
@@ -132,11 +154,11 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               !disabled && "group-active/checkbox:scale-[0.92]",
               s.box,
               on
-                ? "border-[rgb(var(--neon))] bg-[rgb(var(--neon))] shadow-[0_0_14px_rgb(var(--neon)/0.45),inset_0_1px_0_rgb(255_255_255/0.35)]"
+                ? "border-[rgb(var(--neon))] bg-[rgb(var(--neon))] shadow-[0_0_14px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.35)]"
                 : "border-white/20 bg-white/[0.03]",
               !disabled &&
                 (on
-                  ? "group-hover/checkbox:shadow-[0_0_20px_rgb(var(--neon)/0.6),inset_0_1px_0_rgb(255_255_255/0.35)]"
+                  ? "group-hover/checkbox:shadow-[0_0_20px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.35)]"
                   : "group-hover/checkbox:border-[rgb(var(--neon)/0.55)]"),
             )}
           >

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { componentPath, examplePath, registry } from "@/registry";
+import { categories, componentPath, examplePath, registry } from "@/registry";
 import { docs } from "@/registry/docs";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -19,6 +19,12 @@ describe.each(registry.map((item) => [item.slug, item] as const))("%s", (slug, i
     expect(doc.api.length).toBeGreaterThan(0);
   });
 
+  it("lets the hero demo follow the preview's accent picker", () => {
+    // A literal palette color pins the demo; status colors via expressions are fine.
+    const demo = read(examplePath(slug, "demo"));
+    expect(demo).not.toMatch(/\bcolor="(cyan|blue|violet|magenta|pink|red|orange|amber|lime|green)"/);
+  });
+
   it("has a source file for every example", () => {
     for (const example of docs[slug].examples) {
       expect(existsSync(path.join(root, examplePath(slug, example.name)))).toBe(true);
@@ -26,6 +32,8 @@ describe.each(registry.map((item) => [item.slug, item] as const))("%s", (slug, i
   });
 
   it("reads color through --neon with an inherited fallback", () => {
+    // Icons draw in currentColor, so they take whatever color their parent sets.
+    if (slug === "icons") return;
     expect(source).toContain("[--neon:var(--neon-accent,34_211_238)]");
   });
 
@@ -49,7 +57,8 @@ describe.each(registry.map((item) => [item.slug, item] as const))("%s", (slug, i
     expect(code).not.toMatch(/\bfont-neon\b/);
   });
 
-  it("is listed with a known category", () => {
-    expect(["Forms", "Data Display", "Feedback", "Overlay", "Effects"]).toContain(item.category);
+  it("is listed with a known category and version", () => {
+    expect(categories).toContain(item.category);
+    expect(item.addedIn).toMatch(/^\d+\.\d+$/);
   });
 });

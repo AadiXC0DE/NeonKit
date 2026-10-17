@@ -13,9 +13,11 @@ const editors = [
   { name: "Arjun Mehta", src: undefined },
 ];
 
+const reviewers = ["Wren Morales", "Marcus Webb", "Ama Mensah", "Hugo Moreau", "Mei Watanabe"];
+
 export default function AvatarGroupExample() {
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="grid w-full max-w-sm gap-6">
       <div className="flex items-center gap-3">
         <AvatarGroup max={4}>
           {editors.map((person) => (
@@ -26,11 +28,17 @@ export default function AvatarGroupExample() {
           <span className="text-white/90">Maya, Daniel</span> and 5 others are editing
         </p>
       </div>
-      <AvatarGroup size="sm" max={5}>
-        {editors.map((person) => (
-          <Avatar key={person.name} src={person.src} alt={person.name} />
-        ))}
-      </AvatarGroup>
+      <div className="flex items-center justify-between gap-3 border-t border-white/[0.06] pt-6">
+        <div className="min-w-0">
+          <p className="text-sm text-white/90">Review requested</p>
+          <p className="text-xs text-white/50">#2148 Move billing to usage-based plans</p>
+        </div>
+        <AvatarGroup max={4}>
+          {reviewers.map((name) => (
+            <Avatar key={name} alt={name} />
+          ))}
+        </AvatarGroup>
+      </div>
     </div>
   );
 }

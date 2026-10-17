@@ -49,6 +49,8 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "required shows the neon dot after the label. A form reset re-counts and re-sizes the field.",
+    "When the browser rejects the field on submit (required, type, pattern), it turns red until it's edited or the form resets. The browser shows its own message.",
     "The count is linked with aria-describedby, so screen readers read it when the field gets focus.",
     "maxLength is the native attribute, so typing and pasting stop at the limit.",
     "Auto-resize re-measures when the value changes and when the field's width changes.",

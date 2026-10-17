@@ -5,7 +5,7 @@ const colors = ["cyan", "blue", "violet", "magenta", "pink", "red", "orange", "a
 export default function SwitchColors() {
   return (
     <div className="grid w-full max-w-md gap-5">
-      <div className="flex flex-wrap justify-center gap-x-6 gap-y-4">
+      <div className="mx-auto grid grid-cols-[repeat(2,auto)] gap-x-8 gap-y-4 sm:grid-cols-[repeat(5,auto)] sm:gap-x-6">
         {colors.map((color) => (
           <Switch key={color} color={color} defaultChecked label={color} className="capitalize" />
         ))}

@@ -30,7 +30,7 @@ function Ring({ size }: { size: SpinnerSize }) {
       viewBox="0 0 24 24"
       fill="none"
       strokeWidth={sizes[size].stroke}
-      className="size-full animate-spin [animation-duration:calc(0.8s*var(--nk-spinner-slow))] [filter:drop-shadow(0_0_3px_rgb(var(--neon)/0.8))]"
+      className="size-full animate-spin [animation-duration:calc(0.8s*var(--nk-spinner-slow))] [filter:drop-shadow(0_0_3px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))))]"
     >
       <circle cx={12} cy={12} r={RING_RADIUS} className="[stroke:rgb(var(--neon)/0.15)]" />
       <circle
@@ -52,7 +52,7 @@ function Dots({ size }: { size: SpinnerSize }) {
       {[0, 0.16, 0.32].map((delay) => (
         <span
           key={delay}
-          className="rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/0.7)]"
+          className="rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1)))]"
           style={{
             width: dot,
             height: dot,
@@ -72,7 +72,7 @@ function Bars({ size }: { size: SpinnerSize }) {
       {[-1, -0.85, -0.7, -0.55].map((delay) => (
         <span
           key={delay}
-          className="h-full rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/0.6)]"
+          className="h-full rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]"
           style={{
             width: bar,
             animation: `nk-spinner-bar ${seconds(1)} ease-in-out ${seconds(delay)} infinite`,
@@ -97,7 +97,7 @@ function Orbit({ size }: { size: SpinnerSize }) {
         className="absolute inset-0 animate-spin [animation-duration:calc(1.1s*var(--nk-spinner-slow))]"
       >
         <span
-          className="absolute top-0 left-1/2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/0.9)]"
+          className="absolute top-0 left-1/2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]"
           style={{ width: orbit, height: orbit, marginLeft: -orbit / 2 }}
         />
       </span>

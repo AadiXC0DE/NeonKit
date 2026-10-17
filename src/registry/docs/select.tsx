@@ -42,7 +42,8 @@ export const doc: ComponentDoc = {
         { prop: "defaultValue", type: "string", description: "Initial value when uncontrolled." },
         { prop: "onValueChange", type: "(value: string) => void", description: "Called when the user picks a different option." },
         { prop: "placeholder", type: "ReactNode", default: '"Select…"', description: "Shown while nothing is selected." },
-        { prop: "name", type: "string", description: "Submits the value with a surrounding form." },
+        { prop: "name", type: "string", description: "Submits the value with a surrounding form. A form reset puts back the starting value." },
+        { prop: "required", type: "boolean", default: "false", description: "Stops an empty submit with the browser's own message, turns the trigger red and shows the neon dot on the label." },
         { prop: "label", type: "ReactNode", description: "Visible label. Names both the trigger and the list." },
         { prop: "description", type: "ReactNode", description: "Helper text under the trigger." },
         {
@@ -68,10 +69,11 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "When the browser rejects the field on submit (required, type, pattern), it turns red until it's edited or the form resets. The browser shows its own message.",
     "Follows the WAI-ARIA select-only combobox pattern: focus stays on the trigger and aria-activedescendant tracks the highlighted option.",
     "Enter, Space and the arrow keys open the list. Arrows move, Home and End jump, Enter or Space picks, Escape and Tab close.",
     "Typing letters jumps to the first matching option. Pressing the same letter again cycles through matches.",
     "Without a visible label, pass aria-label. It names both the trigger and the list.",
-    "The list is positioned below the trigger, so an overflow-hidden ancestor will clip it.",
+    "The list renders in a portal, flips above the trigger near the bottom of the screen and is never clipped by overflow-hidden ancestors.",
   ],
 };

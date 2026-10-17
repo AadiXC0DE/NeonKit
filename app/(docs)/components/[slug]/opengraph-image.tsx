@@ -1,20 +1,26 @@
 import { ImageResponse } from "next/og";
+import { Mark, og, ogFonts } from "@/lib/og";
 import { getItem, registry } from "@/registry";
 
 export const alt = "NeonKit component";
-export const size = { width: 1200, height: 630 };
+export const size = og.size;
 export const contentType = "image/png";
 
 export function generateStaticParams() {
   return registry.map((item) => ({ slug: item.slug }));
 }
 
-const cyan = "34 211 238";
-
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const item = getItem(slug);
   const name = item?.name ?? "NeonKit";
+  const category = item?.category ?? "";
+  // The card's fonts are subset to the text on it; spell out symbols they may not carry.
+  const description = (item?.description ?? "").replace(/⌘/g, "Cmd ");
+  const command = `npx shadcn@latest add @neonkit/${slug}`;
+  const fonts = await ogFonts({ sans: `NeonKit${name}${description}${category}`, mono: command });
+  const c = og.cyan;
+  const titleSize = name.length > 20 ? 92 : name.length > 14 ? 108 : 128;
 
   return new ImageResponse(
     (
@@ -26,36 +32,38 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "radial-gradient(ellipse 80% 70% at 30% 45%, #0f1a22, #05060a 70%)",
-          color: "#e8edf5",
+          background: `radial-gradient(ellipse 55% 60% at 18% 46%, rgb(${c} / 0.11), transparent 70%), ${og.page}`,
+          color: og.fg,
+          fontFamily: "Mona Sans",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 24, color: "#5a6276", letterSpacing: 4 }}>
-          <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-            <rect x="3" y="3" width="26" height="26" rx="4.5" stroke={`rgb(${cyan})`} strokeWidth="2.6" />
-            <path d="M11 22V10l10 12V10" stroke={`rgb(${cyan})`} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span>{`NEONKIT · ${(item?.category ?? "").toUpperCase()}`}</span>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <Mark size={38} />
+            <span style={{ fontSize: 28, fontWeight: 600, letterSpacing: -0.6 }}>NeonKit</span>
+          </div>
+          <span style={{ fontSize: 26, color: og.muted }}>{category}</span>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          <span
+
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {/* A short lit tube: the one thing on the card that glows */}
+          <div
             style={{
-              fontSize: 132,
-              letterSpacing: -5,
-              lineHeight: 1,
-              color: "#dcf9fd",
-              textShadow: `0 0 6px rgb(${cyan}), 0 0 28px rgb(${cyan}), 0 0 70px rgb(${cyan} / 0.55)`,
+              width: 132,
+              height: 7,
+              borderRadius: 4,
+              marginBottom: 34,
+              background: "#e4fbff",
+              boxShadow: `0 0 4px rgb(${c}), 0 0 16px rgb(${c}), 0 0 40px rgb(${c} / 0.6)`,
             }}
-          >
-            {name}
-          </span>
-          <span style={{ fontSize: 34, color: "#8a93a6", maxWidth: 980 }}>{item?.description ?? ""}</span>
+          />
+          <span style={{ fontSize: titleSize, fontWeight: 600, letterSpacing: -titleSize * 0.035, lineHeight: 1 }}>{name}</span>
+          <span style={{ marginTop: 26, fontSize: 32, lineHeight: 1.4, color: og.muted, maxWidth: 1000, textWrap: "balance" }}>{description}</span>
         </div>
-        <div style={{ display: "flex", fontSize: 26, color: "#5a6276", fontFamily: "monospace" }}>
-          {`npx shadcn@latest add @neonkit/${slug}`}
-        </div>
+
+        <span style={{ fontFamily: "Fragment Mono", fontSize: 25, color: og.muted }}>{command}</span>
       </div>
     ),
-    size,
+    { ...size, fonts },
   );
 }

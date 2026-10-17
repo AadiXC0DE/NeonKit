@@ -7,7 +7,7 @@ export const doc: ComponentDoc = {
 
 <SpotlightCard className="p-6">Hover me</SpotlightCard>`,
   examples: [
-    { name: "demo", title: "Feature grid", component: SpotlightCardDemo },
+    { name: "demo", title: "Stats", description: "Each card keeps its own light; the border catches it nearest the pointer.", component: SpotlightCardDemo },
     { name: "profile", title: "Wider light", description: "radius sets the size of the pool of light.", component: SpotlightCardProfile },
   ],
   api: [

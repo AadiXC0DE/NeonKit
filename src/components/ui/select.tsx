@@ -1,14 +1,18 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
+import { autoUpdate, flip, offset, shift, size as fitToViewport, useFloating } from "@floating-ui/react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
 const INVALID = "#ff4d5e";
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
+
+const subscribeNoop = () => () => {};
 
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
@@ -46,6 +50,35 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
+/**
+ * True once the browser rejects the field on submit (required, type, pattern), until it's
+ * edited, its value changes or the form resets. The browser still shows its own message;
+ * this keeps the field red after that bubble fades.
+ */
+function useRejected(ref: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>, value?: string) {
+  const [rejected, setRejected] = React.useState<{ value?: string } | null>(null);
+  const valueRef = React.useRef(value);
+  React.useEffect(() => {
+    valueRef.current = value;
+  });
+  React.useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const form = element.form;
+    const flag = () => setRejected({ value: valueRef.current });
+    const clear = () => setRejected(null);
+    element.addEventListener("invalid", flag);
+    element.addEventListener("input", clear);
+    form?.addEventListener("reset", clear);
+    return () => {
+      element.removeEventListener("invalid", flag);
+      element.removeEventListener("input", clear);
+      form?.removeEventListener("reset", clear);
+    };
+  }, [ref]);
+  return rejected !== null && rejected.value === value;
+}
+
 export interface SelectProps
   extends Omit<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -61,6 +94,8 @@ export interface SelectProps
   size?: keyof typeof sizes;
   /** Submits the value under this name with a surrounding form. */
   name?: string;
+  /** Blocks form submission until something is picked, with the browser's own message. */
+  required?: boolean;
   label?: React.ReactNode;
   /** Helper text under the trigger. Hidden while `error` is set. */
   description?: React.ReactNode;
@@ -83,6 +118,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
       color,
       size = "md",
       name,
+      required = false,
       label,
       description,
       error,
@@ -113,19 +149,68 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
     const listboxId = `${id}-listbox`;
     const optionId = (index: number) => `${id}-option-${index}`;
 
-    const invalid = Boolean(error);
-    const message = invalid ? (error === true ? null : error) : description;
-    const messageId = message ? `${id}-${invalid ? "error" : "description"}` : undefined;
+    const errored = Boolean(error);
+    const message = errored ? (error === true ? null : error) : description;
+    const messageId = message ? `${id}-${errored ? "error" : "description"}` : undefined;
     const s = sizes[size];
     const reduceMotion = useReducedMotion();
 
     const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
     const selectedValue = value !== undefined ? value : uncontrolledValue;
+
+    // A form reset goes back to the value the select started with.
+    const proxyRef = React.useRef<HTMLInputElement>(null);
+    const rejected = useRejected(proxyRef, selectedValue ?? "");
+    // A wrapping Field marks its control with aria-invalid; it lights the same red as `error`.
+    const ariaInvalid = props["aria-invalid"];
+    const invalid = errored || rejected || ariaInvalid === true || ariaInvalid === "true";
+    const initialValue = React.useRef(selectedValue);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialValue.current;
+        if (initial === selectedValue) return;
+        if (value === undefined) setUncontrolledValue(initial);
+        if (initial !== undefined) onValueChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = proxyRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
     const selectedIndex = options.findIndex((option) => option.value === selectedValue);
     const selected = selectedIndex >= 0 ? options[selectedIndex] : undefined;
 
     const [open, setOpen] = React.useState(false);
-    const [listWidth, setListWidth] = React.useState<number>();
+    // The list is portaled out of this subtree, so it gets the resolved color copied over.
+    const [carriedNeon, setCarriedNeon] = React.useState<string>();
+    const isClient = React.useSyncExternalStore(subscribeNoop, () => true, () => false);
+
+    const { refs, floatingStyles, placement } = useFloating({
+      placement: "bottom-start",
+      strategy: "fixed",
+      // Position with top/left; motion owns `transform` for the enter animation.
+      transform: false,
+      whileElementsMounted: autoUpdate,
+      middleware: [
+        offset(6),
+        flip({ padding: 8 }),
+        shift({ padding: 8 }),
+        fitToViewport({
+          padding: 8,
+          apply({ rects, availableHeight, elements }) {
+            Object.assign(elements.floating.style, {
+              width: `${rects.reference.width}px`,
+              maxHeight: `${Math.max(120, Math.min(256, availableHeight))}px`,
+            });
+          },
+        }),
+      ],
+    });
+    const above = placement.startsWith("top");
     const [activeIndex, setActiveIndex] = React.useState(-1);
     const isOpen = open && !disabled;
 
@@ -175,8 +260,9 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             : step(options.length - 1, -1);
       scrollToActive.current = true;
       setActiveIndex(index);
-      // Match the trigger, which may be narrower than the field's container.
-      setListWidth(triggerRef.current?.offsetWidth);
+      if (triggerRef.current) {
+        setCarriedNeon(getComputedStyle(triggerRef.current).getPropertyValue("--neon").trim() || undefined);
+      }
       setOpen(true);
     }
 
@@ -302,11 +388,21 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             className={cn("w-fit font-medium text-white/80", s.label)}
           >
             {label}
+            {required && (
+              <span
+                aria-hidden
+                title="Required"
+                className="relative -top-px ml-1.5 inline-block size-[5px] rounded-full bg-[rgb(var(--neon))] align-middle shadow-[0_0_4px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]"
+              />
+            )}
           </label>
         )}
         <div className="relative">
           <button
-            ref={triggerRef}
+            ref={(node) => {
+              triggerRef.current = node;
+              refs.setReference(node);
+            }}
             id={id}
             type="button"
             role="combobox"
@@ -319,20 +415,21 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             aria-labelledby={label ? labelId : ariaLabelledBy}
             aria-describedby={[ariaDescribedBy, messageId].filter(Boolean).join(" ") || undefined}
             aria-invalid={invalid || undefined}
+            aria-required={required || undefined}
             data-state={isOpen ? "open" : "closed"}
             data-placeholder={selected ? undefined : ""}
             style={invalid ? neonVars(INVALID, style) : style}
             className={cn(
               "flex w-full cursor-pointer select-none items-center border border-white/10 bg-white/[0.03] text-left text-white/90 outline-none",
               "transition-[border-color,background-color,box-shadow] ease-[cubic-bezier(0.23,1,0.32,1)] duration-[150ms,150ms,320ms]",
-              "focus-visible:border-[rgb(var(--neon)/0.8)] focus-visible:bg-[rgb(var(--neon)/0.04)] focus-visible:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+              "focus-visible:border-[rgb(var(--neon)/0.8)] focus-visible:bg-[rgb(var(--neon)/0.04)] focus-visible:shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
               "disabled:cursor-not-allowed disabled:opacity-50",
               "[&_svg]:pointer-events-none [&_svg]:shrink-0",
               !isOpen && "hover:border-white/20",
               invalid && "border-[rgb(var(--neon)/0.55)]",
               invalid && !isOpen && "hover:border-[rgb(var(--neon)/0.75)]",
               isOpen &&
-                "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.04)] shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/0.5),inset_0_0_12px_-2px_rgb(var(--neon)/0.14)]",
+                "border-[rgb(var(--neon)/0.8)] bg-[rgb(var(--neon)/0.04)] shadow-[0_0_0_1px_rgb(var(--neon)/0.2),0_0_20px_-4px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1))),inset_0_0_12px_-2px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1)))]",
               s.trigger,
               className,
             )}
@@ -363,7 +460,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             {selected?.icon && (
               <span className="flex shrink-0 items-center text-white/50">{selected.icon}</span>
             )}
-            <span className={cn("min-w-0 flex-1 truncate", !selected && "text-white/30")}>
+            <span className={cn("min-w-0 flex-1 truncate", !selected && "text-white/50")}>
               {selected ? selected.label : placeholder}
             </span>
             <ChevronDown
@@ -375,96 +472,123 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             />
           </button>
 
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                ref={listRef}
-                id={listboxId}
-                role="listbox"
-                aria-labelledby={label ? labelId : ariaLabelledBy}
-                aria-label={label ? undefined : ariaLabel}
-                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4, scale: 0.98 }}
-                transition={{ duration: 0.16, ease: EASE_OUT }}
-                // Keep focus on the trigger so aria-activedescendant stays in charge.
-                onMouseDown={(event) => event.preventDefault()}
-                style={{ width: listWidth }}
-                className={cn(
-                  "absolute left-0 top-full z-50 w-full mt-1.5 max-h-64 origin-top overflow-y-auto overscroll-contain border border-white/10 bg-[#0a0b11] p-1",
-                  "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/0.45)]",
-                  "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]",
-                  s.list,
-                )}
-              >
-                {options.map((option, index) => {
-                  const active = index === activeIndex;
-                  const isSelected = index === selectedIndex;
-                  return (
-                    <div
-                      key={option.value}
-                      id={optionId(index)}
-                      role="option"
-                      aria-selected={isSelected}
-                      aria-disabled={option.disabled || undefined}
-                      data-active={active || undefined}
-                      onPointerMove={() => {
-                        if (!option.disabled && !active) setActiveIndex(index);
-                      }}
-                      onClick={() => {
-                        if (!option.disabled) commit(index);
-                      }}
-                      className={cn(
-                        "flex cursor-pointer select-none items-center text-white/75 transition-colors duration-100",
-                        s.option,
-                        active && "bg-[rgb(var(--neon)/0.1)] text-white",
-                        isSelected && "text-[rgb(var(--neon))]",
-                        option.disabled && "cursor-not-allowed opacity-40",
-                      )}
-                    >
-                      {option.icon && (
-                        <span
+          {/* Carries the value into forms. It sits under the trigger so the browser's
+              "please select" bubble points at the right place, and hands focus on. */}
+          <input
+            ref={proxyRef}
+            aria-hidden
+            tabIndex={-1}
+            name={name}
+            value={selectedValue ?? ""}
+            required={required}
+            disabled={disabled}
+            onChange={() => {}}
+            onFocus={() => triggerRef.current?.focus()}
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-px w-full opacity-0"
+          />
+
+          {isClient &&
+            createPortal(
+              <AnimatePresence>
+                {isOpen && (
+                  <motion.div
+                    ref={(node) => {
+                      listRef.current = node;
+                      refs.setFloating(node);
+                    }}
+                    id={listboxId}
+                    role="listbox"
+                    aria-labelledby={label ? labelId : ariaLabelledBy}
+                    aria-label={label ? undefined : ariaLabel}
+                    initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: above ? 4 : -4, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: above ? 4 : -4, scale: 0.98 }}
+                    transition={{ duration: 0.16, ease: EASE_OUT }}
+                    // Keep focus on the trigger so aria-activedescendant stays in charge.
+                    onMouseDown={(event) => event.preventDefault()}
+                    style={
+                      {
+                        ...floatingStyles,
+                        ...(carriedNeon ? { "--neon": carriedNeon, "--neon-accent": carriedNeon } : null),
+                      } as React.CSSProperties
+                    }
+                    className={cn(
+                      "[--neon:var(--neon-accent,34_211_238)] z-50 overflow-y-auto overscroll-contain border border-white/10 bg-[#0a0b11] p-1",
+                      "shadow-[0_18px_48px_-12px_rgb(0_0_0/0.85),0_0_0_1px_rgb(var(--neon)/0.06),0_0_28px_-10px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
+                      "[scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]",
+                      above ? "origin-bottom" : "origin-top",
+                      s.list,
+                    )}
+                  >
+                    {options.map((option, index) => {
+                      const active = index === activeIndex;
+                      const isSelected = index === selectedIndex;
+                      return (
+                        <div
+                          key={option.value}
+                          id={optionId(index)}
+                          role="option"
+                          aria-selected={isSelected}
+                          aria-disabled={option.disabled || undefined}
+                          data-active={active || undefined}
+                          onPointerMove={() => {
+                            if (!option.disabled && !active) setActiveIndex(index);
+                          }}
+                          onClick={() => {
+                            if (!option.disabled) commit(index);
+                          }}
                           className={cn(
-                            "flex shrink-0 items-center",
-                            isSelected ? "text-[rgb(var(--neon))]" : "text-white/45",
+                            "flex cursor-pointer select-none items-center text-white/75 transition-colors duration-100",
+                            s.option,
+                            active && "bg-[rgb(var(--neon)/0.1)] text-white",
+                            isSelected && "text-[rgb(var(--neon))]",
+                            option.disabled && "cursor-not-allowed opacity-40",
                           )}
                         >
-                          {option.icon}
-                        </span>
-                      )}
-                      <span className="flex min-w-0 flex-1 flex-col">
-                        <span className="truncate">{option.label}</span>
-                        {option.description && (
-                          <span
-                            className={cn(
-                              "truncate",
-                              s.hint,
-                              active ? "text-white/55" : "text-white/40",
+                          {option.icon && (
+                            <span
+                              className={cn(
+                                "flex shrink-0 items-center",
+                                isSelected ? "text-[rgb(var(--neon))]" : "text-white/50",
+                              )}
+                            >
+                              {option.icon}
+                            </span>
+                          )}
+                          <span className="flex min-w-0 flex-1 flex-col">
+                            <span className="truncate">{option.label}</span>
+                            {option.description && (
+                              <span
+                                className={cn(
+                                  "truncate",
+                                  s.hint,
+                                  active ? "text-white/60" : "text-white/50",
+                                )}
+                              >
+                                {option.description}
+                              </span>
                             )}
-                          >
-                            {option.description}
                           </span>
-                        )}
-                      </span>
-                      <Check
-                        aria-hidden
-                        className={cn(
-                          "shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/0.7))]",
-                          !isSelected && "invisible",
-                        )}
-                      />
-                    </div>
-                  );
-                })}
-              </motion.div>
+                          <Check
+                            aria-hidden
+                            className={cn(
+                              "shrink-0 text-[rgb(var(--neon))] [filter:drop-shadow(0_0_6px_rgb(var(--neon)/CALC(0.7*var(--neon-glow,1))))]",
+                              !isSelected && "invisible",
+                            )}
+                          />
+                        </div>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>,
+              document.body,
             )}
-          </AnimatePresence>
         </div>
-        {name && <input type="hidden" name={name} value={selectedValue ?? ""} disabled={disabled} />}
         {message && (
           <p
             id={messageId}
-            className={cn("text-xs leading-5", invalid ? "text-[#ff4d5e]" : "text-white/55")}
+            className={cn("text-xs leading-5", errored ? "text-[#ff4d5e]" : "text-white/55")}
           >
             {message}
           </p>

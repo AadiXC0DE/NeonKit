@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { GitBranch, GitPullRequest, Rocket, Tag } from "lucide-react";
+import { GitBranch, GitPullRequest, Rocket, Tag } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 

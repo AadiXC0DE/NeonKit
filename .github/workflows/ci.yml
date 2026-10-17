@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -20,3 +24,54 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+
+  # axe-core (WCAG 2.1 A + AA) over every component, block, template and site page of a production build.
+  a11y:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-1.64-${{ runner.os }}
+      - run: npx playwright@1.64 install --with-deps chromium
+      - name: Start the site
+        run: |
+          npx next start --port 3000 > next-start.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:3000/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat next-start.log
+          exit 1
+      - run: npm run a11y -- --json=a11y-results.json
+        env:
+          BASE_URL: http://localhost:3000
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-results
+          path: |
+            a11y-results.json
+            next-start.log
+          if-no-files-found: ignore
+
+  # Installs components, a block and a template from a locally served registry into a fresh create-next-app
+  # project and builds it. Needs only Node, so no npm ci here.
+  install-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm run install-test

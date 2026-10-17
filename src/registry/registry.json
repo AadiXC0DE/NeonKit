@@ -1,10 +1,18 @@
 {
   "categories": [
+    "Foundations",
     "Forms",
+    "Buttons",
     "Data Display",
-    "Feedback",
+    "Navigation",
     "Overlay",
-    "Effects"
+    "Feedback",
+    "Layout",
+    "AI",
+    "Text",
+    "Instruments",
+    "Effects",
+    "Backgrounds"
   ],
   "items": [
     {
@@ -13,8 +21,11 @@
       "category": "Forms",
       "description": "Solid, outline, soft, ghost and link buttons that light up on hover.",
       "dependencies": [
-        "@radix-ui/react-slot",
-        "lucide-react"
+        "@radix-ui/react-slot"
+      ],
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
       ]
     },
     {
@@ -22,14 +33,18 @@
       "name": "Input",
       "category": "Forms",
       "description": "Text field with an animated neon focus ring, icons, labels and error states.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "textarea",
       "name": "Textarea",
       "category": "Forms",
       "description": "Multi-line field that grows with its content and counts characters.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "select",
@@ -37,8 +52,12 @@
       "category": "Forms",
       "description": "Keyboard-friendly listbox with a glowing popover and typeahead.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
       ]
     },
     {
@@ -46,28 +65,36 @@
       "name": "Checkbox",
       "category": "Forms",
       "description": "Checkbox with a drawn-on checkmark and indeterminate state.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "radio-group",
       "name": "Radio Group",
       "category": "Forms",
       "description": "Single choice from a set, with arrow-key navigation and card layouts.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "switch",
       "name": "Switch",
       "category": "Forms",
       "description": "A toggle that powers on like a neon tube.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "slider",
       "name": "Slider",
       "category": "Forms",
       "description": "Pointer and keyboard slider with a glowing track and optional range.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "otp-input",
@@ -75,15 +102,201 @@
       "category": "Forms",
       "description": "One-time code input with auto-advance, paste and backspace handling.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0",
+      "registryDependencies": []
+    },
+    {
+      "slug": "toggle-group",
+      "name": "Toggle Group",
+      "category": "Forms",
+      "description": "Toggles and segmented controls with a lit pill that slides to the selection.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": []
+    },
+    {
+      "slug": "combobox",
+      "name": "Combobox",
+      "category": "Forms",
+      "description": "Searchable select with filtering, keyboard nav and an async-friendly API.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "tag-input",
+      "name": "Tag Input",
+      "category": "Forms",
+      "description": "Type, paste or backspace your way through a row of glowing chips.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "number-input",
+      "name": "Number Input",
+      "category": "Forms",
+      "description": "Steppers, drag-to-scrub, min, max, step and locale formatting.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "file-dropzone",
+      "name": "File Dropzone",
+      "category": "Forms",
+      "description": "Drag files in and the dashed tube border powers up. Lists files with progress.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "rating",
+      "name": "Rating",
+      "category": "Forms",
+      "description": "Stars or bolts that flicker on as you hover, with half steps.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "color-picker",
+      "name": "Color Picker",
+      "category": "Forms",
+      "description": "Neon gel swatches, a hue knob and a hex field in one control.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": []
+    },
+    {
+      "slug": "calendar",
+      "name": "Calendar",
+      "category": "Forms",
+      "description": "Single, range and multiple selection with full keyboard grid navigation.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "date-picker",
+      "name": "Date Picker",
+      "category": "Forms",
+      "description": "A field that opens a calendar, with presets and range support.",
+      "dependencies": [],
+      "registryDependencies": [
+        "calendar",
+        "icons",
+        "popover"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "time-input",
+      "name": "Time Input",
+      "category": "Forms",
+      "description": "Segmented hours and minutes you can type, arrow or scrub.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": []
+    },
+    {
+      "slug": "field",
+      "name": "Field",
+      "category": "Forms",
+      "description": "Label, description and error wiring for any control, plus a standalone Label.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": []
+    },
+    {
+      "slug": "shimmer-button",
+      "name": "Shimmer Button",
+      "category": "Buttons",
+      "description": "A light sweeps across the face while a beam runs the border.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "pulse-button",
+      "name": "Pulse Button",
+      "category": "Buttons",
+      "description": "A ring pulses outward to call attention.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "magnetic-button",
+      "name": "Magnetic Button",
+      "category": "Buttons",
+      "description": "Pulled toward the cursor, with a label that leads.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "power-button",
+      "name": "Power Button",
+      "category": "Buttons",
+      "description": "A round power key that ignites with a flickering ring.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "cyber-button",
+      "name": "Cyber Button",
+      "category": "Buttons",
+      "description": "Cut corners, a corner tick and a glitch on hover.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "hold-button",
+      "name": "Hold Button",
+      "category": "Buttons",
+      "description": "Hold to confirm: a tube fills, release drains it.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "copy-button",
+      "name": "Copy Button",
+      "category": "Buttons",
+      "description": "Copy to clipboard with a drawn-on check.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "badge",
       "name": "Badge",
       "category": "Data Display",
       "description": "Status labels with optional live dot and remove button.",
-      "dependencies": [
-        "lucide-react"
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
       ]
     },
     {
@@ -91,14 +304,18 @@
       "name": "Avatar",
       "category": "Data Display",
       "description": "Profile image with initials fallback, status light and stacked groups.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "card",
       "name": "Card",
       "category": "Data Display",
       "description": "Surface with header, content and footer slots and a lit edge.",
-      "dependencies": []
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "kbd",
@@ -106,7 +323,8 @@
       "category": "Data Display",
       "description": "Keyboard keys and shortcuts that glow when pressed.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "tabs",
@@ -116,7 +334,8 @@
       "dependencies": [
         "motion"
       ],
-      "isNew": true
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "accordion",
@@ -124,53 +343,103 @@
       "category": "Data Display",
       "description": "Collapsible sections with smooth height animation.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "isNew": true
-    },
-    {
-      "slug": "progress",
-      "name": "Progress",
-      "category": "Feedback",
-      "description": "Linear and circular progress with a moving highlight.",
-      "dependencies": []
-    },
-    {
-      "slug": "spinner",
-      "name": "Spinner",
-      "category": "Feedback",
-      "description": "Ring, dots and bars loaders in any neon color.",
-      "dependencies": [],
-      "isNew": true
-    },
-    {
-      "slug": "skeleton",
-      "name": "Skeleton",
-      "category": "Feedback",
-      "description": "Loading placeholders with a scanning shimmer.",
-      "dependencies": [],
-      "isNew": true
-    },
-    {
-      "slug": "alert",
-      "name": "Alert",
-      "category": "Feedback",
-      "description": "Inline messages for info, success, warning and errors.",
-      "dependencies": [
-        "lucide-react"
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
       ]
     },
     {
-      "slug": "toast",
-      "name": "Toast",
-      "category": "Feedback",
-      "description": "Stacked notifications with a tiny toast() API. No provider needed.",
+      "slug": "table",
+      "name": "Table",
+      "category": "Data Display",
+      "description": "Sortable, selectable table with a sticky header and a row hover beam.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "timeline",
+      "name": "Timeline",
+      "category": "Data Display",
+      "description": "Events on a tube that is lit up to now.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": []
+    },
+    {
+      "slug": "glow-chart",
+      "name": "Glow Chart",
+      "category": "Data Display",
+      "description": "Line, area and bar charts with glow, crosshair tooltips and a Sparkline.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "breadcrumb",
+      "name": "Breadcrumb",
+      "category": "Navigation",
+      "description": "Path navigation with separators and overflow collapse.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "pagination",
+      "name": "Pagination",
+      "category": "Navigation",
+      "description": "Page controls with a sliding active indicator and a compact mode.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
       ],
-      "isNew": true
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "stepper",
+      "name": "Stepper",
+      "category": "Navigation",
+      "description": "Steps joined by a tube that fills as you progress.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "navigation-menu",
+      "name": "Navigation Menu",
+      "category": "Navigation",
+      "description": "Top navigation with mega-menu panels and a moving light indicator.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "sidebar",
+      "name": "Sidebar",
+      "category": "Navigation",
+      "description": "App sidebar with groups, collapse-to-rail and an active tube marker.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
     },
     {
       "slug": "dialog",
@@ -178,8 +447,11 @@
       "category": "Overlay",
       "description": "Accessible modal built on the native dialog element.",
       "dependencies": [
-        "motion",
-        "lucide-react"
+        "motion"
+      ],
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
       ]
     },
     {
@@ -188,19 +460,341 @@
       "category": "Overlay",
       "description": "Hover and focus hints on four sides.",
       "dependencies": [
+        "@floating-ui/react-dom",
         "motion"
       ],
-      "isNew": true
+      "addedIn": "1.0",
+      "registryDependencies": []
+    },
+    {
+      "slug": "dropdown-menu",
+      "name": "Dropdown Menu",
+      "category": "Overlay",
+      "description": "Menus with groups, checkable items, submenus and a gliding highlight.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "context-menu",
+      "name": "Context Menu",
+      "category": "Overlay",
+      "description": "Right-click menus built on the Dropdown Menu parts.",
+      "dependencies": [],
+      "registryDependencies": [
+        "dropdown-menu"
+      ],
+      "addedIn": "1.1"
+    },
+    {
+      "slug": "popover",
+      "name": "Popover",
+      "category": "Overlay",
+      "description": "Anchored panel that flips to stay on screen, with arrow and focus handling.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": []
+    },
+    {
+      "slug": "hover-card",
+      "name": "Hover Card",
+      "category": "Overlay",
+      "description": "Rich previews that open on hover or focus.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": []
+    },
+    {
+      "slug": "command",
+      "name": "Command",
+      "category": "Overlay",
+      "description": "A ⌘K palette with groups, fuzzy search and keyboard navigation.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "sheet",
+      "name": "Sheet",
+      "category": "Overlay",
+      "description": "Side panel on the native dialog with a lit leading edge.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "progress",
+      "name": "Progress",
+      "category": "Feedback",
+      "description": "Linear and circular progress with a moving highlight.",
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
+    },
+    {
+      "slug": "spinner",
+      "name": "Spinner",
+      "category": "Feedback",
+      "description": "Ring, dots and bars loaders in any neon color.",
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
+    },
+    {
+      "slug": "skeleton",
+      "name": "Skeleton",
+      "category": "Feedback",
+      "description": "Loading placeholders with a scanning shimmer.",
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": []
+    },
+    {
+      "slug": "alert",
+      "name": "Alert",
+      "category": "Feedback",
+      "description": "Inline messages for info, success, warning and errors.",
+      "dependencies": [],
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "toast",
+      "name": "Toast",
+      "category": "Feedback",
+      "description": "Stacked notifications with a tiny toast() API. No provider needed.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.0",
+      "registryDependencies": [
+        "icons"
+      ]
+    },
+    {
+      "slug": "separator",
+      "name": "Separator",
+      "category": "Layout",
+      "description": "Hairlines and tube dividers, with optional labels.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": []
+    },
+    {
+      "slug": "scroll-area",
+      "name": "Scroll Area",
+      "category": "Layout",
+      "description": "Thin neon scrollbar with edge fades that appear only when needed.",
+      "dependencies": [],
+      "addedIn": "1.1",
+      "registryDependencies": []
+    },
+    {
+      "slug": "collapsible",
+      "name": "Collapsible",
+      "category": "Layout",
+      "description": "A single disclosure with smooth height animation.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.1",
+      "registryDependencies": []
     },
     {
       "slug": "neon-text",
       "name": "Neon Text",
-      "category": "Effects",
+      "category": "Text",
       "description": "Text rendered as a glowing tube sign, with optional power-on flicker.",
       "dependencies": [
         "motion"
       ],
-      "isNew": true
+      "addedIn": "1.0",
+      "registryDependencies": []
+    },
+    {
+      "slug": "neon-sign",
+      "name": "Neon Sign",
+      "category": "Text",
+      "description": "A full sign: acrylic backplate, standoffs, frame tube, cable and a power switch with flicker profiles.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "glitch-text",
+      "name": "Glitch Text",
+      "category": "Text",
+      "description": "RGB-split text with slice jitter, in bursts or on hover.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "scramble-text",
+      "name": "Scramble Text",
+      "category": "Text",
+      "description": "Text that decodes into place from random glyphs.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "terminal",
+      "name": "Terminal",
+      "category": "Text",
+      "description": "A typing terminal and an inline typewriter for rotating headlines.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "split-flap",
+      "name": "Split-Flap Board",
+      "category": "Text",
+      "description": "Departure-board characters that flip mechanically into place.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "seven-segment",
+      "name": "Seven-Segment Display",
+      "category": "Text",
+      "description": "Numbers and clocks on segments you can see even when they're off.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "led-matrix",
+      "name": "LED Matrix",
+      "category": "Text",
+      "description": "Dot-matrix marquee with a built-in 5×7 font.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "knob",
+      "name": "Knob",
+      "category": "Instruments",
+      "description": "A machined rotary control with a lit value arc and detents.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "fader",
+      "name": "Fader",
+      "category": "Instruments",
+      "description": "A mixing-desk channel fader with a scale and an LED meter.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "hardware-switch",
+      "name": "Hardware Switch",
+      "category": "Instruments",
+      "description": "Rocker, safety-cover flip and key switches you can almost feel.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "gauge",
+      "name": "Gauge",
+      "category": "Instruments",
+      "description": "Radial gauge with a sprung needle, redline and digital readout.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "meter",
+      "name": "Meter",
+      "category": "Instruments",
+      "description": "LED VU meter with zones and peak hold.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "equalizer",
+      "name": "Equalizer",
+      "category": "Instruments",
+      "description": "Animated spectrum bars, optionally driven by real audio.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "oscilloscope",
+      "name": "Oscilloscope",
+      "category": "Instruments",
+      "description": "A phosphor trace on a CRT grid, from waveforms or live audio.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "radar",
+      "name": "Radar",
+      "category": "Instruments",
+      "description": "A sweeping radar where blips flare as the beam passes.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "heartbeat",
+      "name": "Heartbeat",
+      "category": "Instruments",
+      "description": "A looping ECG trace with a bright leading edge.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "countdown",
+      "name": "Countdown",
+      "category": "Instruments",
+      "description": "Launch timers in split-flap, digital or neon-tube digits.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "neon-clock",
+      "name": "Neon Clock",
+      "category": "Instruments",
+      "description": "Analog and digital clocks with tube hands and a blinking colon.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "border-beam",
@@ -208,7 +802,8 @@
       "category": "Effects",
       "description": "A beam of light that travels around any element's border.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0",
+      "registryDependencies": []
     },
     {
       "slug": "spotlight-card",
@@ -216,15 +811,1727 @@
       "category": "Effects",
       "description": "Card whose border and surface light up under the cursor.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0",
+      "registryDependencies": []
+    },
+    {
+      "slug": "hologram-card",
+      "name": "Hologram Card",
+      "category": "Effects",
+      "description": "A 3D-tilting card with iridescent foil and a moving glare.",
+      "dependencies": [
+        "motion"
+      ],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "neon-frame",
+      "name": "Neon Frame",
+      "category": "Effects",
+      "description": "A HUD frame with corner brackets that draw in and label tabs.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "tube-divider",
+      "name": "Tube Divider",
+      "category": "Effects",
+      "description": "Bent neon tube separators with mounting clips.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "crt-overlay",
+      "name": "CRT Overlay",
+      "category": "Effects",
+      "description": "Scanlines, vignette, flicker and a power-on animation over anything.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "cursor-glow",
+      "name": "Cursor Glow",
+      "category": "Effects",
+      "description": "A pointer light with an optional comet trail.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "marquee",
+      "name": "Marquee",
+      "category": "Effects",
+      "description": "Infinite scrolling rows with edge fades and pause on hover.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "neon-icon",
+      "name": "Neon Icon",
+      "category": "Effects",
+      "description": "Status icons whose bars light in sequence, and any NeonKit icon drawn as a lit tube.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
     },
     {
       "slug": "retro-grid",
       "name": "Retro Grid",
-      "category": "Effects",
+      "category": "Backgrounds",
       "description": "Synthwave perspective grid that scrolls toward the horizon.",
       "dependencies": [],
-      "isNew": true
+      "addedIn": "1.0",
+      "registryDependencies": []
+    },
+    {
+      "slug": "aurora",
+      "name": "Aurora",
+      "category": "Backgrounds",
+      "description": "Slow curtains of light drifting behind your content.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "starfield",
+      "name": "Starfield",
+      "category": "Backgrounds",
+      "description": "Parallax stars with a hyperspace warp.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "light-rays",
+      "name": "Light Rays",
+      "category": "Backgrounds",
+      "description": "Volumetric beams with drifting dust.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "cityscape",
+      "name": "Cityscape",
+      "category": "Backgrounds",
+      "description": "A night skyline with flickering windows and rooftop signs.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "rain-glass",
+      "name": "Rain on Glass",
+      "category": "Backgrounds",
+      "description": "Droplets sliding down glass over neon bokeh.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "particles",
+      "name": "Particles",
+      "category": "Backgrounds",
+      "description": "Drifting dust that reacts to the cursor.",
+      "dependencies": [],
+      "addedIn": "1.2",
+      "registryDependencies": []
+    },
+    {
+      "slug": "alert-dialog",
+      "name": "Alert Dialog",
+      "category": "Overlay",
+      "description": "Confirm dialog on the native dialog element. Cancel takes focus; type-to-confirm lights the action up.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "drawer",
+      "name": "Drawer",
+      "category": "Overlay",
+      "description": "Bottom drawer with drag to dismiss, snap points, velocity-aware flicks, nesting and a scaled background.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "menubar",
+      "name": "Menubar",
+      "category": "Navigation",
+      "description": "Application menubar with the APG keyboard model, hover switching, submenus, checkbox and radio items.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "dropdown-menu"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "button-group",
+      "name": "Button Group",
+      "category": "Buttons",
+      "description": "Attached buttons, inputs and text segments with single-pixel seams, split buttons and vertical stacks.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "input-group",
+      "name": "Input Group",
+      "category": "Forms",
+      "description": "Input or Textarea with icon, text, button and toolbar addons inside one field box that glows as a whole.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "input",
+        "textarea"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "item",
+      "name": "Item",
+      "category": "Layout",
+      "description": "List row with media, title, description and actions, for settings, people, files and notifications.",
+      "dependencies": [
+        "@radix-ui/react-slot"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "empty",
+      "name": "Empty",
+      "category": "Feedback",
+      "description": "Empty state whose icon is an unlit neon tube that flickers on once there's an action to take.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "code-block",
+      "name": "Code Block",
+      "category": "Data Display",
+      "description": "Highlighted code with file tabs, line numbers, lit lines, diffs, wrap and copy. Built-in tokenizer, no dependencies.",
+      "dependencies": [],
+      "registryDependencies": [
+        "copy-button",
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "chat-message",
+      "name": "Chat Message",
+      "category": "AI",
+      "description": "A message row with streamed markdown, reasoning, tool calls, attachments, inline edit and hover actions.",
+      "dependencies": [],
+      "registryDependencies": [
+        "code-block",
+        "copy-button",
+        "icons",
+        "reasoning",
+        "tool-call"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "prompt-input",
+      "name": "Prompt Input",
+      "category": "AI",
+      "description": "An auto-growing composer with attachments by click, paste or drop, a token counter and a send button that becomes Stop.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "conversation",
+      "name": "Conversation",
+      "category": "AI",
+      "description": "A transcript that follows streaming text, stops when you scroll up and offers Jump to latest with an unread count.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "reasoning",
+      "name": "Reasoning",
+      "category": "AI",
+      "description": "A thinking trace with a live line and timer. Its filament glows while it thinks and cools to a dim wire when done.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "tool-call",
+      "name": "Tool Call",
+      "category": "AI",
+      "description": "One tool invocation with a status lamp, live timer, arguments, result and Approve/Deny. Groups into a run log.",
+      "dependencies": [],
+      "registryDependencies": [
+        "code-block",
+        "icons"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "agent-plan",
+      "name": "Agent Plan",
+      "category": "AI",
+      "description": "An agent's steps on a glass tube that fills to the one running. Done, failed and skipped steps, substeps, findings.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "sources",
+      "name": "Sources",
+      "category": "AI",
+      "description": "Inline citation markers and a source list that light each other, with hover previews of the cited passage.",
+      "dependencies": [],
+      "registryDependencies": [
+        "hover-card",
+        "icons"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "context-meter",
+      "name": "Context Meter",
+      "category": "AI",
+      "description": "Context-window usage as an LED bar split by system, conversation, files and tools, with zones and a breakdown.",
+      "dependencies": [],
+      "registryDependencies": [
+        "popover"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "voice-input",
+      "name": "Voice Input",
+      "category": "AI",
+      "description": "Toggle or push-to-talk dictation with a live LED tape from the mic, a timer, cancel and a transcribing state.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "icons",
+        "meter"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "model-select",
+      "name": "Model Select",
+      "category": "AI",
+      "description": "A model picker that prints context, speed and price as LED readouts in columns you can compare.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "popover"
+      ],
+      "addedIn": "1.6"
+    },
+    {
+      "slug": "icons",
+      "name": "Icons",
+      "category": "Foundations",
+      "description": "412 icons drawn as bent neon tube, with every lucide-react name for them. Blockout gaps where one tube passes behind another.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "data-table",
+      "name": "Data Table",
+      "category": "Data Display",
+      "description": "Sorting with Shift multi-sort, search, faceted filters, range selection, pages or load more. No table library.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "icons",
+        "input",
+        "pagination",
+        "skeleton",
+        "table"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "tree-view",
+      "name": "Tree View",
+      "category": "Navigation",
+      "description": "File tree with the APG keyboard model, typeahead, multi-select, lazy folders and a lit guide down the open branch.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "resizable",
+      "name": "Resizable",
+      "category": "Layout",
+      "description": "Resizable panel groups: nested, collapsible, keyboard-driven, saved to localStorage. Grips light up as tubes.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "carousel",
+      "name": "Carousel",
+      "category": "Layout",
+      "description": "Scroll-snap carousel with mouse drag, loop, autoplay that pauses itself, and dots that fill with the timer.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "stat",
+      "name": "Stat",
+      "category": "Data Display",
+      "description": "KPI with a count-up value, a tube-drawn icon that lights when live, a delta judged by direction, a sparkline or goal.",
+      "dependencies": [],
+      "registryDependencies": [
+        "glow-chart",
+        "icons",
+        "skeleton"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "donut-chart",
+      "name": "Donut Chart",
+      "category": "Data Display",
+      "description": "Donut and pie charts bent from neon tube, with a lit hover, keyboard reading and an unlit remainder for max.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "odometer",
+      "name": "Odometer",
+      "category": "Text",
+      "description": "Rolling-drum counter that carries like real gearing. Lit, backlit and cream drums, locale-aware separators.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "status-light",
+      "name": "Status Light",
+      "category": "Feedback",
+      "description": "Indicator lamp with six states: a bezelled panel LED, a dot or a live pulse, plus a group for service lists.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "dock",
+      "name": "Dock",
+      "category": "Navigation",
+      "description": "Magnifying dock on springs, with tooltips, running tubes, badges, separators and a one-stop keyboard toolbar.",
+      "dependencies": [
+        "@radix-ui/react-slot",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "image-compare",
+      "name": "Image Compare",
+      "category": "Data Display",
+      "description": "Before and after slider split by a lit tube. Drag, press, keys or hover to scrub; horizontal or vertical.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "banner",
+      "name": "Banner",
+      "category": "Feedback",
+      "description": "Announcement bar with a tube along its bottom edge that strikes on at mount. Remembers dismissal, can scroll.",
+      "dependencies": [
+        "@radix-ui/react-slot"
+      ],
+      "registryDependencies": [
+        "icons",
+        "marquee"
+      ],
+      "addedIn": "1.5"
+    },
+    {
+      "slug": "signal-beam",
+      "name": "Signal Beam",
+      "category": "Effects",
+      "description": "A neon tube drawn between two elements, with a pulse of light running along it. Curves, reverses, runs both ways.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "globe",
+      "name": "Globe",
+      "category": "Backgrounds",
+      "description": "A dotted neon globe on canvas with real coastlines, pulsing markers and lit arcs. Drag or use arrow keys to spin.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "sparks",
+      "name": "Sparks",
+      "category": "Effects",
+      "description": "Bursts of white-hot sparks that cool to the neon color, fired from a hook, a function or a click wrapper.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "rotating-text",
+      "name": "Rotating Text",
+      "category": "Text",
+      "description": "Cycles words in a headline like swapping a neon sign insert: the old tube powers off, the next one strikes.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "scroll-progress",
+      "name": "Scroll Progress",
+      "category": "Feedback",
+      "description": "Reading progress as a lit tube on the window edge, or a ring for back to top. Follows the page or any container.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "device-frame",
+      "name": "Device Frame",
+      "category": "Layout",
+      "description": "Browser window and phone frames for screenshots or live UI, with a screen rim that catches the neon.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "dot-grid",
+      "name": "Dot Grid",
+      "category": "Backgrounds",
+      "description": "A pegboard of dots that light up near the pointer like LEDs behind a panel, with slow ripples rolling across.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "circuit",
+      "name": "Circuit",
+      "category": "Backgrounds",
+      "description": "A seeded PCB with buses of traces, vias and chips. Pulses of light run along the traces and light the pins they reach.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "lasers",
+      "name": "Lasers",
+      "category": "Backgrounds",
+      "description": "Stage lasers fanning from the top or bottom edge, sweeping slowly through patchy haze, with a bright source flare.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "tunnel",
+      "name": "Tunnel",
+      "category": "Backgrounds",
+      "description": "Neon rings or corridor frames rushing toward you down a winding tunnel, drawn on canvas with soft halos.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "sunset",
+      "name": "Sunset",
+      "category": "Backgrounds",
+      "description": "A synthwave sun whose slits drift down and widen, behind rim-lit mountains. Lines up with Retro Grid.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "haze",
+      "name": "Haze",
+      "category": "Backgrounds",
+      "description": "Drifting smoke lit by neon from below or a side: three layers of one noise tile, slid and lit each frame, no blur.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "tour",
+      "name": "Tour",
+      "category": "Overlay",
+      "description": "Product tour: the page dims around a lit outline that glides from target to target, with a focus-trapped step card.",
+      "dependencies": [
+        "@floating-ui/react-dom",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "password-input",
+      "name": "Password Input",
+      "category": "Forms",
+      "description": "Password field with a reveal toggle, Caps Lock warning, four-segment strength meter and a rule checklist.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "input"
+      ],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "heatmap",
+      "name": "Heatmap",
+      "category": "Data Display",
+      "description": "Contribution calendar or labelled matrix, lit by value, with one tooltip and arrow-key navigation. SSR-stable.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "suggestions",
+      "name": "Suggestions",
+      "category": "AI",
+      "description": "A row of prompt chips for under a chat input. One tab stop, arrow keys, edge fades while it scrolls.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    },
+    {
+      "slug": "aspect-ratio",
+      "name": "Aspect Ratio",
+      "category": "Layout",
+      "description": "Holds children at a fixed shape, from 16 / 9 or \"4:3\". Optional hairline frame with a lit corner tick.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "addedIn": "1.7"
+    }
+  ],
+  "blockCategories": [
+    "Heroes",
+    "Navigation",
+    "Features",
+    "Social proof",
+    "Testimonials",
+    "Pricing",
+    "FAQ",
+    "Calls to action",
+    "Footers",
+    "Auth",
+    "App",
+    "Marketing"
+  ],
+  "blocks": [
+    {
+      "slug": "hero-sign",
+      "name": "Sign Hero",
+      "category": "Heroes",
+      "description": "A neon sign headline on a lit wall, with a working power switch.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "neon-text",
+        "switch"
+      ],
+      "addedIn": "1.1",
+      "height": 720
+    },
+    {
+      "slug": "navbar-minimal",
+      "name": "Minimal Navbar",
+      "category": "Navigation",
+      "description": "Quiet navbar with a lit tube under the active link and a large-type mobile sheet.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "sheet"
+      ],
+      "addedIn": "1.3",
+      "height": 425
+    },
+    {
+      "slug": "navbar-mega",
+      "name": "Mega Menu Navbar",
+      "category": "Navigation",
+      "description": "Mega menu with a live CI pipeline readout and a collapsible mobile sheet.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "collapsible",
+        "icons",
+        "navigation-menu",
+        "sheet"
+      ],
+      "addedIn": "1.3",
+      "height": 520
+    },
+    {
+      "slug": "navbar-floating",
+      "name": "Floating Navbar",
+      "category": "Navigation",
+      "description": "Floating pill nav that tightens on scroll and grows a glowing reading-progress hairline.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons"
+      ],
+      "addedIn": "1.3",
+      "height": 640
+    },
+    {
+      "slug": "hero-grid",
+      "name": "Grid Hero",
+      "category": "Heroes",
+      "description": "Retro-grid hero with a working email capture and a live webhook delivery log.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "icons",
+        "input",
+        "retro-grid"
+      ],
+      "addedIn": "1.3",
+      "height": 1038
+    },
+    {
+      "slug": "hero-terminal",
+      "name": "Terminal Hero",
+      "category": "Heroes",
+      "description": "Split hero where a typing terminal deploys, then 38 region bars light up on success.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "copy-button",
+        "icons",
+        "terminal"
+      ],
+      "addedIn": "1.3",
+      "height": 1020
+    },
+    {
+      "slug": "hero-city",
+      "name": "City Hero",
+      "category": "Heroes",
+      "description": "Night-skyline launch hero with a neon-tube countdown and a notify-me form.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "cityscape",
+        "countdown",
+        "icons",
+        "input"
+      ],
+      "addedIn": "1.3",
+      "height": 941
+    },
+    {
+      "slug": "hero-product",
+      "name": "Product Hero",
+      "category": "Heroes",
+      "description": "Centered hero over a tilted, interactive analytics dashboard with light pooling beneath.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "glow-chart",
+        "icons"
+      ],
+      "addedIn": "1.3",
+      "height": 1097
+    },
+    {
+      "slug": "hero-split-form",
+      "name": "Split Form Hero",
+      "category": "Heroes",
+      "description": "Split hero with a working email, OTP and vault-created sign-up flow.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "input",
+        "otp-input"
+      ],
+      "addedIn": "1.3",
+      "height": 775
+    },
+    {
+      "slug": "hero-globe",
+      "name": "Globe Hero",
+      "category": "Heroes",
+      "description": "Edge-network hero: a draggable globe of 18 regions with deploy arcs and a live p95 latency readout.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "copy-button",
+        "globe",
+        "icons"
+      ],
+      "addedIn": "1.7",
+      "height": 844
+    },
+    {
+      "slug": "hero-sunset",
+      "name": "Sunset Hero",
+      "category": "Heroes",
+      "description": "Synthwave album launch over a sunset and grid floor: rotating format headline, format picker, release countdown.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "countdown",
+        "icons",
+        "retro-grid",
+        "rotating-text",
+        "sunset",
+        "toggle-group"
+      ],
+      "addedIn": "1.7",
+      "height": 860
+    },
+    {
+      "slug": "features-bento",
+      "name": "Bento Features",
+      "category": "Features",
+      "description": "Live bento of meters, a threshold knob, latency readout, ECG watchdog and terminal.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "heartbeat",
+        "icons",
+        "knob",
+        "meter",
+        "seven-segment",
+        "terminal",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1429
+    },
+    {
+      "slug": "features-alternating",
+      "name": "Alternating Features",
+      "category": "Features",
+      "description": "Three alternating rows of live UI: invoice search, due-date calendar, bank reconcile.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "calendar",
+        "checkbox",
+        "command",
+        "icons",
+        "table"
+      ],
+      "addedIn": "1.3",
+      "height": 2232
+    },
+    {
+      "slug": "features-spotlight",
+      "name": "Spotlight Features",
+      "category": "Features",
+      "description": "Spotlight cards where the number is the hero and lights up like a tube on hover.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "spotlight-card"
+      ],
+      "addedIn": "1.3",
+      "height": 1190
+    },
+    {
+      "slug": "features-comparison",
+      "name": "Before and After",
+      "category": "Features",
+      "description": "Before and after columns; a rocker switch powers the lit column's checks in sequence.",
+      "dependencies": [],
+      "registryDependencies": [
+        "hardware-switch",
+        "icons"
+      ],
+      "addedIn": "1.3",
+      "height": 1070
+    },
+    {
+      "slug": "features-steps",
+      "name": "Feature Steps",
+      "category": "Features",
+      "description": "Three working steps joined by a Stepper tube that fills as each one completes.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "icons",
+        "stepper"
+      ],
+      "addedIn": "1.3",
+      "height": 983
+    },
+    {
+      "slug": "features-integrations",
+      "name": "Integrations Features",
+      "category": "Features",
+      "description": "Eight sources beamed into a hub and out to three destinations. Switch a source off and the count drops.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "signal-beam"
+      ],
+      "addedIn": "1.7",
+      "height": 1151
+    },
+    {
+      "slug": "logos-grid",
+      "name": "Logo Grid",
+      "category": "Social proof",
+      "description": "A hairline grid of twelve type-drawn wordmarks that flicker on like signs when hovered.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons"
+      ],
+      "addedIn": "1.3",
+      "height": 932
+    },
+    {
+      "slug": "logos-marquee",
+      "name": "Logo Marquee",
+      "category": "Social proof",
+      "description": "A logo marquee under a strip lamp: each wordmark lights up as it passes the middle.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "marquee"
+      ],
+      "addedIn": "1.3",
+      "height": 533
+    },
+    {
+      "slug": "stats-counters",
+      "name": "Stat Counters",
+      "category": "Social proof",
+      "description": "Seven-segment stats that count up in view, led by a live requests-served counter.",
+      "dependencies": [],
+      "registryDependencies": [
+        "seven-segment"
+      ],
+      "addedIn": "1.3",
+      "height": 1037
+    },
+    {
+      "slug": "stats-chart",
+      "name": "Stats with Chart",
+      "category": "Social proof",
+      "description": "Uptime KPIs and a glowing p95 chart with an SLO line and a 7/30/90-day range switch.",
+      "dependencies": [],
+      "registryDependencies": [
+        "glow-chart",
+        "icons",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1228
+    },
+    {
+      "slug": "testimonials-wall",
+      "name": "Testimonial Wall",
+      "category": "Testimonials",
+      "description": "A masonry wall of twelve quotes with one lit featured card and a show-all toggle.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "icons"
+      ],
+      "addedIn": "1.3",
+      "height": 1569
+    },
+    {
+      "slug": "testimonials-marquee",
+      "name": "Testimonial Marquee",
+      "category": "Testimonials",
+      "description": "Two opposing quote marquees; hovering a card pauses it and lights its highlighted line.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "icons",
+        "marquee"
+      ],
+      "addedIn": "1.3",
+      "height": 790
+    },
+    {
+      "slug": "testimonial-hero",
+      "name": "Big Quote",
+      "category": "Testimonials",
+      "description": "An editorial big quote signed with a neon name sign that re-strikes per story.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "neon-sign"
+      ],
+      "addedIn": "1.3",
+      "height": 765
+    },
+    {
+      "slug": "pricing-tiers",
+      "name": "Pricing Tiers",
+      "category": "Pricing",
+      "description": "Three plans with an odometer price roll on billing switch and a beamed featured tier.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "border-beam",
+        "button",
+        "icons",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1284
+    },
+    {
+      "slug": "pricing-single",
+      "name": "Single Plan",
+      "category": "Pricing",
+      "description": "One plan with a lit price driven by a pageview slider and an honest not-included list.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "slider"
+      ],
+      "addedIn": "1.3",
+      "height": 967
+    },
+    {
+      "slug": "pricing-table",
+      "name": "Plan Comparison",
+      "category": "Pricing",
+      "description": "Full plan comparison table with tooltips, grouped rows and a sticky lit plan header.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "table",
+        "tooltip"
+      ],
+      "addedIn": "1.3",
+      "height": 1672
+    },
+    {
+      "slug": "faq-accordion",
+      "name": "FAQ Accordion",
+      "category": "FAQ",
+      "description": "Two-column FAQ: an Accordion whose open answer lights a tube, plus a support card.",
+      "dependencies": [],
+      "registryDependencies": [
+        "accordion",
+        "avatar",
+        "button",
+        "icons"
+      ],
+      "addedIn": "1.3",
+      "height": 980
+    },
+    {
+      "slug": "faq-search",
+      "name": "Searchable FAQ",
+      "category": "FAQ",
+      "description": "Command-powered FAQ search with grouped topics and a lit answer panel.",
+      "dependencies": [],
+      "registryDependencies": [
+        "command",
+        "icons",
+        "kbd"
+      ],
+      "addedIn": "1.3",
+      "height": 997
+    },
+    {
+      "slug": "cta-band",
+      "name": "CTA Band",
+      "category": "Calls to action",
+      "description": "Full-width call to action between two neon tubes that strike as it scrolls in.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "tube-divider"
+      ],
+      "addedIn": "1.3",
+      "height": 781
+    },
+    {
+      "slug": "cta-sign",
+      "name": "Open Sign CTA",
+      "category": "Calls to action",
+      "description": "An OPEN neon sign on a brick wall; flip the switch and the CTA lights up.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "hardware-switch",
+        "icons",
+        "neon-sign"
+      ],
+      "addedIn": "1.3",
+      "height": 892
+    },
+    {
+      "slug": "cta-terminal",
+      "name": "Install Command CTA",
+      "category": "Calls to action",
+      "description": "Big headline over a glowing install prompt with a package-manager switch.",
+      "dependencies": [],
+      "registryDependencies": [
+        "copy-button",
+        "icons",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 925
+    },
+    {
+      "slug": "cta-lasers",
+      "name": "Lasers CTA",
+      "category": "Calls to action",
+      "description": "Closing CTA under crossing lasers in haze. One big line whose ticket count ticks down, a button, one line of proof.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "haze",
+        "icons",
+        "lasers"
+      ],
+      "addedIn": "1.7",
+      "height": 781
+    },
+    {
+      "slug": "footer-big",
+      "name": "Big Footer",
+      "category": "Footers",
+      "description": "Link columns, newsletter and status, over a giant outlined name that lights up.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "input"
+      ],
+      "addedIn": "1.3",
+      "height": 1037
+    },
+    {
+      "slug": "footer-minimal",
+      "name": "Minimal Footer",
+      "category": "Footers",
+      "description": "One calm row under a thin neon tube with electrode caps.",
+      "dependencies": [],
+      "registryDependencies": [
+        "icons",
+        "tube-divider"
+      ],
+      "addedIn": "1.3",
+      "height": 150
+    },
+    {
+      "slug": "footer-sign",
+      "name": "Sign Footer",
+      "category": "Footers",
+      "description": "A neon sign signature over a city skyline, with address and live opening hours.",
+      "dependencies": [],
+      "registryDependencies": [
+        "cityscape",
+        "icons",
+        "neon-sign"
+      ],
+      "addedIn": "1.3",
+      "height": 927
+    },
+    {
+      "slug": "auth-sign-in",
+      "name": "Sign In",
+      "category": "Auth",
+      "description": "Split sign-in with an orbiting satellite over a lit planet limb and a working form.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "icons",
+        "input",
+        "starfield"
+      ],
+      "addedIn": "1.3",
+      "height": 820
+    },
+    {
+      "slug": "auth-sign-up",
+      "name": "Sign Up",
+      "category": "Auth",
+      "description": "Sign-up form whose LED strength meter and rule tubes light as the password improves.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "icons",
+        "input",
+        "meter"
+      ],
+      "addedIn": "1.3",
+      "height": 864
+    },
+    {
+      "slug": "auth-verify",
+      "name": "Two-Factor Verify",
+      "category": "Auth",
+      "description": "OTP check with a resend timer and a neon keystone that lights on success, red on failure.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "icons",
+        "otp-input"
+      ],
+      "addedIn": "1.3",
+      "height": 760
+    },
+    {
+      "slug": "app-dashboard",
+      "name": "Dashboard",
+      "category": "App",
+      "description": "Metrics dashboard with a rail sidebar, a glowing MRR chart and a sortable accounts table.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "dropdown-menu",
+        "glow-chart",
+        "icons",
+        "input",
+        "sidebar",
+        "table",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1364
+    },
+    {
+      "slug": "app-settings",
+      "name": "Settings",
+      "category": "App",
+      "description": "Tabbed settings with a save bar that lights on changes and a hold-to-delete danger zone.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "field",
+        "hold-button",
+        "icons",
+        "input",
+        "radio-group",
+        "select",
+        "switch",
+        "tabs"
+      ],
+      "addedIn": "1.3",
+      "height": 1065
+    },
+    {
+      "slug": "app-inbox",
+      "name": "Inbox",
+      "category": "App",
+      "description": "Three-pane mail client with glowing unread dots, labels, archive, reply and compose.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "icons",
+        "input",
+        "sheet",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "addedIn": "1.3",
+      "height": 760
+    },
+    {
+      "slug": "app-kanban",
+      "name": "Kanban Board",
+      "category": "App",
+      "description": "Production board where cards fly between columns and WIP limits buzz red when exceeded.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "icons",
+        "input",
+        "kbd",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 820
+    },
+    {
+      "slug": "app-chat",
+      "name": "Team Chat",
+      "category": "App",
+      "description": "Team chat with grouped messages, a working composer, glowing typing dots and replies.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "icons",
+        "input",
+        "sheet",
+        "textarea"
+      ],
+      "addedIn": "1.3",
+      "height": 760
+    },
+    {
+      "slug": "app-notifications",
+      "name": "Notification Center",
+      "category": "App",
+      "description": "Incident notification center with filters, day groups and a lit firing-alert detail pane.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "glow-chart",
+        "icons",
+        "input",
+        "switch",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 953
+    },
+    {
+      "slug": "app-music-player",
+      "name": "Music Player",
+      "category": "App",
+      "description": "Now-playing radio screen with SVG tube cover art, a live Equalizer, fader volume and queue.",
+      "dependencies": [],
+      "registryDependencies": [
+        "equalizer",
+        "fader",
+        "icons",
+        "slider"
+      ],
+      "addedIn": "1.3",
+      "height": 605
+    },
+    {
+      "slug": "app-server-status",
+      "name": "Status Board",
+      "category": "App",
+      "description": "Status board with a fleet Heartbeat, live load meters, 90-day uptime bars and an incident Timeline.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "heartbeat",
+        "meter",
+        "timeline",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1450
+    },
+    {
+      "slug": "app-onboarding",
+      "name": "Onboarding",
+      "category": "App",
+      "description": "Three-step workspace setup with a Stepper and a live preview that retints to the chosen accent.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "color-picker",
+        "icons",
+        "input",
+        "stepper",
+        "tag-input",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 720
+    },
+    {
+      "slug": "app-empty-states",
+      "name": "Empty States",
+      "category": "App",
+      "description": "Four empty states with unlit glass tube illustrations that light on hover or success.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "input",
+        "switch"
+      ],
+      "addedIn": "1.3",
+      "height": 984
+    },
+    {
+      "slug": "marketing-404",
+      "name": "404 No Vacancy",
+      "category": "Marketing",
+      "description": "Full-page 404 under a motel sign whose 0 is dying, with key-fob links to popular pages.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "neon-sign"
+      ],
+      "addedIn": "1.3",
+      "height": 900
+    },
+    {
+      "slug": "marketing-500",
+      "name": "500 Power Outage",
+      "category": "Marketing",
+      "description": "Browned-out 500 page; flip the breaker panel's main switch to bring the lights back.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "hardware-switch",
+        "icons",
+        "neon-text"
+      ],
+      "addedIn": "1.3",
+      "height": 780
+    },
+    {
+      "slug": "marketing-newsletter",
+      "name": "Newsletter",
+      "category": "Marketing",
+      "description": "Newsletter capture card lit by a desk-lamp tube, with an expandable issue archive.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "input"
+      ],
+      "addedIn": "1.3",
+      "height": 835
+    },
+    {
+      "slug": "marketing-waitlist",
+      "name": "Waitlist",
+      "category": "Marketing",
+      "description": "Waitlist that hands you a split-flap ticket number and a referral link to copy.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "copy-button",
+        "icons",
+        "input",
+        "split-flap"
+      ],
+      "addedIn": "1.3",
+      "height": 927
+    },
+    {
+      "slug": "marketing-team",
+      "name": "Team Grid",
+      "category": "Marketing",
+      "description": "Team grid of hologram ID cards, each with a lit tide line, plus filters and open roles.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "hologram-card",
+        "icons",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1834
+    },
+    {
+      "slug": "marketing-contact",
+      "name": "Contact",
+      "category": "Marketing",
+      "description": "Contact form with validation and studio hours on a live seven-segment clock.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "input",
+        "select",
+        "seven-segment",
+        "textarea",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 900
+    },
+    {
+      "slug": "marketing-changelog",
+      "name": "Changelog",
+      "category": "Marketing",
+      "description": "Release notes on a tube timeline lit from the newest version, with tag filters.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "icons",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1740
+    },
+    {
+      "slug": "marketing-blog",
+      "name": "Blog Grid",
+      "category": "Marketing",
+      "description": "Featured post and filterable card grid with blueprint covers, each with one lit stroke.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "icons",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 1900
+    },
+    {
+      "slug": "marketing-event-ticket",
+      "name": "Event Ticket",
+      "category": "Marketing",
+      "description": "Notched event ticket with a neon wordmark, seeded QR stub, countdown and wallet button.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "countdown",
+        "icons",
+        "neon-text"
+      ],
+      "addedIn": "1.3",
+      "height": 862
+    },
+    {
+      "slug": "marketing-product-card",
+      "name": "Product Card",
+      "category": "Marketing",
+      "description": "Product card with an exploding isometric switch lit in its stem color, plus a live cart.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "icons",
+        "number-input",
+        "progress",
+        "toggle-group"
+      ],
+      "addedIn": "1.3",
+      "height": 790
+    },
+    {
+      "slug": "marketing-device",
+      "name": "Device Showcase",
+      "category": "Marketing",
+      "description": "Laptop and phone frames running one live app: seat a party on the phone and its table lights up on the laptop.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "device-frame",
+        "icons",
+        "switch"
+      ],
+      "addedIn": "1.7",
+      "height": 1376
+    }
+  ],
+  "templates": [
+    {
+      "slug": "saas",
+      "name": "SaaS landing",
+      "description": "Nightshift, a deploy scheduler: a lit 2am headline, a live night-run panel, pricing and a plan comparison page.",
+      "dependencies": [],
+      "registryDependencies": [
+        "accordion",
+        "avatar",
+        "badge",
+        "button",
+        "copy-button",
+        "hardware-switch",
+        "heartbeat",
+        "icons",
+        "input",
+        "marquee",
+        "neon-sign",
+        "seven-segment",
+        "switch",
+        "table",
+        "terminal",
+        "toggle-group",
+        "tooltip"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        "",
+        "/pricing"
+      ]
+    },
+    {
+      "slug": "dashboard",
+      "name": "Dashboard",
+      "description": "Switchback, a deploy platform console: live overview, filterable projects and tabbed team settings.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "command",
+        "dialog",
+        "dropdown-menu",
+        "field",
+        "glow-chart",
+        "heartbeat",
+        "hold-button",
+        "icons",
+        "input",
+        "kbd",
+        "meter",
+        "popover",
+        "progress",
+        "select",
+        "sheet",
+        "sidebar",
+        "switch",
+        "table",
+        "tabs",
+        "toast",
+        "toggle-group"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        "",
+        "/projects",
+        "/settings"
+      ]
+    },
+    {
+      "slug": "portfolio",
+      "name": "Portfolio",
+      "description": "Juno Park, a design engineer: one page under a pendant lamp whose pull cord turns every light off.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "copy-button",
+        "crt-overlay",
+        "cursor-glow",
+        "dialog",
+        "icons",
+        "input",
+        "kbd",
+        "neon-sign",
+        "sheet",
+        "switch",
+        "terminal",
+        "textarea",
+        "timeline"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        ""
+      ]
+    },
+    {
+      "slug": "launch",
+      "name": "Launch event",
+      "description": "Low Light, a one-night conference: a split-flap countdown that flips to live, then to the replay.",
+      "dependencies": [],
+      "registryDependencies": [
+        "accordion",
+        "badge",
+        "button",
+        "cityscape",
+        "copy-button",
+        "icons",
+        "input",
+        "neon-text",
+        "sheet",
+        "split-flap",
+        "timeline",
+        "toggle-group"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        ""
+      ]
+    },
+    {
+      "slug": "docs",
+      "name": "Docs",
+      "description": "Gantry, a container CLI: sidebar nav, ⌘K search, an outline that tracks your reading and MDX-ready blocks.",
+      "dependencies": [],
+      "registryDependencies": [
+        "alert",
+        "command",
+        "copy-button",
+        "icons",
+        "kbd",
+        "scroll-area",
+        "sheet",
+        "sidebar",
+        "table",
+        "tabs"
+      ],
+      "addedIn": "1.4",
+      "routes": [
+        "",
+        "/installation",
+        "/quickstart",
+        "/configuration",
+        "/deploying",
+        "/troubleshooting",
+        "/cli/up",
+        "/cli/build"
+      ]
     }
   ]
 }

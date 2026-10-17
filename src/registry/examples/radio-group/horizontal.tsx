@@ -2,8 +2,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function RadioGroupHorizontal() {
   return (
-    <div className="flex flex-col items-center gap-4">
-      <p id="row-density" className="text-sm text-white/55">
+    <div className="grid gap-3">
+      <p id="row-density" className="text-sm font-medium text-white/80">
         Row density
       </p>
       <RadioGroup orientation="horizontal" defaultValue="default" aria-labelledby="row-density">

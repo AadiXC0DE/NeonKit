@@ -16,7 +16,7 @@ export default function KbdShortcuts() {
       <table className="w-full border-collapse text-sm">
         <caption className="sr-only">Keyboard shortcuts</caption>
         <thead>
-          <tr className="border-b border-white/[0.06] text-left text-xs text-white/40">
+          <tr className="border-b border-white/[0.06] text-left text-xs text-white/50">
             <th scope="col" className="px-4 py-2.5 font-medium">
               Action
             </th>
@@ -33,7 +33,7 @@ export default function KbdShortcuts() {
                 <KbdCombo
                   keys={shortcut.keys}
                   size="sm"
-                  separator={shortcut.then ? <span className="px-0.5 text-white/40">then</span> : null}
+                  separator={shortcut.then ? <span className="px-0.5 text-white/50">then</span> : null}
                 />
               </td>
             </tr>

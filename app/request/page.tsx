@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { PageShell } from "@/components/site/page-shell";
+import { PageHeader, textLink } from "@/components/site/prose";
 import { RequestForm } from "@/components/site/request-form";
 import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
 import { registry } from "@/registry";
 
 export const metadata: Metadata = {
@@ -11,55 +13,47 @@ export const metadata: Metadata = {
 };
 
 const steps = [
-  ["Describe it", "A name and the use case. Screenshots and links help."],
-  ["It lands on GitHub", "As an issue anyone can upvote with a thumbs-up."],
-  ["Most wanted ships first", "Requests with the most votes go to the top of the queue."],
+  ["You describe it", "A name and what you're building with it. Screenshots and links help."],
+  ["It becomes a GitHub issue", "Public, so anyone who wants the same thing can add a thumbs-up."],
+  ["The most wanted ships first", "Requests are built in order of votes, then by how many blocks they'd unlock."],
 ];
 
 export default function RequestPage() {
   return (
     <PageShell>
-      <div className="grid gap-16 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-        <div>
-          <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">Request</p>
-          <h1 className="text-balance text-[clamp(2.75rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-fg">
-            What should we light up next?
-          </h1>
-          <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted">
-            {registry.length} components so far. If the one you need isn&apos;t here, ask for it.
-          </p>
-          <div className="mt-12 max-w-2xl">
+      <div className="grid gap-20 lg:grid-cols-12 lg:gap-8">
+        <div className="min-w-0 lg:col-span-7">
+          <PageHeader title="What should we light up next?" size="lg" className="mb-12">
+            {registry.length} components so far. If the one you need isn&apos;t one of them, ask for it here.
+          </PageHeader>
+          <div className="max-w-2xl">
             <RequestForm />
           </div>
         </div>
 
-        <aside className="lg:pt-24">
-          <div className="rounded-2xl border border-line bg-white/[0.015]">
-            <h2 className="border-b border-line px-6 py-4 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
-              What happens next
-            </h2>
-            <ol className="divide-y divide-line">
-              {steps.map(([title, body], i) => (
-                <li key={title} className="flex gap-4 px-6 py-5">
-                  <span className="font-mono text-[11px] text-[rgb(var(--neon-accent))]">0{i + 1}</span>
-                  <div>
-                    <p className="text-[15px] font-medium text-fg">{title}</p>
-                    <p className="mt-1 text-[14px] leading-relaxed text-muted">{body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <div className="border-t border-line px-6 py-4">
-              <a
-                href={`${siteConfig.issues}?q=is%3Aissue+label%3Acomponent-request+sort%3Areactions-%2B1-desc`}
-                target="_blank"
-                rel="noreferrer"
-                className="text-[14px] text-fg underline decoration-white/20 underline-offset-4 hover:decoration-[rgb(var(--neon-accent))]"
-              >
-                See what&apos;s already been requested
-              </a>
-            </div>
-          </div>
+        <aside aria-labelledby="next-title" className="lg:col-span-4 lg:col-start-9 lg:pt-[13.5rem]">
+          <h2 id="next-title" className="text-[15px] font-medium text-fg">
+            What happens next
+          </h2>
+          <ol className="mt-6 space-y-7">
+            {steps.map(([title, body], i) => (
+              <li key={title} className="grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-2">
+                <span className="text-[15px] font-medium tabular-nums text-muted">{i + 1}</span>
+                <div>
+                  <p className="text-[15px] font-medium text-fg">{title}</p>
+                  <p className="mt-1 text-[14.5px] leading-[1.6] text-muted">{body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <a
+            href={`${siteConfig.issues}?q=is%3Aissue+label%3Acomponent-request+sort%3Areactions-%2B1-desc`}
+            target="_blank"
+            rel="noreferrer"
+            className={cn(textLink, "mt-10 inline-block text-[14.5px]")}
+          >
+            See what&apos;s already been asked for
+          </a>
         </aside>
       </div>
     </PageShell>

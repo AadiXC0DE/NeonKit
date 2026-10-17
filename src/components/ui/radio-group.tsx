@@ -108,6 +108,28 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     const isControlled = valueProp !== undefined;
     const value = isControlled ? valueProp : uncontrolled;
 
+    const rootRef = React.useRef<HTMLDivElement>(null);
+    React.useImperativeHandle(ref, () => rootRef.current as HTMLDivElement);
+
+    // A form reset moves the native radios back without a change event. Follow it.
+    const initialValue = React.useRef(value);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialValue.current;
+        if (initial === value) return;
+        if (!isControlled) setUncontrolled(initial);
+        if (initial !== undefined) onValueChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = rootRef.current?.closest("form");
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     const context = React.useMemo<RadioGroupContextValue>(
       () => ({
         name: name ?? autoName,
@@ -129,7 +151,7 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     return (
       <RadioGroupContext.Provider value={context}>
         <div
-          ref={ref}
+          ref={rootRef}
           role="radiogroup"
           aria-required={required || undefined}
           aria-disabled={disabled || undefined}
@@ -139,7 +161,7 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
             "[--neon:var(--neon-accent,34_211_238)]",
             variant === "card"
               ? horizontal
-                ? "grid grid-cols-[repeat(auto-fit,minmax(8.5rem,1fr))] gap-3"
+                ? "grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(8.5rem,1fr))]"
                 : "grid gap-2.5"
               : horizontal
                 ? "flex flex-wrap gap-x-6 gap-y-3"
@@ -263,7 +285,7 @@ const RadioGroupItem = React.forwardRef<HTMLInputElement, RadioGroupItemProps>(
             "group/radio relative flex cursor-pointer select-none flex-col rounded-xl border",
             "transition-[background-color,border-color,box-shadow] duration-200 ease-out motion-reduce:transition-none",
             checked
-              ? "border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.05)] shadow-[0_0_24px_-6px_rgb(var(--neon)/0.55),inset_0_0_16px_rgb(var(--neon)/0.06)]"
+              ? "border-[rgb(var(--neon)/0.7)] bg-[rgb(var(--neon)/0.05)] shadow-[0_0_24px_-6px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),inset_0_0_16px_rgb(var(--neon)/CALC(0.06*var(--neon-glow,1)))]"
               : "border-white/10 bg-white/[0.03]",
             !checked && !disabled && "hover:border-white/20 hover:bg-white/[0.05]",
             disabled && "cursor-not-allowed opacity-50",
@@ -282,7 +304,7 @@ const RadioGroupItem = React.forwardRef<HTMLInputElement, RadioGroupItemProps>(
               "pointer-events-none absolute flex items-center justify-center rounded-full border",
               "transition-[border-color,box-shadow] duration-150 ease-out",
               checked
-                ? "border-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.35)]"
+                ? "border-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]"
                 : "border-white/20",
               s.indicator,
             )}
@@ -329,7 +351,7 @@ const RadioGroupItem = React.forwardRef<HTMLInputElement, RadioGroupItemProps>(
               "transition-[background-color,border-color,box-shadow,transform] duration-150 ease-out motion-reduce:transition-none",
               "peer-focus-visible:ring-2 peer-focus-visible:ring-[rgb(var(--neon)/0.6)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[#05060a]",
               checked
-                ? "border-[rgb(var(--neon))] bg-[rgb(var(--neon)/0.1)] shadow-[0_0_12px_rgb(var(--neon)/0.35)]"
+                ? "border-[rgb(var(--neon))] bg-[rgb(var(--neon)/0.1)] shadow-[0_0_12px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1)))]"
                 : "border-white/20 bg-white/[0.03]",
               !disabled && "group-active/radio:scale-[0.92]",
               !checked && !disabled && "group-hover/radio:border-[rgb(var(--neon)/0.55)]",
@@ -356,7 +378,7 @@ function Dot({ checked, className }: { checked: boolean; className: string }) {
   return (
     <span
       className={cn(
-        "rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)),0_0_12px_rgb(var(--neon)/0.6)]",
+        "rounded-full bg-[rgb(var(--neon))] shadow-[0_0_6px_rgb(var(--neon)/var(--neon-glow,1)),0_0_12px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1)))]",
         "transition-[transform,scale,opacity] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
         checked ? "scale-100 opacity-100" : "scale-50 opacity-0",
         className,

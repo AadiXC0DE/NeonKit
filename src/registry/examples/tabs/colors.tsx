@@ -35,7 +35,7 @@ export default function TabsColors() {
           {ranges.map((range) => (
             <TabsContent key={range} value={range} className="rounded-md text-center">
               <p className="text-2xl font-semibold tabular-nums tracking-tight text-white">{chart.values[range]}</p>
-              <p className="mt-1 text-xs text-white/45">{chart.metric}</p>
+              <p className="mt-1 text-xs text-white/50">{chart.metric}</p>
             </TabsContent>
           ))}
         </Tabs>

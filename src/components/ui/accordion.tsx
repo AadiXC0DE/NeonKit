@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -182,7 +182,7 @@ const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
           <span
             aria-hidden
             className={cn(
-              "pointer-events-none absolute bottom-4 left-0 top-4 w-px rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/0.8)]",
+              "pointer-events-none absolute bottom-4 left-0 top-4 w-px rounded-full bg-[rgb(var(--neon))] shadow-[0_0_8px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1)))]",
               "transition-opacity duration-200 ease-out motion-reduce:transition-none",
               open ? "opacity-100" : "opacity-0",
             )}
@@ -208,7 +208,8 @@ const AccordionTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAtt
           type="button"
           id={item.triggerId}
           aria-expanded={item.open}
-          aria-controls={item.contentId}
+          // The panel unmounts while closed, so only point at it when it exists.
+          aria-controls={item.open ? item.contentId : undefined}
           aria-disabled={locked || undefined}
           disabled={item.disabled}
           data-accordion-trigger=""
@@ -231,8 +232,8 @@ const AccordionTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAtt
           <ChevronDown
             aria-hidden
             className={cn(
-              "size-4 shrink-0 transition-[transform,color] duration-[220ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
-              item.open ? "rotate-180 text-white/70" : "text-white/40 group-hover/trigger:text-white/70",
+              "size-[18px] shrink-0 transition-[transform,color] duration-[220ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
+              item.open ? "rotate-180 text-white/80" : "text-white/55 group-hover/trigger:text-white/80",
             )}
           />
         </button>

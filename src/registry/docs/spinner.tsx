@@ -9,7 +9,12 @@ export const doc: ComponentDoc = {
 
 <Spinner variant="orbit" label="Loading invoices" />`,
   examples: [
-    { name: "demo", title: "Variants", component: SpinnerDemo },
+    {
+      name: "demo",
+      title: "Variants",
+      description: "ring for work with an end, dots for someone else's turn, bars for audio, orbit for a connection.",
+      component: SpinnerDemo,
+    },
     { name: "sizes", title: "Sizes", component: SpinnerSizes },
     {
       name: "button",

@@ -32,12 +32,12 @@ export default function ProgressIndeterminate() {
       <div className="mb-4 flex items-center gap-2.5">
         <CircularProgress size={14} thickness={2} aria-hidden />
         <span className="text-sm font-medium text-white/90">acme-web</span>
-        <span className="ml-auto text-xs tabular-nums text-white/45">
+        <span className="ml-auto text-xs tabular-nums text-white/50">
           {formatElapsed(elapsed)}
         </span>
       </div>
       <Progress label="Deploying to production" />
-      <div className="mt-3 flex items-center justify-between gap-4 text-xs text-white/45">
+      <div className="mt-3 flex items-center justify-between gap-4 text-xs text-white/50">
         <span className="truncate">{stage}…</span>
         <span className="shrink-0 font-mono">main · 7f3c2a1</span>
       </div>

@@ -1,13 +1,20 @@
 import { ImageResponse } from "next/og";
-import { registry } from "@/registry";
+import { icons } from "@/components/ui/icons";
+import { Screw, inventory, og, ogFonts } from "@/lib/og";
+import { blocks, templates } from "@/registry";
+import { siteConfig } from "@/config/site";
 
-export const alt = "NeonKit — neon UI components for React";
-export const size = { width: 1200, height: 630 };
+export const alt = "NeonKit: neon UI components for React and Tailwind";
+export const size = og.size;
 export const contentType = "image/png";
 
-const cyan = "34 211 238";
+export default async function OpengraphImage() {
+  const line = "Neon UI components for React and Tailwind.";
+  const count = `${inventory(blocks.length, templates.length, Object.keys(icons).length)}. MIT.`;
+  const host = siteConfig.url.replace(/^https?:\/\//, "");
+  const fonts = await ogFonts({ sign: "neonkit", sans: line + count, mono: host });
+  const c = og.cyan;
 
-export default function OpengraphImage() {
   return new ImageResponse(
     (
       <div
@@ -16,39 +23,51 @@ export default function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
           justifyContent: "space-between",
-          padding: 72,
-          background: "radial-gradient(ellipse 70% 60% at 50% 42%, #0f1a22, #05060a 70%)",
-          color: "#e8edf5",
+          padding: "64px 72px 56px",
+          background: `radial-gradient(ellipse 62% 52% at 50% 36%, rgb(${c} / 0.16), transparent 72%), radial-gradient(ellipse 80% 70% at 50% 40%, #0e1119, ${og.page} 72%)`,
+          color: og.fg,
+          fontFamily: "Mona Sans",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, color: "#5a6276", letterSpacing: 4 }}>
-          <span>NEON UI FOR REACT</span>
-          <span>{`${registry.length} COMPONENTS · MIT`}</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 40 }}>
-          <svg width="150" height="150" viewBox="0 0 32 32" fill="none">
-            <rect x="3" y="3" width="26" height="26" rx="4.5" stroke={`rgb(${cyan})`} strokeWidth="2.6" />
-            <path d="M11 22V10l10 12V10" stroke={`rgb(${cyan})`} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-            <rect x="3" y="3" width="26" height="26" rx="4.5" stroke="white" strokeOpacity="0.85" strokeWidth="0.9" />
-            <path d="M11 22V10l10 12V10" stroke="white" strokeOpacity="0.85" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+        {/* The sign, on its backplate */}
+        <div
+          style={{
+            position: "relative",
+            display: "flex",
+            padding: "4px 64px 26px",
+            borderRadius: 34,
+            border: "1px solid rgba(255,255,255,0.06)",
+            boxShadow: `inset 0 1px 0 rgb(${c} / 0.18)`,
+          }}
+        >
+          <Screw style={{ left: 16, top: 16 }} />
+          <Screw style={{ right: 16, top: 16 }} />
+          <Screw style={{ left: 16, bottom: 16 }} />
+          <Screw style={{ right: 16, bottom: 16 }} />
           <span
             style={{
-              fontSize: 170,
-              letterSpacing: -4,
-              color: "#d9f8fd",
-              textShadow: `0 0 6px rgb(${cyan}), 0 0 24px rgb(${cyan}), 0 0 60px rgb(${cyan} / 0.6)`,
+              fontFamily: "Tilt Neon",
+              fontSize: 196,
+              lineHeight: 1.12,
+              color: "#e4fbff",
+              textShadow: `0 0 4px rgb(${c}), 0 0 18px rgb(${c}), 0 0 46px rgb(${c} / 0.75), 0 0 110px rgb(${c} / 0.45)`,
             }}
           >
             neonkit
           </span>
         </div>
-        <div style={{ display: "flex", fontSize: 32, color: "#8a93a6", maxWidth: 900 }}>
-          Calm at rest, lit when it matters. Copy them in or add them with the shadcn CLI.
+
+        <div style={{ display: "flex", flexDirection: "column", width: "100%", gap: 10 }}>
+          <span style={{ fontSize: 40, fontWeight: 600, letterSpacing: -1.2, color: og.fg }}>{line}</span>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 27, color: og.muted }}>{count}</span>
+            <span style={{ fontFamily: "Fragment Mono", fontSize: 23, color: og.muted }}>{host}</span>
+          </div>
         </div>
       </div>
     ),
-    size,
+    { ...size, fonts },
   );
 }

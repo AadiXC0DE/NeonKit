@@ -46,7 +46,7 @@ export default function AccordionMultiple() {
                   className="size-3.5 shrink-0 cursor-pointer accent-[rgb(var(--neon))]"
                 />
                 <span className="flex-1">{option.label}</span>
-                <span className="tabular-nums text-xs text-white/35">{option.count}</span>
+                <span className="tabular-nums text-xs text-white/50">{option.count}</span>
               </label>
             ))}
           </AccordionContent>

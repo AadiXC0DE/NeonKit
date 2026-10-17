@@ -21,6 +21,10 @@ if (browser && !window.matchMedia) {
     }) as MediaQueryList;
 }
 
+if (browser && !Element.prototype.scrollTo) {
+  Element.prototype.scrollTo = () => {};
+}
+
 if (browser && !Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {};
 }

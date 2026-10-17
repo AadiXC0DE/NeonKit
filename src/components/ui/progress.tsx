@@ -15,19 +15,19 @@ const sizes = {
     track: "h-1",
     text: "text-xs",
     gap: "gap-1.5",
-    glow: "shadow-[0_0_6px_rgb(var(--neon)/0.55)]",
+    glow: "shadow-[0_0_6px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]",
   },
   md: {
     track: "h-2",
     text: "text-sm",
     gap: "gap-2",
-    glow: "shadow-[0_0_10px_rgb(var(--neon)/0.5)]",
+    glow: "shadow-[0_0_10px_rgb(var(--neon)/CALC(0.5*var(--neon-glow,1)))]",
   },
   lg: {
     track: "h-3",
     text: "text-sm",
     gap: "gap-2.5",
-    glow: "shadow-[0_0_12px_rgb(var(--neon)/0.45)]",
+    glow: "shadow-[0_0_12px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
   },
 } as const;
 
@@ -214,7 +214,7 @@ const CircularProgress = React.forwardRef<HTMLDivElement, CircularProgressProps>
           viewBox={`0 0 ${size} ${size}`}
           fill="none"
           className={cn(
-            "absolute inset-0 -rotate-90 overflow-visible [filter:drop-shadow(0_0_5px_rgb(var(--neon)/0.6))]",
+            "absolute inset-0 -rotate-90 overflow-visible [filter:drop-shadow(0_0_5px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))))]",
             isIndeterminate &&
               "animate-spin [animation-duration:1s] motion-reduce:[animation-duration:3s]",
           )}
