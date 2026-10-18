@@ -14,16 +14,25 @@ async function googleFont(family: string, text: string, weight?: number) {
   const css = await (await fetch(url)).text();
   const src = css.match(/src: url\((.+?)\) format\('(?:opentype|truetype)'\)/)?.[1];
   if (!src) throw new Error(`No TTF for ${family}`);
-  return (await fetch(src)).arrayBuffer();
+  const res = await fetch(src);
+  if (!res.ok) throw new Error(`${family}: ${res.status}`);
+  return res.arrayBuffer();
 }
 
-/** Loads the faces a card uses. Pass every string that appears on it. */
+/** One retry: the build fetches dozens of subsets at once and the odd one drops. */
+const withRetry = <T,>(job: () => Promise<T>) => job().catch(() => job());
+
+/**
+ * Loads the faces a card uses. Pass every string that appears on it. Returns undefined rather than an empty
+ * list when nothing loaded, because next/og only falls back to its built-in face when `fonts` is left out;
+ * an empty array fails the build.
+ */
 export async function ogFonts(texts: { sign?: string; sans?: string; mono?: string }) {
   const jobs: Promise<Font | null>[] = [];
   const load = (name: string, family: string, text: string | undefined, weight: Font["weight"]) => {
     if (!text) return;
     jobs.push(
-      googleFont(family, text, weight === 400 ? undefined : weight)
+      withRetry(() => googleFont(family, text, weight === 400 ? undefined : weight))
         .then((data) => ({ name, data, weight, style: "normal" as const }))
         .catch(() => null),
     );
@@ -32,7 +41,8 @@ export async function ogFonts(texts: { sign?: string; sans?: string; mono?: stri
   load("Mona Sans", "Mona Sans", texts.sans, 400);
   load("Mona Sans", "Mona Sans", texts.sans, 600);
   load("Fragment Mono", "Fragment Mono", texts.mono, 400);
-  return (await Promise.all(jobs)).filter((font): font is Font => font !== null);
+  const fonts = (await Promise.all(jobs)).filter((font): font is Font => font !== null);
+  return fonts.length ? fonts : undefined;
 }
 
 export const og = {
