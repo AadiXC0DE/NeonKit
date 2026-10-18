@@ -3,9 +3,9 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { blocks, templates } from "@/registry";
 import { DocsNav } from "./docs-nav";
 import { GitHubIcon } from "./icons";
 import { Logo } from "./logo";
@@ -14,6 +14,10 @@ import { Search } from "./search";
 const links = [
   { title: "Docs", href: "/docs" },
   { title: "Components", href: "/components" },
+  // Advertised once there's a real gallery, not a single pilot block.
+  ...(blocks.length >= 6 ? [{ title: "Blocks", href: "/blocks" }] : []),
+  ...(templates.length > 0 ? [{ title: "Templates", href: "/templates" }] : []),
+  { title: "Theme", href: "/theme" },
   { title: "Use with AI", href: "/docs/ai" },
   { title: "Sponsor", href: "/sponsor" },
 ];
@@ -45,7 +49,7 @@ export function SiteHeader({ className }: { className?: string }) {
         <Link href="/" aria-label="NeonKit home" className="rounded-md">
           <Logo />
         </Link>
-        <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
+        <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
           {links.map((link) => {
             const active =
               link.href === "/docs"
@@ -73,29 +77,43 @@ export function SiteHeader({ className }: { className?: string }) {
             rel="noreferrer"
             className="inline-flex h-8 items-center gap-2 rounded-md px-2.5 text-[13px] text-muted transition-colors hover:bg-white/[0.05] hover:text-fg"
           >
-            <GitHubIcon className="size-4" />
+            <GitHubIcon aria-hidden className="size-4" />
             <span className="hidden sm:inline">Star</span>
+            <span className="sr-only"> NeonKit on GitHub</span>
           </a>
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="grid size-9 cursor-pointer place-items-center rounded-md text-muted transition-colors hover:bg-white/[0.05] hover:text-fg md:hidden"
+            className="grid size-9 cursor-pointer place-items-center rounded-md text-muted transition-colors hover:bg-white/[0.05] hover:text-fg lg:hidden"
           >
-            {open ? <X className="size-4" /> : <Menu className="size-4" />}
+            <span aria-hidden className="relative block h-3 w-4">
+              <span
+                className={cn(
+                  "absolute left-0 top-[3px] h-[1.5px] w-4 rounded-full bg-current transition-transform duration-200 ease-out",
+                  open && "translate-y-[2.25px] rotate-45",
+                )}
+              />
+              <span
+                className={cn(
+                  "absolute bottom-[3px] left-0 h-[1.5px] w-4 rounded-full bg-current transition-transform duration-200 ease-out",
+                  open && "-translate-y-[2.25px] -rotate-45",
+                )}
+              />
+            </span>
           </button>
         </div>
       </div>
       {open && (
-        <div className="fixed inset-x-0 bottom-0 top-14 z-50 overflow-y-auto border-t border-line bg-background px-4 pb-16 pt-6 md:hidden">
-          <nav aria-label="Site" className="mb-8 grid grid-cols-2 gap-2">
+        <div className="fixed inset-x-0 bottom-0 top-14 z-50 overflow-y-auto border-t border-line bg-background px-4 pb-16 pt-6 lg:hidden">
+          <nav aria-label="Site" className="mb-10 flex flex-col border-b border-line pb-8">
             {[...links, { title: "Request a component", href: "/request" }].map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="rounded-lg border border-line px-3 py-2.5 text-[14px] text-fg"
+                className="rounded-md py-1.5 text-[26px] font-medium leading-tight tracking-[-0.02em] text-fg"
               >
                 {link.title}
               </Link>

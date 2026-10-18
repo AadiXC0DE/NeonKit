@@ -13,7 +13,7 @@ const sizes = {
   lg: { root: "h-6", track: "h-2", thumb: "size-[22px]", rail: "inset-x-[11px]", radius: 11 },
 } as const;
 
-const thumbGlow = "shadow-[0_0_18px_rgb(var(--neon)/0.8),0_1px_3px_rgb(0_0_0/0.5)]";
+const thumbGlow = "shadow-[0_0_18px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_1px_3px_rgb(0_0_0/0.5)]";
 
 function clamp(value: number, lower: number, upper: number) {
   return Math.min(upper, Math.max(lower, value));
@@ -69,6 +69,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       name,
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       onPointerDown,
       onPointerMove,
       onPointerUp,
@@ -81,6 +82,28 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     const isControlled = valueProp !== undefined;
     const values = isControlled ? valueProp : uncontrolled;
     const isRange = values.length > 1;
+
+    const rootRef = React.useRef<HTMLDivElement>(null);
+    React.useImperativeHandle(ref, () => rootRef.current as HTMLDivElement);
+
+    // A form reset puts the thumbs back where they started.
+    const initialValues = React.useRef(values);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialValues.current;
+        if (initial.length === values.length && initial.every((value, i) => value === values[i])) return;
+        if (!isControlled) setUncontrolled(initial);
+        onValueChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = rootRef.current?.closest("form");
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
 
     const railRef = React.useRef<HTMLDivElement>(null);
     const thumbRefs = React.useRef<(HTMLSpanElement | null)[]>([]);
@@ -134,6 +157,19 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       event.preventDefault();
 
       let index = thumbRefs.current.findIndex((thumb) => thumb?.contains(event.target as Node));
+      if (index >= 0 && isRange) {
+        // Grips overlap when thumbs sit close together; take the one nearest the pointer.
+        let best = Infinity;
+        thumbRefs.current.forEach((thumb, i) => {
+          if (!thumb) return;
+          const rect = thumb.getBoundingClientRect();
+          const distance = Math.abs(event.clientX - (rect.left + rect.width / 2));
+          if (distance < best || (distance === best && i === index)) {
+            best = distance;
+            index = i;
+          }
+        });
+      }
       let offset = 0;
       const grabbed = thumbRefs.current[index];
       if (grabbed) {
@@ -196,7 +232,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
     return (
       <div
-        ref={ref}
+        ref={rootRef}
         role={isRange ? "group" : undefined}
         aria-label={isRange ? ariaLabel : undefined}
         aria-labelledby={isRange ? ariaLabelledBy : undefined}
@@ -241,7 +277,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
               right: `${100 - last}%`,
             }}
             className={cn(
-              "pointer-events-none absolute top-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.55)]",
+              "pointer-events-none absolute top-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1)))]",
               s.track,
             )}
           />
@@ -263,6 +299,8 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
                   tabIndex={disabled ? -1 : 0}
                   aria-label={label}
                   aria-labelledby={!isRange && !thumbLabels?.[i] ? ariaLabelledBy : undefined}
+                  // Descriptions belong to the focusable thumbs, not the wrapper.
+                  aria-describedby={ariaDescribedBy}
                   aria-valuemin={i > 0 ? values[i - 1] : min}
                   aria-valuemax={i < values.length - 1 ? values[i + 1] : max}
                   aria-valuenow={value}
@@ -274,14 +312,16 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
                   onKeyUp={handleKeyUp}
                   className={cn(
                     "peer absolute left-0 top-1/2 block -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[rgb(var(--neon))] bg-[#eef3fa] outline-none",
-                    "shadow-[0_0_8px_rgb(var(--neon)/0.4),0_1px_3px_rgb(0_0_0/0.5)]",
+                    // A larger invisible grip, so the thumb is easy to catch with a finger.
+                    "before:absolute before:-inset-3 before:rounded-full before:content-['']",
+                    "shadow-[0_0_8px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1))),0_1px_3px_rgb(0_0_0/0.5)]",
                     "transition-[transform,scale,box-shadow] duration-150 ease-out motion-reduce:transition-none",
-                    "focus-visible:scale-110 focus-visible:shadow-[0_0_18px_rgb(var(--neon)/0.8),0_1px_3px_rgb(0_0_0/0.5)]",
+                    "focus-visible:scale-110 focus-visible:shadow-[0_0_18px_rgb(var(--neon)/CALC(0.8*var(--neon-glow,1))),0_1px_3px_rgb(0_0_0/0.5)]",
                     "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
                     dragging
                       ? cn("scale-110", thumbGlow)
                       : !disabled &&
-                          "hover:shadow-[0_0_12px_rgb(var(--neon)/0.6),0_1px_3px_rgb(0_0_0/0.5)]",
+                          "hover:shadow-[0_0_12px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),0_1px_3px_rgb(0_0_0/0.5)]",
                     s.thumb,
                   )}
                 />
@@ -309,7 +349,7 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
         {name &&
           values.map((value, i) => (
-            <input key={i} type="hidden" name={isRange ? `${name}[]` : name} value={value} />
+            <input key={i} type="hidden" name={isRange ? `${name}[]` : name} value={value} disabled={disabled} />
           ))}
       </div>
     );

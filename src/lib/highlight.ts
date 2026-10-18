@@ -12,7 +12,7 @@ const theme: ThemeRegistration = {
     "editor.foreground": "#c8d0de",
   },
   tokenColors: [
-    { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: "#4f586b", fontStyle: "italic" } },
+    { scope: ["comment", "punctuation.definition.comment"], settings: { foreground: "#7a8396", fontStyle: "italic" } },
     { scope: ["keyword", "storage", "storage.type", "keyword.control", "keyword.operator.new", "keyword.operator.expression"], settings: { foreground: "#f58ac6" } },
     { scope: ["string", "string.template", "punctuation.definition.string"], settings: { foreground: "#7ee8f8" } },
     { scope: ["constant.numeric", "constant.language", "constant.language.boolean"], settings: { foreground: "#fbbf24" } },
@@ -22,8 +22,8 @@ const theme: ThemeRegistration = {
     { scope: ["entity.name.type", "support.type", "entity.name.type.alias", "support.type.primitive"], settings: { foreground: "#8fb8ff" } },
     { scope: ["variable", "variable.other", "meta.object-literal.key"], settings: { foreground: "#c8d0de" } },
     { scope: ["variable.parameter"], settings: { foreground: "#d6dcea" } },
-    { scope: ["punctuation", "meta.brace", "punctuation.separator", "punctuation.terminator", "keyword.operator"], settings: { foreground: "#6b7489" } },
-    { scope: ["punctuation.definition.tag"], settings: { foreground: "#5a6276" } },
+    { scope: ["punctuation", "meta.brace", "punctuation.separator", "punctuation.terminator", "keyword.operator"], settings: { foreground: "#767f92" } },
+    { scope: ["punctuation.definition.tag"], settings: { foreground: "#737b8e" } },
     { scope: ["source.shell", "support.function.builtin.shell"], settings: { foreground: "#c8d0de" } },
   ],
 };

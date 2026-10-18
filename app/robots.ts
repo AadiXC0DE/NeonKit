@@ -5,6 +5,12 @@ import { siteConfig } from "@/config/site";
 // NeonKit shows up, the better.
 const aiCrawlers = [
   "GPTBot",
+  "ClaudeBot",
+  "Claude-User",
+  "Claude-SearchBot",
+  "anthropic-ai",
+  "Amazonbot",
+  "MistralAI-User",
   "OAI-SearchBot",
   "ChatGPT-User",
   "PerplexityBot",

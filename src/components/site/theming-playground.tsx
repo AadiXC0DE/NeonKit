@@ -17,50 +17,62 @@ export function ThemingPlayground() {
   const active = valid ? (hex.startsWith("#") ? hex : `#${hex}`) : color;
 
   return (
-    <div className="overflow-hidden rounded-xl border border-line bg-surface">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-2.5">
+    <figure className="min-w-0">
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 pb-2">
         <AccentPicker
-          value={color}
+          label="Palette color"
+          value={valid ? null : color}
           onChange={(next) => {
             setColor(next);
             setHex("");
           }}
+          className="-ml-1"
         />
-        <label className="flex items-center gap-2 font-mono text-[11px] text-dim">
-          or hex
+        <label className="flex items-center gap-2.5 text-[13.5px] text-muted">
+          Or any hex
           <input
             value={hex}
             onChange={(e) => setHex(e.target.value.trim())}
             placeholder="#ff6a00"
             maxLength={7}
             spellCheck={false}
-            className="h-7 w-24 rounded-md border border-line bg-background px-2 text-fg outline-none placeholder:text-dim focus:border-line-strong"
+            aria-invalid={hex !== "" && !valid}
+            className="h-8 w-[6.5rem] rounded-lg border border-white/10 bg-white/[0.03] px-2.5 font-mono text-[13px] text-fg outline-none transition-[border-color,box-shadow] placeholder:text-muted focus:border-[rgb(var(--neon-accent)/0.55)] focus:shadow-[0_0_0_3px_rgb(var(--neon-accent)/0.12)] aria-[invalid=true]:border-[#ff5c7a]/60"
           />
         </label>
       </div>
-      <div style={neonVars(active)} className="grid gap-8 bg-background bg-dots p-6 sm:grid-cols-2 sm:p-8">
-        <div className="space-y-5">
+      <div
+        style={neonVars(active)}
+        className="nk-stage relative isolate grid gap-10 rounded-[14px] border border-white/[0.07] px-6 py-12 [--neon:var(--neon-accent)] sm:grid-cols-2 sm:px-10 sm:py-14"
+      >
+        <div className="space-y-6">
           <div className="flex flex-wrap gap-2">
-            <Button variant="solid" size="sm">Solid</Button>
+            <Button variant="solid" size="sm">
+              Solid
+            </Button>
             <Button size="sm">Outline</Button>
-            <Button variant="soft" size="sm">Soft</Button>
+            <Button variant="soft" size="sm">
+              Soft
+            </Button>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Badge dot pulse>Live</Badge>
+            <Badge dot pulse>
+              Live
+            </Badge>
             <Badge variant="outline">Beta</Badge>
             <Badge variant="solid">New</Badge>
           </div>
           <Progress value={68} label="Upload" showValue size="sm" />
         </div>
-        <div className="flex flex-col items-start gap-5">
+        <div className="flex flex-col items-start gap-6">
           <Switch defaultChecked label="Neon on" />
           <Checkbox defaultChecked label="Inherit the accent" />
           <Slider defaultValue={[40]} aria-label="Demo slider" className="w-full" />
         </div>
       </div>
-      <p className="border-t border-line px-4 py-2.5 font-mono text-[11px] text-dim">
-        --neon-accent: <span className="text-muted">{toNeonRgb(active)}</span>
-      </p>
-    </div>
+      <figcaption className="mt-3 font-mono text-[12.5px] text-muted">
+        --neon-accent: <span className="text-fg">{toNeonRgb(active)}</span>
+      </figcaption>
+    </figure>
   );
 }

@@ -5,18 +5,44 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
 
+// In a group every avatar but the last is partly covered by its neighbour (the overlap plus
+// the 2px cut-out ring), so `shift` moves its initials left to the middle of the part you see.
 const sizes = {
-  sm: { root: "size-7 text-[11px]", square: "rounded-md", dot: "size-2 bottom-0 right-0", overlap: "[&>*+*]:-ml-1.5" },
-  md: { root: "size-9 text-[13px]", square: "rounded-lg", dot: "size-2.5 bottom-0 right-0", overlap: "[&>*+*]:-ml-2" },
-  lg: { root: "size-12 text-base", square: "rounded-xl", dot: "size-3 bottom-px right-px", overlap: "[&>*+*]:-ml-3" },
-  xl: { root: "size-16 text-xl", square: "rounded-2xl", dot: "size-3.5 bottom-0.5 right-0.5", overlap: "[&>*+*]:-ml-4" },
+  sm: {
+    root: "size-7 text-[10.5px]",
+    square: "rounded-md",
+    dot: "size-2 bottom-0 right-0",
+    overlap: "[&>*+*]:-ml-1.5",
+    shift: "[&>*:not(:last-child)]:[--avatar-shift:4px]",
+  },
+  md: {
+    root: "size-9 text-[12px]",
+    square: "rounded-lg",
+    dot: "size-2.5 bottom-0 right-0",
+    overlap: "[&>*+*]:-ml-2",
+    shift: "[&>*:not(:last-child)]:[--avatar-shift:5px]",
+  },
+  lg: {
+    root: "size-12 text-[15px]",
+    square: "rounded-xl",
+    dot: "size-3 bottom-px right-px",
+    overlap: "[&>*+*]:-ml-3",
+    shift: "[&>*:not(:last-child)]:[--avatar-shift:7px]",
+  },
+  xl: {
+    root: "size-16 text-[19px]",
+    square: "rounded-2xl",
+    dot: "size-3.5 bottom-0.5 right-0.5",
+    overlap: "[&>*+*]:-ml-4",
+    shift: "[&>*:not(:last-child)]:[--avatar-shift:9px]",
+  },
 } as const;
 
 // The 2px #05060a ring cuts the light out of the avatar edge.
 const statuses = {
-  online: "bg-[rgb(52_211_153)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(52_211_153/0.45)]",
-  away: "bg-[rgb(251_191_36)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(251_191_36/0.4)]",
-  busy: "bg-[rgb(255_77_94)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(255_77_94/0.45)]",
+  online: "bg-[rgb(52_211_153)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(52_211_153/CALC(0.45*var(--neon-glow,1)))]",
+  away: "bg-[rgb(251_191_36)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(251_191_36/CALC(0.4*var(--neon-glow,1)))]",
+  busy: "bg-[rgb(255_77_94)] shadow-[0_0_0_2px_#05060a,0_0_8px_2px_rgb(255_77_94/CALC(0.45*var(--neon-glow,1)))]",
   offline: "bg-[#05060a] shadow-[0_0_0_2px_#05060a,inset_0_0_0_2px_rgb(255_255_255/0.3)]",
 } as const;
 
@@ -70,11 +96,16 @@ export interface AvatarProps extends Omit<React.HTMLAttributes<HTMLSpanElement>,
   /** Neon ring with a glow, separated from the avatar by a thin gap. */
   ring?: boolean;
   status?: AvatarStatus;
+  /**
+   * Hides the avatar from screen readers while `alt` still sets the initials. Use it when the
+   * name is printed right next to the avatar, so it isn't read twice.
+   */
+  decorative?: boolean;
 }
 
 const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
   (
-    { className, style, color, src, alt, fallback, size: sizeProp, shape: shapeProp, ring = false, status, ...props },
+    { className, style, color, src, alt, fallback, size: sizeProp, shape: shapeProp, ring = false, status, decorative = false, ...props },
     ref,
   ) => {
     const group = React.useContext(AvatarGroupContext);
@@ -84,13 +115,14 @@ const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
     const radius = shape === "circle" ? "rounded-full" : s.square;
     const imageStatus = useImageStatus(src);
     const loaded = imageStatus === "loaded";
+    const labelled = Boolean(alt) && !decorative;
 
     return (
       <span
         ref={ref}
-        role={alt ? "img" : undefined}
-        aria-label={alt ? (status ? `${alt} (${status})` : alt) : undefined}
-        aria-hidden={alt ? undefined : true}
+        role={labelled ? "img" : undefined}
+        aria-label={labelled ? (status ? `${alt} (${status})` : alt) : undefined}
+        aria-hidden={labelled ? undefined : true}
         style={neonVars(color, style)}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
@@ -98,7 +130,7 @@ const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
           s.root,
           radius,
           ring
-            ? "shadow-[0_0_0_2px_#05060a,0_0_0_3px_rgb(var(--neon)),0_0_14px_3px_rgb(var(--neon)/0.4)]"
+            ? "shadow-[0_0_0_2px_#05060a,0_0_0_3px_rgb(var(--neon)),0_0_14px_3px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1)))]"
             : group && "shadow-[0_0_0_2px_#05060a]",
           className,
         )}
@@ -113,8 +145,10 @@ const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
           )}
         >
           <span
+            data-avatar-fallback=""
             className={cn(
-              "flex items-center justify-center transition-opacity duration-200 ease-out motion-reduce:transition-none",
+              "flex items-center justify-center tracking-[-0.02em] transition-opacity duration-200 ease-out motion-reduce:transition-none",
+              "[transform:translateX(calc(var(--avatar-shift,0px)*-1))]",
               loaded && "opacity-0",
             )}
           >
@@ -176,7 +210,7 @@ const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
         <div
           ref={ref}
           style={neonVars(color, style)}
-          className={cn("flex items-center", sizes[size].overlap, className)}
+          className={cn("flex items-center", sizes[size].overlap, sizes[size].shift, className)}
           {...props}
         >
           {visible}

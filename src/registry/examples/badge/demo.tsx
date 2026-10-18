@@ -23,8 +23,12 @@ export default function BadgeDemo() {
           <li key={deployment.project} className="flex items-center justify-between gap-4 px-4 py-3">
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-white/90">{deployment.project}</p>
-              <p className="truncate font-mono text-xs text-white/40">
-                {deployment.branch} · {deployment.commit} · {deployment.age}
+              {/* The branch gives way first, so the commit and age never get cut. */}
+              <p className="flex min-w-0 whitespace-nowrap font-mono text-xs text-white/50">
+                <span className="truncate">{deployment.branch}</span>
+                <span className="shrink-0">
+                  &nbsp;· {deployment.commit} · {deployment.age}
+                </span>
               </p>
             </div>
             <Badge color={status.color} dot pulse={status.pulse}>

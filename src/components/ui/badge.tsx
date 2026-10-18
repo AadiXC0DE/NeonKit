@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { X } from "lucide-react";
+import { X } from "@/components/ui/icons";
 
 import { cn } from "@/lib/utils";
 import { neonVars, type NeonColor } from "@/lib/neon";
@@ -9,9 +9,9 @@ import { neonVars, type NeonColor } from "@/lib/neon";
 const variants = {
   soft: "border-[rgb(var(--neon)/0.18)] bg-[rgb(var(--neon)/0.1)] text-[rgb(var(--neon))]",
   outline:
-    "border-[rgb(var(--neon)/0.55)] text-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.14),inset_0_0_8px_rgb(var(--neon)/0.08)] [text-shadow:0_0_8px_rgb(var(--neon)/0.45)]",
+    "border-[rgb(var(--neon)/0.55)] text-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.14*var(--neon-glow,1))),inset_0_0_8px_rgb(var(--neon)/CALC(0.08*var(--neon-glow,1)))] [text-shadow:0_0_8px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
   solid:
-    "border-transparent bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_14px_rgb(var(--neon)/0.35),inset_0_1px_0_rgb(255_255_255/0.4)]",
+    "border-transparent bg-[rgb(var(--neon))] text-[#05060a] shadow-[0_0_14px_rgb(var(--neon)/CALC(0.35*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.4)]",
 } as const;
 
 // Padding next to the dot and the remove button is tuned so both sit
@@ -92,7 +92,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
             <span
               className={cn(
                 "relative size-1.5 rounded-full bg-current",
-                variant !== "solid" && "shadow-[0_0_6px_rgb(var(--neon)/0.9)]",
+                variant !== "solid" && "shadow-[0_0_6px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]",
               )}
             />
           </span>

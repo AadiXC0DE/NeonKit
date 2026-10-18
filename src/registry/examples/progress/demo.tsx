@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FileArchive, FileImage, FileText } from "lucide-react";
+import { FileArchive, FileImage, FileText } from "@/components/ui/icons";
 import { Progress } from "@/components/ui/progress";
 
 const files = [
@@ -38,7 +38,7 @@ export default function ProgressDemo() {
     <div className="w-full max-w-md rounded-xl border border-white/10 bg-white/[0.03] p-5">
       <div className="mb-5 flex items-baseline justify-between gap-4">
         <h3 className="text-sm font-medium text-white/90">Uploads</h3>
-        <span className="text-xs tabular-nums text-white/45">
+        <span className="text-xs tabular-nums text-white/50">
           {complete} of {files.length} complete
         </span>
       </div>
@@ -57,7 +57,7 @@ export default function ProgressDemo() {
                   showValue
                   color={done ? "green" : undefined}
                 />
-                <p className="text-xs tabular-nums text-white/45">
+                <p className="text-xs tabular-nums text-white/50">
                   {done
                     ? `${size} MB · Uploaded`
                     : `${((size * value) / 100).toFixed(1)} of ${size} MB`}

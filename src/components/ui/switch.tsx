@@ -72,9 +72,31 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
 
     const s = sizes[size];
 
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
+    React.useImperativeHandle(ref, () => buttonRef.current as HTMLButtonElement);
+
+    // A form reset puts the switch back where it started, like a native checkbox.
+    const initialChecked = React.useRef(checked);
+    const resetRef = React.useRef<() => void>(() => {});
+    React.useEffect(() => {
+      resetRef.current = () => {
+        const initial = initialChecked.current;
+        if (initial === checked) return;
+        if (!isControlled) setUncontrolled(initial);
+        onCheckedChange?.(initial);
+      };
+    });
+    React.useEffect(() => {
+      const form = buttonRef.current?.form;
+      if (!form) return;
+      const onReset = () => resetRef.current();
+      form.addEventListener("reset", onReset);
+      return () => form.removeEventListener("reset", onReset);
+    }, []);
+
     const control = (
       <button
-        ref={ref}
+        ref={buttonRef}
         type="button"
         role="switch"
         id={id}
@@ -92,6 +114,8 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
           "group/switch relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-white/10 bg-white/[0.06] p-px outline-none",
+          // An invisible 44px target around the track, so even the small switch is easy to hit.
+          "before:absolute before:left-1/2 before:top-1/2 before:h-[max(100%,2.75rem)] before:w-[max(calc(100%+1rem),2.75rem)] before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:content-['']",
           "transition-[background-color,border-color,transform,scale] duration-150 ease-out active:scale-[0.97]",
           "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
           "disabled:cursor-not-allowed",
@@ -107,9 +131,9 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           aria-hidden
           className={cn(
             "pointer-events-none absolute -inset-px rounded-full border border-[rgb(var(--neon)/0.75)] bg-[rgb(var(--neon)/0.2)]",
-            "shadow-[0_0_14px_rgb(var(--neon)/0.45),inset_0_0_8px_rgb(var(--neon)/0.3)] transition-shadow duration-200 ease-out",
+            "shadow-[0_0_14px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1))),inset_0_0_8px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1)))] transition-shadow duration-200 ease-out",
             !disabled &&
-              "group-hover/switch:shadow-[0_0_20px_rgb(var(--neon)/0.6),inset_0_0_8px_rgb(var(--neon)/0.3)]",
+              "group-hover/switch:shadow-[0_0_20px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),inset_0_0_8px_rgb(var(--neon)/CALC(0.3*var(--neon-glow,1)))]",
             checked ? "opacity-100" : "opacity-0",
             checked &&
               ignitions > 0 &&
@@ -122,7 +146,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
             "pointer-events-none relative block rounded-full",
             "transition-[transform,translate,background-color,box-shadow] duration-[180ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
             checked
-              ? cn(s.on, "bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.9),inset_0_1px_0_rgb(255_255_255/0.5)]")
+              ? cn(s.on, "bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1))),inset_0_1px_0_rgb(255_255_255/0.5)]")
               : "translate-x-0 bg-white/60 shadow-[0_1px_2px_rgb(0_0_0/0.4)]",
             s.thumb,
           )}

@@ -6,7 +6,7 @@ Every component is a single file people copy into their own project. That shapes
 
 ```
 src/components/ui/<slug>.tsx        the component (this is what users copy)
-src/registry/registry.json          name, category, description, npm deps
+src/registry/registry.json          name, category, description, npm deps, addedIn
 src/registry/docs/<slug>.tsx        docs: usage, examples, API table, a11y notes
 src/registry/examples/<slug>/*.tsx  live examples, shown with their source
 src/lib/neon.ts                     palette + neonVars() helper
@@ -17,7 +17,17 @@ src/lib/utils.ts                    cn()
 
 ## Component rules
 
-**Imports.** Only `react`, `@/lib/utils`, `@/lib/neon`, and the npm packages listed for the component in `registry.json` (`motion`, `lucide-react`, `@radix-ui/react-slot`). Import motion from `motion/react`. Never import another NeonKit component unless the registry entry says so.
+**Imports.** Only `react`, `react-dom`, `@/lib/utils`, `@/lib/neon`, other NeonKit components listed in `registryDependencies`, and the npm packages listed for the component in `registry.json` (`motion`, `@radix-ui/react-slot`, `@floating-ui/react-dom`). Import motion from `motion/react`.
+
+**Icons.** Use NeonKit's own set from `@/components/ui/icons` (list `icons` in `registryDependencies`), never lucide-react. The names match lucide's. A new glyph is drawn as bent tube: 24px grid, 1.75 stroke, real bend radii, and a blockout gap where one tube passes behind another.
+
+**Building on other components.** A component may import another NeonKit component from `@/components/ui/<slug>` only when its registry entry lists that slug in `registryDependencies`. The CLI then installs both. The build fails on any mismatch either way. Prefer composition (Date Picker = Calendar + Popover) over copying internals.
+
+**Anchored overlays** (menus, popovers, hover cards, comboboxes):
+
+- Position with `@floating-ui/react-dom`: `useFloating({ placement, whileElementsMounted: autoUpdate, middleware: [offset(8), flip(), shift({ padding: 8 })] })`, plus `size()` when the panel should match or cap to the trigger and viewport.
+- Render the panel in a portal (`createPortal(…, document.body)`) so `overflow: hidden` ancestors can't clip it. A portal leaves the DOM subtree, so copy the trigger's resolved color onto the panel when it opens: read `getComputedStyle(trigger).getPropertyValue("--neon")` and set both `--neon` and `--neon-accent` inline.
+- Close on Escape and outside pointer down, return focus to the trigger, and keep `aria-expanded`/`aria-controls` in sync.
 
 **Color.** Every component takes `color?: NeonColor` and reads it through one CSS variable:
 
@@ -31,6 +41,15 @@ src/lib/utils.ts                    cn()
 - The first class sets the default: inherit `--neon-accent` from an ancestor, otherwise cyan. `neonVars` overrides it inline when `color` is passed.
 - Use the variable through arbitrary values only: `text-[rgb(var(--neon))]`, `bg-[rgb(var(--neon)/0.12)]`, `border-[rgb(var(--neon)/0.6)]`, `shadow-[0_0_18px_rgb(var(--neon)/0.45)]`, `[text-shadow:0_0_10px_rgb(var(--neon)/0.6)]`.
 - Omit `"color"` from the native props you extend: `Omit<React.HTMLAttributes<...>, "color">`.
+
+**Glow intensity.** Every glow reads one more variable, `--neon-glow`: a unitless multiplier, 1 by default, set app-wide in CSS (`:root { --neon-glow: 0.6; }`) or from the [Theme Studio](https://neonkit.heyaadi.com/theme). Glow is light that spills past an element: blurred box-shadow, text-shadow and drop-shadow layers, radial-gradient spill that fades to `transparent`, blurred halo copies, SVG blur filters and canvas bloom. Fills, borders, text colors and focus rings are structure and don't read it. At 0 the component should look flat and still designed.
+
+- Scale the glow layer's alpha: `shadow-[0_0_18px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]`, and `rgb(var(--neon)/var(--neon-glow,1))` where the layer had no alpha. In CSS strings and inline styles, write it normally: `rgb(var(--neon) / calc(0.45 * var(--neon-glow, 1)))`.
+- Write `CALC` in uppercase inside Tailwind classes. CSS function names are case-insensitive, and Tailwind 3 respaces everything after a lowercase `calc(` in an arbitrary value, which turns `drop-shadow` into `drop - shadow` and `-8px` into `- 8px`. Tailwind 4 doesn't care either way.
+- Blurred copies: add `opacity(var(--neon-glow,1))` to their filter (`[filter:blur(6px)_opacity(var(--neon-glow,1))]`). Their state opacity classes keep working.
+- SVG blur filters can't read variables in attributes. Either set `opacity: "var(--neon-glow, 1)"` on the element drawn through the filter, or multiply the blur by `<feFlood floodColor="#fff" style={{ floodOpacity: "var(--neon-glow, 1)" }} />` with `feComposite operator="arithmetic" k1={1}`.
+- Canvas: read it with `parseFloat(getComputedStyle(node).getPropertyValue("--neon-glow"))` and a `Number.isFinite` check, not `|| 1`, so 0 stays 0. Re-read it when the color is re-read: give the probe element `letter-spacing: calc(var(--neon-glow, 1) * 1px)` with a 1ms transition so `transitionend` fires on change.
+- `node scripts/neon-glow-codemod.mjs` rewrites shadows, filters and spill gradients for you, and `tests/neon-glow.test.ts` fails on any glow that doesn't read the variable.
 
 **Tailwind 3 and 4 both.** Users copy into either, so:
 
@@ -48,7 +67,7 @@ src/lib/utils.ts                    cn()
 | Popover / overlay | `bg-[#0a0b11]` + `border-white/10`     |
 | Text              | `text-white/90`                        |
 | Secondary text    | `text-white/55`                        |
-| Placeholder       | `placeholder:text-white/30`            |
+| Placeholder       | `placeholder:text-white/50`            |
 
 **Glow is a signal.** Light up interactive or active state (focus, checked, selected, hover) and leave resting UI calm. One element per component carries the strongest glow.
 
@@ -59,6 +78,28 @@ src/lib/utils.ts                    cn()
 **API.** Follow the existing names: `color`, `variant`, `size` (`"sm" | "md" | "lg"`), `disabled`. Use `checked`/`defaultChecked`/`onCheckedChange` and `value`/`defaultValue`/`onValueChange` for controlled and uncontrolled pairs. Use `React.forwardRef` so the file works on React 18 and 19. Spread `...props` onto the root element and set `displayName`.
 
 **Code style.** `"use client"` at the top when the file uses hooks or events. Two-space indent, double quotes, semicolons. Keep comments to the ones that explain a non-obvious why. Put named exports at the bottom.
+
+## Blocks
+
+Blocks are whole sections (heroes, pricing, auth screens, app shells) built from the components. Same rules as components, plus:
+
+- **File.** `src/components/blocks/<slug>.tsx`, one file with a default export. List it in `registry.json` → `blocks` with `dependencies`, `registryDependencies`, `addedIn` and the preview `height`. The build fails if the imports and the entry disagree.
+- **Imports.** `react`, `@/lib/utils`, `@/lib/neon`, NeonKit components and listed npm packages. No `next/*`: blocks get pasted into any React app.
+- **Color.** Set it once at the root with `style={neonVars("<color>")}` and a comment saying so. Everything inside inherits it.
+- **Content.** A believable fictional product with specific copy and numbers, kept in constants at the top of the file. Anything that looks interactive works in the preview: forms validate and show a success state, tabs switch, filters filter.
+- **Layout.** Holds up at 1440, 768 and 390 px with no horizontal page scroll. Heroes have one `h1`. Sections that sit inside a page (features, pricing, footers…) use `h2`.
+- **Preview.** Each block renders alone at `/view/<slug>` and in the gallery at `/blocks/<slug>`. After adding or changing one, refresh its thumbnail against a production build: `npm run build && npm start`, then `npm run thumbs -- <slug>`.
+
+## Templates
+
+Templates are complete Next.js sites (several pages, one brand, one color) built from the components. They install into an app router project, so unlike blocks they may use `next/*`.
+
+- **Files.** Sections in `src/components/templates/<slug>/`, routes in `app/preview/<slug>/`. They install to `components/templates/<slug>/` and `app/<slug>/`. List the template in `registry.json` → `templates` with `dependencies`, `registryDependencies`, `addedIn` and its `routes` (`""` first).
+- **Config.** `config.ts` exports `basePath = "/preview/<slug>"`, `color` and `brand`. Every link between pages starts from `basePath`; the registry build rewrites it to `/<slug>` and fails if `/preview/<slug>` appears anywhere else.
+- **Imports.** `react`, `next`, `next/*`, `@/lib/utils`, `@/lib/neon`, listed NeonKit components, files inside the template and listed npm packages.
+- **Next.js.** Must build in an app with `cacheComponents` on (the `create-next-app` default): no `dynamicParams` or other segment config it rejects; unknown params call `notFound()`.
+- **Pages.** One `h1` and a `main` per page, a skip link, metadata, an Open Graph image. Same contrast, layout and interaction bar as blocks.
+- **Preview.** Each route renders at `/preview/<slug><route>` (no-indexed) and in the gallery at `/templates/<slug>`. Refresh screenshots against a production build with `npm run thumbs -- <slug>`.
 
 ## Examples and docs
 
@@ -75,3 +116,11 @@ npm run lint
 npm test
 npm run build
 ```
+
+## Quality gates
+
+CI runs three jobs on every pull request and on pushes to `main`: `check` (the commands above), `a11y` and `install-test`.
+
+- **Size budgets.** `tests/budget.test.ts` (part of `npm test`) gzips each component file and its installed footprint, itself plus every NeonKit component it pulls in, and fails past 16 KB per file or 72 KB per footprint. If a component trips it, split it or slim it before raising the limit.
+- **Accessibility.** `npm run a11y` runs axe-core (WCAG 2.1 A and AA) over every component page, every block at `/view/<slug>`, every template route and the site pages, scrolling each page so the lazy previews mount. Serious and critical violations fail and print as a table. It needs a running site: `npm run dev` (or `npm run build && npm start`) in one terminal, then `npm run a11y` in another. Pass routes to check a few (`npm run a11y -- /components/knob /view/hero-city`), `--only=components,blocks,templates,site` for a group, `--verbose` for each failing node's markup, `BASE_URL` for another host. Locally it uses your installed Chrome. Fix the markup rather than adding to the short, commented `EXCEPTIONS` list in the script.
+- **Install.** `npm run install-test` builds the registry for `http://localhost:4400` into a temp dir, serves it, creates a fresh `create-next-app` project outside the repo, runs `shadcn init -d`, adds button, switch, dialog, select, data-table, chat-message, knob, neon-sign, the hero-city block and the saas template over HTTP, then runs `next build`. Run it when you change a component's imports, registry entry or anything a template installs. `--keep` leaves the temp project in place for a look; a failed run always keeps it. It needs the network the first time; after that npm serves most of it from its cache.

@@ -14,10 +14,6 @@ export default function SwitchControlled() {
           ? "Anyone with the link can view this board."
           : "Only invited members can view this board."}
       </p>
-      <div className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-3 font-mono text-xs">
-        <span className="text-white/40">checked</span>
-        <span className="text-white/90">{String(shared)}</span>
-      </div>
     </div>
   );
 }

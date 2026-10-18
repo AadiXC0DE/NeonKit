@@ -23,8 +23,8 @@ export default function AvatarRing() {
       <div className="flex items-start gap-6">
         {participants.map((person) => (
           <div key={person.name} className="flex w-16 flex-col items-center gap-2.5">
-            <Avatar size="lg" src={person.src} alt={person.name} ring={person.speaking} />
-            <span className={person.speaking ? "text-xs text-white/90" : "text-xs text-white/45"}>
+            <Avatar size="lg" src={person.src} alt={person.name} ring={person.speaking} decorative />
+            <span className={person.speaking ? "text-xs text-white/90" : "text-xs text-white/50"}>
               {person.name.split(" ")[0]}
             </span>
           </div>
@@ -34,7 +34,7 @@ export default function AvatarRing() {
         {guests.map((guest) => (
           <Avatar key={guest.name} alt={guest.name} color={guest.color} />
         ))}
-        <span className="ml-1 text-xs text-white/40">Guests get their own color</span>
+        <span className="ml-1 text-xs text-white/50">Guests get their own color</span>
       </div>
     </div>
   );

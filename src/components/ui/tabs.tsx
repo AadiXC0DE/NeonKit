@@ -9,13 +9,25 @@ import { neonVars, type NeonColor } from "@/lib/neon";
 const ease = [0.23, 1, 0.32, 1] as const;
 
 const lists = {
-  pill: "inline-flex w-fit items-center gap-1 rounded-xl border border-white/10 bg-white/[0.03] p-1",
-  underline: "flex items-center gap-6 border-b border-white/10",
+  horizontal: {
+    pill: "inline-flex w-fit items-center gap-1 rounded-xl border border-white/10 bg-white/[0.03] p-1",
+    underline: "flex items-center gap-6 border-b border-white/10",
+  },
+  vertical: {
+    pill: "inline-flex h-fit w-fit flex-col items-stretch gap-1 rounded-xl border border-white/10 bg-white/[0.03] p-1",
+    underline: "flex shrink-0 flex-col items-stretch gap-1 border-l border-white/10",
+  },
 } as const;
 
 const triggers = {
-  pill: "h-8 rounded-lg px-3",
-  underline: "h-10 rounded-md",
+  horizontal: {
+    pill: "h-8 rounded-lg px-3",
+    underline: "h-10 rounded-md",
+  },
+  vertical: {
+    pill: "h-8 justify-start rounded-lg px-3",
+    underline: "h-8 justify-start rounded-md pl-4 pr-3",
+  },
 } as const;
 
 const activeTriggers = {
@@ -24,18 +36,24 @@ const activeTriggers = {
 } as const;
 
 const indicators = {
-  pill: "absolute inset-0 border border-[rgb(var(--neon)/0.45)] bg-[rgb(var(--neon)/0.1)] shadow-[0_0_16px_rgb(var(--neon)/0.25),inset_0_0_12px_rgb(var(--neon)/0.08)]",
+  pill: "absolute inset-0 border border-[rgb(var(--neon)/0.45)] bg-[rgb(var(--neon)/0.1)] shadow-[0_0_16px_rgb(var(--neon)/CALC(0.25*var(--neon-glow,1))),inset_0_0_12px_rgb(var(--neon)/CALC(0.08*var(--neon-glow,1)))]",
   underline:
-    "absolute inset-x-0 -bottom-px h-0.5 bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/0.6),0_0_2px_rgb(var(--neon)/0.9)]",
+    "absolute inset-x-0 -bottom-px h-0.5 bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),0_0_2px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]",
 } as const;
 
-type TabsVariant = keyof typeof lists;
+// The vertical underline sits on the list's left hairline instead of the bottom one.
+const verticalUnderline =
+  "absolute inset-y-1 -left-px w-0.5 rounded-full bg-[rgb(var(--neon))] shadow-[0_0_10px_rgb(var(--neon)/CALC(0.6*var(--neon-glow,1))),0_0_2px_rgb(var(--neon)/CALC(0.9*var(--neon-glow,1)))]";
+
+type TabsVariant = keyof typeof indicators;
+type TabsOrientation = keyof typeof lists;
 
 type TabsContextValue = {
   baseId: string;
   value: string | undefined;
   select: (value: string) => void;
   variant: TabsVariant;
+  orientation: TabsOrientation;
   activationMode: "automatic" | "manual";
   reduceMotion: boolean;
   /** False until the first change, so the initial panel doesn't fade in on load. */
@@ -61,6 +79,8 @@ export interface TabsProps
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   variant?: TabsVariant;
+  /** Lays the list out as a column beside the panels. Arrow keys follow the axis. */
+  orientation?: TabsOrientation;
   /** "automatic" selects a tab as soon as it gets focus; "manual" waits for Enter or Space. */
   activationMode?: "automatic" | "manual";
 }
@@ -75,6 +95,7 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
       defaultValue,
       onValueChange,
       variant = "pill",
+      orientation = "horizontal",
       activationMode = "automatic",
       ...props
     },
@@ -97,16 +118,21 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
     );
 
     const context = React.useMemo(
-      () => ({ baseId, value, select, variant, activationMode, reduceMotion, interacted }),
-      [baseId, value, select, variant, activationMode, reduceMotion, interacted],
+      () => ({ baseId, value, select, variant, orientation, activationMode, reduceMotion, interacted }),
+      [baseId, value, select, variant, orientation, activationMode, reduceMotion, interacted],
     );
 
     return (
       <TabsContext.Provider value={context}>
         <div
           ref={ref}
+          data-orientation={orientation}
           style={neonVars(color, style)}
-          className={cn("[--neon:var(--neon-accent,34_211_238)]", "flex flex-col gap-4", className)}
+          className={cn(
+            "[--neon:var(--neon-accent,34_211_238)]",
+            orientation === "vertical" ? "flex items-start gap-6" : "flex flex-col gap-4",
+            className,
+          )}
           {...props}
         />
       </TabsContext.Provider>
@@ -117,7 +143,7 @@ Tabs.displayName = "Tabs";
 
 const TabsList = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, onKeyDown, ...props }, ref) => {
-    const { variant } = useTabs("TabsList");
+    const { variant, orientation } = useTabs("TabsList");
 
     function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
       onKeyDown?.(event);
@@ -130,10 +156,11 @@ const TabsList = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
       if (index === -1) return;
 
       const last = tabs.length - 1;
+      const [back, forward] = orientation === "vertical" ? ["ArrowUp", "ArrowDown"] : ["ArrowLeft", "ArrowRight"];
       const next = (
         {
-          ArrowRight: index === last ? 0 : index + 1,
-          ArrowLeft: index === 0 ? last : index - 1,
+          [forward]: index === last ? 0 : index + 1,
+          [back]: index === 0 ? last : index - 1,
           Home: 0,
           End: last,
         } as Record<string, number>
@@ -148,9 +175,9 @@ const TabsList = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
       <div
         ref={ref}
         role="tablist"
-        aria-orientation="horizontal"
+        aria-orientation={orientation}
         onKeyDown={handleKeyDown}
-        className={cn(lists[variant], className)}
+        className={cn(lists[orientation][variant], className)}
         {...props}
       />
     );
@@ -192,8 +219,10 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
           "transition-colors duration-150 ease-out",
           "focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
           "disabled:pointer-events-none disabled:opacity-40",
-          triggers[tabs.variant],
-          selected ? activeTriggers[tabs.variant] : "text-white/50 hover:text-white/80",
+          triggers[tabs.orientation][tabs.variant],
+          selected
+            ? activeTriggers[tabs.variant]
+            : cn("text-white/50 hover:text-white/85", tabs.variant === "pill" && "hover:bg-white/[0.04]"),
           className,
         )}
         {...props}
@@ -206,7 +235,11 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
             transition={{ duration: 0.3, ease }}
             // Set inline so motion can keep the corners round while the pill stretches.
             style={tabs.variant === "pill" ? { borderRadius: 8 } : undefined}
-            className={indicators[tabs.variant]}
+            className={
+              tabs.variant === "underline" && tabs.orientation === "vertical"
+                ? verticalUnderline
+                : indicators[tabs.variant]
+            }
           />
         )}
         <span className="relative inline-flex items-center gap-2 [&_svg]:size-4 [&_svg]:shrink-0">
@@ -249,6 +282,7 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
         transition={tabs.reduceMotion ? { duration: 0 } : { duration: 0.15, ease }}
         className={cn(
           "outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--neon)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#05060a]",
+          tabs.orientation === "vertical" && "min-w-0 flex-1",
           className,
           // Tailwind 3's preflight lets a display class like `grid` override the hidden attribute.
           !selected && "hidden",

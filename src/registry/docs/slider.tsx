@@ -57,6 +57,8 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "Each thumb has an invisible grip 12px wider on every side; when two grips overlap, the nearer thumb wins.",
+    "With name, a form reset puts the thumbs back where they started.",
     "Each thumb has role=\"slider\" with aria-valuemin, aria-valuemax and aria-valuenow.",
     "Arrow keys move by one step, Shift+Arrow and Page Up/Down by ten, Home and End jump to the ends.",
     "A single slider takes its name from aria-label or aria-labelledby; a range uses them to label the group and thumbLabels to name each thumb.",

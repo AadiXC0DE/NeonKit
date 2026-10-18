@@ -3,7 +3,7 @@ import "server-only";
 import { registryUrl, siteConfig } from "@/config/site";
 import { readSource } from "@/lib/highlight";
 import { neonColorNames } from "@/lib/neon";
-import { categories, componentPath, examplePath, getItem, registry } from "@/registry";
+import { blocks, categories, componentPath, examplePath, getItem, registry, templates } from "@/registry";
 import { docs } from "@/registry/docs";
 
 const fence = (code: string, lang = "tsx") => `\`\`\`${lang}\n${code.trimEnd()}\n\`\`\``;
@@ -50,7 +50,7 @@ Palette names: ${neonColorNames.join(", ")}. Edit \`neonColors\` in \`lib/neon.t
 
 - Props: \`color\`, \`variant\`, \`size\` ("sm" | "md" | "lg"), \`disabled\`. Controlled/uncontrolled pairs use \`checked\`/\`defaultChecked\`/\`onCheckedChange\` and \`value\`/\`defaultValue\`/\`onValueChange\`.
 - Components forward refs, spread native props onto the root and accept \`className\`.
-- Motion comes from the \`motion\` package (\`motion/react\`); icons from \`lucide-react\`.
+- Motion comes from the \`motion\` package (\`motion/react\`). Icons are NeonKit's own set in \`@/components/ui/icons\`, with lucide-react names and props.
 - Everything respects \`prefers-reduced-motion\` and is keyboard accessible.`,
 };
 
@@ -79,6 +79,9 @@ export async function componentMarkdown(slug: string) {
     fence(`npx shadcn@latest add ${registryUrl(slug)}`, "bash"),
     `With the \`@neonkit\` namespace configured: \`npx shadcn@latest add @neonkit/${slug}\`.`,
     `npm dependencies: ${deps}. Also needs \`lib/utils.ts\` (\`cn\`) and \`lib/neon.ts\` (\`neonVars\`), which the CLI adds.`,
+    ...(item.registryDependencies?.length
+      ? [`Builds on: ${item.registryDependencies.map((dep) => `[${getItem(dep)?.name ?? dep}](${pageUrl(dep)}.md)`).join(", ")}. The CLI installs them too.`]
+      : []),
     `## Usage`,
     fence(doc.usage),
     `## Examples`,
@@ -125,6 +128,8 @@ export function llmsTxt() {
       `- [Introduction](${siteConfig.url}/docs): what NeonKit is and how it works`,
       `- [Installation](${siteConfig.url}/docs/installation): shadcn CLI, namespaced registry, manual setup`,
       `- [Theming](${siteConfig.url}/docs/theming): the --neon variable, palette and custom colors`,
+      `- [Design language](${siteConfig.url}/docs/design): glow as light, when things glow, type, motion, radius, icon construction`,
+      `- [Theme Studio](${siteConfig.url}/theme): edit the palette, glow (--neon-glow), radius, surface and motion live; install the result with \`npx shadcn@latest add "${siteConfig.url}/r/theme?<query>"\``,
       `- [Use with AI](${siteConfig.url}/docs/ai): MCP, Cursor, Copilot, v0 and prompts`,
     ].join("\n"),
     ...categories.flatMap((category) => [
@@ -134,6 +139,28 @@ export function llmsTxt() {
         .map((item) => `- [${item.name}](${pageUrl(item.slug)}.md): ${item.description}`)
         .join("\n"),
     ]),
+    ...(blocks.length
+      ? [
+          `## Blocks`,
+          [
+            `Whole sections built from NeonKit components. Gallery: ${siteConfig.url}/blocks`,
+            ...blocks.map(
+              (block) => `- [${block.name}](${siteConfig.url}/blocks/${block.slug}): ${block.description} Install: \`npx shadcn@latest add ${registryUrl(block.slug)}\``,
+            ),
+          ].join("\n"),
+        ]
+      : []),
+    ...(templates.length
+      ? [
+          `## Templates`,
+          [
+            `Complete Next.js sites built from NeonKit components. Each installs pages to app/<name> and sections to components/templates/<name>. Gallery: ${siteConfig.url}/templates`,
+            ...templates.map(
+              (template) => `- [${template.name}](${siteConfig.url}/templates/${template.slug}): ${template.description} Install: \`npx shadcn@latest add ${registryUrl(template.slug)}\``,
+            ),
+          ].join("\n"),
+        ]
+      : []),
     `## Optional`,
     [
       `- [Full documentation](${siteConfig.url}/llms-full.txt): every guide and component, including source, in one file`,

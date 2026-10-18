@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 
 const apiKey = "nk_live_51Hx9Q2eZvKYlo2C8Nf3";

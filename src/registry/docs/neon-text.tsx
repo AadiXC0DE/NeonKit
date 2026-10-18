@@ -32,5 +32,7 @@ export const doc: ComponentDoc = {
   notes: [
     "String children are split into letters for the flicker; screen readers get the whole word once.",
     "Flicker and buzz are skipped when the user prefers reduced motion.",
+    "Only a plain string is split into letters. Other children light as one piece, without the letter-by-letter flicker.",
+    "The glow is sized in em, so it stays in proportion from a caption to a headline.",
   ],
 };

@@ -36,7 +36,7 @@ export const doc: ComponentDoc = {
         { prop: "defaultValue", type: "string", description: "Initial value when uncontrolled." },
         { prop: "onValueChange", type: "(value: string) => void", description: "Called when the selection changes." },
         { prop: "name", type: "string", default: "generated", description: "Shared name of the native radios. Set it to submit the value with a form." },
-        { prop: "orientation", type: '"vertical" | "horizontal"', default: '"vertical"', description: "Stacks options or lays them out in a row (a responsive grid for cards)." },
+        { prop: "orientation", type: '"vertical" | "horizontal"', default: '"vertical"', description: "Stacks options or lays them out in a row. Cards stack below 640px and share the row above it." },
         { prop: "variant", type: '"default" | "card"', default: '"default"', description: "Classic radios, or bordered tiles with a corner indicator." },
         { prop: "color", type: "NeonColor", default: "inherited", description: "Palette name or hex. Falls back to --neon-accent, then cyan." },
         { prop: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Radio, text and card padding." },
@@ -59,6 +59,7 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "A form reset moves the selection back to where it started and calls onValueChange.",
     "Options are native radio inputs sharing one name, so the group is a single tab stop and arrow keys move and select.",
     "Give the group an accessible name with aria-label or aria-labelledby.",
     "Each label is wired with aria-labelledby, so descriptions and card content are read as descriptions, not as part of the name.",

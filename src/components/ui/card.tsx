@@ -5,14 +5,14 @@ import { neonVars, type NeonColor } from "@/lib/neon";
 
 const variants = {
   default: "border-white/10 bg-white/[0.03]",
-  glow: "border-[rgb(var(--neon)/0.4)] bg-[rgb(var(--neon)/0.035)] shadow-[0_0_32px_-8px_rgb(var(--neon)/0.4),inset_0_0_24px_rgb(var(--neon)/0.05)]",
+  glow: "border-[rgb(var(--neon)/0.4)] bg-[rgb(var(--neon)/0.035)] shadow-[0_0_32px_-8px_rgb(var(--neon)/CALC(0.4*var(--neon-glow,1))),inset_0_0_24px_rgb(var(--neon)/CALC(0.05*var(--neon-glow,1)))]",
   outline: "border-white/[0.12] bg-transparent",
 } as const;
 
 const interactiveVariants = {
   default:
-    "hover:border-white/[0.16] hover:bg-white/[0.045] hover:shadow-[0_16px_40px_-20px_rgb(var(--neon)/0.45)]",
-  glow: "hover:border-[rgb(var(--neon)/0.6)] hover:shadow-[0_0_48px_-6px_rgb(var(--neon)/0.55),inset_0_0_28px_rgb(var(--neon)/0.08)]",
+    "hover:border-white/[0.16] hover:bg-white/[0.045] hover:shadow-[0_16px_40px_-20px_rgb(var(--neon)/CALC(0.45*var(--neon-glow,1)))]",
+  glow: "hover:border-[rgb(var(--neon)/0.6)] hover:shadow-[0_0_48px_-6px_rgb(var(--neon)/CALC(0.55*var(--neon-glow,1))),inset_0_0_28px_rgb(var(--neon)/CALC(0.08*var(--neon-glow,1)))]",
   outline: "hover:border-[rgb(var(--neon)/0.35)]",
 } as const;
 
@@ -41,7 +41,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         style={neonVars(color, style)}
         className={cn(
           "[--neon:var(--neon-accent,34_211_238)]",
-          "group/card relative flex flex-col rounded-2xl border text-white/90",
+          "group/card relative flex flex-col rounded-xl border text-white/90",
           variants[variant],
           interactive && [
             "transition-[transform,border-color,background-color,box-shadow] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]",

@@ -16,7 +16,7 @@ export default function SkeletonTable() {
       className="w-full max-w-lg overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]"
     >
       <span className="sr-only">Loading invoices</span>
-      <div className="grid grid-cols-[1fr_auto_auto] gap-6 border-b border-white/[0.06] px-4 py-2.5 text-xs text-white/45">
+      <div className="grid grid-cols-[1fr_auto_auto] gap-6 border-b border-white/[0.06] px-4 py-2.5 text-xs text-white/50">
         <span>Customer</span>
         <span className="w-16">Status</span>
         <span className="w-16 text-right">Amount</span>

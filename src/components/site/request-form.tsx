@@ -1,14 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { shareOnX, siteConfig } from "@/config/site";
+import { categories as registryCategories } from "@/registry";
 
-const categories = ["Forms", "Data Display", "Feedback", "Overlay", "Effects", "Not sure"].map((value) => ({
+const categories = [...registryCategories, "Not sure"].map((value) => ({
   value,
   label: value,
 }));
@@ -89,8 +90,8 @@ export function RequestForm() {
           </a>
         </Button>
       </div>
-      <p className="text-[13px] text-dim">
-        GitHub opens with everything filled in. You review it and press Submit there.
+      <p className="text-[13.5px] text-muted">
+        GitHub opens with everything filled in. You check it over and submit it there.
       </p>
     </form>
   );

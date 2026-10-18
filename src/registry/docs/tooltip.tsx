@@ -60,6 +60,6 @@ export const doc: ComponentDoc = {
     "The trigger gets aria-describedby pointing at the tooltip while it's open.",
     "Opens on mouse hover and keyboard focus, never on touch, so don't put anything essential in a tooltip.",
     "Escape, blur, pointer down and leaving the trigger all close it; you can move the pointer onto the tooltip without it closing.",
-    "Positioned with CSS, not measured: it won't flip at the viewport edge and an overflow-hidden ancestor will clip it.",
+    "Flips to the opposite side and shifts along the edge to stay on screen. It renders in a portal (inside the dialog when there is one), so overflow, masks and transforms on its ancestors can't clip it, and it keeps the trigger's color.",
   ],
 };

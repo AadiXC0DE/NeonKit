@@ -60,6 +60,8 @@ export const doc: ComponentDoc = {
     },
   ],
   notes: [
+    "required shows the neon dot after the label and stays a native attribute, so the browser validates it.",
+    "When the browser rejects the field on submit (required, type, pattern), it turns red until it's edited or the form resets. The browser shows its own message.",
     "The label is a native <label>, and the description or error is linked with aria-describedby.",
     "Clicking the padding or the leading icon focuses the input, like a native field.",
     "Fields without a visible label need an aria-label.",

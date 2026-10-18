@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Search } from "lucide-react";
+import { Search } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 
 export default function InputSearch() {
@@ -29,7 +29,7 @@ export default function InputSearch() {
       placeholder="Search components and props"
       leading={<Search />}
       trailing={
-        <kbd className="pointer-events-none rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 font-sans text-[11px] font-medium leading-4 text-white/45">
+        <kbd className="pointer-events-none rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 font-sans text-[11px] font-medium leading-4 text-white/50">
           {focused ? "Esc" : "/"}
         </kbd>
       }

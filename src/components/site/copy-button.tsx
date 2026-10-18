@@ -1,17 +1,20 @@
 "use client";
 
 import * as React from "react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 
 export function CopyButton({
   value,
   className,
   label = "Copy code",
+  text,
 }: {
   value: string;
   className?: string;
   label?: string;
+  /** Show a word next to the icon, for toolbars with room for it. */
+  text?: boolean;
 }) {
   const [copied, setCopied] = React.useState(false);
 
@@ -24,17 +27,23 @@ export function CopyButton({
   return (
     <button
       type="button"
-      aria-label={copied ? "Copied" : label}
+      aria-label={text ? undefined : copied ? "Copied" : label}
       onClick={async () => {
         await navigator.clipboard.writeText(value);
         setCopied(true);
       }}
       className={cn(
-        "grid size-8 cursor-pointer place-items-center rounded-md text-muted transition-colors hover:bg-white/[0.06] hover:text-fg",
+        "inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg text-[13px] text-muted transition-colors duration-150 hover:bg-white/[0.06] hover:text-fg",
+        text ? "px-2.5" : "w-8",
         className,
       )}
     >
-      {copied ? <Check className="size-3.5 text-[rgb(var(--neon-accent))]" /> : <Copy className="size-3.5" />}
+      {copied ? (
+        <Check size={14} className="text-[rgb(var(--neon-accent))]" />
+      ) : (
+        <Copy size={14} />
+      )}
+      {text && <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>}
     </button>
   );
 }
