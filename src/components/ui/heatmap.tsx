@@ -17,6 +17,9 @@ const css = `
 .nk-heat-cell[data-key]:hover { outline: 1px solid rgb(255 255 255 / 0.55); }
 .nk-heat-cell:focus-visible { outline: 2px solid rgb(var(--neon) / 0.9); }
 .nk-heat-cell[aria-selected="true"] { outline: 1.5px solid rgb(255 255 255 / 0.95); outline-offset: 1.5px; }
+.nk-heat-pin { position: sticky; inset-inline-start: 0; z-index: 1; }
+[data-scrolled] > [role="grid"] .nk-heat-pin { background: linear-gradient(to var(--nk-heat-edge, right), var(--nk-heat-surface, rgb(5 6 10)) 78%, transparent); box-shadow: calc(var(--nk-heat-side, -1) * 5px) 0 0 var(--nk-heat-surface, rgb(5 6 10)); }
+.nk-heat-pin:dir(rtl) { --nk-heat-edge: left; --nk-heat-side: 1; }
 `;
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -288,6 +291,7 @@ const Heatmap = React.forwardRef<HTMLDivElement, HeatmapProps>((props, forwarded
   useIsomorphicLayoutEffect(() => {
     const scroller = scrollerRef.current;
     if (scroller && model.calendar) scroller.scrollLeft = scroller.scrollWidth;
+    if (scroller) markScrolled(scroller);
   }, [model.calendar]);
 
   const select = (key: string) => {
@@ -384,7 +388,7 @@ const Heatmap = React.forwardRef<HTMLDivElement, HeatmapProps>((props, forwarded
       <>
         {/* Labels only: the cells name their own dates, so this row stays out of the grid's structure. */}
         <div role="presentation" style={ROW}>
-          <span aria-hidden />
+          <span aria-hidden className="nk-heat-pin self-stretch" />
           {model.colLabels.map(({ col, text }) => (
             <span
               key={`${col}-${text}`}
@@ -401,7 +405,8 @@ const Heatmap = React.forwardRef<HTMLDivElement, HeatmapProps>((props, forwarded
         </div>
         {model.cells.map((row, r) => (
           <div key={r} role="row" style={ROW}>
-            <span aria-hidden className="self-center whitespace-nowrap pr-2 text-[11px] leading-none text-white/45">
+            {/* Pinned, so the weekdays stay readable when a narrow screen scrolls the weeks. */}
+            <span aria-hidden className="nk-heat-pin flex items-center self-stretch whitespace-nowrap pr-2 text-[11px] leading-none text-white/45">
               {model.rowLabels[r]}
             </span>
             {row.map((cell, c) =>
@@ -441,7 +446,7 @@ const Heatmap = React.forwardRef<HTMLDivElement, HeatmapProps>((props, forwarded
       {...domProps}
     >
       <style href="nk-heatmap" precedence="nk">{css}</style>
-      <div ref={scrollerRef} className="-m-1 min-w-0 overflow-x-auto p-1 [scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]">
+      <div ref={scrollerRef} onScroll={(event) => markScrolled(event.currentTarget)} className="-m-1 min-w-0 overflow-x-auto p-1 [scrollbar-color:rgb(255_255_255/0.15)_transparent] [scrollbar-width:thin]">
         <div
           role="grid"
           aria-label={ariaLabel ?? (model.calendar ? "Activity by day" : "Heatmap")}
@@ -509,6 +514,15 @@ const Heatmap = React.forwardRef<HTMLDivElement, HeatmapProps>((props, forwarded
   );
 });
 Heatmap.displayName = "Heatmap";
+
+/**
+ * Backs the pinned labels only once cells can pass under them, written straight to the DOM so scrolling never
+ * re-renders the grid.
+ */
+function markScrolled(scroller: HTMLElement) {
+  if (Math.abs(scroller.scrollLeft) > 1) scroller.dataset.scrolled = "";
+  else delete scroller.dataset.scrolled;
+}
 
 function strip(cell: ModelCell | undefined): HeatmapCell | null {
   if (!cell) return null;

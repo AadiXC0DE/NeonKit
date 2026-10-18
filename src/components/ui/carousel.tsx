@@ -18,6 +18,9 @@ const subscribeReducedMotion = (callback: () => void) => {
 };
 const getReducedMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 
+const FOCUSABLE =
+  'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),summary,iframe,[contenteditable="true"],[tabindex]:not([tabindex="-1"])';
+
 function useReducedMotion() {
   return React.useSyncExternalStore(subscribeReducedMotion, getReducedMotion, () => false);
 }
@@ -404,12 +407,34 @@ const CarouselContent = React.forwardRef<HTMLDivElement, CarouselContentProps>(
   ({ className, viewportClassName, ...props }, ref) => {
     const { setViewport, live, onScroll, onDragStart, trackId, orientation } = useCarousel("CarouselContent");
     const horizontal = orientation === "horizontal";
+    const viewportRef = React.useRef<HTMLDivElement | null>(null);
+    const viewport = React.useCallback(
+      (node: HTMLDivElement | null) => {
+        viewportRef.current = node;
+        setViewport(node);
+      },
+      [setViewport],
+    );
+    // Slides with their own links or buttons already give the keyboard a way in, so the viewport only takes a
+    // tab stop when they don't.
+    const subscribe = React.useCallback((callback: () => void) => {
+      const node = viewportRef.current;
+      if (!node || typeof MutationObserver === "undefined") return () => {};
+      const observer = new MutationObserver(callback);
+      observer.observe(node, { childList: true, subtree: true, attributes: true, attributeFilter: ["href", "disabled", "tabindex"] });
+      return () => observer.disconnect();
+    }, []);
+    const tabbable = React.useSyncExternalStore(
+      subscribe,
+      () => !viewportRef.current?.querySelector(FOCUSABLE),
+      () => true,
+    );
     return (
       <div
-        ref={setViewport}
+        ref={viewport}
         data-carousel-viewport=""
         // Focusable so the track scrolls from the keyboard: arrows, Home and End are handled on the root.
-        tabIndex={0}
+        tabIndex={tabbable ? 0 : -1}
         aria-live={live}
         onScroll={onScroll}
         onPointerDown={onDragStart}

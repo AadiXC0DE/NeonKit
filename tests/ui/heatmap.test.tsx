@@ -110,6 +110,21 @@ describe("Heatmap calendar", () => {
     expect(container.firstElementChild).not.toHaveAttribute("data");
   });
 
+  it("pins the day labels and backs them only once the weeks scroll", () => {
+    render(<Heatmap data={[{ date: "2026-03-05", value: 3 }]} end="2026-03-07" />);
+    const grid = screen.getByRole("grid");
+    const scroller = grid.parentElement!;
+    const labels = Array.from(grid.querySelectorAll('[role="row"] > span'));
+    expect(labels.every((label) => label.classList.contains("nk-heat-pin"))).toBe(true);
+    scroller.scrollLeft = 0;
+    fireEvent.scroll(scroller);
+    expect(scroller).not.toHaveAttribute("data-scrolled");
+    scroller.scrollLeft = 120;
+    fireEvent.scroll(scroller);
+    expect(scroller).toHaveAttribute("data-scrolled");
+    expect(document.querySelector('style[data-href="nk-heatmap"]')?.textContent).toContain("--nk-heat-surface");
+  });
+
   it("draws a legend with every step", () => {
     const { container } = render(<Heatmap data={DATA} end="2026-10-17" levels={6} legendLabels={["0", "40+"]} />);
     expect(screen.getByText("40+")).toBeInTheDocument();

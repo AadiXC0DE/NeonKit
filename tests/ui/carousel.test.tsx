@@ -53,6 +53,23 @@ function Releases(props: Partial<React.ComponentProps<typeof Carousel>>) {
 }
 
 describe("Carousel", () => {
+  it("gives the viewport a tab stop only when no slide content can take focus", async () => {
+    const { rerender } = render(<Releases />);
+    const viewport = document.querySelector<HTMLElement>("[data-carousel-viewport]")!;
+    expect(viewport.tabIndex).toBe(0);
+    rerender(
+      <Carousel aria-label="Releases">
+        <CarouselContent>
+          <CarouselItem>
+            <a href="/data-table">Data Table</a>
+          </CarouselItem>
+        </CarouselContent>
+      </Carousel>,
+    );
+    await act(async () => {});
+    expect(document.querySelector<HTMLElement>("[data-carousel-viewport]")!.tabIndex).toBe(-1);
+  });
+
   it("uses APG carousel semantics", () => {
     render(<Releases />);
     const root = screen.getByRole("region", { name: "Releases" });

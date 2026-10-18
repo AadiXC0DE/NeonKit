@@ -64,7 +64,7 @@ export const doc: ComponentDoc = {
     "Every cell is named with its value and date (\"14 deploys, Tue, Mar 3, 2026\"). Selected cells report aria-selected only when selection is on.",
     "One tooltip serves the whole grid. It's portaled to the body, so a scrolling or clipped parent can't cut it off, and it follows keyboard focus as well as the pointer.",
     "Dates are read and formatted in UTC with fixed English names, so the server and the browser render the same grid. Pass formatDate for another language.",
-    "When the calendar has to scroll, it opens scrolled to the latest weeks.",
+    "When the calendar has to scroll, it opens scrolled to the latest weeks and the day labels stay pinned at the edge. They're backed in the page color, `#05060a`; on another surface, set `--nk-heat-surface` to match (`[--nk-heat-surface:#0b0d12]`).",
     "Only the top two steps throw light, and the glow is static. Hovering repaints one tooltip, not the grid.",
   ],
 };
