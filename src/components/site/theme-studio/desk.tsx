@@ -63,7 +63,7 @@ function ChannelEditor({
   };
 
   return (
-    <div className="grid w-[288px] gap-4">
+    <div className="grid w-[288px] max-w-full gap-4">
       <Input
         label="Name"
         size="sm"
@@ -207,7 +207,7 @@ export function Channels({ theme, update }: { theme: Theme; update: Update }) {
                   </span>
                 </button>
               </PopoverTrigger>
-              <PopoverContent side="top" sideOffset={12} className="p-4">
+              <PopoverContent side="top" sideOffset={12} className="w-auto p-4">
                 <ChannelEditor tube={tube} index={i} theme={theme} update={update} onDone={() => setOpen(null)} />
               </PopoverContent>
             </Popover>
