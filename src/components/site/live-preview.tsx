@@ -3,75 +3,17 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { demoLoaders } from "./demo-loaders";
-import { FRAME_NAME, type FrameMessage } from "./frame-control";
 
 /*
- * Previews render the real thing, never a screenshot. A gallery can hold dozens of them, so they share a budget:
+ * Component demos render the real thing. A gallery can hold dozens of them, so they share a budget:
  *  - each mounts when it comes near the viewport and unmounts once it's far away, keeping its box so nothing jumps;
- *  - inside a horizontal strip the window is measured against the strip, so sliding a frame out doesn't reboot it;
- *  - mounts are queued: one iframe boots at a time and only once scrolling settles, demos one per idle slice;
- *  - only what's on screen animates. Frames are paused from inside while off screen or mid-scroll.
+ *  - inside a horizontal strip the window is measured against the strip, so sliding a demo out doesn't reboot it;
+ *  - mounts are queued, one per idle slice, so a screenful doesn't land in one long task;
+ *  - only what's on screen animates.
+ *
+ * Whole pages (blocks, templates) are too heavy to run by the dozen; galleries show them as screenshots, see
+ * preview-shot.tsx.
  */
-
-// ── Scrolling, shared by every preview on the page ───────────────────────────────────────────────
-
-const SCROLL_IDLE = 160;
-let scrolling = false;
-let scrollTimer = 0;
-const scrollListeners = new Set<() => void>();
-const idleWaiters: (() => void)[] = [];
-
-function onScroll() {
-  window.clearTimeout(scrollTimer);
-  scrollTimer = window.setTimeout(() => {
-    scrolling = false;
-    scrollListeners.forEach((notify) => notify());
-    idleWaiters.splice(0).forEach((run) => run());
-  }, SCROLL_IDLE);
-  if (!scrolling) {
-    scrolling = true;
-    scrollListeners.forEach((notify) => notify());
-  }
-}
-
-function subscribeScroll(notify: () => void) {
-  if (scrollListeners.size === 0) document.addEventListener("scroll", onScroll, { capture: true, passive: true });
-  scrollListeners.add(notify);
-  return () => {
-    scrollListeners.delete(notify);
-    if (scrollListeners.size === 0) document.removeEventListener("scroll", onScroll, { capture: true });
-  };
-}
-
-function useScrolling() {
-  return React.useSyncExternalStore(
-    subscribeScroll,
-    () => scrolling,
-    () => false,
-  );
-}
-
-/** Runs `run` once the page stops scrolling, or after `maxWait` ms regardless. Returns a cancel. */
-function whenScrollIdle(run: () => void, maxWait: number) {
-  let done = false;
-  const go = () => {
-    if (done) return;
-    done = true;
-    window.clearTimeout(fallback);
-    const i = idleWaiters.indexOf(go);
-    if (i >= 0) idleWaiters.splice(i, 1);
-    run();
-  };
-  const fallback = window.setTimeout(go, maxWait);
-  if (scrolling) idleWaiters.push(go);
-  else window.setTimeout(go, 0);
-  return () => {
-    done = true;
-    window.clearTimeout(fallback);
-    const i = idleWaiters.indexOf(go);
-    if (i >= 0) idleWaiters.splice(i, 1);
-  };
-}
 
 const idle = (run: () => void) =>
   typeof window.requestIdleCallback === "function"
@@ -125,8 +67,6 @@ function createQueue(slots: number, wait: (run: () => void) => () => void) {
   };
 }
 
-/** Iframes boot a whole document: one at a time, between scrolls. */
-const frameQueue = createQueue(1, (run) => whenScrollIdle(run, 1200));
 /** Demos are cheaper: one per idle slice, so a screenful doesn't land in one long task. */
 const demoQueue = createQueue(1, idle);
 
@@ -191,145 +131,8 @@ function useOnScreen(ref: React.RefObject<HTMLElement | null>, enabled: boolean)
   return on;
 }
 
-/** Tracks an element's width, for scaling a fixed-size stage into it. */
-function useWidth(ref: React.RefObject<HTMLElement | null>) {
-  const [width, setWidth] = React.useState(0);
-  React.useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const ro = new ResizeObserver(([entry]) => setWidth(Math.round(entry.contentRect.width)));
-    ro.observe(node);
-    return () => ro.disconnect();
-  }, [ref]);
-  return width;
-}
-
 const stage =
   "relative isolate overflow-hidden bg-[#05060a] before:absolute before:inset-x-0 before:top-0 before:-z-10 before:h-2/3 before:bg-[radial-gradient(60%_80%_at_50%_0%,rgb(var(--neon-accent)/0.07),transparent)]";
-
-// ── Frames ───────────────────────────────────────────────────────────────────────────────────────
-
-/** The iframe itself: a fresh instance per mount, so its loading state resets with it. */
-function Frame({
-  src,
-  title,
-  viewport,
-  scale,
-  playing,
-}: {
-  src: string;
-  title: string;
-  viewport: number;
-  scale: number;
-  playing: boolean;
-}) {
-  const [started, setStarted] = React.useState(false);
-  const [loaded, setLoaded] = React.useState(false);
-  const frameRef = React.useRef<HTMLIFrameElement>(null);
-  const releaseRef = React.useRef<() => void>(() => {});
-  const playingRef = React.useRef(playing);
-  React.useEffect(() => {
-    playingRef.current = playing;
-  }, [playing]);
-
-  React.useEffect(
-    () =>
-      frameQueue((release) => {
-        releaseRef.current = release;
-        setStarted(true);
-      }),
-    [],
-  );
-
-  const send = React.useCallback((value: boolean) => {
-    const message: FrameMessage = { type: "neonkit:frame-play", playing: value };
-    frameRef.current?.contentWindow?.postMessage(message, window.location.origin);
-  }, []);
-
-  // The frame says hello once it can listen; answer with whether it should be running.
-  React.useEffect(() => {
-    if (!started) return;
-    const onMessage = (event: MessageEvent) => {
-      if (event.source !== frameRef.current?.contentWindow) return;
-      if ((event.data as FrameMessage | undefined)?.type === "neonkit:frame-ready") send(playingRef.current);
-    };
-    window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
-  }, [started, send]);
-
-  React.useEffect(() => {
-    if (loaded) send(playing);
-  }, [loaded, playing, send]);
-
-  if (!started) return null;
-  return (
-    <iframe
-      ref={frameRef}
-      src={src}
-      name={FRAME_NAME}
-      title={title}
-      tabIndex={-1}
-      aria-hidden
-      onLoad={() => {
-        setLoaded(true);
-        releaseRef.current();
-      }}
-      className={cn(
-        "pointer-events-none absolute left-0 top-0 origin-top-left border-0 transition-opacity duration-300 motion-reduce:transition-none",
-        loaded ? "opacity-100" : "opacity-0",
-      )}
-      style={{ width: viewport, height: viewport * 0.625, transform: `scale(${scale})` }}
-    />
-  );
-}
-
-/**
- * On-screen frames boot first. Neighbours just off screen boot ahead of time, but only once the page has been
- * still for a while, so a boot never lands at the start of the next swipe.
- */
-function FrameSlot({ onScreen, scrolling, children }: { onScreen: boolean; scrolling: boolean; children: React.ReactNode }) {
-  const [warm, setWarm] = React.useState(false);
-  // Once it's been on screen it has booted (or is booting): keep it.
-  if (onScreen && !warm) setWarm(true);
-  React.useEffect(() => {
-    if (warm || scrolling) return;
-    const timer = window.setTimeout(() => setWarm(true), 900);
-    return () => window.clearTimeout(timer);
-  }, [scrolling, warm]);
-  return onScreen || warm ? children : null;
-}
-
-/**
- * A real page (a block's /view route or a template's /preview route) drawn at a desktop viewport and scaled
- * to fit, so it stays sharp at any size. Inert: it's a picture of the page you can't tab into.
- */
-export function LiveFrame({
-  src,
-  title,
-  viewport = 1440,
-  className,
-}: {
-  src: string;
-  /** Names the frame for assistive tech that reaches it anyway. */
-  title: string;
-  /** Width of the virtual browser the page lays out in. */
-  viewport?: number;
-  className?: string;
-}) {
-  const [ref, mounted] = useWindowed<HTMLDivElement>(200, 1000);
-  const width = useWidth(ref);
-  const onScreen = useOnScreen(ref, mounted);
-  const scrolling = useScrolling();
-  return (
-    <div ref={ref} className={cn(stage, "aspect-[8/5]", className)}>
-      {mounted && width > 0 && (
-        <FrameSlot onScreen={onScreen} scrolling={scrolling}>
-          <Frame src={src} title={title} viewport={viewport} scale={width / viewport} playing={onScreen && !scrolling} />
-        </FrameSlot>
-      )}
-    </div>
-  );
-}
 
 // ── Component demos ──────────────────────────────────────────────────────────────────────────────
 

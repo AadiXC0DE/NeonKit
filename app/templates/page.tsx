@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LiveFrame } from "@/components/site/live-preview";
+import { PreviewShot } from "@/components/site/preview-shot";
 import { ArrowUpRight } from "@/components/ui/icons";
 import { PageShell } from "@/components/site/page-shell";
 import { PageHeader, textLink } from "@/components/site/prose";
 import { cn } from "@/lib/utils";
-import { isNew, templatePreviewPath, templates } from "@/registry";
+import { isNew, templatePreviewPath, templateShot, templates } from "@/registry";
 
 export const metadata: Metadata = {
   title: "Templates",
@@ -33,7 +33,11 @@ function TemplateEntry({
           featured && "lg:col-span-8",
         )}
       >
-        <LiveFrame src={templatePreviewPath(template.slug)} title={`${template.name} template preview`} className="size-full" />
+        <PreviewShot
+          base={templateShot(template.slug)}
+          sizes={featured ? "(min-width: 1024px) 66vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+          className="size-full"
+        />
       </Link>
       <div className={cn("mt-6", featured && "lg:col-span-4 lg:mt-0 lg:flex lg:flex-col lg:justify-end lg:pb-1")}>
         <p className="text-[13.5px] text-muted">

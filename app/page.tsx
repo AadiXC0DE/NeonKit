@@ -14,7 +14,7 @@ import { JsonLd } from "@/components/site/json-ld";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { siteConfig } from "@/config/site";
-import { blocks, categories, currentVersion, getBlock, registry, templatePreviewPath, templates } from "@/registry";
+import { blockShot, blocks, categories, currentVersion, getBlock, registry, templateShot, templates } from "@/registry";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -78,8 +78,8 @@ const reelBlocks = ["hero-sign", "pricing-tiers", "app-dashboard", "features-ben
 const reels: Reel[] = templates.flatMap((template, i) => {
   const block = getBlock(reelBlocks[i] ?? "");
   return [
-    { href: `/templates/${template.slug}`, src: templatePreviewPath(template.slug), name: template.name, meta: "Template" },
-    ...(block ? [{ href: `/blocks/${block.slug}`, src: `/view/${block.slug}`, name: block.name, meta: block.category }] : []),
+    { href: `/templates/${template.slug}`, shot: templateShot(template.slug), name: template.name, meta: "Template" },
+    ...(block ? [{ href: `/blocks/${block.slug}`, shot: blockShot(block.slug), name: block.name, meta: block.category }] : []),
   ];
 });
 

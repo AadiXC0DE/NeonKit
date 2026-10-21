@@ -233,7 +233,7 @@ main[tabindex="-1"]:focus {
   outline: none;
 }
 
-/* Previews that are off screen (or a gallery frame mid-scroll) hold still. See live-preview.tsx. */
+/* Demos that are off screen hold still. See live-preview.tsx. */
 [data-nk-paused] *,
 [data-nk-paused] *::before,
 [data-nk-paused] *::after {
