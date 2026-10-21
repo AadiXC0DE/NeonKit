@@ -7,6 +7,25 @@ export const FRAME_NAME = "neonkit-frame";
 
 export type FrameMessage = { type: "neonkit:frame-ready" } | { type: "neonkit:frame-play"; playing: boolean };
 
+/** The window name for a frame drawn at `scale`: the page inside reads it back before anything renders. */
+export const frameName = (scale: number) => `${FRAME_NAME}:${scale.toFixed(3)}`;
+
+const isGalleryFrame = () => window.parent !== window && window.name.startsWith(FRAME_NAME);
+
+/*
+ * A gallery frame lays out at desktop width and is drawn at a third of that or less. Canvases size their backing
+ * store from devicePixelRatio, so left alone every one of them renders at full desktop resolution only to be shrunk,
+ * and a page of frames runs out of memory. Report the ratio the frame is actually shown at instead: canvases come
+ * out exactly as sharp as the pixels they land on. Runs when this module loads, before any component's effects.
+ */
+if (typeof window !== "undefined" && isGalleryFrame()) {
+  const scale = Number(window.name.slice(FRAME_NAME.length + 1));
+  if (scale > 0 && scale < 1) {
+    const ratio = Math.max(0.5, Math.round((window.devicePixelRatio || 1) * scale * 100) / 100);
+    Object.defineProperty(window, "devicePixelRatio", { configurable: true, get: () => ratio });
+  }
+}
+
 /**
  * Inside a gallery frame: holds the page still until the parent says it's on screen.
  *
@@ -16,7 +35,7 @@ export type FrameMessage = { type: "neonkit:frame-ready" } | { type: "neonkit:fr
  */
 export function FrameControl() {
   React.useEffect(() => {
-    if (window.parent === window || window.name !== FRAME_NAME) return;
+    if (!isGalleryFrame()) return;
     const root = document.documentElement;
     const nativeRaf = window.requestAnimationFrame.bind(window);
     const nativeCancel = window.cancelAnimationFrame.bind(window);

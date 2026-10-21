@@ -89,7 +89,7 @@ export function BlockCard({ block }: { block: GalleryBlock }) {
   return (
     <Link href={`/blocks/${block.slug}`} className="group block rounded-xl outline-none">
       <div className="relative aspect-[8/5] overflow-hidden rounded-xl border border-white/[0.07] bg-surface transition-[border-color,box-shadow] duration-200 ease-out-quint group-hover:border-[rgb(var(--neon-accent)/0.4)] group-hover:shadow-[0_0_0_1px_rgb(var(--neon-accent)/0.12),0_18px_48px_-20px_rgb(var(--neon-accent)/0.45)] group-focus-visible:ring-2 group-focus-visible:ring-[rgb(var(--neon-accent)/0.6)] group-focus-visible:ring-offset-4 group-focus-visible:ring-offset-background">
-        <LiveFrame src={`/view/${block.slug}`} title={`${block.name} preview`} className="size-full" />
+        <LiveFrame src={`/view/${block.slug}`} title={`${block.name} preview`} still className="size-full" />
       </div>
       <div className="mt-4 flex items-baseline justify-between gap-3">
         <span className="text-[15.5px] font-medium text-fg">{block.name}</span>
