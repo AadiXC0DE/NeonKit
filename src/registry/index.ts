@@ -31,7 +31,7 @@ export function getBlockNeighbours(slug: string) {
   };
 }
 
-export { blockCategoryId, templateThumb } from "./ids";
+export { blockCategoryId, blockShot, templateShot, templateThumb } from "./ids";
 
 export const templates: RegistryTemplate[] = data.templates;
 

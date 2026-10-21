@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { act, render } from "@testing-library/react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
-import { blockCategories, blockPath, blocks } from "@/registry";
+import { blockCategories, blockPath, blockShot, blocks } from "@/registry";
 import { blockComponents } from "@/registry/blocks.generated";
 
 const root = path.resolve(import.meta.dirname, "..");
@@ -78,8 +78,11 @@ describe.each(blocks.map((block) => [block.slug, block] as const))("%s", (slug, 
     expect(code).not.toMatch(/\b(localStorage|sessionStorage)\b/);
   });
 
-  it("has a gallery thumbnail", () => {
+  it("has a social card and gallery screenshots", () => {
     expect(existsSync(path.join(root, "public/thumbs", `${slug}.jpg`))).toBe(true);
+    for (const width of [1280, 2560]) {
+      expect(existsSync(path.join(root, "public", `${blockShot(slug)}-${width}.webp`)), `${width}`).toBe(true);
+    }
   });
 
   it("renders with sound headings, labelled fields and named buttons", () => {

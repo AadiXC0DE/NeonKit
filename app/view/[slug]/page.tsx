@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { FrameControl } from "@/components/site/frame-control";
 import { FrameHeight } from "@/components/site/frame-height";
 import { blocks, getBlock } from "@/registry";
 import { blockComponents } from "@/registry/blocks.generated";
@@ -27,7 +26,6 @@ export default async function BlockViewPage({ params }: Props) {
   if (!Block) notFound();
   return (
     <>
-      <FrameControl />
       <FrameHeight id={slug} />
       <Block />
     </>

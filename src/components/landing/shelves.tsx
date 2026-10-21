@@ -3,7 +3,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { componentCategoryId } from "@/components/site/category-id";
-import { LiveDemo, LiveFrame } from "@/components/site/live-preview";
+import { LiveDemo } from "@/components/site/live-preview";
+import { PreviewShot } from "@/components/site/preview-shot";
 import { cn } from "@/lib/utils";
 import { featured, shelfPicks, type Reel, type Shelf, type ShelfItem } from "./shelf-data";
 
@@ -151,7 +152,7 @@ export function Shelves({
         </div>
       </div>
 
-      {/* Blocks and templates, running in frames */}
+      {/* Blocks and templates */}
       <div className="mt-28 sm:mt-40">
         <div className="mx-auto mb-8 flex max-w-[88rem] flex-wrap items-end justify-between gap-x-8 gap-y-3 px-4 sm:px-6">
           <h3 className="max-w-[44rem] text-[clamp(1.35rem,2vw,1.75rem)] font-medium leading-[1.2] tracking-[-0.02em] text-fg">
@@ -178,7 +179,7 @@ export function Shelves({
             <li key={reel.href} className="w-[82vw] max-w-[600px] shrink-0 snap-start">
               <Link href={reel.href} className="group block rounded-[12px] outline-offset-4">
                 <div className={frame}>
-                  <LiveFrame src={reel.src} title={`${reel.name} preview`} />
+                  <PreviewShot base={reel.shot} sizes="(min-width: 732px) 600px, 82vw" />
                 </div>
                 <span className="mt-3 flex items-baseline justify-between gap-3 px-0.5">
                   <span className="truncate text-[14.5px] font-medium text-fg">{reel.name}</span>

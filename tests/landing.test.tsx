@@ -43,7 +43,7 @@ describe("Shelves", () => {
         total={registry.length}
         shelves={shelves}
         lookup={lookup}
-        reels={[{ href: "/templates/saas", src: "/preview/saas", name: "SaaS landing", meta: "Template" }]}
+        reels={[{ href: "/templates/saas", shot: "/previews/templates/saas", name: "SaaS landing", meta: "Template" }]}
         blockCount={blocks.length}
         templateCount={templates.length}
       />,
@@ -55,7 +55,11 @@ describe("Shelves", () => {
     for (const slug of shelfPicks.Instruments) {
       expect(document.querySelector(`#shelf-stage a[href="/components/${slug}"]`)).not.toBeNull();
     }
-    expect(document.querySelectorAll("img")).toHaveLength(0);
+    // Component demos run live; only the blocks and templates strip is screenshots.
+    expect(document.querySelectorAll("#shelf-stage img")).toHaveLength(0);
+    const shots = [...document.querySelectorAll("img")];
+    expect(shots).toHaveLength(1);
+    expect(shots[0]).toHaveAttribute("src", "/previews/templates/saas-1280.webp");
   });
 });
 

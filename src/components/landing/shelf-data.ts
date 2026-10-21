@@ -1,7 +1,8 @@
 /** What the library section shows. Plain data, so the server page and the client section can both read it. */
 export type ShelfItem = { slug: string; name: string; description: string; category: string };
 export type Shelf = { category: string; count: number };
-export type Reel = { href: string; src: string; name: string; meta: string };
+/** `shot` is a gallery screenshot path, see PreviewShot. */
+export type Reel = { href: string; shot: string; name: string; meta: string };
 
 export const featured = ["knob", "glow-chart", "neon-sign"];
 

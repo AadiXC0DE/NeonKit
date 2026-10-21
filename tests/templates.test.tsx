@@ -3,7 +3,7 @@ import path from "node:path";
 import * as React from "react";
 import { act, render } from "@testing-library/react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
-import { templates, templateThumb } from "@/registry";
+import { templates, templateShot, templateThumb } from "@/registry";
 
 const root = path.resolve(import.meta.dirname, "..");
 const read = (file: string) => readFileSync(path.join(root, file), "utf8");
@@ -149,9 +149,12 @@ describe.each(templates.map((template) => [template.slug, template] as const))("
     }
   });
 
-  it("has a gallery thumbnail for every page", () => {
+  it("has a social card and gallery screenshots for every page", () => {
     for (const route of template.routes) {
       expect(existsSync(path.join(root, "public", templateThumb(slug, route))), route || "/").toBe(true);
+      for (const width of [1280, 2560]) {
+        expect(existsSync(path.join(root, "public", `${templateShot(slug, route)}-${width}.webp`)), `${route || "/"} ${width}`).toBe(true);
+      }
     }
   });
 

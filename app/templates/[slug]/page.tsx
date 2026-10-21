@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LiveFrame } from "@/components/site/live-preview";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "@/components/ui/icons";
@@ -8,6 +7,7 @@ import { CodeBlock } from "@/components/site/code-block";
 import { CommandBlock } from "@/components/site/install-tabs";
 import { JsonLd } from "@/components/site/json-ld";
 import { PageShell } from "@/components/site/page-shell";
+import { PreviewShot } from "@/components/site/preview-shot";
 import { InlineCode, PageHeader, PagerLinks, Trail, series, textLink } from "@/components/site/prose";
 import { registryUrl, siteConfig } from "@/config/site";
 import { runCommand } from "@/lib/commands";
@@ -19,6 +19,7 @@ import {
   getTemplateNeighbours,
   isNew,
   templatePreviewPath,
+  templateShot,
   templateThumb,
   templates,
 } from "@/registry";
@@ -134,7 +135,10 @@ export default async function TemplatePage({ params }: Props) {
                 className="group block rounded-[14px] outline-none"
               >
                 <span className="block overflow-hidden rounded-[14px] border border-white/[0.07] bg-surface transition-[border-color,box-shadow] duration-200 ease-out-quint group-hover:border-[rgb(var(--neon-accent)/0.4)] group-hover:shadow-[0_0_0_1px_rgb(var(--neon-accent)/0.12),0_24px_64px_-28px_rgb(var(--neon-accent)/0.5)] group-focus-visible:ring-2 group-focus-visible:ring-[rgb(var(--neon-accent)/0.6)] group-focus-visible:ring-offset-4 group-focus-visible:ring-offset-background">
-                  <LiveFrame src={templatePreviewPath(slug, route)} title={`The /${slug}${route} page`} />
+                  <PreviewShot
+                    base={templateShot(slug, route)}
+                    sizes={template.routes.length > 2 && i === 0 ? "(min-width: 1280px) 1200px, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+                  />
                 </span>
                 <span className="mt-3.5 flex items-center justify-between gap-3">
                   <span className="truncate font-mono text-[13px] text-fg">
